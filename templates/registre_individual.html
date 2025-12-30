@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ _('Registre de nou perfil') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/registre_individual.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+</head>
+<body>
+
+<header>
+    <nav class="nav">
+    <a href="{{ url_for('inici.inici_pagina') }}" class="logo">
+      <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca" height="32">
+
+    </a>
+      </nav>
+</header>
+<div id="flash-modal" class="modal-flash" style="display: none;">
+  <div class="modal-flash-contingut">
+    <span class="tancar-flash" onclick="tancarFlashModal()">&times;</span>
+    <div id="flash-missatge"></div>
+  </div>
+</div>
+
+    <h2 class= "centrado">{{ _('Crear nou perfil') }}</h2>
+   
+   <form id="formulari-registre" method="post" enctype="multipart/form-data">
+
+ <div class="fila-formulari">
+  <div><label>{{ _('Nom') }}</label><input type="text" name="nom"  required value="{{ dades.nom or '' }}"></div>
+  <div><label>{{ _('Primer cognom') }}</label><input type="text" name="primer_cognom"  required value="{{ dades.primer_cognom or '' }}"></div>
+  <div><label>{{ _('Segon cognom') }}</label><input type="text" name="segon_cognom"></div>
+</div>
+
+<div class="fila-formulari">
+  <div><label>{{ _('Data de naixement') }}</label> <input type="date" name="data" id="data_naixement"  required value="{{ dades.data_naixement or '' }}"></div>
+  <div><label>{{ _('País de naixement') }}</label><select name="pais" id="pais" class="campo-largo" required disabled><option value="">{{ _('Carregant...') }}</option></select></div>
+  <div><label>{{ _('Regió o estat') }}</label><select name="regio" id="regio" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select></div>
+  <div><label>{{ _('Poble o ciutat de naixement') }}</label><select name="municipi" id="municipi" class="campo-largo" disabled><option value="">{{ _('Selecciona primer la regió') }}</option></select></div>
+</div>
+
+<div class="fila-formulari">
+  <div><label>{{ _('Idioma principal') }}</label><input type="text" name="idioma"  required value="{{ dades.idioma or '' }}"></div>
+  <div><label>{{ _('País de residència') }}</label><select name="pais_residencia" id="pais_residencia" class="campo-largo" required disabled><option value="">{{ _('Carregant...') }}</option></select></div>
+  <div><label>{{ _('Regió de residència') }}</label><select name="regio_residencia" id="regio_residencia" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select></div>
+  <div><label>{{ _('Correu electrònic') }}</label><input type="email" name="direccion_email"  required value="{{ dades.direccion_email or '' }}"></div>
+ </div>
+
+<div class="fila-formulari"> 
+  <div><label>{{ _("Nom d'usuari") }}</label><input type="text" name="nom_login"  required value="{{ dades.nom_login or '' }}"></div>
+
+{% if error_contrasenya %}
+  <p class="error-text">{{ error_contrasenya }}</p>
+{% endif %}
+
+
+  <div class="camp-formulari">
+    <label for="contrasenya">{{ _('Contrasenya') }}</label>
+    <div class="contrasenya-container">
+      <input type="password" id="contrasenya" name="contrasenya" required>
+      <span class="icona-ull" onclick="toggleVisibilitat('contrasenya', this)">👁️</span>
+    </div>
+  </div>
+
+  <div class="camp-formulari">
+    <label for="confirmar_contrasenya">{{ _('Confirmar contrasenya') }}</label>
+    <div class="contrasenya-container">
+      <input type="password" id="confirmar_contrasenya" name="confirmar_contrasenya" required>
+      <span class="icona-ull" onclick="toggleVisibilitat('confirmar_contrasenya', this)">👁️</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h3 id="titol-addicional" class="plegable" onclick="toggleBlocAddicional()">
+  {{ _('Informació addicional') }}
+</h3>
+<p>{{ _('Informació opcional però important') }} –
+  <button type="button" class="boto-textual" onclick="obreDisclaimer()">
+    {{ _('Per què la demanem?') }}
+  </button>
+</p>
+
+<div id="disclaimer-modal" class="modal" style="display: none;">
+  <div class="modal-content petit">
+    <span class="tancar-modal" onclick="tancaDisclaimer()">&times;</span>
+    <h4>{{ _('Per què et demanem aquesta informació?') }}</h4>
+    <p>{{ _("Aquesta informació és molt important per poder verificar els testimonis, establir connexions familiars i garantir la coherència del projecte.") }}</p>
+    <p>{{ _("Aquest arxiu pretén ser un espai seriós de memòria, conservació i investigació. No comerciem amb les dades dels usuaris.") }}</p>
+    <p>{{ _("Les dades aportades pertanyen als usuaris i només s'utilitzen amb finalitats científiques i acadèmiques.") }}</p>
+  </div>
+</div>
+
+<div id="bloc-addicional" style="display: none;"><hr>
+<h3>{{ _('Informació del pare') }}</h3>
+
+<div class="fila-formulari">
+  <div>
+    <label for="nom_pare">{{ _('Nom') }}</label>
+    <input type="text" id="nom_pare" name="nom_pare">
+  </div>
+  <div>
+    <label for="primer_cognom_pare">{{ _('Primer cognom') }}</label>
+    <input type="text" id="primer_cognom_pare" name="primer_cognom_pare">
+  </div>
+  <div>
+    <label for="segon_cognom_pare">{{ _('Segon cognom') }}</label>
+    <input type="text" id="segon_cognom_pare" name="segon_cognom_pare">
+  </div>
+</div>
+
+<div class="fila-formulari">
+  <div>
+    <label for="naixement_pare">{{ _('Data de naixement') }}</label>
+    <input type="date" id="naixement_pare" name="naixement_pare">
+  </div>
+  <div>
+    <label for="pais_naixement_pare">{{ _('País') }}</label>
+    <select id="pais_naixement_pare" name="pais_naixement_pare" class="campo-largo" disabled><option value="">{{ _('Carregant...') }}</option></select>
+  </div>
+  <div>
+    <label for="regio_naixement_pare">{{ _('Regió o estat') }}</label>
+    <select id="regio_naixement_pare" name="regio_naixement_pare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select>
+  </div>
+  <div>
+    <label for="municipi_naixement_pare">{{ _('Municipi de naixement') }}</label>
+    <select id="municipi_naixement_pare" name="municipi_naixement_pare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer la regió') }}</option></select>
+  </div>
+</div>
+
+<div class="fila-formulari">
+  <div>
+    <label for="pare_data_defuncio">{{ _('Data de defunció') }}</label>
+    <input type="date" id="pare_data_defuncio" name="pare_data_defuncio">
+  </div>
+  <div>
+    <label for="pais_defuncio_pare">{{ _('País') }}</label>
+    <select id="pais_defuncio_pare" name="pais_defuncio_pare" class="campo-largo" disabled><option value="">{{ _('Carregant...') }}</option></select>
+  </div>
+  <div>
+    <label for="regio_defuncio_pare">{{ _('Regió o estat') }}</label>
+    <select id="regio_defuncio_pare" name="regio_defuncio_pare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select>
+  </div>
+  <div>
+    <label for="municipi_defuncio_pare">{{ _('Municipi de defunció') }}</label>
+    <select id="municipi_defuncio_pare" name="municipi_defuncio_pare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer la regió') }}</option></select>
+  </div>
+</div>
+
+<h3>{{ _('Informació de la mare') }}</h3>
+
+<div class="fila-formulari">
+  <div>
+    <label for="nom_mare">{{ _('Nom') }}</label>
+    <input type="text" id="nom_mare" name="nom_mare">
+  </div>
+  <div>
+    <label for="primer_cognom_mare">{{ _('Primer cognom') }}</label>
+    <input type="text" id="primer_cognom_mare" name="primer_cognom_mare">
+  </div>
+  <div>
+    <label for="segon_cognom_mare">{{ _('Segon cognom') }}</label>
+    <input type="text" id="segon_cognom_mare" name="segon_cognom_mare">
+  </div>
+</div>
+
+<div class="fila-formulari">
+  <div>
+    <label for="naixement_mare">{{ _('Data de naixement') }}</label>
+    <input type="date" id="naixement_mare" name="naixement_mare">
+  </div>
+  <div>
+    <label for="pais_naixement_mare">{{ _('País') }}</label>
+    <select id="pais_naixement_mare" name="pais_naixement_mare" class="campo-largo" disabled><option value="">{{ _('Carregant...') }}</option></select>
+  </div>
+  <div>
+    <label for="regio_naixement_mare">{{ _('Regió o estat') }}</label>
+    <select id="regio_naixement_mare" name="regio_naixement_mare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select>
+  </div>
+  <div>
+    <label for="municipi_naixement_mare">{{ _('Municipi de naixement') }}</label>
+    <select id="municipi_naixement_mare" name="municipi_naixement_mare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer la regió') }}</option></select>
+  </div>
+</div>
+
+<div class="fila-formulari">
+  <div>
+    <label for="mare_data_defuncio">{{ _('Data de defunció') }}</label>
+    <input type="date" id="mare_data_defuncio" name="mare_data_defuncio">
+  </div>
+  <div>
+    <label for="pais_defuncio_mare">{{ _('País') }}</label>
+    <select id="pais_defuncio_mare" name="pais_defuncio_mare" class="campo-largo" disabled><option value="">{{ _('Carregant...') }}</option></select>
+  </div>
+  <div>
+    <label for="regio_defuncio_mare">{{ _('Regió o estat') }}</label>
+    <select id="regio_defuncio_mare" name="regio_defuncio_mare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer el país') }}</option></select>
+  </div>
+  <div>
+    <label for="municipi_defuncio_mare">{{ _('Municipi de defunció') }}</label>
+    <select id="municipi_defuncio_mare" name="municipi_defuncio_mare" class="campo-largo" disabled><option value="">{{ _('Selecciona primer la regió') }}</option></select>
+  </div>
+</div>
+</div>
+<hr>
+<h3>{{ _('Documents acreditatius (opcional)') }}</h3>
+
+<div class="camp-formulari">
+  <label for="documents">{{ _('Pots aportar escaneigs o fotografies...') }}</label>
+  
+  <!-- Input de fitxers ocult -->
+  <input type="file" id="documents" name="documents" multiple style="display: none;">
+
+
+  <!-- Botó per obrir selecció -->
+  <button type="button" onclick="document.getElementById('documents').click()">
+    {{ _('Selecciona documents') }}
+  </button>
+
+  <!-- Zona de previsualització -->
+  <div id="previsualitzacions" class="zona-documents"></div>
+
+  <small>{{ _("Els documents adjuntats en aquesta secció no són públics ni visibles. La seva funció és ajudar a acreditar el perfil de l'usuari. Per fer públics els documents s'han d'adjuntar a una entrada personal a l'arxiu.") }}</small>
+</div>
+
+  
+<div class="fila-final">
+  <label class="checkbox-etica">
+    <input type="checkbox" name="acepta_etica" required>
+    <span class="checkmark"></span>
+    Accepto els <a href="{{ url_for('legal.termes_condicions') }}" target="_blank">Termes i Condicions</a> i la <a href="{{ url_for('legal.politica_privadesa') }}" target="_blank">Política de Privacitat</a>
+  </label>
+<div class="fila-final">
+  <label class="checkbox-etica">
+    <input type="checkbox" name="major_18" required>
+    <span class="checkmark"></span>
+    {{ _("Declaro que tinc més de 18 anys") }}
+  </label>
+</div>
+  <button type="submit">{{ _('Registrar') }}</button>
+</div>
+
+<div class="aviso-etico">
+  {{ _("Aquest projecte no comercialitza amb les dades dels usuaris o les usuàries. És un arxiu ètic i comunitari. Darrere d'aquest web hi ha persones i un projecte acadèmic, no hi ha algoritmes ni ànim de lucre.") }}
+</div>
+
+</form>
+
+<body data-missatge-eliminar="{{ _('Estàs segur que vols eliminar aquest document?') }}">
+
+<script>
+let fitxersSeleccionats = [];
+
+document.getElementById('documents').addEventListener('change', function (event) {
+    const nousFitxers = Array.from(event.target.files);
+    fitxersSeleccionats.push(...nousFitxers);
+    actualitzaPrevisualitzacions();
+});
+
+function actualitzaPrevisualitzacions() {
+    const zona = document.getElementById('previsualitzacions');
+    zona.innerHTML = '';
+
+  
+    fitxersSeleccionats = fitxersSeleccionats.filter(f => !f._eliminar);
+
+    fitxersSeleccionats.forEach((fitxer, index) => {
+        const lector = new FileReader();
+        lector.onload = function (e) {
+            const div = document.createElement('div');
+            div.className = 'document-box';
+
+            let contingut;
+            if (fitxer.type.startsWith('image/')) {
+    contingut = `<img src="${e.target.result}" alt="Imatge" class="miniatura" onclick="obreVisorImatge('${e.target.result}')">`;
+}
+
+            else {
+                contingut = `<div class="icona-arxiu">${fitxer.name.split('.').pop().toUpperCase()}</div>`;
+            }
+
+            div.innerHTML = `
+                ${contingut}
+                <div class="nom-arxiu">${fitxer.name}</div>
+<div class="quadrat-eliminar" onclick="marcaPerEliminar(${index})">Eliminar</div>
+
+            `;
+            zona.appendChild(div);
+        };
+        lector.readAsDataURL(fitxer);
+    });
+
+    actualitzaInputReal();
+}
+
+function eliminaFitxer(index) {
+    fitxersSeleccionats.splice(index, 1);
+    actualitzaPrevisualitzacions();
+}
+
+function actualitzaInputReal() {
+    const input = document.getElementById('documents');
+    const dt = new DataTransfer();
+    fitxersSeleccionats.forEach(f => dt.items.add(f));
+    input.files = dt.files;
+}
+
+function marcaPerEliminar(index) {
+    const fitxer = fitxersSeleccionats[index];
+
+    const missatge = document.body.dataset.missatgeEliminar || `Estàs segur que vols eliminar "${fitxer.name}"?`;
+    const confirmat = confirm(missatge.replace('%s', fitxer.name));
+
+    if (!confirmat) return;
+
+    fitxer._eliminar = true;
+    actualitzaPrevisualitzacions();
+}
+</script>
+<!-- VISOR IMATGE -->
+<div id="visor" class="visor-ocult" onclick="tancaVisor()">
+  <span class="tancar-visor">&times;</span>
+  <img id="imatgeGran" src="" alt="Imatge ampliada">
+</div>
+
+<script>
+function obreVisorImatge(url) {
+    const visor = document.getElementById('visor');
+    const img = document.getElementById('imatgeGran');
+    img.src = url;
+    visor.style.display = 'flex';
+}
+
+function tancaVisor() {
+    const visor = document.getElementById('visor');
+    visor.style.display = 'none';
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const formulari = document.getElementById("formulari-registre");
+  const dataNaixement = document.getElementById("data_naixement");
+
+  formulari.addEventListener("submit", function (e) {
+    const valor = dataNaixement.value;
+    if (!valor) return;
+
+    const avui = new Date();
+    const dataUsuari = new Date(valor);
+    const edat = avui.getFullYear() - dataUsuari.getFullYear();
+    const anyCorrecte = (avui.getMonth() > dataUsuari.getMonth()) || 
+                        (avui.getMonth() === dataUsuari.getMonth() && avui.getDate() >= dataUsuari.getDate());
+
+    const edatReal = anyCorrecte ? edat : edat - 1;
+
+    if (edatReal < 18) {
+      e.preventDefault();
+      alert("{{ _('Has de tenir més de 18 anys per registrar-te') }}");
+    }
+  });
+});
+</script>
+<script>
+function toggleVisibilitat(idCamp, elementSpan) {
+  const input = document.getElementById(idCamp);
+  if (input.type === "password") {
+    input.type = "text";
+    elementSpan.textContent = "ok";  // 
+  } else {
+    input.type = "password";
+    elementSpan.textContent = "👁️";
+  }
+}
+</script>
+<script>
+function obreDisclaimer() {
+  document.getElementById("disclaimer-modal").style.display = "block";
+}
+function tancaDisclaimer() {
+  document.getElementById("disclaimer-modal").style.display = "none";
+}
+</script>
+
+<script>
+  function tancarFlashModal() {
+    const modal = document.getElementById("flash-modal");
+    modal.style.display = "none";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const missatge = {{ get_flashed_messages()|default([])|tojson|safe }};
+    if (missatge.length > 0) {
+      const modal = document.getElementById("flash-modal");
+      const contenidor = document.getElementById("flash-missatge");
+      contenidor.innerHTML = missatge.join("<br>");
+      modal.style.display = "block";
+      setTimeout(tancarFlashModal, 8000);
+    }
+  });
+</script>
+
+<script>
+  function toggleBlocAddicional() {
+    const bloc = document.getElementById("bloc-addicional");
+    if (bloc) {
+      bloc.style.display = (bloc.style.display === "none" || bloc.style.display === "") ? "block" : "none";
+    }
+  }
+</script>
+
+<!-- TRADUCCIONS PER JAVASCRIPT -->
+<script>
+window.traduccions = {
+    seleccionaPais: {{ _('Selecciona un país')|tojson }},
+    seleccionaRegio: {{ _('Selecciona província/regió')|tojson }},
+    seleccionaMunicipi: {{ _('Selecciona o escriu el teu municipi')|tojson }},
+    carregant: {{ _('Carregant...')|tojson }},
+    errorCarregant: {{ _('Error carregant')|tojson }},
+    seleccionaPrimerRegio: {{ _('Selecciona primer la regió')|tojson }},
+    seleccionaPrimerPais: {{ _('Selecciona primer el país')|tojson }}
+};
+</script>
+
+<!-- SISTEMA D'UBICACIONS -->
+<script src="{{ url_for('static', filename='js/ubicacions.js') }}"></script>
+
+</body>
+</html>

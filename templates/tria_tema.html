@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block contingut %}
+<div class="pestanyes">
+  <a class="pestanya {% if pestanya_activa == 'biografia' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=biografia">{{ _('Biografia') }}</a>
+  <a class="pestanya {% if pestanya_activa == 'entrevista' %}activa{% endif %}" href="{{ url_for('ia_lleugera.entrevista_ia', perfil_id=perfil.id, tema='Infància') }}">{{ _('Entrevista') }}</a>
+  <a class="pestanya {% if pestanya_activa == 'entrades' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=entrades">{{ _('Entrades') }}</a>
+  <a class="pestanya {% if pestanya_activa == 'nova' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=nova">{{ _('Nova entrada personal') }}</a>
+  <a class="pestanya {% if pestanya_activa == 'perfil' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=perfil">{{ _('Perfil') }}</a>
+</div>
+
+<div class="pantalla-inicial">
+  <h2>{{ _('Hola, de què et ve de gust parlar?') }}</h2>
+  <p>{{ _('Tria un tema, si us plau.') }}</p>
+  <form method="POST">
+    <input type="text" name="missatge" placeholder="{{ _('Escriu un tema...') }}" required>
+    <button type="submit">{{ _('Començar') }}</button>
+  </form>
+</div>
+
+{% if tema %}
+<div class="confirma-tema">
+  <h2>{{ _('Ja tens una conversa amb el tema "%(tema)s"', tema=tema.nom) }}</h2>
+  <p>{{ _('Vols continuar una d’elles o començar-ne una de nova?') }}</p>
+
+  <h3>{{ _('Converses existents') }}</h3>
+  <ul>
+    {% for ent in entrevistes %}
+      <li>
+        <a href="{{ url_for('ia_lleugera.entrevista_ia', perfil_id=perfil.id, tema=tema.nom) }}">
+          {{ tema.nom }} {{ ent.numero }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <form method="post" action="{{ url_for('ia_lleugera.nova_entrevista') }}">
+    <input type="hidden" name="tema_id" value="{{ tema.id }}">
+    <input type="submit" value="{{ _('Nova conversa') }}">
+  </form>
+</div>
+{% endif %}
+{% endblock %}

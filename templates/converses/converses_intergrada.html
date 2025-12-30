@@ -1,0 +1,717 @@
+<!-- Pestanya CONVERSES completa integrada -->
+<div class="converses-integrades">
+  
+  <!-- HEADER amb toggle vista/formulari -->
+  <div class="header-converses-toggle">
+    <h2>Converses i Diàlegs</h2>
+    <div class="botons-toggle">
+      <button type="button" id="btn-veure-converses" class="btn-toggle actiu" onclick="mostrarVista('llistat')">
+        📋 Les meves converses ({{ converses|length }})
+      </button>
+      <button type="button" id="btn-nova-conversa" class="btn-toggle" onclick="mostrarVista('formulari')">
+        ➕ Nova conversa
+      </button>
+    </div>
+  </div>
+
+  <!-- VISTA LLISTAT CONVERSES -->
+  <div id="vista-llistat" class="vista-converses">
+    {% if converses %}
+      <div class="llista-converses-pestanya">
+        {% for conversa in converses %}
+        <div class="conversa-card-mini">
+          <div class="conversa-info">
+            <div class="conversa-data-lloc">
+              <strong>
+                {% if conversa.data_conversa %}
+                  {{ conversa.data_conversa.strftime('%d/%m/%Y') }}
+                {% else %}
+                  Sense data
+                {% endif %}
+              </strong>
+              {% if conversa.lloc_municipi or conversa.lloc_regio %}
+                - {{ conversa.lloc_municipi }}{% if conversa.lloc_regio %}, {{ conversa.lloc_regio }}{% endif %}
+              {% endif %}
+            </div>
+            
+            {% if conversa.participants %}
+            <div class="participants-noms">
+              Participants: 
+              {% for participant in conversa.participants[:3] %}
+                {{ participant.nom }}{% if not loop.last %}, {% endif %}
+              {% endfor %}
+              {% if conversa.participants|length > 3 %}
+                i {{ conversa.participants|length - 3 }} més
+              {% endif %}
+            </div>
+            {% endif %}
+            
+            {% if conversa.observacions_generals %}
+            <div class="observacions-mini">
+              "{{ conversa.observacions_generals[:100] }}{% if conversa.observacions_generals|length > 100 %}...{% endif %}"
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="conversa-badges">
+            {% if conversa.durada_minuts %}
+              <span class="badge">⏱️ {{ conversa.durada_minuts }}min</span>
+            {% endif %}
+            {% if conversa.arxiu_nom %}
+              <span class="badge badge-arxiu">
+                {% if conversa.arxiu_tipus == 'audio' %}🎤{% elif conversa.arxiu_tipus == 'video' %}🎥{% else %}📁{% endif %}
+              </span>
+            {% endif %}
+            {% if conversa.organitzacio %}
+              <span class="badge badge-org">🏢 {{ conversa.organitzacio.nom }}</span>
+            {% endif %}
+          </div>
+          
+          <div class="conversa-accions-mini">
+            <button onclick="editarConversa({{ conversa.id }})" class="btn-mini">✏️</button>
+            <button onclick="eliminarConversa({{ conversa.id }})" class="btn-mini btn-eliminar">🗑️</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state-integrat">
+        <p>Encara no tens converses gravades.</p>
+        <button onclick="mostrarVista('formulari')" class="btn-crear-primera">
+          ➕ Crear la primera conversa
+        </button>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- VISTA FORMULARI NOVA CONVERSA -->
+  <div id="vista-formulari" class="vista-converses" style="display: none;">
+    <form id="form-conversa-integrada" method="POST" action="{{ url_for('converses.nova_conversa') }}" enctype="multipart/form-data">
+      
+      <div class="formulari-conversa-dos-cols">
+        
+        <!-- COLUMNA ESQUERRA: Dades principals -->
+        <div class="col-esquerra-conversa">
+          
+          <!-- PARTICIPANTS -->
+          <div class="bloc-participants">
+            <h3>👥 Participants</h3>
+            <div id="participants-container-integrat">
+              <!-- Els participants s'afegiran dinàmicament -->
+            </div>
+            <button type="button" id="btn-afegir-participant-integrat" class="btn-afegir">
+              ➕ Afegir participant
+            </button>
+          </div>
+
+          <!-- DADES CONVERSA -->
+          <div class="bloc-dades-conversa">
+            <h3>📍 Lloc i data</h3>
+            
+            <div class="fila-camps">
+              <div class="camp">
+                <label for="data_conversa_integrat">Data conversa: *</label>
+                <input type="date" id="data_conversa_integrat" name="data_conversa" required>
+              </div>
+              <div class="camp">
+                <label for="durada_minuts_integrat">Durada (min):</label>
+                <input type="number" id="durada_minuts_integrat" name="durada_minuts" min="1" placeholder="45">
+              </div>
+            </div>
+
+            <div class="fila-camps">
+              <div class="camp">
+                <label for="lloc_municipi_integrat">Municipi:</label>
+                <input type="text" id="lloc_municipi_integrat" name="lloc_municipi" placeholder="Barcelona">
+              </div>
+              <div class="camp">
+                <label for="lloc_regio_integrat">Regió:</label>
+                <input type="text" id="lloc_regio_integrat" name="lloc_regio" placeholder="Catalunya">
+              </div>
+              <div class="camp">
+                <label for="lloc_pais_integrat">País:</label>
+                <input type="text" id="lloc_pais_integrat" name="lloc_pais" placeholder="Espanya">
+              </div>
+            </div>
+
+            <div class="camp-complet">
+              <label for="observacions_integrat">Observacions generals:</label>
+              <textarea id="observacions_integrat" name="observacions_generals" rows="3" 
+                        placeholder="Context, temes tractats, circumstàncies..."></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMNA DRETA: Arxiu i organització -->
+        <div class="col-dreta-conversa">
+          
+          <!-- ARXIU MULTIMÈDIA -->
+          <div class="bloc-arxiu-conversa">
+            <h3>🎤 Arxiu multimèdia</h3>
+            
+            <!-- Opcions de gravació (similar a nova entrada) -->
+            <div class="opcions-gravacio">
+              <button type="button" id="btn-grava-audio-conversa" class="btn-multimedia">
+                🎤 Gravar àudio
+              </button>
+              <button type="button" id="btn-grava-video-conversa" class="btn-multimedia">
+                🎥 Gravar vídeo
+              </button>
+            </div>
+            
+            <div class="separador-o">
+              <span>o</span>
+            </div>
+            
+            <!-- Pujar arxiu -->
+            <div class="pujar-arxiu">
+              <label for="arxiu_conversa" class="etiqueta-arxiu">
+                📁 Seleccionar arxiu
+              </label>
+              <input type="file" id="arxiu_conversa" name="arxiu" 
+                     accept="audio/*,video/*,.webm,.mp4,.mp3,.wav,.ogg,.m4a">
+              <div id="info-arxiu-conversa" class="info-arxiu"></div>
+            </div>
+          </div>
+
+          <!-- COMPARTIR AMB ORGANITZACIÓ -->
+          <div class="bloc-organitzacio-conversa">
+            <h3>🏢 Compartir</h3>
+            <div class="camp">
+              <label for="organitzacio_conversa">Organització:</label>
+              <select id="organitzacio_conversa" name="organitzacio_id">
+                <option value="">Només perfil personal</option>
+                {% for org in usuari_organitzacions %}
+                  <option value="{{ org.id }}">{{ org.nom }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BOTONS ACCIÓ -->
+      <div class="botons-accio-conversa">
+        <button type="submit" class="btn-guardar-conversa">
+          💾 Guardar conversa
+        </button>
+        <button type="button" onclick="mostrarVista('llistat')" class="btn-cancelar-conversa">
+          ❌ Cancel·lar
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<style>
+/* CSS específic per converses integrades */
+.converses-integrades {
+  padding: 0;
+  font-family: inherit;
+}
+
+/* HEADER AMB TOGGLE */
+.header-converses-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.header-converses-toggle h2 {
+  margin: 0;
+  color: #333;
+}
+
+.botons-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-toggle {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9em;
+}
+
+.btn-toggle:hover {
+  border-color: #4CAF50;
+}
+
+.btn-toggle.actiu {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+/* LLISTAT CONVERSES */
+.llista-converses-pestanya {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.conversa-card-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  transition: box-shadow 0.3s;
+}
+
+.conversa-card-mini:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.conversa-info {
+  flex-grow: 1;
+  margin-right: 15px;
+}
+
+.conversa-data-lloc {
+  font-size: 1em;
+  margin-bottom: 5px;
+}
+
+.participants-noms {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.observacions-mini {
+  font-size: 0.85em;
+  color: #777;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.conversa-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-right: 10px;
+}
+
+.badge {
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  color: #666;
+  text-align: center;
+}
+
+.badge-arxiu {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.badge-org {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.conversa-accions-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.btn-mini {
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8em;
+  transition: all 0.3s;
+}
+
+.btn-mini:hover {
+  background: #f5f5f5;
+}
+
+.btn-eliminar:hover {
+  background: #ffebee;
+  border-color: #f44336;
+}
+
+/* FORMULARI CONVERSA */
+.formulari-conversa-dos-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.col-esquerra-conversa,
+.col-dreta-conversa {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bloc-participants,
+.bloc-dades-conversa,
+.bloc-arxiu-conversa,
+.bloc-organitzacio-conversa {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.bloc-participants h3,
+.bloc-dades-conversa h3,
+.bloc-arxiu-conversa h3,
+.bloc-organitzacio-conversa h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+/* PARTICIPANTS DINÀMICS */
+.participant-integrat {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: white;
+  position: relative;
+}
+
+.participant-header-integrat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.participant-num {
+  background: #4CAF50;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.btn-eliminar-participant-integrat {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7em;
+}
+
+/* CAMPS FORMULARI */
+.fila-camps {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.camp {
+  flex: 1;
+}
+
+.camp-complet {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.camp label,
+.camp-complet label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.camp input,
+.camp select,
+.camp-complet input,
+.camp-complet textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+}
+
+.camp input:focus,
+.camp select:focus,
+.camp-complet input:focus,
+.camp-complet textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* BOTONS */
+.btn-afegir,
+.btn-multimedia,
+.btn-guardar-conversa,
+.btn-cancelar-conversa,
+.btn-crear-primera {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.btn-afegir {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-afegir:hover {
+  background: #1976D2;
+}
+
+.btn-multimedia {
+  background: #FF9800;
+  color: white;
+  margin: 5px;
+}
+
+.btn-multimedia:hover {
+  background: #F57C00;
+}
+
+.btn-guardar-conversa {
+  background: #4CAF50;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-guardar-conversa:hover {
+  background: #45a049;
+}
+
+.btn-cancelar-conversa {
+  background: #757575;
+  color: white;
+}
+
+.btn-cancelar-conversa:hover {
+  background: #616161;
+}
+
+.btn-crear-primera {
+  background: #4CAF50;
+  color: white;
+}
+
+/* OPCIONS GRAVACIÓ */
+.opcions-gravacio {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.separador-o {
+  text-align: center;
+  margin: 10px 0;
+  position: relative;
+}
+
+.separador-o:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+}
+
+.separador-o span {
+  background: #fafafa;
+  padding: 0 10px;
+  color: #999;
+}
+
+/* EMPTY STATE */
+.empty-state-integrat {
+  text-align: center;
+  padding: 50px 20px;
+  color: #666;
+}
+
+.botons-accio-conversa {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .formulari-conversa-dos-cols {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .fila-camps {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .conversa-card-mini {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .conversa-accions-mini {
+    flex-direction: row;
+    align-self: flex-end;
+  }
+  
+  .header-converses-toggle {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .opcions-gravacio {
+    flex-direction: column;
+  }
+}
+</style>
+
+<script>
+// JavaScript per la pestanya integrada
+let numeroParticipantIntegrat = 0;
+
+function mostrarVista(vista) {
+  const llistat = document.getElementById('vista-llistat');
+  const formulari = document.getElementById('vista-formulari');
+  const btnVeure = document.getElementById('btn-veure-converses');
+  const btnNova = document.getElementById('btn-nova-conversa');
+
+  if (vista === 'llistat') {
+    llistat.style.display = 'block';
+    formulari.style.display = 'none';
+    btnVeure.classList.add('actiu');
+    btnNova.classList.remove('actiu');
+  } else {
+    llistat.style.display = 'none';
+    formulari.style.display = 'block';
+    btnVeure.classList.remove('actiu');
+    btnNova.classList.add('actiu');
+  }
+}
+
+function afegirParticipantIntegrat() {
+  const container = document.getElementById('participants-container-integrat');
+  const participantHtml = `
+    <div class="participant-integrat" data-participant="${numeroParticipantIntegrat}">
+      <div class="participant-header-integrat">
+        <div class="participant-num">${numeroParticipantIntegrat + 1}</div>
+        <button type="button" class="btn-eliminar-participant-integrat" onclick="eliminarParticipantIntegrat(${numeroParticipantIntegrat})">
+          Eliminar
+        </button>
+      </div>
+      
+      <div class="fila-camps">
+        <div class="camp">
+          <label>Nom complet: *</label>
+          <input type="text" name="participant_nom_${numeroParticipantIntegrat}" 
+                 placeholder="Maria Fontanals" required>
+        </div>
+        <div class="camp">
+          <label>Data naixement:</label>
+          <input type="date" name="participant_data_naixement_${numeroParticipantIntegrat}">
+        </div>
+      </div>
+      
+      <div class="fila-camps">
+        <div class="camp">
+          <label>Municipi:</label>
+          <input type="text" name="participant_municipi_${numeroParticipantIntegrat}" 
+                 placeholder="Vic">
+        </div>
+        <div class="camp">
+          <label>Regió:</label>
+          <input type="text" name="participant_regio_${numeroParticipantIntegrat}" 
+                 placeholder="Catalunya">
+        </div>
+      </div>
+      
+      <div class="camp-complet">
+        <label>Observacions:</label>
+        <textarea name="participant_observacions_${numeroParticipantIntegrat}" rows="2" 
+                  placeholder="Testimoni directe..."></textarea>
+      </div>
+    </div>
+  `;
+  
+  container.insertAdjacentHTML('beforeend', participantHtml);
+  numeroParticipantIntegrat++;
+}
+
+function eliminarParticipantIntegrat(numero) {
+  const participant = document.querySelector(`[data-participant="${numero}"]`);
+  if (participant) {
+    participant.remove();
+    actualitzarNumeracioIntegrat();
+  }
+}
+
+function actualitzarNumeracioIntegrat() {
+  const participants = document.querySelectorAll('.participant-integrat');
+  participants.forEach((participant, index) => {
+    const numeroElement = participant.querySelector('.participant-num');
+    if (numeroElement) {
+      numeroElement.textContent = index + 1;
+    }
+  });
+}
+
+function editarConversa(id) {
+  // TODO: Implementar edició inline o modal
+  alert('Editar conversa ' + id);
+}
+
+function eliminarConversa(id) {
+  if (confirm('Segur que vols eliminar aquesta conversa?')) {
+    // TODO: Implementar eliminació AJAX
+    alert('Eliminar conversa ' + id);
+  }
+}
+
+// Inicialitzar quan es carrega la pestanya
+document.addEventListener('DOMContentLoaded', function() {
+  // Afegir primer participant per defecte
+  if (document.getElementById('participants-container-integrat')) {
+    afegirParticipantIntegrat();
+    
+    // Event listener botó afegir
+    document.getElementById('btn-afegir-participant-integrat')?.addEventListener('click', afegirParticipantIntegrat);
+  }
+});
+</script>

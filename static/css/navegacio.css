@@ -1,0 +1,378 @@
+header {
+  background-color: #3d3d3c;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #e1f6f1;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: rgb(69, 179, 223);
+}
+
+
+
+.submenu li {
+  margin: 5px 0;
+}
+
+.submenu a {
+  color: #000;
+}
+
+.menu-login {
+  position: relative;
+}
+
+.menu-login .submenu-login {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  min-width: 200px;
+}
+
+.menu-login:hover .submenu-login {
+  display: block;
+}
+
+.submenu-login form {
+  display: flex;
+  flex-direction: column;
+}
+
+.submenu-login input {
+  margin-bottom: 8px;
+  padding: 5px;
+  font-size: 0.9rem;
+}
+
+.submenu-login button {
+  background-color: #225e91;
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submenu-login button:hover {
+  background-color: #1a4b75;
+}
+
+nav li a {
+  text-decoration: none;
+  color: #e1f6f1;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+nav.nav {
+  width: 100%;
+  max-width: var(--amplada-max);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--padding-x);
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  margin-left: auto;
+}
+
+.usuari-connectat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: transparent;
+  padding: 5px 10px;
+  font-size: 0.95rem;
+}
+
+.usuari-connectat .nom-usuari {
+  color: lab(96.77% -0.27 -2.27);
+}
+
+.usuari-connectat .punt-verd {
+  width: 5px;
+  height: 5px;
+  background-color: #4caf50;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.nom-usuari {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.submenu-login {
+  display: none;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1em;
+  z-index: 9999;
+}
+
+.submenu-login.mostrar {
+  display: block;
+}
+
+.menu-idioma img {
+  width: 32px;
+  height: auto;
+  cursor: pointer;
+}
+
+.menu-idioma:hover .submenu {
+  display: block;
+}
+
+.menu-idioma .submenu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  padding: 0.5em;
+}
+
+.menu-idioma .submenu.visible {
+  display: block;
+}
+
+.menu-idioma .submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  rigth: 100%;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+}
+
+
+.menu-idioma {
+  position: relative;
+}
+
+.menu-idioma .submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  padding: 0.5em;
+  list-style: none;
+  min-width: 120px;
+}
+
+
+.menu-idioma .submenu li {
+  margin: 0.2em 0;
+}
+
+.menu-idioma .submenu a {
+  color: #333;
+  text-decoration: none;
+}
+
+ .icona-missatges {
+      position: relative;
+      font-size: 1.5rem;
+      text-decoration: none;
+      margin: 0 1rem;
+      display: inline-block;
+    }
+    
+    .badge-notificacions {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: #d32f2f;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      min-width: 18px;
+      text-align: center;
+    }
+    
+    .icona-missatges:hover {
+      opacity: 0.8;
+    }
+
+    /* CSS PER ALS PUNTS DE NIVELL D'USUARI - VERSIÓ AMB !IMPORTANT */
+/* Substitueix o actualitza al navegacio.css */
+
+/* Punt de nivell */
+.punt-nivell {
+  display: inline-block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  margin-left: 8px !important;
+  position: relative !important;
+  cursor: help !important;
+}
+
+/* Colors segons nivell */
+.punt-nivell-blau {
+  background-color: #2196F3 !important;
+  box-shadow: 0 0 5px rgba(33, 150, 243, 0.5) !important;
+}
+
+.punt-nivell-groc {
+  background-color: #FFC107 !important;
+  box-shadow: 0 0 5px rgba(255, 193, 7, 0.5) !important;
+}
+
+.punt-nivell-verd {
+  background-color: #4CAF50 !important;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5) !important;
+}
+
+/* Animació pulse suau */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Tooltip en hover */
+.punt-nivell::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10000;
+}
+
+/* Fletxa del tooltip */
+.punt-nivell::after {
+  content: '';
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10000;
+}
+
+/* Mostrar tooltip en hover */
+.punt-nivell:hover::before,
+.punt-nivell:hover::after {
+  opacity: 1 !important;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  
+  .nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #3d3d3c;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  
+ .nav ul.open {
+    display: flex;
+  }
+  
+  .usuari-connectat {
+    font-size: 0.8rem;
+  }
+  
+  .icona-missatges svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+

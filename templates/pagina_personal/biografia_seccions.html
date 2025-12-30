@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('La meva biografia') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal_info.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="biografia-container">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('pagina_personal.pagina_personal') }}">{{ _('El meu espai') }}</a> › 
+    <span>{{ _('Biografia') }}</span>
+  </div>
+
+  <h1>
+    {{ _('La meva biografia') }}
+    <button type="button" data-modal="modal-info-biografia" class="boto-info" title="{{ _('Com organitzar la teva biografia') }}">
+      i
+    </button>
+  </h1>
+  
+
+  {% if seccions %}
+    <!-- Seccions de biografia -->
+    {% for seccio in seccions %}
+    <div class="seccio-biografia" data-seccio-id="{{ seccio.id }}">
+      
+      <div class="seccio-header">
+        <h2 class="seccio-titol">
+          {{ seccio.titol }}
+          {% if seccio.any_inici %}
+             <span style="color: #666; font-weight: normal; font-size: 0.9em;">
+              ({{ seccio.any_inici }}{% if seccio.any_final %} — {{ seccio.any_final }}{% endif %})
+            </span>
+          {% endif %}
+        </h2>
+        
+        <div class="seccio-accions">
+       
+    
+          
+          <!-- Visibilitat -->
+          <button 
+            class="boto-visibilitat {{ 'publica' if seccio.visible else 'privada' }}" 
+            onclick="toggleVisibilitat({{ seccio.id }})"
+            id="visibilitat-{{ seccio.id }}">
+            {{ _('Pública') if seccio.visible else _('Privada') }}
+          </button>
+          
+          <!-- Editar -->
+          <a href="{{ url_for('biografia_seccions.editar_seccio', seccio_id=seccio.id) }}" class="boto-editar">
+            {{ _('Editar') }}
+          </a>
+          
+          <!-- Eliminar -->
+          <button class="boto-eliminar" onclick="eliminarSeccio({{ seccio.id }}, '{{ seccio.titol }}')">
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <!-- Info de la secció -->
+      <div class="seccio-info">
+        <span>{{ _('Última modificació:') }} {{ seccio.data_modificacio.strftime('%d/%m/%Y') if seccio.data_modificacio else seccio.data_creacio.strftime('%d/%m/%Y') }}</span>
+        <span class="badge {{ 'badge-publica' if seccio.visible else 'badge-privada' }}">
+          {{ _('Visible al perfil públic') if seccio.visible else _('Només visible per tu') }}
+        </span>
+      </div>
+
+      <!-- Contingut -->
+      <div class="seccio-contingut">
+        {% if seccio.contingut %}
+          {{ seccio.contingut|safe }}
+        {% else %}
+          <p class="seccio-buida">{{ _('Aquesta secció encara no té contingut.') }}</p>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <!-- Missatge si no hi ha seccions -->
+    <div class="seccio-buida">
+      <h3>{{ _('Encara no has escrit cap secció de la teva biografia') }}</h3>
+      <p>{{ _('Comença creant la primera secció. Pots organitzar-la per períodes, temes o com prefereixis.') }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Botó afegir nova secció -->
+  <div class="afegir-seccio">
+    <a href="{{ url_for('biografia_seccions.crear_seccio') }}" class="boto-afegir">
+      + {{ _('Afegir nova secció') }}
+    </a>
+  </div>
+
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="{{ url_for('pagina_personal.pagina_personal') }}" class="link-tornar">
+      ← {{ _('Tornar al meu espai') }}
+    </a>
+  </div>
+
+</div>
+
+<!-- Modal informatiu -->
+<div id="modal-info-biografia" class="modal-overlay">
+  <div class="modal-content">
+    <button data-modal-close class="modal-tancar" aria-label="{{ _('Tancar') }}">×</button>
+    
+    <h2>💡 {{ _('Consells per organitzar la teva biografia') }}</h2>
+
+    <div class="text-principal">
+      <p>{{ _('La biografia és la teva història personal. Organitza-la com vulguis:') }}</p>
+      
+      <ul>
+        <li><strong>{{ _('Per períodes:') }}</strong> {{ _('"Infància", "Joventut", "Vida professional"...') }}</li>
+        <li><strong>{{ _('Per temes:') }}</strong> {{ _('"Família", "Estudis", "Carrera", "Aficions"...') }}</li>
+        <li><strong>{{ _('Per llocs:') }}</strong> {{ _('"Barcelona", "París", "Nova York"...') }}</li>
+      </ul>
+      
+      <p>{{ _('Cada secció es pot:') }}</p>
+      <ul>
+        <li>✓ {{ _('Editar individualment amb format ric (negreta, cursiva, enllaços, imatges...)') }}</li>
+        <li>✓ {{ _('Marcar com a privada si no vols que aparegui al perfil públic') }}</li>
+        <li>✓ {{ _('Reordenar arrossegant o amb les fletxes') }}</li>
+        <li>✓ {{ _('Eliminar si ja no la necessites') }}</li>
+      </ul>
+
+      <button 
+        data-toggle-trigger="info-biografia-completa" 
+        data-text-mes="▼ {{ _('Més consells avançats') }}"
+        data-text-menys="▲ {{ _('Amagar consells') }}"
+        class="boto-llegir-mes">
+        ▼ {{ _('Més consells avançats') }}
+      </button>
+    </div>
+
+    <!-- Part desplegable -->
+    <div id="info-biografia-completa" data-toggle-content style="display: none;">
+      
+      <h3>{{ _('PRIVACITAT I VISIBILITAT') }}</h3>
+      <p>{{ _('Pots decidir què és públic i què és privat:') }}</p>
+      <ul>
+        <li>{{ _('Les seccions públiques apareixen al teu perfil visible per tothom') }}</li>
+        <li>{{ _('Les seccions privades només les pots veure tu') }}</li>
+        <li>{{ _('Pots canviar la visibilitat en qualsevol moment') }}</li>
+      </ul>
+
+      <h3>{{ _('FORMAT I ESTIL') }}</h3>
+      <p>{{ _('Utilitza l\'editor per donar format al text:') }}</p>
+      <ul>
+        <li>{{ _('Negreta i cursiva per destacar') }}</li>
+        <li>{{ _('Llistes per organitzar idees') }}</li>
+        <li>{{ _('Enllaços a recursos externs') }}</li>
+        <li>{{ _('Imatges per il·lustrar moments importants') }}</li>
+      </ul>
+
+      <h3>{{ _('CONSELLS D\'ESCRIPTURA') }}</h3>
+      <ul>
+        <li>{{ _('No cal escriure-ho tot d\'un cop. Vés afegint seccions poc a poc') }}</li>
+        <li>{{ _('Comença pels moments que recordes més clarament') }}</li>
+        <li>{{ _('Inclou dates aproximades si no les recordes amb exactitud') }}</li>
+        <li>{{ _('Les anècdotes personals fan la biografia més viva i interessant') }}</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/modal_info.js') }}"></script>
+<script>
+
+// Toggle visibilitat
+function toggleVisibilitat(seccioId) {
+  fetch(`/perfil/biografia-seccions/${seccioId}/toggle-visibilitat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const boto = document.getElementById(`visibilitat-${seccioId}`);
+      boto.textContent = data.visible ? '{{ _("Pública") }}' : '{{ _("Privada") }}';
+      boto.className = `boto-visibilitat ${data.visible ? 'publica' : 'privada'}`;
+      
+      // Actualitzar badge
+      location.reload();
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}
+
+// Eliminar secció
+function eliminarSeccio(seccioId, titol) {
+  if (!confirm(`Estàs segur que vols eliminar la secció "${titol}"?\n\nAquesta acció no es pot desfer.`)) {
+    return;
+  }
+  
+  fetch(`/perfil/biografia-seccions/${seccioId}/eliminar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      alert(data.error || 'Error al eliminar la secció');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,645 @@
+/* ========================================
+   INICI.CSS - ESPECÍFIC PORTADA
+   ======================================== */
+
+/* ========== LAYOUT 3 COLUMNES ========== */
+
+.portada-container {
+    min-height: calc(100vh - 200px);
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Quadre benvinguda a dalt */
+.quadre-benvinguda {
+    background: #f8f9fa;
+    border: 1px solid #a7d7f9;
+    padding: 30px;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 4px;
+    max-width: 1400px;
+}
+
+.quadre-benvinguda h1 {
+    font-size: 2.5rem;
+    color: #1a4b75;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.quadre-benvinguda .lema {
+    font-size: 1.2rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Layout Grid 3 columnes */
+.portada-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    align-items: start;
+}
+
+/* ========== SIDEBAR ESQUERRA ========== */
+
+.portada-sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.portada-sidebar h2 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.menu-lateral {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-lateral li {
+    margin: 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-lateral li:last-child {
+    border-bottom: none;
+}
+
+.menu-lateral a {
+    display: block;
+    padding: 10px 8px;
+    font-size: 0.95rem;
+    color: #0645ad;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.menu-lateral a:hover {
+    background: #e8f4ff;
+    text-decoration: underline;
+}
+
+/* Submenús desplegables */
+.menu-item-desplegable {
+    position: relative;
+}
+
+.menu-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu-toggle .fletxa {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.menu-toggle.obert .fletxa {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #f0f0f0;
+}
+
+.submenu.visible {
+    display: block;
+}
+
+.submenu li {
+    border-bottom: 1px solid #e0e0e0;
+    margin: 0;
+}
+
+.submenu li:last-child {
+    border-bottom: none;
+}
+
+.submenu a {
+    display: block;
+    padding: 8px 8px 8px 24px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.submenu a:hover {
+    background: #e0e0e0;
+    color: #1a4b75;
+}
+
+/* ========== CONTINGUT CENTRAL ========== */
+
+.portada-contingut {
+    padding: 0;
+}
+
+/* Caixes de contingut */
+.caixa-contingut {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+}
+
+.caixa-contingut h2 {
+    font-size: 1.5rem;
+    color: #1a4b75;
+    margin-bottom: 10px;
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.caixa-contingut h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.caixa-contingut p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* ========== GRID DE TEMES ========== */
+
+.grid-temes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.boto-tema {
+    display: block;
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.boto-tema:hover {
+    background: #e8f4ff;
+    border-color: #1a4b75;
+    color: #1a4b75;
+}
+
+/* Botó MÉS/MENYS */
+.boto-mes {
+    background: #fff;
+    border: 1px solid #1a4b75;
+    color: #1a4b75;
+    font-weight: 600;
+}
+
+.boto-mes:hover {
+    background: #1a4b75;
+    color: #fff;
+}
+
+/* Temes addicionals ocults */
+.temes-addicionals {
+    display: none;
+    grid-column: 1 / -1;
+}
+
+.temes-addicionals.visible {
+    display: contents;
+}
+
+/* Botó "altre tema" */
+.boto-altre-tema {
+    grid-column: 1 / -1;
+    background: #fff;
+    border: 2px dashed #bdc3c7;
+    color: #666;
+    font-weight: 600;
+    padding: 16px 20px;
+    margin-top: 10px;
+}
+
+.boto-altre-tema:hover {
+    background: #f0f0f0;
+    border-color: #1a4b75;
+    color: #1a4b75;
+}
+
+/* ========== SELECTOR PAÍS ========== */
+
+.selector-pais-wrapper {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.selector-pais-container {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 0;
+}
+
+.selector-pais-container h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.selector-pais-container h3::after {
+    content: ':';
+}
+
+.selector-pais {
+    padding: 4px 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #555;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    max-width: 120px;
+}
+
+.selector-pais:hover {
+    border-color: #1a4b75;
+    background: #fff;
+}
+
+.selector-pais:focus {
+    outline: none;
+    border-color: #1a4b75;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(26, 75, 117, 0.1);
+}
+
+/* ========== BARRA LATERAL DRETA ========== */
+
+.barra-lateral {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.toggle-buttons {
+    display: flex;
+    padding: 10px;
+    gap: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.toggle-btn.active {
+    background: #1a4b75;
+    color: white;
+    border-color: #1a4b75;
+}
+
+.toggle-btn:hover:not(.active) {
+    background: #e9ecef;
+}
+
+.mode-content {
+    display: none;
+    flex: 1;
+    overflow: hidden;
+}
+
+.mode-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.llista-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.item-categoria,
+.item-pais,
+.item-tema {
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.item-categoria:hover,
+.item-pais:hover,
+.item-tema:hover {
+    background: #e8f4f8;
+    border-color: #1a4b75;
+}
+
+.item-categoria .icona {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.btn-tornar {
+    padding: 8px 12px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.btn-tornar:hover {
+    background: #e9ecef;
+}
+
+#nom-pais-seleccionat {
+    margin: 0 10px 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1a4b75;
+    font-size: 16px;
+    color: #1a4b75;
+}
+
+/* ========== MODAL MOTIVADORA ========== */
+
+.modal-motivadora {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-motivadora.visible {
+    display: flex;
+}
+
+.modal-motivadora-contingut {
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.modal-motivadora-tancar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    background: none;
+    border: none;
+    line-height: 1;
+}
+
+.modal-motivadora-tancar:hover {
+    color: #333;
+}
+
+.modal-motivadora h2 {
+    font-size: 1.5rem;
+    color: #1a4b75;
+    margin-bottom: 20px;
+}
+
+.modal-motivadora p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.modal-motivadora-botons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.modal-motivadora-botons a,
+.modal-motivadora-botons button {
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-crear-perfil {
+    background: #1a4b75;
+    color: #fff;
+    border: none;
+}
+
+.btn-crear-perfil:hover {
+    background: #143a5c;
+}
+
+.btn-login {
+    background: #fff;
+    color: #1a4b75;
+    border: 2px solid #1a4b75;
+}
+
+.btn-login:hover {
+    background: #f0f8ff;
+}
+
+/* ========== FORMULARI LOGIN ========== */
+
+.submenu-login {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 320px;
+}
+
+.submenu-login.actiu {
+    display: block;
+}
+
+.camp-login {
+    margin-bottom: 20px;
+}
+
+.camp-login label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.camp-login input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.camp-login input:focus {
+    outline: none;
+    border-color: #1a4b75;
+}
+
+.submenu-login button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #1a4b75;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submenu-login button[type="submit"]:hover {
+    background: #143a5c;
+}
+
+.registre-entrada {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.tipus-compte {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.tipus-compte a {
+    color: #1a4b75;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tipus-compte a:hover {
+    text-decoration: underline;
+}
+
+.enllaços-extra a {
+    color: #666;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.enllaços-extra a:hover {
+    color: #1a4b75;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 968px) {
+    .portada-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .barra-lateral {
+        display: none;
+    }
+
+    .quadre-benvinguda h1 {
+        font-size: 2rem;
+    }
+
+    .quadre-benvinguda .lema {
+        font-size: 1rem;
+    }
+
+    .caixa-contingut h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-temes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-temes {
+        grid-template-columns: 1fr;
+    }
+}

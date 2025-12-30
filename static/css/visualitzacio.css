@@ -1,0 +1,313 @@
+/* ========================================
+   VISUALITZACIÓ.CSS - Estil unificat per pàgines de contingut
+   Per: Famílies, Organitzacions, Membres, etc.
+   ======================================== */
+
+/* === CONTENIDOR PRINCIPAL === */
+.container-visualitzacio {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* === CAPÇALERES === */
+.capçalera-pagina {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.capçalera-pagina h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.capçalera-pagina h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.capçalera-pagina .text-muted,
+.capçalera-pagina p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* === CARDS PRINCIPALS === */
+.card-visualitzacio {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-visualitzacio h3,
+.card-visualitzacio h4 {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.card-visualitzacio h3 {
+    font-size: 1.3rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+}
+
+.card-visualitzacio h4 {
+    font-size: 1.1rem;
+}
+
+/* === SECCIONS AMB COLOR === */
+.card-header-custom {
+    border-radius: 8px 8px 0 0;
+    padding: 1rem 1.5rem;
+    margin: -1.5rem -1.5rem 1rem -1.5rem;
+    color: white;
+    font-weight: 600;
+}
+
+.card-header-primary { background-color: #1a4b75; }
+.card-header-success { background-color: #5a7a8a; }
+.card-header-danger { background-color: #6c757d; }
+.card-header-warning { background-color: #8a95a0; color: white; }
+.card-header-info { background-color: #7b8fa3; }
+.card-header-secondary { background-color: #8a9199; }
+
+/* === GRID DE 2 COLUMNES === */
+.grid-2-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .grid-2-cols {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === LLISTES ELEGANTS === */
+.llista-elegant {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.llista-elegant li {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    border-left: 3px solid #1a4b75;
+    transition: all 0.2s ease;
+}
+
+.llista-elegant li:hover {
+    background-color: #f0f0f0;
+    transform: translateX(3px);
+}
+
+.llista-elegant li a {
+    color: #1a4b75;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.llista-elegant li a:hover {
+    text-decoration: underline;
+}
+
+/* === TAULES === */
+.taula-visualitzacio {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.taula-visualitzacio thead {
+    background-color: #f8f9fa;
+}
+
+.taula-visualitzacio th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.taula-visualitzacio td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.taula-visualitzacio tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* === BADGES === */
+.badge-custom {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-admin { background-color: hsl(212, 53%, 77%); color: white; }
+.badge-membre { background-color: #6c757d; color: white; }
+.badge-actiu { background-color: #28a745; color: white; }
+.badge-provisional { background-color: hsl(240, 33%, 16%); color: #333; }
+.badge-mort { background-color: hsl(208, 46%, 74%); color: white; }
+
+/* === BOTONS === */
+.boto-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.btn-custom {
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary-custom {
+    background-color: #1a4b75;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: #225e91;
+}
+
+.btn-secondary-custom {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary-custom:hover {
+    background-color: #5a6268;
+}
+
+.btn-outline-custom {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.btn-outline-custom:hover {
+    background-color: #f0f0f0;
+}
+
+/* === ALERTES === */
+.alerta-info {
+    background-color: #d1ecf1;
+    border-left: 4px solid #17a2b8;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.alerta-success {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.alerta-warning {
+    background-color: #fff3cd;
+    border-left: 4px solid hsl(231, 100%, 51%);
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+/* === SEPARADORS === */
+.separador {
+    border: 0;
+    border-top: 2px solid #f0f0f0;
+    margin: 2rem 0;
+}
+
+/* === TEXTOS === */
+.text-muted-custom {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.text-petit {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* === ICONES === */
+.icona-titol {
+    margin-right: 0.5rem;
+    color: #1a4b75;
+}
+
+/* === NAVEGACIÓ === */
+.nav-tornar {
+    margin-bottom: 1.5rem;
+}
+
+.nav-tornar a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.nav-tornar a:hover {
+    color: #1a4b75;
+}
+
+/* === DOCUMENTS / GALERIA === */
+.galeria-documents {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.document-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.document-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* === BIOGRAFIES / TEXT LLARG === */
+.biografia-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #333;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}

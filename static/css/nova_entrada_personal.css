@@ -1,0 +1,662 @@
+
+.formulari-dos-cols {
+  display: flex;
+  gap: 40px;
+  padding: 20px;
+  align-items: flex-start;
+  max-width: 1400px;  /* o més si vols */
+  margin: 0 auto;     /* centra-ho a la pantalla */
+  width: 100%;
+}
+
+.col-esquerra {
+  flex: 4;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.col-dreta {
+  flex: 2;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+
+input.campo-largo:focus,
+textarea.campo-largo:focus {
+  border-color: #5a9;
+  outline: none;
+  background-color: #fffdf6;
+}
+
+.col-esquerra h1,
+.col-dreta h1 {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  }
+
+  .miniatura {
+  display: inline-block;
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 8px;
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: top;
+}
+
+.miniatura img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+.galeria-edicio {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.llista-arxius-existents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.element-arxiu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  width: 120px;
+}
+
+.miniatura-edicio, .icona-edicio {
+  max-width: 100px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+.icona-arxiu {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+.galeria-arxius {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 1rem 0;
+}
+
+.caixa-arxiu {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: auto;
+  text-align: center;
+}
+
+.caixa-arxiu img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.caixa-arxiu input[type="checkbox"] {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  accent-color: #4CAF50; /* Verd bonic */
+  cursor: pointer;
+  z-index: 2;
+}
+
+.centrat {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.bloc-audio {
+  margin-top: 10px;
+  background: #f2f2f2;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.boto-eliminar-audio {
+  margin-left: 10px;
+  background-color: #ffdddd;
+  border: 1px solid #d00;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+#onda-gravacio {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  height: 20px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#onda-gravacio.onda-oculta {
+  display: none;
+}
+
+#onda-gravacio .barra {
+  width: 4px;
+  background-color: #4caf50;
+  animation: pujaBaixa 1s infinite ease-in-out;
+  border-radius: 2px;
+}
+
+#onda-gravacio .barra:nth-child(1) { animation-delay: 0s; }
+#onda-gravacio .barra:nth-child(2) { animation-delay: 0.1s; }
+#onda-gravacio .barra:nth-child(3) { animation-delay: 0.2s; }
+#onda-gravacio .barra:nth-child(4) { animation-delay: 0.3s; }
+#onda-gravacio .barra:nth-child(5) { animation-delay: 0.4s; }
+#onda-gravacio .barra:nth-child(6) { animation-delay: 0.5s; }
+#onda-gravacio .barra:nth-child(7) { animation-delay: 0.6s; }
+#onda-gravacio .barra:nth-child(8) { animation-delay: 0.7s; }
+@keyframes pujaBaixa {
+  0%, 100% { height: 4px; }
+  50% { height: 20px; }
+}
+
+/* Afegir al CSS existent */
+#onda-gravacio-conversa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  margin: 10px 0;
+}
+
+#onda-gravacio-conversa .barra {
+  width: 4px;
+  height: 20px;
+  background: #4CAF50;
+  border-radius: 2px;
+  animation: onda 1.5s infinite ease-in-out;
+}
+
+#onda-gravacio-conversa .barra:nth-child(2) { animation-delay: 0.1s; }
+#onda-gravacio-conversa .barra:nth-child(3) { animation-delay: 0.2s; }
+#onda-gravacio-conversa .barra:nth-child(4) { animation-delay: 0.3s; }
+#onda-gravacio-conversa .barra:nth-child(5) { animation-delay: 0.4s; }
+
+.onda-oculta {
+  display: none !important;
+}
+
+@keyframes onda {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    opacity: 0.5;
+  }
+  20% { 
+    transform: scaleY(1.0);
+    opacity: 1;
+  }
+}
+.caixa-arxiu input[type="checkbox"]:checked + img {
+  outline: 3px solid #e53935; /* contorn vermell */
+  box-shadow: 0 0 5px #e53935;
+  border-radius: 6px;
+}
+
+.caixa-arxiu {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.caixa-arxiu:hover {
+  background-color: #f5f5f5;
+}
+
+.caixa-arxiu input[type="checkbox"] {
+  display: none;
+}
+
+input.campo-largo,
+textarea.campo-largo {
+  width: 100%;
+}
+
+.titol-seccio {
+  margin-bottom: 0rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.bloc-gravacio {
+  margin-bottom:0rem;
+}
+
+.botons-gravacio {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0rem;
+}
+
+.bloc-gravacio + .bloc-gravacio {
+  margin-top: 20px;  /* Afegim espai només ENTRE blocs */
+}
+
+main {
+  display: flex;
+  justify-content: center;  /* centrar horitzontalment */
+  padding: 2rem;
+}
+
+main > * {
+  flex: 1;              /* que creixi i ocupi espai */
+  max-width: 900px;     /* límit perquè no sigui massa ample */
+}
+
+/* estils generals del select */
+.compartir-organitzacions select {
+  font-size: 1rem;    /* mida com h3 */
+  font-weight: bold;   /* gruix h3 */
+  color: #000;         /* negre */
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* només la primera opció dins del desplegable */
+.compartir-organitzacions select option:first-child {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+}
+
+
+* CSS específic per converses integrades */
+.header-converses-integrat {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.botons-toggle-converses {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-toggle-conversa {
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9em;
+}
+
+.btn-toggle-conversa:hover {
+  border-color: #4CAF50;
+}
+
+.btn-toggle-conversa.actiu {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.vista-converses {
+  margin-top: 15px;
+}
+
+.seccio-conversa {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.seccio-conversa h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.fila-camps-conversa {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.camp-conversa {
+  flex: 1;
+}
+
+.camp-conversa-complet {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.camp-conversa label,
+.camp-conversa-complet label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.camp-conversa input,
+.camp-conversa select,
+.camp-conversa-complet input,
+.camp-conversa-complet textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+}
+
+.camp-conversa input:focus,
+.camp-conversa select:focus,
+.camp-conversa-complet input:focus,
+.camp-conversa-complet textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* PARTICIPANTS DINÀMICS */
+.participant-integrat {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: white;
+  position: relative;
+}
+
+.participant-header-integrat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.participant-num {
+  background: #4CAF50;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.btn-eliminar-participant-integrat {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7em;
+}
+
+/* OPCIONS GRAVACIÓ */
+.opcions-gravacio-conversa {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.separador-conversa {
+  text-align: center;
+  margin: 10px 0;
+  color: #999;
+  position: relative;
+}
+
+.separador-conversa:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+}
+
+.separador-conversa {
+  background: #fafafa;
+  padding: 0 10px;
+  display: inline-block;
+}
+
+.pujar-arxiu-conversa {
+  position: relative;
+}
+
+.etiqueta-arxiu-conversa {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.etiqueta-arxiu-conversa:hover {
+  background: #e0e0e0;
+}
+
+#arxiu_conversa {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.info-arxiu-conversa {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* BOTONS */
+.btn-afegir-conversa,
+.btn-guardar-conversa,
+.btn-cancelar-conversa {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.btn-afegir-conversa {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-afegir-conversa:hover {
+  background: #1976D2;
+}
+
+.btn-guardar-conversa {
+  background: #4CAF50;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-guardar-conversa:hover {
+  background: #45a049;
+}
+
+.btn-cancelar-conversa {
+  background: #757575;
+  color: white;
+}
+
+.btn-cancelar-conversa:hover {
+  background: #616161;
+}
+
+.botons-accio-conversa {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .fila-camps-conversa {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .opcions-gravacio-conversa {
+    flex-direction: column;
+  }
+}
+
+#carregant-converses {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.icona-conversa {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.icona-tipus {
+    width: 20px;
+    height: 20px;
+    filter: invert(1); /* Fer-la blanca */
+}
+.compartir-amb {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.titol-seccio {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.opcions-compartir {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.grup-opcions {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    background: white;
+}
+
+.grup-opcions legend {
+    font-weight: 600;
+    color: #0000CD;
+    padding: 0 0.5rem;
+}
+
+.opcio-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.opcio-checkbox:hover {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.opcio-checkbox input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.opcio-checkbox span {
+    flex: 1;
+}
+
+.info-visibilitat {
+    margin-top: 1rem;
+    color: #666;
+    font-style: italic;
+}
+/* VIDEO RESPONSIVE */
+#previsualitzacio-video {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+#videos-gravats video {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+  #previsualitzacio-video,
+  #videos-gravats video {
+    max-width: 100%;
+    width: 100%;
+  }
+}

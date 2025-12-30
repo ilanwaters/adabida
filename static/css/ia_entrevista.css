@@ -1,0 +1,216 @@
+.entrevista .contenidor-principal {
+  display: flex;
+  height: calc(100vh - 130px); /* ajustat a header + pestanyes */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.entrevista .sidebar {
+  width: 220px;
+  border-right: 1px solid #ccc;
+  padding: 15px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.entrevista .sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.entrevista .sidebar li {
+  margin-bottom: 8px;
+}
+
+.entrevista .sidebar li.actiu a {
+  font-weight: bold;
+  color: #005bbb;
+}
+
+.entrevista .xat-contenidor {
+  flex-grow: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.entrevista .capcalera-xat {
+  margin-bottom: 5px;
+}
+
+.entrevista .xat-missatges {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #f4f4f4;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.entrevista .missatge {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 80%;
+  line-height: 1.4;
+}
+
+.entrevista .missatge.usuari {
+  background: #e0f7fa;
+  align-self: flex-end;
+  text-align: right;
+  max-width: 100%;
+}
+
+.entrevista .missatge.echo {
+  background: #e8eaf6;
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.entrevista .xat-formulari {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 80px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border-top: 1px solid #ccc;
+  z-index: 999;
+}
+
+.entrevista .xat-formulari input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+}
+
+.entrevista .xat-formulari button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: #005bbb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.entrevista .avis-xat {
+  color: #777;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.entrevista .contenidor-principal {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.entrevista .capcalera-xat {
+  margin-top: 30;
+  padding-top: 0;
+}
+
+
+.entrevista h2 {
+  margin-top: 0;
+}
+
+.capcalera-xat {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.capcalera-xat h2 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* També assegura que el contenidor principal no afegeix espai */
+.contenidor-principal {
+  margin-top: 0;
+  padding-top: 10;
+}
+
+#formulari-missatge {
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  right: 0;
+  background: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  border-top: 1px solid #ccc;
+  z-index: 10;
+}
+
+#camp-missatge {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-width: 1000px; /* pots ajustar aquest valor */
+  box-sizing: border-box;
+}
+
+#formulari-missatge button {
+  padding: 10px 20px;
+  font-weight: bold;
+  background: #005bbb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tema-principal {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.subtemes {
+  list-style: none;
+  margin-left: 15px;
+  padding-left: 10px;
+  border-left: 2px solid #ccc;
+}
+
+.subtemes li {
+  margin-bottom: 4px;
+}
+.tema-principal {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.tema-nom {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fletxa {
+  font-size: 0.8em;
+  margin-left: 8px;
+}
+
+.subtemes {
+  list-style: none;
+  margin: 5px 0 5px 15px;
+  padding-left: 10px;
+  border-left: 2px solid #ccc;
+}
+
+.ocult {
+  display: none;
+}
+

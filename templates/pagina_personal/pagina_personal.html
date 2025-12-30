@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Pàgina personal') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_entrada_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
+    <a href="{{ url_for('inici.inici_pagina') }}" class="boto_nav">{{ _('Inici') }}</a>
+  </h1>
+</div>
+
+<main>
+  <div class="cards-grid">
+
+    <!-- Card: Biografia -->
+ <a href="{{ url_for('biografia_seccions.llistar') }}" class="card">
+      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
+   
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Biografia') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Les meves entrades -->
+    <a href="{{ url_for('pagina_personal.entrades') }}" class="card">
+      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/test.jpg') }}');">
+     
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Les meves entrades') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Nova entrada -->
+    <a href="{{ url_for('pagina_personal.nova_entrada') }}" class="card">
+      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
+    
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Nova entrada') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Perfil personal -->
+    <a href="{{ url_for('pagina_personal.perfil') }}" class="card">
+      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
+   
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Perfil personal') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Organitzacions -->
+    <a href="{{ url_for('organitzacions.hub') }}" class="card">
+      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/adabida2.jpg') }}');">
+     
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Organitzacions') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Família -->
+<a href="{{ url_for('familia.hub') }}" class="card">
+  <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/familia.png') }}');">
+  
+  </div>
+  <div class="card-content">
+    <h3>{{ _('Família') }}</h3>
+  </div>
+</a>
+
+  </div>
+
+  {% include "components/modal_entrada.html" %}
+  {% include "components/modal_entrada_editar.html" %}
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+  
+<script>
+  const pestanya = "{{ pestanya_activa }}";
+</script>
+
+<script> 
+  function preparaAccioFormulari(formulari) {
+    const idEntrada = formulari.querySelector('input[name="entrada_id"]');
+    if (idEntrada) {
+      formulari.action = `/actualitzar_entrada/${idEntrada.value}`;
+    }
+    return true;
+  }
+</script>
+
+<script>
+  function obreSeccio(id) {
+    const seccions = document.querySelectorAll('.seccio');
+    const pestanyes = document.querySelectorAll('.pestanya');
+
+    seccions.forEach(sec => {
+      sec.style.display = 'none';
+      sec.classList.remove("visible");
+    });
+    pestanyes.forEach(p => p.classList.remove('activa'));
+    const activa = document.getElementById(id);
+    if (activa) {
+      activa.style.display = 'block';
+      activa.classList.add("visible");
+    }
+    const pestanyaHTML = document.querySelector(`.pestanya[data-id="${id}"]`);
+    if (pestanyaHTML) pestanyaHTML.classList.add('activa');
+    history.replaceState(null, '', `?pestanya=${id}`);
+
+    if (id === "perfil") {
+      carregaGuardades();
+    }
+
+    if (id === "converses") {
+      carregaConverses();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    let pestanya = params.get('pestanya');
+
+    if (!pestanya) {
+      pestanya = "{{ pestanya or 'biografia' }}";
+    }
+
+    obreSeccio(pestanya);
+  });
+</script>
+
+<script>
+  function carregaEntradesGuardades(usuariLogin) {
+    fetch(`/api/guardades/${usuariLogin}`)
+      .then(res => {
+        if (!res.ok) throw new Error("No s'ha pogut carregar");
+        return res.text();
+      })
+      .then(html => {
+        const cont = document.getElementById("llista-guardades");
+        cont.innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("llista-guardades").innerHTML = "<p>Error carregant les entrades guardades.</p>";
+      });
+  }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    carregaEntradesGuardades("{{ session['usuari'] }}");
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const botoEliminar = document.querySelector('button[name="accio"][value="eliminar_arxius"]');
+    if (botoEliminar) {
+      botoEliminar.addEventListener("click", function (e) {
+        const confirmat = confirm("{{ _('Segur que vols eliminar els arxius seleccionats?') }}");
+        if (!confirmat) {
+          e.preventDefault();
+        }
+      });
+    }
+  });
+</script>
+
+<script>
+  function obrePestanya(nom) {
+    const params = new URLSearchParams(window.location.search);
+    const usuari = params.get("usuari_login");
+
+    if (!usuari) {
+      alert("Falta usuari_login a la URL!");
+      return;
+    }
+
+    window.location.href = `/pagina_personal?usuari_login=${usuari}&pestanya=${nom}`;
+  }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    activaTancarModals();  
+  });
+</script>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("obrir") === "missatges") {
+      const bloc = document.querySelector('.bloc-plegable');
+      if (bloc && bloc.classList.contains('tancat')) {
+        toggleBloc(bloc.querySelector(".titol-plegable"));
+      }
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".bloc-plegable").forEach(bloc => {
+      bloc.classList.add("tancat");
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("obrir") === "missatges") {
+      const bloc = document.querySelector('.bloc-plegable');
+      if (bloc && bloc.classList.contains('tancat')) {
+        toggleBloc(bloc.querySelector(".titol-plegable"));
+      }
+    }
+  });
+
+  function canviaBustia(quina) {
+    const rebuts = document.getElementById("bustia-rebuts");
+    const enviats = document.getElementById("bustia-enviats");
+
+    const pestanyes = document.querySelectorAll(".pestanya-bustia");
+    pestanyes.forEach(p => p.classList.remove("activa"));
+
+    if (quina === "rebuts") {
+      rebuts.style.display = "block";
+      enviats.style.display = "none";
+      pestanyes[0].classList.add("activa");
+    } else {
+      rebuts.style.display = "none";
+      enviats.style.display = "block";
+      pestanyes[1].classList.add("activa");
+    }
+  }
+</script>
+
+<script>
+  function carregaConverses() {
+    fetch('/converses/ajax')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('contingut-converses').innerHTML = html;
+      })
+      .catch(error => {
+        document.getElementById('contingut-converses').innerHTML = '<p>Error carregant converses</p>';
+      });
+  }
+</script>
+
+<script>
+  function toggleBloc(element) {
+    const bloc = element.parentElement;
+    bloc.classList.toggle('tancat');
+  }
+</script>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_missatge.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nova_entrada_personal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nova_entrada.js') }}"></script>
+
+{% endblock %}

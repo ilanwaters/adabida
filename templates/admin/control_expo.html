@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Administració exposició') }}{% endblock %}
+
+{% block contingut %}
+<a href="{{ url_for('admin.admin_exposicions') }}" class="boto-retorn">
+  ⬅️ {{ _('Tornar a exposicions') }}
+</a>
+
+<div class="contenidor-expo">
+  <h1>{{ expo.titol }}</h1>
+  <p><strong>{{ _('Codi:') }}</strong> {{ expo.codi }}</p>
+  <p><strong>{{ _('Descripció:') }}</strong> {{ expo.descripcio }}</p>
+
+  {% set portada_path = expo.carpeta + '/portada.jpg' %}
+  <div class="imatge-portada">
+    <h3>{{ _('Imatge de portada') }}</h3>
+    <img src="{{ url_for('serveis_media.serveix_media', filepath=portada_path) }}" alt="Portada" width="300">
+  </div>
+</div>
+<form method="POST" action="{{url_for('admin_galeria.elimina_exposicio', id=expo.id) }}"
+      onsubmit="return confirm('{{ _('Segur que vols eliminar aquesta exposició?') }}');">
+  <button type="submit" class="boto-elimina">
+    🗑 {{ _('Eliminar exposició') }}
+  </button>
+</form>
+
+{% endblock %}

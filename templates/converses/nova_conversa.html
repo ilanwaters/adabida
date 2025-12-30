@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Conversa - ADABIDA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estils.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/converses.css') }}">
+</head>
+<body>
+    <div class="formulari-conversa">
+        <h1>📝 Nova Conversa/Diàleg</h1>
+        
+        <form id="form-nova-conversa" method="POST" enctype="multipart/form-data">
+            
+            <!-- PARTICIPANTS -->
+            <div class="seccio-formulari">
+                <h3>👥 Participants</h3>
+                <div id="participants-container">
+                    <!-- Els participants s'afegiran aquí dinàmicament -->
+                </div>
+                <button type="button" id="btn-afegir-participant" class="btn-afegir-participant">
+                    ➕ Afegir contertulio
+                </button>
+            </div>
+            
+            <!-- DADES CONVERSA -->
+            <div class="seccio-formulari">
+                <h3>📍 Dades de la Conversa</h3>
+                
+                <div class="fila-formulari">
+                    <div class="camp-formulari">
+                        <label for="lloc_municipi">Municipi:</label>
+                        <input type="text" id="lloc_municipi" name="lloc_municipi" placeholder="Barcelona">
+                    </div>
+                    <div class="camp-formulari">
+                        <label for="lloc_regio">Regió:</label>
+                        <input type="text" id="lloc_regio" name="lloc_regio" placeholder="Catalunya">
+                    </div>
+                    <div class="camp-formulari">
+                        <label for="lloc_pais">País:</label>
+                        <input type="text" id="lloc_pais" name="lloc_pais" placeholder="Espanya">
+                    </div>
+                </div>
+                
+                <div class="fila-formulari">
+                    <div class="camp-formulari camp-petit">
+                        <label for="data_conversa">Data conversa:</label>
+                        <input type="date" id="data_conversa" name="data_conversa" required>
+                    </div>
+                    <div class="camp-formulari camp-petit">
+                        <label for="durada_minuts">Durada (min):</label>
+                        <input type="number" id="durada_minuts" name="durada_minuts" min="1" placeholder="45">
+                    </div>
+                </div>
+                
+                <div class="camp-formulari">
+                    <label for="observacions_generals">Observacions generals:</label>
+                    <textarea id="observacions_generals" name="observacions_generals" rows="3" 
+                              placeholder="Context de la conversa, temes tractats, circumstàncies..."></textarea>
+                </div>
+            </div>
+            
+            <!-- ARXIU MULTIMÈDIA -->
+            <div class="seccio-formulari seccio-arxiu">
+                <h3>🎤 Arxiu Multimèdia</h3>
+                <div class="camp-formulari">
+                    <label for="arxiu">Seleccionar arxiu:</label>
+                    <input type="file" id="arxiu" name="arxiu" 
+                           accept="audio/*,video/*,.webm,.mp4,.mp3,.wav,.ogg,.m4a">
+                    <small style="color: #666; margin-top: 5px; display: block;">
+                        Formats acceptats: MP3, WAV, OGG, WebM, MP4, M4A
+                    </small>
+                </div>
+                
+                <!-- TODO: Afegir opcions gravació directa -->
+                <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
+                    <small style="color: #1976d2;">
+                        <strong>Pròximament:</strong> Gravació d'àudio i vídeo directament des del navegador
+                    </small>
+                </div>
+            </div>
+            
+            <!-- COMPARTIR AMB ORGANITZACIÓ -->
+            <div class="seccio-formulari seccio-compartir">
+                <h3>🏢 Compartir amb Organització</h3>
+                <div class="camp-formulari">
+                    <label for="organitzacio_id">Seleccionar organització:</label>
+                    <select id="organitzacio_id" name="organitzacio_id">
+                        <option value="">No compartir</option>
+                        {% for org in organitzacions %}
+                            <option value="{{ org.id }}">{{ org.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <!-- BOTONS ACCIÓ -->
+            <div class="botons-accio">
+                <button type="submit" class="btn-guardar">💾 Guardar Conversa</button>
+                <button type="button" class="btn-cancelar" onclick="window.history.back();">❌ Cancel·lar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript per gestionar múltiples participants
+        let numeroParticipant = 0;
+        
+        function afegirParticipant() {
+            const container = document.getElementById('participants-container');
+            const participantHtml = `
+                <div class="participant-card" data-participant="${numeroParticipant}">
+                    <div class="participant-header">
+                        <div class="participant-numero">${numeroParticipant + 1}</div>
+                        <button type="button" class="btn-eliminar-participant" onclick="eliminarParticipant(${numeroParticipant})">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                    
+                    <div class="fila-formulari">
+                        <div class="camp-formulari">
+                            <label for="participant_nom_${numeroParticipant}">Nom complet: *</label>
+                            <input type="text" id="participant_nom_${numeroParticipant}" 
+                                   name="participant_nom_${numeroParticipant}" 
+                                   placeholder="Maria Fontanals i Roca" required>
+                        </div>
+                        <div class="camp-formulari camp-petit">
+                            <label for="participant_data_naixement_${numeroParticipant}">Data naixement:</label>
+                            <input type="date" id="participant_data_naixement_${numeroParticipant}" 
+                                   name="participant_data_naixement_${numeroParticipant}">
+                        </div>
+                    </div>
+                    
+                    <div class="fila-formulari">
+                        <div class="camp-formulari">
+                            <label for="participant_municipi_${numeroParticipant}">Municipi origen:</label>
+                            <input type="text" id="participant_municipi_${numeroParticipant}" 
+                                   name="participant_municipi_${numeroParticipant}" 
+                                   placeholder="Vic">
+                        </div>
+                        <div class="camp-formulari">
+                            <label for="participant_regio_${numeroParticipant}">Regió:</label>
+                            <input type="text" id="participant_regio_${numeroParticipant}" 
+                                   name="participant_regio_${numeroParticipant}" 
+                                   placeholder="Catalunya">
+                        </div>
+                        <div class="camp-formulari">
+                            <label for="participant_pais_${numeroParticipant}">País:</label>
+                            <input type="text" id="participant_pais_${numeroParticipant}" 
+                                   name="participant_pais_${numeroParticipant}" 
+                                   placeholder="Espanya">
+                        </div>
+                    </div>
+                    
+                    <div class="camp-formulari">
+                        <label for="participant_observacions_${numeroParticipant}">Observacions:</label>
+                        <textarea id="participant_observacions_${numeroParticipant}" 
+                                  name="participant_observacions_${numeroParticipant}" 
+                                  rows="2" 
+                                  placeholder="Testimoni directe de la guerra civil, filla de refugiats..."></textarea>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', participantHtml);
+            numeroParticipant++;
+            actualitzarNumeracio();
+        }
+        
+        function eliminarParticipant(numero) {
+            const participant = document.querySelector(`[data-participant="${numero}"]`);
+            if (participant) {
+                participant.remove();
+                actualitzarNumeracio();
+            }
+        }
+        
+        function actualitzarNumeracio() {
+            const participants = document.querySelectorAll('.participant-card');
+            participants.forEach((participant, index) => {
+                const numeroElement = participant.querySelector('.participant-numero');
+                if (numeroElement) {
+                    numeroElement.textContent = index + 1;
+                }
+                
+                // Actualitzar classe d'estil
+                if (index === 0) {
+                    participant.classList.add('participant-actiu');
+                } else {
+                    participant.classList.remove('participant-actiu');
+                }
+            });
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Afegir primer participant per defecte
+            afegirParticipant();
+            
+            // Botó afegir participant
+            document.getElementById('btn-afegir-participant').addEventListener('click', afegirParticipant);
+            
+            // Validació del formulari
+            document.getElementById('form-nova-conversa').addEventListener('submit', function(e) {
+                const participants = document.querySelectorAll('.participant-card input[name^="participant_nom_"]');
+                let almenysUnParticipant = false;
+                
+                participants.forEach(input => {
+                    if (input.value.trim()) {
+                        almenysUnParticipant = true;
+                    }
+                });
+                
+                if (!almenysUnParticipant) {
+                    e.preventDefault();
+                    alert('Has d\'afegir almenys un participant amb nom.');
+                    return false;
+                }
+                
+                // Validar data conversa
+                const dataConversa = document.getElementById('data_conversa').value;
+                if (!dataConversa) {
+                    e.preventDefault();
+                    alert('La data de la conversa és obligatòria.');
+                    document.getElementById('data_conversa').focus();
+                    return false;
+                }
+            });
+            
+            // Autocompletat de lloc (copiar de conversa a participants)
+            const municipiConversa = document.getElementById('lloc_municipi');
+            const regioConversa = document.getElementById('lloc_regio');
+            const paisConversa = document.getElementById('lloc_pais');
+            
+            function copiarLlocAParticipants() {
+                const participants = document.querySelectorAll('.participant-card');
+                participants.forEach(participant => {
+                    const municipiPart = participant.querySelector('input[name*="municipi"]');
+                    const regioPart = participant.querySelector('input[name*="regio"]');
+                    const paisPart = participant.querySelector('input[name*="pais"]');
+                    
+                    if (municipiPart && !municipiPart.value) municipiPart.value = municipiConversa.value;
+                    if (regioPart && !regioPart.value) regioPart.value = regioConversa.value;
+                    if (paisPart && !paisPart.value) paisPart.value = paisConversa.value;
+                });
+            }
+            
+            // Copiar automàticament quan l'usuari surt del camp lloc conversa
+            paisConversa.addEventListener('blur', copiarLlocAParticipants);
+        });
+        
+        // Funció per previsualitzar fitxer
+        document.getElementById('arxiu').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const tamanyMB = (file.size / 1024 / 1024).toFixed(2);
+                console.log(`Arxiu seleccionat: ${file.name} (${tamanyMB} MB)`);
+                
+                // TODO: Afegir previsualització si és imatge
+            }
+        });
+    </script>
+</body>
+</html>

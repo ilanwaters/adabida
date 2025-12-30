@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}{{ familia.nom }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+    
+    <!-- Navegació -->
+    <div class="nav-tornar">
+        <a href="{{ url_for('familia.les_meves') }}">
+            ← {{ _('Tornar als Meus Espais') }}
+        </a>
+    </div>
+
+    <!-- Capçalera amb heràldica -->
+    <div class="capçalera-pagina">
+        {% if familia.heraldica_fitxer %}
+            <img src="{{ url_for('static', filename='heraldica/' + familia.heraldica_fitxer) }}" 
+                 alt="{{ _('Escut de') }} {{ familia.nom }}" 
+                 style="max-height: 120px; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        {% endif %}
+        
+        <h1>{{ familia.nom }}</h1>
+        
+        {% if familia.motiu %}
+            <p class="text-muted-custom" style="font-size: 1.1rem; margin-top: 0.5rem;">{{ familia.motiu }}</p>
+        {% endif %}
+        
+        {% if es_admin %}
+        <div class="boto-group" style="justify-content: center; margin-top: 1rem;">
+            <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}" class="btn-custom btn-primary-custom">
+                + {{ _('Afegir Membre') }}
+            </a>
+           
+    <!-- NOU BOTÓ -->
+    <a href="{{ url_for('administrar.index', familia_id=familia.id) }}" 
+       class="btn-custom btn-secondary-custom">
+        {{ _('Administrar Espai') }}
+    </a>
+</div>
+        
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Descripció i període -->
+    {% if familia.descripcio or familia.periode_referencia %}
+    <div class="card-visualitzacio">
+        <div class="card-header-custom card-header-primary">
+            {{ _('Informació General') }}
+        </div>
+        
+        {% if familia.descripcio %}
+            <p style="margin-bottom: 1rem;">{{ familia.descripcio }}</p>
+        {% endif %}
+        
+        {% if familia.periode_referencia %}
+            <p class="text-muted-custom" style="margin: 0;">
+                <strong>{{ _('Període de referència') }}:</strong> {{ familia.periode_referencia }}
+            </p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Grid de 2 columnes: Ubicacions -->
+    <div class="grid-2-cols">
+        
+        <!-- Ubicacions d'Origen -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-success">
+                 {{ _('Llocs d\'Origen') }}
+            </div>
+            
+            {% if familia.ubicacions_origen %}
+                <ul class="llista-elegant">
+                    {% for ubicacio in familia.ubicacions_origen|sort(attribute='ordre') %}
+                    <li>
+                        {% if ubicacio.municipi %}{{ ubicacio.municipi }}, {% endif %}
+                        {% if ubicacio.regio %}{{ ubicacio.regio }}, {% endif %}
+                        {{ ubicacio.pais }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted-custom">{{ _('No s\'han especificat llocs d\'origen') }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Ubicacions Actuals -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-info">
+                 {{ _('Ubicacions Actuals') }}
+            </div>
+            
+            {% if familia.ubicacions_mostrar %}
+                <ul class="llista-elegant">
+                    {% for ubicacio in familia.ubicacions_mostrar %}
+                    <li>
+                        {% if ubicacio.municipi %}{{ ubicacio.municipi }}, {% endif %}
+                        {% if ubicacio.regio %}{{ ubicacio.regio }}, {% endif %}
+                        {{ ubicacio.pais }}
+                        {% if ubicacio.es_provisional %}
+                            <span class="badge-custom badge-provisional">{{ _('Provisional') }}</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if familia.ubicacions_actuals and familia.ubicacions_actuals[0].es_provisional %}
+                    <div class="alerta-info" style="margin-top: 1rem;">
+                        <small>{{ _('Les ubicacions provisionals es recalcularan automàticament quan s\'afegeixin membres') }}</small>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="text-muted-custom">{{ _('No s\'han especificat ubicacions actuals') }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- Membres de la Família -->
+    <div class="card-visualitzacio">
+        <div class="card-header-custom card-header-warning">
+             {{ _('Membres de la Família') }} ({{ familia.nombre_membres }})
+        </div>
+
+        {% if familia.membres %}
+            <ul class="llista-elegant">
+                {% for membre in familia.membres %}
+                <li>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <a href="{{ url_for('membres.veure', membre_id=membre.id) }}">
+                                <strong>
+                                    {% if membre.usuari %}
+                                        {{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}
+                                        {% if membre.usuari.segon_cognom %}{{ membre.usuari.segon_cognom }}{% endif %}
+                                    {% elif membre.nom %}
+                                        {{ membre.nom }} {{ membre.primer_cognom }}
+                                        {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}
+                                    {% else %}
+                                        {{ _('Sense dades') }}
+                                    {% endif %}
+                                </strong>
+                            </a>
+                            
+                            {% if membre.data_naixement and membre.data_defuncio %}
+                                <span class="badge-custom badge-mort" style="margin-left: 0.5rem;">
+                                    {{ membre.data_naixement.strftime('%Y') }}-{{ membre.data_defuncio.strftime('%Y') }}
+                                </span>
+                            {% elif membre.data_defuncio %}
+                                <span class="badge-custom badge-mort" style="margin-left: 0.5rem;">
+                                    † {{ membre.data_defuncio.strftime('%Y') }}
+                                </span>
+                            {% elif membre.data_naixement %}
+                                <span class="text-petit" style="margin-left: 0.5rem; color: #666;">
+                                    ({{ membre.data_naixement.strftime('%Y') }})
+                                </span>
+                            {% endif %}
+                            
+                            <br>
+                            
+                            <span class="badge-custom {% if membre.rol == 'administrador' %}badge-actiu{% else %}badge-membre{% endif %}">
+                                {% if membre.rol == 'administrador' %}{{ _('Administrador') }}{% else %}{{ _('Membre') }}{% endif %}
+                            </span>
+                            
+                            {% if membre.municipi_actual %}
+                                <span class="text-petit" style="margin-left: 0.5rem;">
+                                     {{ membre.municipi_actual }}{% if membre.pais_actual %}, {{ membre.pais_actual }}{% endif %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if es_admin %}
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{{ url_for('membres.veure', membre_id=membre.id) }}" 
+                               class="btn-custom btn-outline-custom" 
+                               style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">
+                                {{ _('Veure') }}
+                            </a>
+                            <a href="{{ url_for('membres.editar', membre_id=membre.id) }}" 
+                               class="btn-custom btn-outline-custom" 
+                               style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">
+                                {{ _('Editar') }}
+                            </a>
+                            <a href="{{ url_for('membres.gestionar_relacions', membre_id=membre.id) }}" 
+                               class="btn-custom btn-outline-custom" 
+                               style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">
+                                {{ _('Relacions') }}
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alerta-info">
+                <p>{{ _('Aquest espai familiar encara no té membres.') }}</p>
+                {% if es_admin %}
+                    <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}" class="btn-custom btn-primary-custom" style="margin-top: 0.5rem;">
+                        + {{ _('Afegir Primer Membre') }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Records Familiars -->
+    <div class="card-visualitzacio">
+        <div class="card-header-custom card-header-danger">
+             {{ _('Records') }}
+        </div>
+
+        {% if records %}
+            <div style="display: grid; gap: 1rem;">
+                {% for entrada in records %}
+                    {% include "components/caixa_entrada.html" %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted-custom">{{ _('Encara no hi ha records publicats en aquest espai familiar.') }}</p>
+        {% endif %}
+
+        <a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" 
+           class="btn-custom btn-primary-custom" 
+           style="margin-top: 1rem;">
+            + {{ _('Crear Entrada') }}
+        </a>
+        
+        <p class="text-muted-custom" style="margin-top: 0.5rem; font-size: 0.85rem;">
+            {{ _('Quan creïs una entrada, marca el checkbox d\'aquesta família per compartir-la aquí') }}
+        </p>
+    </div>
+
+    <!-- Arbre Genealògic (Futur) -->
+    <div class="card-visualitzacio" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: none;">
+        <div style="text-align: center; padding: 2rem;">
+            <span style="font-size: 3rem;"></span>
+            <h3 style="color: #1a4b75; margin: 1rem 0;">{{ _('Arbre Genealògic Visual') }}</h3>
+            <p class="text-muted-custom">{{ _('Properament podràs visualitzar l\'arbre genealògic complet amb totes les relacions familiars!') }}</p>
+            <button class="btn-custom btn-outline-custom" style="margin-top: 1rem;" disabled>
+                {{ _('Veure Arbre') }} ({{ _('Properament') }})
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal per veure entrades -->
+{% include "components/modal_entrada.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+{% endblock %}

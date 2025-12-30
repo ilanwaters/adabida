@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block titol %}Explorador Umberto{% endblock %}
+
+{% block contingut %}
+<h1>Umberto – Navegador d’arxius</h1>
+<p>Ruta actual: /{{ ruta_actual }}</p>
+
+{% if ruta_actual %}
+   <button onclick="window.location.href='{{ url_for('admin.pagina_admin') }}'"> {{ _('Tornar al panell principal') }}</button>
+{% else %}
+  <p><em>Estàs a la carpeta arrel.</em></p>
+{% endif %}
+{% if ruta_actual %}
+  <div class="breadcrumb">
+    <a href="{{ url_for('admin.navegador_umberto') }}">📁 arrel</a>
+    {% set path_parts = ruta_actual.split('/') %}
+    {% set acumulat = [] %}
+    {% for part in path_parts %}
+      {% set _ = acumulat.append(part) %}
+      &nbsp;/&nbsp;
+      <a href="{{ url_for('admin.navegador_umberto', subpath='/'.join(acumulat)) }}">{{ part }}</a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="breadcrumb">
+    <strong>📁 arrel</strong>
+  </div>
+{% endif %}
+
+<h2>{{ _('Carpetes') }}</h2>
+</h2>
+<ul>
+  {% for carpeta in carpetes %}
+    <li>
+      <a href="{{ url_for('admin.navegador_umberto', subpath=(ruta_actual + '/' if ruta_actual else '') + carpeta) }}">
+        📁 {{ carpeta }}
+      </a>
+    </li>
+  {% else %}
+    <li>No hi ha cap carpeta</li>
+  {% endfor %}
+</ul>
+
+
+<h2>{{ _('Fitxers') }}</h2>
+
+<table class="taula-fitxers">
+  <thead>
+    <tr>
+      <th>{{ _('Miniatura') }}</th>
+      <th>{{ _('Nom') }}</th>
+      <th>{{ _('Data') }}</th>
+      <th>{{ _('Autor') }}</th>
+      <th>{{ _('Accions') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for f in fitxers %}
+    <tr>
+      <td>
+     {% if f.tipus == "imatge" and f.ruta_api %}
+  <img src="{{ f.ruta_api }}"
+       alt="{{ f.nom }}" class="miniatura-imatge"
+       onclick="obrePopup(this.src)">
+{% else %}
+  📄
+{% endif %}
+
+
+      </td>
+      <td>{{ f.nom }}</td>
+      <td>{{ f.data }}</td>
+      <td>{{ f.autor }}</td>
+      <td>
+        <button class="boto-eliminar">{{ _('Eliminar') }}</button>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">{{ _('No hi ha cap fitxer') }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<div id="popup-img">
+  <span class="tancar" onclick="tancaPopup()">&times;</span>
+  <img id="popup-img-src" src="">
+</div>
+
+<script>
+function obrePopup(src) {
+  document.getElementById("popup-img-src").src = src;
+  document.getElementById("popup-img").style.display = "block";
+}
+
+function tancaPopup() {
+  document.getElementById("popup-img").style.display = "none";
+}
+</script>
+
+
+
+{% endblock %}

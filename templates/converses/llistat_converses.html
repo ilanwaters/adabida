@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}Les meves Converses - ADABIDA{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/converses.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="converses-container">
+        <div class="header-converses">
+            <h1>Les meves Converses i Diàlegs</h1>
+            <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa">
+                ➕ Nova Conversa
+            </a>
+        </div>
+        
+        {% if converses %}
+            {% for conversa in converses %}
+            <div class="conversa-card">
+                <div class="conversa-header">
+                    <div>
+                        <div class="conversa-data">
+                            {% if conversa.data_conversa %}
+                                {{ conversa.data_conversa.strftime('%d/%m/%Y') }}
+                            {% else %}
+                                Sense data
+                            {% endif %}
+                        </div>
+                        <div class="conversa-lloc">
+                            {% if conversa.lloc_municipi or conversa.lloc_regio or conversa.lloc_pais %}
+                                📍 
+                                {% if conversa.lloc_municipi %}{{ conversa.lloc_municipi }}{% endif %}
+                                {% if conversa.lloc_regio %}{% if conversa.lloc_municipi %}, {% endif %}{{ conversa.lloc_regio }}{% endif %}
+                                {% if conversa.lloc_pais %}{% if conversa.lloc_municipi or conversa.lloc_regio %}, {% endif %}{{ conversa.lloc_pais }}{% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="conversa-actions">
+                        <a href="{{ url_for('converses.detall_conversa', id=conversa.id) }}" class="btn-action btn-veure">
+                            👁️ Veure
+                        </a>
+                        <a href="{{ url_for('converses.editar_conversa', id=conversa.id) }}" class="btn-action btn-editar">
+                            ✏️ Editar
+                        </a>
+                        <button onclick="confirmarEsborrar({{ conversa.id }})" class="btn-action btn-esborrar">
+                            🗑️ Esborrar
+                        </button>
+                    </div>
+                </div>
+                
+                {% if conversa.participants %}
+                <div class="conversa-participants">
+                    <div class="participants-llista">
+                        {% for participant in conversa.participants %}
+                            <span class="participant-tag">
+                                {{ participant.nom }}
+                                {% if participant.edat_aproximada %}
+                                    ({{ participant.edat_aproximada }} anys)
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="conversa-detalls">
+                    {% if conversa.durada_minuts %}
+                    <div class="detall-item">
+                        ⏱️ {{ conversa.durada_minuts }} min
+                    </div>
+                    {% endif %}
+                    
+                    {% if conversa.arxiu_nom %}
+                    <div class="detall-item">
+                        <span class="arxiu-info">
+                            {% if conversa.arxiu_tipus == 'audio' %}🎤{% elif conversa.arxiu_tipus == 'video' %}🎥{% else %}📁{% endif %}
+                            {{ conversa.arxiu_tipus|title }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if conversa.organitzacio %}
+                    <div class="detall-item">
+                        <span class="organitzacio-info">
+                            🏢 {{ conversa.organitzacio.nom }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="detall-item" style="justify-self: end;">
+                        <small>Creada: {{ conversa.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                    </div>
+                </div>
+                
+                {% if conversa.observacions_generals %}
+                <div class="conversa-observacions">
+                    "{{ conversa.observacions_generals }}"
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+        {% else %}
+            <div class="empty-state">
+                <h3>Encara no tens converses gravades</h3>
+                <p>Les converses i diàlegs et permeten documentar testimonis entre múltiples persones de manera natural i oberta.</p>
+                <br>
+                <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa">
+                    ➕ Crear la meva primera conversa
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function confirmarEsborrar(conversaId) {
+            if (confirm('Estàs segur que vols esborrar aquesta conversa? Aquesta acció no es pot desfer.')) {
+                // Crear formulari hidden per enviar POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/converses/${conversaId}/esborrar`;
+                
+                // Afegir token CSRF si el tens implementat
+                // const csrf = document.createElement('input');
+                // csrf.type = 'hidden';
+                // csrf.name = 'csrf_token';
+                // csrf.value = '{{ csrf_token() }}';
+                // form.appendChild(csrf);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+{% endblock %}<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les meves Converses - ADABIDA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estils.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/converses.css') }}">
+</head>
+<body>
+    <div class="converses-container">
+        <div class="header-converses">
+            <h1>Les meves Converses i Diàlegs</h1>
+            <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa">
+                ➕ Nova Conversa
+            </a>
+        </div>
+        
+        {% if converses %}
+            {% for conversa in converses %}
+            <div class="conversa-card">
+                <div class="conversa-header">
+                    <div>
+                        <div class="conversa-data">
+                            {% if conversa.data_conversa %}
+                                {{ conversa.data_conversa.strftime('%d/%m/%Y') }}
+                            {% else %}
+                                Sense data
+                            {% endif %}
+                        </div>
+                        <div class="conversa-lloc">
+                            {% if conversa.lloc_municipi or conversa.lloc_regio or conversa.lloc_pais %}
+                                📍 
+                                {% if conversa.lloc_municipi %}{{ conversa.lloc_municipi }}{% endif %}
+                                {% if conversa.lloc_regio %}{% if conversa.lloc_municipi %}, {% endif %}{{ conversa.lloc_regio }}{% endif %}
+                                {% if conversa.lloc_pais %}{% if conversa.lloc_municipi or conversa.lloc_regio %}, {% endif %}{{ conversa.lloc_pais }}{% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="conversa-actions">
+                        <a href="{{ url_for('converses.detall_conversa', id=conversa.id) }}" class="btn-action btn-veure">
+                            👁️ Veure
+                        </a>
+                        <a href="{{ url_for('converses.editar_conversa', id=conversa.id) }}" class="btn-action btn-editar">
+                            ✏️ Editar
+                        </a>
+                        <button onclick="confirmarEsborrar({{ conversa.id }})" class="btn-action btn-esborrar">
+                            🗑️ Esborrar
+                        </button>
+                    </div>
+                </div>
+                
+                {% if conversa.participants %}
+                <div class="conversa-participants">
+                    <div class="participants-llista">
+                        {% for participant in conversa.participants %}
+                            <span class="participant-tag">
+                                {{ participant.nom }}
+                                {% if participant.edat_aproximada %}
+                                    ({{ participant.edat_aproximada }} anys)
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="conversa-detalls">
+                    {% if conversa.durada_minuts %}
+                    <div class="detall-item">
+                        ⏱️ {{ conversa.durada_minuts }} min
+                    </div>
+                    {% endif %}
+                    
+                    {% if conversa.arxiu_nom %}
+                    <div class="detall-item">
+                        <span class="arxiu-info">
+                            {% if conversa.arxiu_tipus == 'audio' %}🎤{% elif conversa.arxiu_tipus == 'video' %}🎥{% else %}📁{% endif %}
+                            {{ conversa.arxiu_tipus|title }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if conversa.organitzacio %}
+                    <div class="detall-item">
+                        <span class="organitzacio-info">
+                            🏢 {{ conversa.organitzacio.nom }}
+                        </span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="detall-item" style="justify-self: end;">
+                        <small>Creada: {{ conversa.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                    </div>
+                </div>
+                
+                {% if conversa.observacions_generals %}
+                <div class="conversa-observacions">
+                    "{{ conversa.observacions_generals }}"
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+        {% else %}
+            <div class="empty-state">
+                <h3>Encara no tens converses gravades</h3>
+                <p>Les converses i diàlegs et permeten documentar testimonis entre múltiples persones de manera natural i oberta.</p>
+                <br>
+                <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa">
+                    ➕ Crear la meva primera conversa
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function confirmarEsborrar(conversaId) {
+            if (confirm('Estàs segur que vols esborrar aquesta conversa? Aquesta acció no es pot desfer.')) {
+                // Crear formulari hidden per enviar POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/converses/${conversaId}/esborrar`;
+                
+                // Afegir token CSRF si el tens implementat
+                // const csrf = document.createElement('input');
+                // csrf.type = 'hidden';
+                // csrf.name = 'csrf_token';
+                // csrf.value = '{{ csrf_token() }}';
+                // form.appendChild(csrf);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<div class="participant-integrat" data-participant="{{ numero }}">
+  <div class="participant-header-integrat">
+    <div class="participant-num">{{ numero + 1 }}</div>
+    <button type="button" class="btn-eliminar-participant-integrat" onclick="eliminarParticipantIntegrat({{ numero }})">
+      {{ _('Eliminar') }}
+    </button>
+  </div>
+  
+  <div class="fila-camps-conversa">
+    <div class="camp-conversa">
+      <label>{{ _('Nom') }}:</label>
+      <input type="text" name="participant_nom_{{ numero }}" required>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('Primer cognom') }}:</label>
+      <input type="text" name="participant_primer_cognom_{{ numero }}" required>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('Segon cognom') }}:</label>
+      <input type="text" name="participant_segon_cognom_{{ numero }}" required>
+    </div>
+  </div>
+
+  <div class="fila-camps-conversa">
+    <div class="camp-conversa">
+      <label>{{ _('Data naixement') }}:</label>
+      <input type="date" name="participant_data_naixement_{{ numero }}"required>
+    </div>
+  </div>
+  
+  <div class="fila-camps-conversa">
+    <div class="camp-conversa">
+      <label>{{ _('Municipi') }}:</label>
+      <input type="text" name="participant_municipi_{{ numero }}" required>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('Regió') }}:</label>
+      <input type="text" name="participant_regio_{{ numero }}" required>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('País') }}:</label>
+      <input type="text" name="participant_pais_{{ numero }}" required>
+    </div>
+  </div>
+  
+  <div class="camp-conversa-complet">
+    <label>{{ _('Observacions') }}:</label>
+    <textarea name="participant_observacions_{{ numero }}" rows="2" 
+              placeholder="{{ _('Testimoni directe...') }}"></textarea>
+  </div>
+</div>

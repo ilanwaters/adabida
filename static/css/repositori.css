@@ -1,0 +1,370 @@
+.formulari-cerca {
+  background: #f4f4f4;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.camps-cerca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.camps-cerca input {
+  flex: 1 1 200px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button[type="submit"] {
+  padding: 0.6rem 1.2rem;
+  background-color: #2e5aa7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.caixa-entrada {
+  display: flex;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+
+.miniatura {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.miniatura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contingut-entrada {
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.contingut-entrada h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.paginacio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.boto-paginacio {
+  background-color: #eee;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+.boto-paginacio:hover {
+  background-color: #ddd;
+}
+
+.pagina-actual {
+  color: #666;
+}
+.clicable {
+  cursor: pointer;
+
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease;
+}
+
+.clicable:hover {
+  color: #007bff; /* o un color blau discret */
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.mostrar {
+  display: flex;
+}
+
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.tancar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  color: white;
+}
+.modal-imatge img {
+  max-width: 300px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+
+.botons-anonim {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.botons-anonim .boto {
+  background-color: #eee;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.botons-anonim .boto:hover {
+  background-color: #ddd;
+}
+
+/* El disclaimer ha d’estar per sobre del login */
+#disclaimer-modal {
+  z-index: 11000;   /* més alt que .login-repositori (10000) */
+}
+
+.tancar-disclaimer {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.grid-repositori {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+.linia-final-cerca {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.linia-final-cerca label {
+  flex: 1 1 auto;
+}
+
+#reduir-cerca {
+  flex: 0 0 auto;
+}
+
+.linia-final-cerca button {
+  flex: 0 0 auto;
+}
+.linia-final-cerca {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.registre-entrada {
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px lab(43.07% 36.14 -78.74 / 0.863);
+}
+
+
+/* ----------------------
+   FORMULARI LOGIN MODAL
+-------------------------*/
+body:has(.submenu-login.mostrar) .fons-borros {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+  pointer-events: none;
+}
+/* Centrat i estil del quadre modal */
+.submenu-login {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-width: 90vw;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.submenu-login.mostrar {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Estil dels blocs del formulari */
+.submenu-login form,
+.submenu-login .registre-entrada {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+/* Camps d’entrada */
+.camp-login,
+.camp-contrasenya {
+  width: 100%;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.camp-login label,
+.camp-contrasenya label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.camp-login input,
+.camp-contrasenya input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.8rem;  /* padding dret per deixar lloc a l’ull */
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Icona de l’ull */
+.icona-ull {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 1.2rem;
+}
+
+/* Botó d’entrar */
+.submenu-login button[type="submit"] {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: lch(23.46% 25.55 269.64);
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submenu-login button[type="submit"]:hover {
+  background-color: #000;
+}
+
+.login-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/static/img/fons_login.png'); 
+  background-size: cover;
+  background-position: center;
+  z-index: 9999;
+}
+.finestra-error-login {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffdddd;
+  color: #a80000;
+  border: 1px solid #d10000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 10000;
+  animation: tremolor 0.4s ease-in-out 1;
+}
+
+.boto-info {
+  background: #14d8ce;
+  border: none;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  font-style: italic;
+  transition: all 0.3s;
+}
+
+.boto-info:hover {
+  background: #0ea99f;
+  transform: scale(1.1);
+}

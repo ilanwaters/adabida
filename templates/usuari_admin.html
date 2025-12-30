@@ -1,0 +1,647 @@
+{% extends "base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registre_individual.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/usuari_admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+{% endblock %}
+
+{% block titol %}{{ _('Gestió del compte') }}{% endblock %}
+
+{% block contingut %}
+
+<!-- ───────────────── DADES PERSONALS (només lectura) ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Dades personals') }}</h2>
+  <div class="contingut-bloc">
+    <div class="fila-formulari">
+      <div>
+        <label>{{ _('Nom') }}</label>
+        <input type="text" value="{{ usuari.nom }}" disabled>
+      </div>
+      <div>
+        <label>{{ _('Primer cognom') }}</label>
+        <input type="text" value="{{ usuari.primer_cognom }}" disabled>
+      </div>
+      <div>
+        <label>{{ _('Segon cognom') }}</label>
+        <input type="text" value="{{ usuari.segon_cognom }}" disabled>
+      </div>
+    </div>
+
+    <div class="fila-formulari">
+      <div>
+        <label>{{ _('Data de naixement') }}</label>
+        <input type="date" value="{{ usuari.data_naixement }}" disabled onfocus="this.blur()">
+      </div>
+      <div>
+        <label>{{ _('Municipi de naixement') }}</label>
+        <input type="text" value="{{ usuari.municipi_naixement }}" disabled>
+      </div>
+      <div>
+        <label>{{ _('Regió o estat') }}</label>
+        <input type="text" value="{{ usuari.regio_naixement }}" disabled>
+      </div>
+      <div>
+        <label>{{ _('País de naixement') }}</label>
+        <input type="text" value="{{ usuari.pais_naixement }}" disabled>
+      </div>
+    </div>
+
+    <div class="fila-formulari">
+      <div>
+        <label>{{ _("Nom d'usuari") }}</label>
+        <input type="text" value="{{ usuari.nom_login }}" disabled>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────── CONTACTE / CONFIG (POST → usuari_admin) ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Contacte i configuració') }}</h2>
+  <div class="contingut-bloc">
+    <form method="POST" action="{{ url_for('usuari_admin.usuari_admin') }}">
+      <input type="hidden" name="bloc" value="contacte">
+      {# {{ csrf_token() }} #}
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Correu electrònic') }}</label>
+          <input type="email" name="email" value="{{ usuari.email }}">
+        </div>
+        <div>
+          <label>{{ _('Idioma principal') }}</label>
+          <input type="text" name="idioma" value="{{ usuari.idioma }}">
+        </div>
+        <div>
+          <label>{{ _('País de residència') }}</label>
+          <input type="text" name="pais_residencia" value="{{ usuari.pais_residencia }}">
+        </div>
+      </div>
+      <button type="submit">{{ _('Desar canvis') }}</button>
+    </form>
+    
+<form method="POST" class="formulari-missatges">
+  <div class="fila-form-inline">
+    <label class="checkbox-etica">
+      <input type="checkbox" name="rebre_missatges"
+             {% if usuari.rebre_missatges %}checked{% endif %}>
+      <span class="checkmark"></span>
+      {{ _('Vull rebre missatges d’altres usuaris') }}
+    </label>
+
+    <button type="submit" class="boto-formulari">
+      {{ _('Desar') }}
+    </button>
+  </div>
+</form>
+
+  </div>
+  
+</div>
+
+<!-- ───────────────── PERFIL BIOGRÀFIC (POST → usuari_admin) ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Perfil públic') }}</h2>
+  <div class="contingut-bloc">
+    <form method="POST" action="{{ url_for('usuari_admin.usuari_admin') }}">
+      <input type="hidden" name="bloc" value="perfil_biografic">
+      {# {{ csrf_token() }} #}
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Professió') }}</label>
+          <input type="text" name="professio" value="{{ perfil.professio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Frase destacada') }}</label>
+          <input type="text" name="frase_destacada" value="{{ perfil.frase_destacada if perfil else '' }}">
+        </div>
+      </div>
+
+      <div class="fila-formulari"> <!-- ✅ DINS DEL FORMULARI -->
+        <label><input type="checkbox" name="mostrar_experiencia" {% if perfil and perfil.mostrar_experiencia %}checked{% endif %}> {{ _('Mostrar experiència professional') }}</label>
+        <label><input type="checkbox" name="mostrar_biografia" {% if perfil and perfil.mostrar_biografia %}checked{% endif %}> {{ _('Mostrar biografia') }}</label>
+        <label><input type="checkbox" name="mostrar_estudis" {% if perfil and perfil.mostrar_estudis %}checked{% endif %}> {{ _('Mostrar estudis') }}</label>
+        <label><input type="checkbox" name="mostrar_obres" {% if perfil and perfil.mostrar_obres %}checked{% endif %}> {{ _('Mostrar obres') }}</label>
+        <label><input type="checkbox" name="mostrar_carrecs" {% if perfil and perfil.mostrar_carrecs %}checked{% endif %}> {{ _('Mostrar càrrecs públics') }}</label>
+        <label><input type="checkbox" name="mostrar_pare" {% if perfil and perfil.mostrar_pare %}checked{% endif %}> {{ _('Mostrar informació del pare') }}</label>
+        <label><input type="checkbox" name="mostrar_mare" {% if perfil and perfil.mostrar_mare %}checked{% endif %}> {{ _('Mostrar informació de la mare') }}</label>
+      </div>
+
+      <button type="submit">{{ _('Desar canvis') }}</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- ───────────────── organitzacions família ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Organitzacions') }}</h2>
+  <div class="contingut-bloc">
+    <p>{{ _('Gestiona les teves organitzacions col·laboradores') }}</p>
+    <a href="{{ url_for('organitzacions.crear') }}" class="boto boto-primari">
+      {{ _('Crear organització') }}
+    </a>
+  </div>
+</div>
+</div>
+<!-- ───────────────── EXPERIÈNCIA PROFESSIONAL ───────────────── -->
+
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Experiència professional') }}</h2>
+  <div class="contingut-bloc">
+
+    {% set exps = (perfil and perfil.experiencies or [])|list %}
+    {% if exps %}
+      <div class="taula-responsive">
+        <table class="taula-dades">
+          <thead>
+            <tr>
+              <th>{{ _('Càrrec') }}</th>
+              <th>{{ _('Organització') }}</th>
+              <th>{{ _('Àmbit') }}</th>
+              <th>{{ _('Anys') }}</th>
+              <th>{{ _('Descripció') }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for exp in exps %}
+            <tr>
+              <td>{{ exp.carrec }}</td>
+              <td>{{ exp.organitzacio or '' }}</td>
+              <td>{{ exp.ambit or '' }}</td>
+              <td>
+                {% if exp.actualment %}
+                  {{ exp.any_inici or '' }}–{{ _('actual') }}
+                {% else %}
+                  {{ exp.any_inici or '' }}{% if exp.any_fi %}–{{ exp.any_fi }}{% endif %}
+                {% endif %}
+              </td>
+              <td class="text-sm">{{ exp.descripcio or '' }}</td>
+              <td>
+                <form method="POST" action="{{ url_for('usuari_admin.delete_experiencia', exp_id=exp.id) }}" onsubmit="return confirm('{{ _('Eliminar aquesta experiència?') }}')">
+                  <button type="submit" class="boto-eliminar" title="{{ _('Eliminar') }}">🗑</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">{{ _('Encara no has afegit cap experiència.') }}</p>
+    {% endif %}
+
+    <h3 class="mt-2">{{ _('Afegir experiència') }}</h3>
+    <form method="POST" action="{{ url_for('usuari_admin.add_experiencia') }}">
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Càrrec') }} *</label>
+          <input type="text" name="carrec" required>
+        </div>
+        <div>
+          <label>{{ _('Organització') }}</label>
+          <input type="text" name="organitzacio">
+        </div>
+        <div>
+          <label>{{ _('Àmbit') }}</label>
+          <input type="text" name="ambit" placeholder="p. ex. docència, recerca, música">
+        </div>
+      </div>
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Any inici') }}</label>
+          <input type="number" name="any_inici" min="0" max="2100" inputmode="numeric">
+        </div>
+        <div>
+          <label>{{ _('Any fi') }}</label>
+          <input type="number" name="any_fi" min="0" max="2100" inputmode="numeric">
+        </div>
+        <div class="checkbox-inline">
+          <label><input type="checkbox" name="actualment"> {{ _('Actualment') }}</label>
+        </div>
+      </div>
+      <div class="fila-formulari">
+        <div class="w-100">
+          <label>{{ _('Descripció') }}</label>
+          <textarea name="descripcio" rows="2"></textarea>
+        </div>
+      </div>
+      <button type="submit">{{ _('Afegir experiència') }}</button>
+    </form>
+
+  </div>
+</div>
+
+<!-- ───────────────── OBRA (pujada d’arxius) ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Obra') }}</h2>
+  <div class="contingut-bloc">
+    <form method="POST" action="{{ url_for('usuari_admin.puja_obra') }}" enctype="multipart/form-data">
+      <input type="hidden" name="bloc" value="obra_add">
+      <div class="fila-formulari">
+        <div class="w-100">
+          <label for="titol_obra">{{ _('Títol') }} *</label>
+          <input type="text" id="titol_obra" name="titol_obra" required>
+        </div>
+        <div>
+          <label for="any_obra">{{ _("Any de l'obra") }} *</label>
+          <input type="number" id="any_obra" name="any_obra" min="1800" max="2100" inputmode="numeric" required>
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div class="w-100">
+          <label for="descripcio_obra">{{ _('Descripció (màx. 200 paraules)') }}</label>
+          <textarea id="descripcio_obra" name="descripcio_obra" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div class="w-100">
+          <label for="fitxers_obra">{{ _('Fitxers (PDF o imatges)') }} *</label>
+          <input type="file" id="fitxers_obra" name="fitxers_obra" accept="application/pdf,image/*" multiple required>
+        </div>
+      </div>
+
+      <button type="submit">{{ _('Pujar obra') }}</button>
+    </form>
+  </div>
+</div>
+
+<!-- ───────────────── ESTUDIS ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Estudis') }}</h2>
+  <div class="contingut-bloc">
+
+    {% set estudis = (perfil and perfil.estudis or [])|list %}
+    {% if estudis %}
+      <div class="taula-responsive">
+        <table class="taula-dades">
+          <thead>
+            <tr>
+              <th>{{ _('Titulació') }}</th>
+              <th>{{ _('Centre') }}</th>
+              <th>{{ _('Lloc') }}</th>
+              <th>{{ _('Anys') }}</th>
+              <th>{{ _('Descripció') }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for s in estudis %}
+            <tr>
+              <td>{{ s.titulacio }}</td>
+              <td>{{ s.centre or '' }}</td>
+              <td>{{ [s.ciutat, s.pais]|reject("equalto", None)|reject("equalto", "")|join(', ') }}</td>
+              <td>{{ s.any_inici or '' }}{% if s.any_fi %}–{{ s.any_fi }}{% endif %}</td>
+              <td class="text-sm">{{ s.descripcio or '' }}</td>
+              <td>
+                <form method="POST" action="{{ url_for('usuari_admin.delete_estudi', estudi_id=s.id) }}" onsubmit="return confirm('{{ _('Eliminar aquest estudi?') }}')">
+                  <button type="submit" class="boto-eliminar" title="{{ _('Eliminar') }}">🗑</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">{{ _('Encara no has afegit cap estudi.') }}</p>
+    {% endif %}
+
+    <h3 class="mt-2">{{ _('Afegir estudi') }}</h3>
+    <form method="POST" action="{{ url_for('usuari_admin.add_estudi') }}">
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Titulació') }} *</label>
+          <input type="text" name="titulacio" required>
+        </div>
+        <div>
+          <label>{{ _('Centre') }}</label>
+          <input type="text" name="centre">
+        </div>
+        <div>
+          <label>{{ _('Ciutat') }}</label>
+          <input type="text" name="ciutat">
+        </div>
+        <div>
+          <label>{{ _('País') }}</label>
+          <input type="text" name="pais">
+        </div>
+      </div>
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Any inici') }}</label>
+          <input type="number" name="any_inici" min="0" max="2100" inputmode="numeric">
+        </div>
+        <div>
+          <label>{{ _('Any fi') }}</label>
+          <input type="number" name="any_fi" min="0" max="2100" inputmode="numeric">
+        </div>
+      </div>
+      <div class="fila-formulari">
+        <div class="w-100">
+          <label>{{ _('Descripció') }}</label>
+          <textarea name="descripcio" rows="2"></textarea>
+        </div>
+      </div>
+      <button type="submit">{{ _('Afegir estudi') }}</button>
+    </form>
+
+  </div>
+</div>
+
+<!-- ───────────────── CÀRRECS PÚBLICS ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Càrrecs públics') }}</h2>
+  <div class="contingut-bloc">
+
+    {% set carrecs = (perfil and perfil.carrecs_publics or [])|list %}
+    {% if carrecs %}
+      <div class="taula-responsive">
+        <table class="taula-dades">
+          <thead>
+            <tr>
+              <th>{{ _('Càrrec') }}</th>
+              <th>{{ _('Anys') }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for c in carrecs %}
+            <tr>
+              <td>{{ c.titol }}</td>
+              <td>{{ c.any_inici or '' }}{% if c.any_fi %}–{{ c.any_fi }}{% endif %}</td>
+              <td>
+                <form method="POST" action="{{ url_for('usuari_admin.delete_carrec_public', carrec_id=c.id) }}" onsubmit="return confirm('{{ _('Eliminar aquest càrrec?') }}')">
+                  <button type="submit" class="boto-eliminar" title="{{ _('Eliminar') }}">🗑</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">{{ _('Encara no has afegit cap càrrec públic.') }}</p>
+    {% endif %}
+
+    <h3 class="mt-2">{{ _('Afegir càrrec públic') }}</h3>
+<form method="POST" action="{{ url_for('usuari_admin.add_carrec_public') }}">
+  <div class="fila-formulari">
+    <div>
+      <label>{{ _('Càrrec') }} *</label>
+      <input type="text" name="titol" required>
+    </div>
+    <div>
+      <label>{{ _('Any inici') }}</label>
+      <input type="number" name="any_inici" min="0" max="2100" inputmode="numeric">
+    </div>
+    <div>
+      <label>{{ _('Any fi') }}</label>
+      <input type="number" name="any_fi" min="0" max="2100" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="fila-formulari">
+    <div>
+      <label>{{ _('Municipi') }}</label>
+      <input type="text" name="municipi">
+    </div>
+    <div>
+      <label>{{ _('Regió o estat') }}</label>
+      <input type="text" name="regio">
+    </div>
+    <div>
+      <label>{{ _('País') }}</label>
+      <input type="text" name="pais">
+    </div>
+  </div>
+     <button type="submit">{{ _('Desar canvis') }}</button>
+    </form>
+  </div>
+</div>
+
+<!-- ───────────────── INFORMACIÓ DEL PARE ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Pare') }}</h2>
+  <div class="contingut-bloc">
+    <form method="POST" action="{{ url_for('usuari_admin.usuari_admin') }}">
+      <input type="hidden" name="bloc" value="pare_update">
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Nom') }}</label>
+          <input type="text" name="pare_nom" value="{{ perfil.pare_nom if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Primer cognom') }}</label>
+          <input type="text" name="pare_primer_cognom" value="{{ perfil.pare_primer_cognom if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Segon cognom') }}</label>
+          <input type="text" name="pare_segon_cognom" value="{{ perfil.pare_segon_cognom if perfil else '' }}">
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Data de naixement') }}</label>
+          <input type="date" name="pare_data_naixement" value="{{ perfil.pare_data_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Municipi de naixement') }}</label>
+          <input type="text" name="pare_municipi_naixement" value="{{ perfil.pare_municipi_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Regió o estat') }}</label>
+          <input type="text" name="pare_regio_naixement" value="{{ perfil.pare_regio_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('País') }}</label>
+          <input type="text" name="pare_pais_naixement" value="{{ perfil.pare_pais_naixement if perfil else '' }}">
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Data de defunció') }}</label>
+          <input type="date" name="pare_data_defuncio" value="{{ perfil.pare_data_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Municipi de defunció') }}</label>
+          <input type="text" name="pare_municipi_defuncio" value="{{ perfil.pare_municipi_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Regió o estat') }}</label>
+          <input type="text" name="pare_regio_defuncio" value="{{ perfil.pare_regio_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('País') }}</label>
+          <input type="text" name="pare_pais_defuncio" value="{{ perfil.pare_pais_defuncio if perfil else '' }}">
+        </div>
+      </div>
+
+      <button type="submit">{{ _('Desar canvis del pare') }}</button>
+    </form>
+  </div>
+</div>
+
+<!-- ───────────────── INFORMACIÓ DE LA MARE ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Mare') }}</h2>
+  <div class="contingut-bloc">
+    <form method="POST" action="{{ url_for('usuari_admin.usuari_admin') }}">
+      <input type="hidden" name="bloc" value="mare_update">
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Nom') }}</label>
+          <input type="text" name="mare_nom" value="{{ perfil.mare_nom if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Primer cognom') }}</label>
+          <input type="text" name="mare_primer_cognom" value="{{ perfil.mare_primer_cognom if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Segon cognom') }}</label>
+          <input type="text" name="mare_segon_cognom" value="{{ perfil.mare_segon_cognom if perfil else '' }}">
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Data de naixement') }}</label>
+          <input type="date" name="mare_data_naixement" value="{{ perfil.mare_data_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Municipi de naixement') }}</label>
+          <input type="text" name="mare_municipi_naixement" value="{{ perfil.mare_municipi_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Regió o estat') }}</label>
+          <input type="text" name="mare_regio_naixement" value="{{ perfil.mare_regio_naixement if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('País') }}</label>
+          <input type="text" name="mare_pais_naixement" value="{{ perfil.mare_pais_naixement if perfil else '' }}">
+        </div>
+      </div>
+
+      <div class="fila-formulari">
+        <div>
+          <label>{{ _('Data de defunció') }}</label>
+          <input type="date" name="mare_data_defuncio" value="{{ perfil.mare_data_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Municipi de defunció') }}</label>
+          <input type="text" name="mare_municipi_defuncio" value="{{ perfil.mare_municipi_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('Regió o estat') }}</label>
+          <input type="text" name="mare_regio_defuncio" value="{{ perfil.mare_regio_defuncio if perfil else '' }}">
+        </div>
+        <div>
+          <label>{{ _('País') }}</label>
+          <input type="text" name="mare_pais_defuncio" value="{{ perfil.mare_pais_defuncio if perfil else '' }}">
+        </div>
+      </div>
+
+      <button type="submit">{{ _('Actualitzar informació mare') }}</button>
+    </form>
+  </div>
+</div>
+
+<!-- ───────────────── SEGURETAT / ELIMINACIÓ DEL COMPTE ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Eliminar perfil') }}</h2>
+  <div class="contingut-bloc">
+    <div class="bloc-contingut">
+      <span class="muted">{{ _('Aquesta acció és irreversible.') }}</span>
+      <button id="boto-eliminar-compte" class="boto-danger">
+        {{ _('Eliminar perfil definitivament') }}
+      </button>
+    </div>
+
+    <!-- 🔒 Modal confirmació -->
+    <div id="modal-eliminar" class="modal" style="display:none;">
+      <div class="modal-content">
+        <h2>{{ _('Estàs segur que vols eliminar el teu compte?') }}</h2>
+        <p>{{ _('S’eliminaran totes les teves dades de l’arxiu, inclosos perfils, entrades, àudios, imatges, i la teva vinculació a organitzacions o famílies.') }}</p>
+
+        <div class="botons-modal">
+          <button id="cancelar-eliminacio" class="boto_nav">{{ _('Cancel·lar') }}</button>
+          <form method="POST" action="{{ url_for('usuari_admin.eliminar_compte') }}">
+            {# {{ csrf_token() }} #}
+            <button type="submit" class="boto-danger">{{ _('Eliminar perfil') }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  // Plegables
+  document.querySelectorAll('.bloc.plegable .titol-bloc').forEach(titol => {
+    titol.addEventListener('click', () => {
+      titol.parentElement.classList.toggle('plegat');
+    });
+  });
+
+  // Flash (si existeix a base.html)
+  document.addEventListener('DOMContentLoaded', function () {
+    const flash = document.getElementById("flash-missatges");
+    if (flash && flash.innerText.trim() !== "") {
+      flash.style.display = "block";
+      setTimeout(() => {
+        flash.style.opacity = 0;
+        setTimeout(() => flash.remove(), 1000);
+      }, 4000);
+    }
+  });
+
+  // Modal eliminar compte
+  const botoEliminar = document.getElementById("boto-eliminar-compte");
+  const modal = document.getElementById("modal-eliminar");
+  const cancelar = document.getElementById("cancelar-eliminacio");
+
+  if (botoEliminar && modal && cancelar) {
+    botoEliminar.addEventListener("click", () => { modal.style.display = "block"; });
+    cancelar.addEventListener("click", () => { modal.style.display = "none"; });
+  }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const formCarrec = document.querySelector('form[action$="add_carrec_public"]');
+  if (!formCarrec) return;
+
+  formCarrec.addEventListener("submit", function (e) {
+    const municipi = formCarrec.querySelector('[name="municipi"]').value.trim();
+    const regio = formCarrec.querySelector('[name="regio"]').value.trim();
+    const pais = formCarrec.querySelector('[name="pais"]').value.trim();
+
+    let error = "";
+
+    if (municipi) {
+      if (!regio || !pais) {
+        error = "{{ _('Si s\'ha indicat un municipi, cal afegir també regió i país.') }}";
+      }
+    } else if (regio && !pais) {
+      error = "{{ _('Si s\'ha indicat una regió, cal afegir també el país.') }}";
+    }
+
+    if (error) {
+      e.preventDefault();
+      alert(error);
+    }
+  });
+});
+</script>
+
+{% endblock %}

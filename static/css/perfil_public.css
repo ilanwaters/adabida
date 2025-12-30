@@ -1,0 +1,333 @@
+
+
+.miniatura {
+  width: 100px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.miniatura {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+}
+
+
+/* ==== FINESTRA MODAL ==== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Botons dins la modal */
+.modal-botons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-botons .boto-editar-modal,
+.modal-botons .boto-eliminar-modal,
+.modal-botons .boto-tancar-modal {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-botons .boto-eliminar-modal {
+  background-color: #ffdddd;
+  color: #900;
+}
+
+.modal-botons .boto-editar-modal {
+  background-color: #ddf4ff;
+  color: #0077aa;
+}
+
+.modal-botons .boto-tancar-modal {
+  background-color: #eee;
+}
+
+.modal-capsalera h2 {
+  margin: 0;
+}
+
+#modal-arxius img {
+  display: inline-block;
+  margin: 10px;
+  max-height: 100px;
+}
+
+.titol-entrada {
+  cursor: pointer;       /* Fa que es vegi el "dit" al passar per sobre */
+  user-select: none;     /* Evita que es pugui seleccionar el text amb doble clic */
+  transition: 0.2s ease;
+}
+
+.titol-entrada:hover {
+  text-decoration: underline;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  margin: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 90vh;       /* límit d'alçada visible */
+  overflow-y: auto;       /* activa scroll quan calgui */
+  scroll-behavior: smooth;
+}
+
+.modal-imatge img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+.modal-text h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.any {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.modal-dades p {
+  margin: 5px 0;
+}
+
+.contingut-formatat {
+  white-space: pre-line;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.modal-arxius img {
+  max-width: 100px;
+  margin: 10px;
+}
+
+.seccio {
+  display: none;
+}
+
+.seccio.visible {
+  display: block;
+}
+
+/* Evitem el parpelleig afegint aquesta classe per defecte */
+.ocult_pre_js {
+  display: none !important;
+}
+
+.fila-nom-usuari {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.nom-complet {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.icona-configuracio {
+  font-size: 1.4rem;
+  text-decoration: none;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.icona-configuracio:hover {
+  color: #000;
+}
+
+.icona-configuracio {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #555;
+  cursor: pointer;
+  transition: transform 0.4s ease, color 0.2s;
+  display: inline-block;
+}
+
+.icona-configuracio:hover {
+  transform: rotate(90deg);
+  color: #000;
+}
+ .llista-entrades {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
+
+.capcalera-perfil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 2rem; /* separació del marge dret */
+  margin-bottom: 1rem;
+}
+
+.nom-usuari-perfil {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.boto-enviar-missatge {
+  text-decoration: none;
+}
+
+
+.boto-enviar-missatge:hover {
+  background-color: #ddd;
+}
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.boto-enviar {
+  background-color: #444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.boto-enviar:hover {
+  background-color: #222;
+}
+
+/* ==== BLOCS PLEGABLES ==== */
+.bloc-plegable {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: #fafafa;
+}
+
+.titol-plegable {
+  background: #f0f0f0;
+  padding: 1rem;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 8px 8px 0 0;
+  transition: background-color 0.2s ease;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titol-plegable:hover {
+  background: #e8e8e8;
+}
+
+/* Fletxa indicadora */
+.titol-plegable::after {
+  content: "▼";
+  font-size: 0.8rem;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+/* Quan està plegat (per defecte) */
+.bloc-plegable .contingut-plegable {
+  display: none;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Quan està desplegat (amb classe 'actiu') */
+.bloc-plegable.actiu .contingut-plegable {
+  display: block;
+  padding: 1rem;
+  max-height: none;
+}
+
+/* Fletxa cap amunt quan està obert */
+.bloc-plegable.actiu .titol-plegable::after {
+  transform: rotate(180deg);
+}
+
+/* Estils per contingut dins els blocs */
+.contingut-plegable ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contingut-plegable li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.contingut-plegable li:last-child {
+  border-bottom: none;
+}
+
+.contingut-plegable .muted {
+  color: #888;
+  font-style: italic;
+}
+
+/* Small tags més petits */
+.contingut-plegable small {
+  color: #666;
+  font-size: 0.9rem;
+}

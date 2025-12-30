@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Entrevista') }}</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pestanyes.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon_round.png') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon_round.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ia_entrevista.css') }}">
+</head>
+<body>
+  <body class="entrevista">
+
+
+<header class="nav-wrapper">
+  <nav class="nav">
+    <a href="{{ url_for('inici.inici_pagina') }}" class="logo">
+      <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca" height="32">
+    </a>
+    {% if session['usuari'] %}
+<div class="usuari-connectat">
+ 
+ <a class="nom-usuari" href="#">{{ session['usuari'] }}</a>
+
+   <span class="punt-verd"></span>
+</div>
+{% endif %}
+    <div class="hamburger" onclick="document.querySelector('.nav ul').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+    <ul>
+      {% if session.get('usuari') %}
+  <li><a href="{{ url_for('repositori.consulta_repositori') }}">{{ _('Arxiu') }}</a></li>
+  <li><a href="{{ url_for('login.logout') }}">{{ _('Tancar sessió') }}</a></li>
+{% else %}
+  <li><a href="#" onclick="obrirLogin()">{{ _('Entra') }}</a></li>
+{% endif %}
+
+
+
+    </ul>
+  </nav>
+</header>
+
+
+<div class="pestanyes">
+  <a class="pestanya {% if pestanya_activa == 'biografia' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=biografia">{{ _('Biografia') }}</a>
+
+  <a class="pestanya {% if pestanya_activa == 'entrevista' %}activa{% endif %}" href="{{ url_for('ia_lleugera.entrevista_ia', perfil_id=perfil.id, tema='Infància') }}">{{ _('Entrevista') }}</a>
+
+  <a class="pestanya {% if pestanya_activa == 'entrades' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=entrades">{{ _('Entrades') }}</a>
+
+  <a class="pestanya {% if pestanya_activa == 'nova' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=nova">{{ _('Nova entrada personal') }}</a>
+  
+  <a class="pestanya {% if pestanya_activa == 'perfil' %}activa{% endif %}" href="{{ url_for('pagina_personal.pagina_personal') }}?pestanya=perfil">{{ _('Perfil') }}</a>
+</div>
+
+
+
+<div class="contenidor-principal">
+ <aside class="sidebar">
+  <h3>{{ _('Les meves converses') }}</h3>
+<ul>
+  {% for tema, entrevistes in entrevistes_per_tema.items() %}
+    <li class="tema-principal">
+      <span class="tema-nom" onclick="toggleSubtemes('{{ tema|replace(' ', '_') }}')">
+         {{ tema }}
+        <span class="fletxa" id="fletxa_{{ tema|replace(' ', '_') }}">▼</span>
+      </span>
+      <ul id="subtemes_{{ tema|replace(' ', '_') }}" class="subtemes {% if tema == tema_seleccionat %}visible{% else %}ocult{% endif %}">
+
+        {% for ent in entrevistes %}
+          <li>
+            <a href="{{ url_for('ia_lleugera.entrevista_ia', perfil_id=perfil.id, tema=tema, numero=ent.numero) }}">
+              {{ tema }} {{ ent.numero }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
+
+
+
+  <!-- 🔽 Afegim el camp aquí -->
+  <div class="afegir-tema">
+    <input type="text" id="nouTema" placeholder="{{ _('Afegir tema nou...') }}">
+    <button onclick="afegeixTema()">{{ _('Afegir') }}</button>
+  </div>
+</aside>
+
+
+  <main class="xat-contenidor">
+    {% if tema_seleccionat %}
+      <div class="capcalera-xat">
+        <h2> {{ tema_seleccionat }}</h2>
+      </div>
+      <div class="xat-missatges" id="xat-scroll">
+        {% for missatge in missatges %}
+          <div class="missatge {{ missatge.autor }}">
+            <strong>{{ 'Echo' if missatge.autor == 'echo' else 'Tu' }}:</strong> {{ missatge.text }}
+          </div>
+        {% endfor %}
+      </div>
+      <form id="formulari-missatge" method="POST" autocomplete="off" class="xat-formulari">
+        <input type="text" id="camp-missatge" name="missatge" placeholder="Escriu aquí..." />
+        <button type="submit">Enviar</button>
+      </form>
+    {% else %}
+      <div class="avis-xat">{{ _("Selecciona un tema a l'esquerra per començar.") }}</div>
+    {% endif %}
+  </main>
+</div>
+
+{% raw %}
+<script>
+  const formulari = document.getElementById("formulari-missatge");
+  const camp = document.getElementById("camp-missatge");
+
+  formulari.addEventListener("submit", function (e) {
+    if (camp.value.trim() === "") {
+      e.preventDefault();
+      return;
+    }
+
+    setTimeout(function () {
+      camp.value = "";
+      camp.focus();
+    }, 100);
+  });
+
+  camp.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      formulari.requestSubmit();
+    }
+  });
+
+   window.onload = function () {
+    camp.focus();
+
+    // Desplaça l'scroll cap a baix per veure l'últim missatge
+    const xatScroll = document.getElementById("xat-scroll");
+    if (xatScroll) {
+      xatScroll.scrollTop = xatScroll.scrollHeight;
+    }
+  };
+</script>
+{% endraw %}
+
+<script>
+function afegeixTema() {
+  const input = document.getElementById('nouTema');
+  const nouTema = input.value.trim();
+  if (!nouTema) return;
+
+  fetch('/api/afegir_tema', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tema: nouTema })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const sidebar = document.querySelector('.sidebar ul');
+      const nouLi = document.createElement('li');
+      const nouLink = document.createElement('a');
+      nouLink.href = `?tema=${encodeURIComponent(nouTema)}`;
+      nouLink.textContent = nouTema;
+      nouLi.appendChild(nouLink);
+      sidebar.appendChild(nouLi);
+      input.value = '';
+    } else {
+      alert("Error: " + data.error);
+    }
+  });
+}
+</script>
+<script>
+function toggleSubtemes(id) {
+  const el = document.getElementById("subtemes_" + id);
+  const fletxa = document.getElementById("fletxa_" + id);
+  el.classList.toggle("ocult");
+  if (fletxa.textContent === "▼") {
+    fletxa.textContent = "▲";
+  } else {
+    fletxa.textContent = "▼";
+  }
+}
+</script>
+
+
+
+
+
+</body>
+</html>

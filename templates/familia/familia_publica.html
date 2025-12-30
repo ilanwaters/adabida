@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ familia.nom }} - {{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/familia.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block page_content %}
+<main>
+  <div class="seccio visible">
+  
+    <!-- Capçalera espai familiar -->
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        {% if familia.heraldica_fitxer %}
+          <img src="{{ url_for('static', filename='heraldica/' + familia.heraldica_fitxer) }}" 
+               alt="{{ _('Escut de') }} {{ familia.nom }}" 
+               style="max-height: 80px; margin-bottom: 1rem;">
+        {% endif %}
+        <h1 style="margin: 0; font-size: 2.5rem; color: #333;">{{ familia.nom }}</h1>
+        {% if familia.motiu %}
+          <p style="margin-top: 0.5rem; font-style: italic; color: #666; font-size: 1.1rem;">"{{ familia.motiu }}"</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Grid de 4 Cards -->
+    <div class="cards-grid" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+      
+      <!-- Card: Història de la família -->
+      <a href="{{ url_for('familia.seccio_publica', url=familia.url, seccio='historia') }}" class="card">
+        {% if familia.imatge_card_historia %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_familia/' + familia.imatge_card_historia) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image-empty" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Història de la família') }}</h3>
+          <p>{{ _('La nostra història') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Arbre Genealògic -->
+      <a href="{{ url_for('familia.seccio_publica', url=familia.url, seccio='arbre') }}" class="card">
+        {% if familia.imatge_card_arbre %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_familia/' + familia.imatge_card_arbre) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image-empty" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Arbre Genealògic') }}</h3>
+          <p>{{ _('Les nostres arrels') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Membres -->
+      <a href="{{ url_for('familia.seccio_publica', url=familia.url, seccio='membres') }}" class="card">
+        {% if familia.imatge_card_membres %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_familia/' + familia.imatge_card_membres) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image-empty" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Membres') }}</h3>
+          <p>{{ _('La nostra família') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Documents -->
+      <a href="{{ url_for('familia.seccio_publica', url=familia.url, seccio='documents') }}" class="card">
+        {% if familia.imatge_card_documents %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_familia/' + familia.imatge_card_documents) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image-empty" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Documents') }}</h3>
+          <p>{{ _('Arxiu històric') }}</p>
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Administració d\'exposicions') }}</title>
+
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pestanyes.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+  
+  <!-- Per navegadors moderns -->
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon_round.png') }}">
+<!-- Compatibilitat amb antics -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon_round.ico') }}">
+
+</head>
+<body>
+
+<div class="wrapper">
+  <header>
+    <nav class="navbar">
+      <a href="/" class="logo">
+        <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca">
+      </a>
+            {% if session['usuari'] %}
+<div class="usuari-connectat">
+ 
+ <a class="nom-usuari" href="#">{{ session['usuari'] }}</a>
+
+   <span class="punt-verd"></span>
+</div>
+{% endif %}
+</div>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('repositori.consulta_repositori') }}">{{ _('Arxiu') }}</a></li>
+        <li class="menu-idioma">
+          <a href="#"><img src="{{ url_for('static', filename='img/idiomas.png') }}" alt="Idiomes"></a>
+          <ul class="submenu">
+            <li><a href="{{ url_for('inici.set_language', idioma='ca') }}">Català</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='es') }}">Español</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='eu') }}">Euskara</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='en') }}">English</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='fr') }}">Français</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='ru') }}">Русский</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='de') }}">Deutsch</a></li>
+            <li><a href="{{ url_for('inici.set_language', idioma='uk') }}">Українська</a></li>
+          </ul>
+        </li>
+        <li class="menu-login">
+          <a href="#" id="login-toggle">{{ _('Entra') }}</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <h1 class="titol-admin"> {{ _('Administració d\'exposicions') }}</h1>
+
+  <div class="botonera-expo">
+    <button onclick="window.location.href='{{ url_for('admin.nova_exposicio') }}'"> {{ _('Crear nova exposició') }}</button>
+    <button onclick="window.location.href='{{ url_for('admin.pagina_admin') }}'"> {{ _('Tornar al panell principal') }}</button>
+  </div>
+<hr>
+
+<div class="filtres-expo">
+  <label for="pais-select">{{ _('País') }}:</label>
+  <select id="pais-select">
+    <option value="">{{ _('Tots') }}</option>
+    {% for pais in paisos %}
+      <option value="{{ pais }}">{{ pais.capitalize() }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="any-select">{{ _('Any') }}:</label>
+  <select id="any-select">
+    <option value="">{{ _('Tots') }}</option>
+    {% for any in anys %}
+      <option value="{{ any }}">{{ any }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="mes-select">{{ _('Mes') }}:</label>
+  <select id="mes-select">
+    <option value="">{{ _('Tots') }}</option>
+    {% for mes in mesos %}
+      <option value="{{ mes }}">{{ "%02d"|format(mes) }}</option>
+    {% endfor %}
+  </select>
+</div>
+<div id="llista-exposicions">
+  {% for expo in exposicions %}
+    <div class="caixa-expo"
+         data-pais="{{ expo.pais }}"
+         data-any="{{ expo.any }}"
+         data-mes="{{ expo.mes }}">
+      <h3>{{ expo.titol }}</h3>
+      <p>{{ _('Codi:') }} {{ expo.codi }}</p>
+      <p>{{ _('Data:') }} {{ expo.mes }}/{{ expo.any }}</p>
+      <a class="boto" href="{{ url_for('admin.control_expo', id=expo.id) }}">{{ _('Gestionar') }}</a>
+    </div>
+  {% else %}
+    <p>{{ _('No s\'han trobat exposicions.') }}</p>
+  {% endfor %}
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const paisSelect = document.getElementById("pais-select");
+  const anySelect = document.getElementById("any-select");
+  const mesSelect = document.getElementById("mes-select");
+  const exposicions = document.querySelectorAll(".caixa-expo");
+
+  function filtra() {
+    const pais = paisSelect.value;
+    const any = anySelect.value;
+    const mes = mesSelect.value;
+
+    exposicions.forEach(expo => {
+      const coincideix =
+        (pais === "" || expo.dataset.pais === pais) &&
+        (any === "" || expo.dataset.any === any) &&
+        (mes === "" || expo.dataset.mes === mes);
+      expo.style.display = coincideix ? "block" : "none";
+    });
+  }
+
+  paisSelect.addEventListener("change", filtra);
+  anySelect.addEventListener("change", filtra);
+  mesSelect.addEventListener("change", filtra);
+});
+</script>
+
+</body>
+</html>

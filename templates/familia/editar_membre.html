@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Editar') }} {{ membre.nom }} {{ membre.primer_cognom }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="capçalera-pagina">
+    <h2 class="centrado">{{ _('Editar Membre') }}: {{ membre.nom }} {{ membre.primer_cognom }}</h2>
+    <p class="text-muted">{{ familia.nom }}</p>
+</div>
+
+<form id="formulari-membre" method="POST" enctype="multipart/form-data">
+    
+    <!-- DADES BÀSIQUES -->
+    <h3>{{ _('Dades Bàsiques') }}</h3>
+    <div class="fila-formulari">
+        <div>
+            <label for="nom">{{ _('Nom') }} <span style="color: red;">*</span></label>
+            <input type="text" id="nom" name="nom" required value="{{ membre.nom or '' }}">
+        </div>
+        <div>
+            <label for="primer_cognom">{{ _('Primer cognom') }} <span style="color: red;">*</span></label>
+            <input type="text" id="primer_cognom" name="primer_cognom" required value="{{ membre.primer_cognom or '' }}">
+        </div>
+        <div>
+            <label for="segon_cognom">{{ _('Segon cognom') }}</label>
+            <input type="text" id="segon_cognom" name="segon_cognom" value="{{ membre.segon_cognom or '' }}">
+        </div>
+    </div>
+    <!-- VINCULAR AMB USUARI REGISTRAT -->
+    <h3>{{ _('Vincular amb Usuari d\'Adabida (opcional)') }}</h3>
+    <p style="font-size: 0.9em; color: #666; margin-bottom: 1rem;">
+        {{ _('Si aquesta persona ja té compte a Adabida, pots vincular-la aquí. Tindrà accés automàtic a l\'espai familiar.') }}
+    </p>
+    <div class="fila-formulari">
+        <div style="position: relative; width: 100%;">
+            <label for="buscar_usuari">{{ _('Buscar usuari per nom o email') }}</label>
+            <input type="text" id="buscar_usuari" placeholder="{{ _('Escriu per buscar...') }}" autocomplete="off">
+            <input type="hidden" id="usuari_id" name="usuari_id" value="{{ membre.usuari_id if membre.usuari_id else '' }}">
+            <div id="resultats_usuari" style="position: absolute; background: white; border: 1px solid #ddd; border-radius: 4px; max-height: 200px; overflow-y: auto; width: 100%; display: none; z-index: 1000;"></div>
+            <div id="usuari_seleccionat" style="margin-top: 8px; padding: 8px; background: #e7f5ff; border-radius: 4px; {% if not membre.usuari %}display: none;{% endif %}">
+                <strong>{{ _('Usuari seleccionat:') }}</strong> <span id="usuari_nom">{% if membre.usuari %}{{ membre.usuari.nom }} ({{ membre.usuari.email }}){% endif %}</span>
+                <button type="button" onclick="netejarUsuari()" style="margin-left: 10px; padding: 2px 8px; background: #ff6b6b; color: white; border: none; border-radius: 3px; cursor: pointer;">✕</button>
+            </div>
+        </div>
+    </div>
+    <!-- NAIXEMENT -->
+    <h3>{{ _('Naixement') }}</h3>
+    <div class="fila-formulari">
+        <div>
+            <label for="data_naixement">{{ _('Data de naixement') }}</label>
+            <input type="date" id="data_naixement" name="data_naixement" 
+                   value="{{ membre.data_naixement.strftime('%Y-%m-%d') if membre.data_naixement else '' }}">
+        </div>
+        <div>
+            <label for="pais_naixement">{{ _('País') }}</label>
+            <select id="pais_naixement" name="pais_naixement" onchange="carregarRegions('naixement')">
+                <option value="">-- {{ _('Selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="regio_naixement">{{ _('Regió') }}</label>
+            <select id="regio_naixement" name="regio_naixement" onchange="carregarMunicipis('naixement')" disabled>
+                <option value="">-- {{ _('Primer selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="municipi_naixement">{{ _('Municipi') }}</label>
+            <input type="text" 
+                   id="municipi_naixement" 
+                   name="municipi_naixement"
+                   list="municipis_naixement_list"
+                   placeholder="{{ _('Escriu o selecciona') }}"
+                   disabled>
+            <datalist id="municipis_naixement_list"></datalist>
+        </div>
+    </div>
+
+    <!-- DEFUNCIÓ -->
+    <h3>{{ _('Defunció') }} ({{ _('si escau') }})</h3>
+    <div class="fila-formulari">
+        <div>
+            <label for="data_defuncio">{{ _('Data de defunció') }}</label>
+            <input type="date" id="data_defuncio" name="data_defuncio" 
+                   value="{{ membre.data_defuncio.strftime('%Y-%m-%d') if membre.data_defuncio else '' }}">
+        </div>
+        <div>
+            <label for="pais_defuncio">{{ _('País') }}</label>
+            <select id="pais_defuncio" name="pais_defuncio" onchange="carregarRegions('defuncio')">
+                <option value="">-- {{ _('Selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="regio_defuncio">{{ _('Regió') }}</label>
+            <select id="regio_defuncio" name="regio_defuncio" onchange="carregarMunicipis('defuncio')" disabled>
+                <option value="">-- {{ _('Primer selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="municipi_defuncio">{{ _('Municipi') }}</label>
+            <input type="text" 
+                   id="municipi_defuncio" 
+                   name="municipi_defuncio"
+                   list="municipis_defuncio_list"
+                   placeholder="{{ _('Escriu o selecciona') }}"
+                   disabled>
+            <datalist id="municipis_defuncio_list"></datalist>
+        </div>
+    </div>
+
+    <h3>{{ _('Gènere') }}</h3>
+    <div class="fila-formulari">
+        <div>
+            <label for="genere"></label>
+            <select id="genere" name="genere" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 6px;">
+                <option value="">-- {{ _('No especificat') }} --</option>
+                <option value="home" {% if membre.genere == 'home' %}selected{% endif %}>Home</option>
+                <option value="dona" {% if membre.genere == 'dona' %}selected{% endif %}>Dona</option>
+            </select>
+            <small style="color: #666; font-size: 0.85em; display: block; margin-top: 4px;">
+                {{ _('Necessari per establir relacions familiars correctes') }}
+            </small>
+        </div>
+    </div>
+
+    <!-- UBICACIÓ ACTUAL -->
+    <h3>{{ _('Ubicació Actual') }}</h3>
+    <p style="font-size: 0.9em; color: #666;">{{ _('On viu actualment (si està viu)') }}</p>
+    <div class="fila-formulari">
+        <div>
+            <label for="pais_actual">{{ _('País') }}</label>
+            <select id="pais_actual" name="pais_actual" onchange="carregarRegions('actual')">
+                <option value="">-- {{ _('Selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="regio_actual">{{ _('Regió') }}</label>
+            <select id="regio_actual" name="regio_actual" onchange="carregarMunicipis('actual')" disabled>
+                <option value="">-- {{ _('Primer selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="municipi_actual">{{ _('Municipi') }}</label>
+            <input type="text" 
+                   id="municipi_actual" 
+                   name="municipi_actual"
+                   list="municipis_actual_list"
+                   placeholder="{{ _('Escriu o selecciona') }}"
+                   disabled>
+            <datalist id="municipis_actual_list"></datalist>
+        </div>
+    </div>
+
+    <!-- BIOGRAFIA -->
+    <h3>{{ _('Biografia') }}</h3>
+    <div style="margin-bottom: 1.5rem;">
+        <label for="biografia">{{ _('Biografia o notes sobre aquesta persona') }}</label>
+        <textarea id="biografia" name="biografia" rows="6" 
+                  placeholder="{{ _('Escriu aquí informació sobre aquesta persona: la seva vida, anècdotes, professió, etc.') }}">{{ membre.biografia or '' }}</textarea>
+        <small style="color: #666; font-size: 0.85em;">{{ _('Aquesta biografia serà visible per tots els membres de la família') }}</small>
+    </div>
+
+    <hr>
+
+    <!-- DOCUMENTS EXISTENTS -->
+    {% if membre.documents %}
+    <h3>{{ _('Documents Actuals') }}</h3>
+    <div style="margin-bottom: 1.5rem;">
+        <div class="list-group">
+            {% for doc in membre.documents %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>
+                        {% if doc.tipus_document == 'dni' %}{{ _('DNI/Passaport') }}
+                        {% elif doc.tipus_document == 'partida_naixement' %}{{ _('Partida de Naixement') }}
+                        {% elif doc.tipus_document == 'partida_defuncio' %}{{ _('Partida de Defunció') }}
+                        {% elif doc.tipus_document == 'certificat' %}{{ _('Certificat') }}
+                        {% elif doc.tipus_document == 'fotografia' %}{{ _('Fotografia') }}
+                        {% else %}{{ _('Document') }}
+                        {% endif %}
+                    </strong>
+                    {% if doc.descripcio %}
+                        <br><small class="text-muted">{{ doc.descripcio }}</small>
+                    {% endif %}
+                    <br>
+                    <span class="badge {% if doc.visibilitat == 'admin' %}bg-warning text-dark{% else %}bg-info{% endif %}">
+                        {% if doc.visibilitat == 'admin' %}{{ _('Només admins') }}{% else %}{{ _('Visible per tota la família') }}{% endif %}
+                    </span>
+                </div>
+                <a href="{{ url_for('static', filename='documents_membres/' + familia.id|string + '/' + doc.nom_fitxer) }}" 
+                   target="_blank" class="btn btn-sm btn-outline-primary">
+                    {{ _('Veure') }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <small style="color: #666; font-size: 0.85em; display: block; margin-top: 10px;">
+            {{ _('Per afegir nous documents o eliminar existents, contacta amb un administrador.') }}
+        </small>
+    </div>
+    <hr>
+    {% endif %}
+
+    <!-- BOTONS FINALS -->
+    <div class="fila-final">
+        <a href="{{ url_for('membres.veure', membre_id=membre.id) }}" 
+           style="padding: 10px 20px; background-color: #ccc; color: #333; text-decoration: none; border-radius: 6px; display: inline-block;">
+            ← {{ _('Cancel·lar') }}
+        </a>
+        <button type="submit">{{ _('Guardar Canvis') }}</button>
+    </div>
+
+    <div class="aviso-etico">
+        {{ _('Els canvis es guardaran immediatament i seran visibles per tots els membres de la família.') }}
+    </div>
+
+</form>
+
+<!-- ZONA PERILLOSA -->
+<div style="border: 2px solid #dc3545; border-radius: 8px; padding: 20px; margin: 2rem 0; background-color: #fff5f5;">
+    <h3 style="color: #dc3545; margin-top: 0;">⚠️ {{ _('Zona Perillosa') }}</h3>
+    <p style="color: #666;">{{ _('Eliminar aquest membre és una acció permanent i irreversible.') }}</p>
+    <button type="button" onclick="confirmarEliminar()" class="btn-custom" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+        🗑️ {{ _('Eliminar Membre') }}
+    </button>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/ubicacions_formulari.js') }}"></script>
+<script src="{{ url_for('static', filename='js/editar_membre.js') }}"></script>
+<script>
+// Esperar que carreguin els països i després preseleccionar
+window.addEventListener('load', async function() {
+    await new Promise(resolve => setTimeout(resolve, 500)); // Esperar 0.5s
+    
+    {% if membre.pais_naixement %}
+    const paisNaix = document.getElementById('pais_naixement');
+    if (paisNaix) {
+        paisNaix.value = "{{ membre.pais_naixement }}";
+        await carregarRegions('naixement');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.regio_naixement %}
+        document.getElementById('regio_naixement').value = "{{ membre.regio_naixement }}";
+        await carregarMunicipis('naixement');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.municipi_naixement %}
+        document.getElementById('municipi_naixement').value = "{{ membre.municipi_naixement }}";
+        {% endif %}
+        {% endif %}
+    }
+    {% endif %}
+    
+    {% if membre.pais_defuncio %}
+    const paisDef = document.getElementById('pais_defuncio');
+    if (paisDef) {
+        paisDef.value = "{{ membre.pais_defuncio }}";
+        await carregarRegions('defuncio');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.regio_defuncio %}
+        document.getElementById('regio_defuncio').value = "{{ membre.regio_defuncio }}";
+        await carregarMunicipis('defuncio');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.municipi_defuncio %}
+        document.getElementById('municipi_defuncio').value = "{{ membre.nom_municipi_defuncio }}";
+        {% endif %}
+        {% endif %}
+    }
+    {% endif %}
+    
+    {% if membre.pais_actual %}
+    const paisAct = document.getElementById('pais_actual');
+    if (paisAct) {
+        paisAct.value = "{{ membre.pais_actual }}";
+        await carregarRegions('actual');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.regio_actual %}
+        document.getElementById('regio_actual').value = "{{ membre.regio_actual }}";
+        await carregarMunicipis('actual');
+        await new Promise(resolve => setTimeout(resolve, 300));
+        {% if membre.municipi_actual %}
+        document.getElementById('municipi_actual').value = "{{ membre.municipi_actual }}";
+        {% endif %}
+        {% endif %}
+    }
+    {% endif %}
+});
+</script>
+{% endblock %}

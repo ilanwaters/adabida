@@ -1,0 +1,547 @@
+/* ============================================
+   BIOGRAFIA - ESTILS
+   ============================================ */
+
+.contingut-principal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.contenidor {
+  width: 100%;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #14d8ce;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Capçalera */
+.capsalera-seccio {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.capsalera-seccio h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.capsalera-seccio h1 i {
+  color: #14d8ce;
+  margin-right: 0.5rem;
+}
+
+.subtitol {
+  font-size: 1.1rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Targetes */
+.targeta {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.targeta-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-bottom: 3px solid #5568d3;
+}
+
+.targeta-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.targeta-header i {
+  margin-right: 0.5rem;
+}
+
+/* Bloc visor */
+.bloc-visor {
+  margin-bottom: 3rem;
+}
+
+.contingut-biografia {
+  padding: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.contingut-biografia p {
+  margin-bottom: 1.2rem;
+}
+
+.contingut-biografia h1,
+.contingut-biografia h2,
+.contingut-biografia h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.contingut-biografia h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #14d8ce;
+  padding-bottom: 0.5rem;
+}
+
+.contingut-biografia h2 {
+  font-size: 1.6rem;
+}
+
+.contingut-biografia h3 {
+  font-size: 1.3rem;
+}
+
+.contingut-biografia a {
+  color: #14d8ce;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom 0.2s;
+}
+
+.contingut-biografia a:hover {
+  border-bottom: 1px solid #14d8ce;
+}
+
+.contingut-biografia img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.contingut-biografia ul,
+.contingut-biografia ol {
+  margin-left: 2rem;
+  margin-bottom: 1.2rem;
+}
+
+.contingut-biografia li {
+  margin-bottom: 0.5rem;
+}
+
+.contingut-biografia blockquote {
+  border-left: 4px solid #14d8ce;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #555;
+}
+
+/* Missatge buit */
+.missatge-buit {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #999;
+}
+
+.missatge-buit p {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.text-petit {
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+/* Bloc editor */
+.bloc-editor {
+  margin-bottom: 3rem;
+}
+
+.bloc-editor .targeta-header {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-bottom: 3px solid #e04e5e;
+}
+
+.bloc-editor form {
+  padding: 2rem;
+}
+
+#editor-biografia {
+  width: 100%;
+  min-height: 500px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Botons editor */
+.botons-editor {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.boto {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.boto-primari {
+  background: #14d8ce;
+  color: white;
+}
+
+.boto-primari:hover {
+  background: #12c2b8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 216, 206, 0.3);
+}
+
+.boto-secundari {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.boto-secundari:hover {
+  background: #e0e0e0;
+}
+
+/* Navegació */
+.navegacio-seccio {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contingut-principal {
+    padding: 1rem;
+  }
+  
+  .capsalera-seccio h1 {
+    font-size: 2rem;
+  }
+  
+  .contingut-biografia {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .botons-editor {
+    flex-direction: column;
+  }
+  
+  .boto {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.biografia-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  min-height: 80vh;
+}
+
+.seccio-biografia {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.seccio-biografia:last-child {
+  border-bottom: none;
+}
+
+.seccio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.seccio-titol {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  flex: 1;
+}
+
+.seccio-accions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.boto-editar,
+.boto-moure,
+.boto-eliminar,
+.boto-visibilitat {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.boto-editar:hover {
+  background: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+.boto-moure:hover {
+  background: #14d8ce;
+  color: white;
+  border-color: #14d8ce;
+}
+
+.boto-eliminar:hover {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.boto-visibilitat {
+  min-width: 80px;
+}
+
+.boto-visibilitat.privada {
+  background: #fff3cd;
+  border-color: #ffc107;
+}
+
+.boto-visibilitat.publica {
+  background: #d1ecf1;
+  border-color: #17a2b8;
+}
+
+.seccio-contingut {
+  line-height: 1.8;
+  color: #333;
+  font-size: 1rem;
+}
+
+.seccio-contingut p {
+  margin-bottom: 1rem;
+}
+
+.seccio-contingut h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.seccio-buida {
+  color: #999;
+  font-style: italic;
+  padding: 2rem;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.afegir-seccio {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.boto-afegir {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #14d8ce 0%, #0ea99f 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.boto-afegir:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 216, 206, 0.3);
+}
+
+.breadcrumb {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #14d8ce;
+  text-decoration: none;
+}
+
+.seccio-info {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-privada {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-publica {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.formulari-seccio {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+}
+
+.camp-formulari {
+  margin-bottom: 1.5rem;
+}
+
+.camp-formulari label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.camp-formulari input[type="text"] {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.camp-formulari input[type="text"]:focus {
+  outline: none;
+  border-color: #14d8ce;
+  box-shadow: 0 0 0 3px rgba(20, 216, 206, 0.1);
+}
+
+.checkbox-camp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-camp input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.botons-formulari {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+}
+
+.boto-guardar {
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #14d8ce 0%, #0ea99f 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boto-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 216, 206, 0.3);
+}
+
+.boto-cancelar {
+  padding: 0.8rem 2rem;
+  background: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.boto-cancelar:hover {
+  background: #e9ecef;
+}
+
+.breadcrumb {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #14d8ce;
+  text-decoration: none;
+}
+
+.ajuda {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-left: 4px solid #14d8ce;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+}
+
+.ajuda h4 {
+  margin: 0 0 0.5rem 0;
+  color: #14d8ce;
+}
+
+.ajuda ul {
+  margin: 0.5rem 0 0 1.5rem;
+  color: #666;
+}

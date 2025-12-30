@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Prova Modal</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tancar {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .modal-imatge img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      cursor: zoom-in;
+    }
+
+    .modal-text h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .any {
+      color: #777;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-dades p {
+      margin: 8px 0;
+    }
+
+    .contingut-formatat {
+      white-space: pre-line;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .modal-botons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .modal-botons button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #3a3a3a;
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="modal">
+  <div class="modal-content">
+    <span class="tancar" onclick="alert('Tancar')">&times;</span>
+
+    <div class="modal-imatge">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Iconic_image_of_Albert_Einstein.jpg/640px-Iconic_image_of_Albert_Einstein.jpg" alt="Imatge">
+    </div>
+
+    <div class="modal-text">
+      <h2>El meu títol d’entrada</h2>
+      <p class="any">(1943)</p>
+
+      <div class="modal-dades">
+        <p><strong>Tema:</strong> Física teòrica</p>
+        <p><strong>Ubicació:</strong> Princeton</p>
+        <p><strong>Contingut:</strong></p>
+        <div class="contingut-formatat">
+          Va desenvolupar la teoria de la relativitat general i va contribuir significativament a la física quàntica.
+        </div>
+    
+      </div>
+
+      <div class="modal-botons">
+        <button>Editar</button>
+        <button>Eliminar</button>
+        <button>Tancar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

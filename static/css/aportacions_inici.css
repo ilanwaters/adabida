@@ -1,0 +1,202 @@
+.aportacio-inici {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+/* Columna esquerra - Info */
+.info-columna h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.info-columna h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.info-columna p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.info-columna ul {
+  margin: 1rem 0 1.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.info-columna li {
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.destacat {
+  background: #f0fffe;
+  border-left: 4px solid #14d8ce;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.destacat p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Columna dreta - Formulari */
+.form-columna {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+}
+
+.aportacio-card {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.aportacio-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Periodicitat */
+.periodicitat {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.periodicitat label {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.periodicitat input[type="radio"] {
+  display: none;
+}
+
+.periodicitat input[type="radio"]:checked + label {
+  border-color: #14d8ce;
+  background: #f0fffe;
+  color: #14d8ce;
+}
+
+.periodicitat label:hover {
+  border-color: #14d8ce;
+}
+
+/* Quantitats */
+.quantitats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.quantitats label {
+  text-align: center;
+  padding: 0.8rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.quantitats input[type="radio"] {
+  display: none;
+}
+
+.quantitats input[type="radio"]:checked + label {
+  border-color: #14d8ce;
+  background: #14d8ce;
+  color: white;
+}
+
+.quantitats label:hover {
+  border-color: #14d8ce;
+}
+
+/* Altra quantitat */
+.altra-quantitat {
+  margin-bottom: 1rem;
+}
+
+.altra-quantitat input {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+.altra-quantitat input:focus {
+  outline: none;
+  border-color: #14d8ce;
+}
+
+/* Mètodes */
+.metodes {
+  margin-bottom: 1rem;
+}
+
+.metodes select {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Botó */
+.aportacio-card .boto_nav {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.nota-seguretat {
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 0.8rem;
+}
+
+/* Responsive */
+/* Responsive */
+@media (max-width: 900px) {
+  .aportacio-inici {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  /* Invertir ordre al mòbil: primer formulari, després text */
+  .form-columna {
+    position: static;
+    order: -1;
+  }
+  
+  .info-columna {
+    order: 1;
+  }
+  
+  .quantitats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block titol %}Nova Aportació{% endblock %}
+
+{% block contingut %}
+<div class="admin-container">
+  <h1>Registrar Nova Aportació</h1>
+
+  <form method="POST">
+    <div class="form-group">
+      <label>Usuari (opcional):</label>
+      <select name="usuari_id">
+        <option value="">Anònim</option>
+        {% for u in usuaris %}
+        <option value="{{ u.id }}">{{ u.nom }} {{ u.cognoms }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Quantitat (€): *</label>
+      <input type="number" step="0.01" name="quantitat" required>
+    </div>
+
+    <div class="form-group">
+      <label>Data: *</label>
+      <input type="date" name="data" value="{{ today }}" required>
+    </div>
+
+    <div class="form-group">
+      <label>Mètode de pagament:</label>
+      <select name="metode_pagament">
+        <option value="">-</option>
+        <option value="Transferència">Transferència</option>
+        <option value="Bizum">Bizum</option>
+        <option value="PayPal">PayPal</option>
+        <option value="Targeta">Targeta</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Estat: *</label>
+      <select name="estat" required>
+        <option value="confirmada">Confirmada</option>
+        <option value="pendent">Pendent</option>
+        <option value="cancel·lada">Cancel·lada</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>País:</label>
+      <input type="text" name="pais" placeholder="Espanya, Holanda, Itàlia...">
+    </div>
+
+    <div class="form-group">
+      <label>Notes:</label>
+      <textarea name="notes" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn-primary">Registrar Aportació</button>
+    <a href="{{ url_for('admin_aportacions.aportacions') }}" class="btn-secondary">Cancel·lar</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ familia.nom }} - Home{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('familia.les_meves') }}">{{ _('Famílies') }}</a> › 
+      <a href="{{ url_for('familia.seccio', url=familia.url, seccio='home') }}">{{ familia.nom }}</a> › 
+      <span>{{ _('Home') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-home"></i> {{ familia.nom }}</h1>
+      <p class="subtitol">{{ _('Informació general de l\'espai familiar') }}</p>
+    </div>
+
+    <!-- Contingut principal -->
+    <div class="contingut-seccio">
+      
+      <!-- Informació bàsica -->
+      <div class="bloc-info">
+        <div class="targeta">
+          <h3><i class="fas fa-info-circle"></i> {{ _('Informació') }}</h3>
+          <div class="info-grid">
+            {% if familia.periode_referencia %}
+            <div class="info-item">
+              <strong>{{ _('Període:') }}</strong>
+              <span>{{ familia.periode_referencia }}</span>
+            </div>
+            {% endif %}
+            {% if familia.ubicacions_origen %}
+            <div class="info-item">
+              <strong>{{ _('Ubicació origen:') }}</strong>
+              <span>
+                {% if familia.ubicacions_origen %}
+<div class="info-item">
+  <strong>{{ _('Ubicació origen:') }}</strong>
+  <span>
+    {{ familia.ubicacions_origen[0].municipi }}, {{ familia.ubicacions_origen[0].regio }}
+  </span>
+</div>
+{% endif %}
+                 {{ familia.ubicacions_origen[0].municipi }}, {{ familia.ubicacions_origen[0].regio }}
+               
+              </span>
+            </div>
+            {% endif %}
+            <div class="info-item">
+              <strong>{{ _('Creada:') }}</strong>
+              <span>{{ familia.data_creacio.strftime('%B %Y') }}</span>
+            </div>
+            {% if familia.heraldica_fitxer %}
+            <div class="info-item">
+              <strong>{{ _('Heràldica:') }}</strong>
+              <span>
+                <img src="{{ url_for('static', filename='heraldica/' + familia.heraldica_fitxer) }}" 
+                     alt="Escut" 
+                     style="max-height: 30px; vertical-align: middle;">
+              </span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripció -->
+      {% if familia.descripcio %}
+      <div class="bloc-descripcio">
+        <div class="targeta">
+          <h3><i class="fas fa-file-text"></i> {{ _('Descripció') }}</h3>
+          <div class="descripcio-text">
+            {{ familia.descripcio }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Estadístiques -->
+      <div class="bloc-estadistiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-bar"></i> {{ _('Estadístiques') }}</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.membres_count }}</div>
+              <div class="stat-label">{{ _('Membres') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.records_count }}</div>
+              <div class="stat-label">{{ _('Records') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.records_mes_actual }}</div>
+              <div class="stat-label">{{ _('Aquest mes') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.dies_activa }}</div>
+              <div class="stat-label">{{ _('Dies activa') }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activitat recent -->
+      {% if activitat_recent %}
+      <div class="bloc-activitat">
+        <div class="targeta">
+          <h3><i class="fas fa-clock"></i> {{ _('Activitat recent') }}</h3>
+          <div class="llista-activitat">
+            {% for item in activitat_recent %}
+            <div class="item-activitat">
+              <div class="icona-activitat">
+                {% if item.tipus == 'record' %}
+                  <i class="fas fa-file-plus"></i>
+                {% elif item.tipus == 'membre' %}
+                  <i class="fas fa-user-plus"></i>
+                {% endif %}
+              </div>
+              <div class="contingut-activitat">
+                <p class="descripcio-activitat">{{ item.descripcio }}</p>
+                <span class="data-activitat">{{ item.data.strftime('%d/%m/%Y %H:%M') }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('familia.les_meves') }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+      
+      {% if es_admin %}
+      <a href="{{ url_for('administrar.index', familia_id=familia.id) }}"
+         class="boto boto-primari">
+        <i class="fas fa-cog"></i> {{ _('Administrar') }}
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+{% endblock %}

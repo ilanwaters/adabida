@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Benvinguts a Adabida') }}{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/benvinguts.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-benvinguts">
+    
+    <!-- BENVINGUDA CÀLIDA -->
+    <div class="capçalera-benvinguda">
+        <h1>{{ _('Benvinguts a Adabida') }}</h1>
+        <div class="missatge-calid">
+            <p>{{ _('Has arribat a un espai de reflexió, on cada vida importa i cada record té valor.') }}</p>
+            <p>{{ _('Adabida és un lloc on el temps no té pressa, on les persones són més importants que els clics, i on cada testimoni compartit serveix per dignificar la vida de qui el viu i de qui el llegeix.') }}</p>
+            <p><strong>{{ _('El teu record, la teva visió, la teva experiència són part de la història. Comparteix-les.') }}</strong></p>
+        </div>
+    </div>
+
+    <!-- NORMES BÀSIQUES -->
+    <div class="seccio">
+        <h2>{{ _('Normes bàsiques de convivència') }}</h2>
+        
+        <p>{{ _('Per preservar aquest espai de respecte i rigor, et demanem que tinguis presents aquestes normes fonamentals:') }}</p>
+        
+        <ul class="llista-normes">
+            <li><strong>{{ _('Respecte i veracitat:') }}</strong> {{ _('Els testimonis han de ser veraços i respectuosos. Adabida és un arxiu històric, no un espai per a opinions polítiques partidistes o desinformació.') }}</li>
+            
+            <li><strong>{{ _('Dignitat de les persones:') }}</strong> {{ _('No es permet contingut ofensiu, discursos d\'odi, ni contingut que atempti contra la dignitat de qualsevol persona o col·lectiu.') }}</li>
+            
+            <li><strong>{{ _('Protecció de dades personals:') }}</strong> {{ _('No comparteixis dades personals sensibles (DNI, adreces, telèfons) de tercers sense el seu consentiment explícit.') }}</li>
+            
+            <li><strong>{{ _('Propietat intel·lectual:') }}</strong> {{ _('Els testimonis que pugis són teus. En compartir-los a Adabida, acceptes que formin part d\'un arxiu públic amb finalitat educativa i de preservació històrica.') }}</li>
+            
+            <li><strong>{{ _('Contingut audiovisual:') }}</strong> {{ _('Les imatges, àudios i vídeos han de ser de la teva propietat o disposar dels drets necessaris per compartir-los.') }}</li>
+            
+            <li><strong>{{ _('Llenguatge constructiu:') }}</strong> {{ _('En espais col·laboratius (fòrums, comentaris futurs), mantén sempre un to respectuós i constructiu.') }}</li>
+        </ul>
+        
+        <div class="destacat">
+            <strong>{{ _('Recorda:') }}</strong> {{ _('Els usuaris verificats (🟢) tenen responsabilitats addicionals en la moderació de contingut. La comunitat és clau per mantenir la qualitat de l\'arxiu.') }}
+        </div>
+    </div>
+
+    <!-- PRIMERS PASSOS -->
+    <div class="seccio">
+        <h2>{{ _('Primers passos a Adabida') }}</h2>
+        
+        <div class="primers-passos">
+            <h3>{{ _('Comença el teu viatge:') }}</h3>
+            <ol>
+                <li><strong>{{ _('Completa el teu perfil:') }}</strong> {{ _('Afegeix una foto, una breu biografia, la teva bandera. Això ajuda a contextualitzar els teus testimonis.') }}</li>
+                
+                <li><strong>{{ _('Crea la teva primera entrada:') }}</strong> {{ _('Pot ser un text, un àudio, un vídeo. Explica una experiència viscuda, un record important, un moment que consideres rellevant.') }}</li>
+                
+                <li><strong>{{ _('Explora el repositori:') }}</strong> {{ _('Llegeix testimonis d\'altres persones. Descobreix històries de vida que potser mai haguessis conegut.') }}</li>
+                
+                <li><strong>{{ _('Crea el teu espai familiar (opcional):') }}</strong> {{ _('Si vols preservar la memòria de la teva família, pots crear un espai genealògic privat.') }}</li>
+                
+                <li><strong>{{ _('Participa activament:') }}</strong> {{ _('A mesura que vagis contribuint, obtindràs el nivell d\'usuari verificat (🟢) i podràs participar en més funcionalitats de la comunitat.') }}</li>
+            </ol>
+        </div>
+        
+        <h3>{{ _('Consells per a un bon testimoni:') }}</h3>
+        <ul class="llista-normes">
+            <li>{{ _('Sigues concret: Data, lloc, context ajuden a situar el teu relat.') }}</li>
+            <li>{{ _('Sigues honest: La teva visió personal és vàlida, no cal que sigui "objectiva".') }}</li>
+            <li>{{ _('Sigues respectuós: Encara que parlis d\'experiències difícils, evita el llenguatge ofensiu.') }}</li>
+            <li>{{ _('Pensa en el futur: Els teus records poden ser font primària per a investigadors d\'aquí 50 anys.') }}</li>
+        </ul>
+    </div>
+
+     <div class="seccio" style="text-align: center; background: #f8f9fa;">
+        <h3 style="color: #1a4b75; margin-bottom: 15px;">{{ _('Estàs llest/a per començar?') }}</h3>
+        <p style="font-size: 1.1em; margin-bottom: 25px;">{{ _('Cada testimoni compta. Cada vida importa. Cada record dignifica.') }}</p>
+        
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" class="btn btn-primary" style="padding: 12px 30px; font-size: 1.1em;">
+            {{ _('Crear la meva primera entrada') }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('registre_individual.registre_individual') }}" class="btn btn-primary" style="padding: 12px 30px; font-size: 1.1em;">
+            {{ _('Crear el meu perfil') }}
+        </a>
+        {% endif %}
+    </div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Història') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('organitzacions.llistat') }}">{{ _('Organitzacions') }}</a> › 
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}">{{ organitzacio.nom }}</a> › 
+      <span>{{ _('Història') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-history"></i> {{ _('Història de') }} {{ organitzacio.nom }}</h1>
+      <p class="subtitol">{{ _('Cronologia i evolució de l\'organització') }}</p>
+    </div>
+
+    <!-- Contingut -->
+    <div class="contingut-seccio">
+      
+      <!-- Timeline -->
+      <div class="bloc-timeline">
+        <div class="targeta">
+          <h3><i class="fas fa-timeline"></i> {{ _('Cronologia') }}</h3>
+          
+          <div class="timeline">
+            <!-- Creació organització -->
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Fundació') }}</h4>
+                <p class="timeline-data">{{ organitzacio.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('L\'organització es va crear i va començar la seva activitat a Adabida.') }}</p>
+              </div>
+            </div>
+
+            <!-- Primer membre -->
+            {% if primer_membre %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primer membre') }}</h4>
+                <p class="timeline-data">{{ primer_membre.data_adhesio.strftime('%B %Y') }}</p>
+                <p>{{ primer_membre.usuari.nom }} {{ _('es va unir com a primer membre.') }}</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Primera entrada -->
+            {% if primera_entrada %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primera entrada compartida') }}</h4>
+                <p class="timeline-data">{{ primera_entrada.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('Es va compartir la primera entrada:') }} "{{ primera_entrada.titol }}"</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Fites importantes -->
+            {% for fita in fites_importants %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ fita.titol }}</h4>
+                <p class="timeline-data">{{ fita.data.strftime('%B %Y') }}</p>
+                <p>{{ fita.descripcio }}</p>
+              </div>
+            </div>
+            {% endfor %}
+
+            <!-- Estat actual -->
+            <div class="timeline-item timeline-actual">
+              <div class="timeline-marker">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Avui') }}</h4>
+    
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadístiques històriques -->
+      <div class="bloc-stats-historiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-line"></i> {{ _('Evolució') }}</h3>
+          
+          <div class="stats-historiques-grid">
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Creixement de membres') }}</div>
+              <div class="stat-graf">
+                <!-- Aquí es podria afegir un gràfic simple -->
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.nous_membres / max_nous_membres * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.nous_membres }} nous membres">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Activitat mensual') }}</div>
+              <div class="stat-graf">
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.noves_entrades / max_noves_entrades * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.noves_entrades }} noves entrades">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

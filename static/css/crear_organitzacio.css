@@ -1,0 +1,117 @@
+
+        .bloc-formulari {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .titol-bloc {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .input-amb-prefix {
+            display: flex;
+            align-items: center;
+        }
+
+        .prefix {
+            background: #e9ecef;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .input-amb-prefix input {
+            border-radius: 0 4px 4px 0 !important;
+            border-left: none !important;
+        }
+
+        .info-ajuda {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .info-ajuda p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #1565c0;
+        }
+
+        .url-preview {
+            font-weight: 500;
+        }
+
+        .info-email-adabida {
+            background: #e8f5e8;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .text-petit {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .opcional {
+            color: #6c757d;
+            font-weight: normal;
+            font-size: 0.9em;
+        }
+
+        .text-ajuda {
+            color: #6c757d;
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+
+        .accions-formulari {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #dee2e6;
+            margin-top: 20px;
+        }
+
+        .boto-gran {
+            padding: 12px 30px;
+            font-size: 1.1em;
+        }
+   
+/* RESPONSIVE MÒBIL */
+@media (max-width: 768px) {
+    .fila-formulari {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    .fila-formulari > div {
+        width: 100% !important;
+    }
+    
+    .input-amb-prefix {
+        flex-wrap: wrap;
+    }
+    
+    .prefix {
+        font-size: 0.85em;
+        padding: 6px 8px;
+    }
+    
+    .bloc-formulari {
+        padding: 15px;
+    }
+    
+    .w-100 {
+        width: 100% !important;
+    }
+}

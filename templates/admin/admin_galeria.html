@@ -1,0 +1,313 @@
+
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_galeria.css') }}">
+{% endblock %}
+
+
+{% block contingut %}
+ 
+    <h1>{{ _('Gestió d’imatges pendents') }}</h1>
+    <a href="{{ url_for('admin.pagina_admin') }}" class="accio-textual">{{ _("Torna al panell d'administració") }}</a>
+  {% if ruta %}
+  <p>
+    {% if '/' in ruta %}
+      <a href="{{ url_for('admin_galeria.navegar_carpetes', subpath=ruta.rsplit('/', 1)[0]) }}">← Tornar enrere</a>
+    {% else %}
+      <a href="{{ url_for('admin_galeria.navegar_carpetes') }}">← Tornar enrere</a>
+    {% endif %}
+  </p>
+{% endif %}
+
+
+
+  {% if carpetes %}
+  
+  <ul class="llista-carpetes">
+    {% for carpeta in carpetes %}
+      <li>
+        <a href="{{ url_for('admin_galeria.navegar_carpetes', subpath=(ruta ~ '/' ~ carpeta if ruta else carpeta)) }}">
+          📁 {{ carpeta }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if imatges %}
+  <h2>Imatges a la carpeta: {{ ruta or 'arrel' }}</h2>
+  <div class="grid-galeria">
+   {% for img in imatges %}
+  <div class="targeta-imatge">
+<a href="{{ img.ruta.replace('/mini/', '/') }}" class="lightbox">
+  <img src="{{ img.ruta }}" alt="Miniatura" class="imatge-galeria">
+</a>
+
+  <div class="accions-imatge">
+    {% if img.destinacio != 'galeria' %}
+    <form method="POST" action="{{ url_for('admin_galeria.afegir_a_galeria') }}">
+  <input type="hidden" name="fitxer" value="{{ img.fitxer }}">
+  <input type="hidden" name="carpeta" value="{{ ruta }}">
+  <input type="hidden" name="entrada_id" value="{{ img.entrada_id }}">
+  <button type="submit" class="boto-accio">Afegir a galeria</button>
+</form>
+
+    {% endif %}
+    
+    {% if img.destinacio != 'obviada' %}
+    <form method="POST" action="{{ url_for('admin_galeria.obviar_imatge') }}">
+  <input type="hidden" name="fitxer" value="{{ img.fitxer }}">
+  <input type="hidden" name="carpeta" value="{{ ruta }}">
+  <button type="submit" class="boto-accio">Obviar</button>
+</form>
+    {% endif %}
+
+   <button type="button" class="boto-accio" onclick="obreModalExposicio('{{ img.fitxer }}')">
+  Assignar a exposició
+</button>
+
+  </div>
+
+  <div class="etiqueta-estat {% if img.destinacio == 'galeria' %}galeria{% elif img.destinacio == 'obviada' %}obviada{% else %}pendent{% endif %}">
+    {{ img.destinacio | capitalize }}
+  </div>
+   {% if img.exposicions %}
+    <div class="nota-expo">
+      Aquesta imatge forma part de:
+      <ul>
+        {% for ruta in img.exposicions %}
+          <li>{{ ruta }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endfor %}
+
+  </div>
+{% else %}
+  
+{% endif %}
+
+
+ {% endblock %}
+ 
+ 
+{% block scripts %}
+<script>
+document.addEventListener('click', function (e) {
+  const link = e.target.closest('.lightbox');
+  if (!link) return;
+
+  e.preventDefault();
+
+  const overlay = document.createElement('div');
+  overlay.classList.add('lightbox-overlay');
+
+  const img = document.createElement('img');
+  img.src = link.href;
+  img.style.transition = 'transform 0.3s ease';
+  img.style.cursor = 'zoom-in';
+
+  let zoomat = false;
+  let isDragging = false;
+  let startX, startY, scrollLeft, scrollTop;
+
+  const container = document.createElement('div');
+  container.classList.add('lightbox-container');
+  container.appendChild(img);
+  overlay.appendChild(container);
+
+  const botoTancar = document.createElement('button');
+  botoTancar.innerHTML = '✖';
+  botoTancar.classList.add('boto-tancar');
+  botoTancar.addEventListener('click', () => overlay.remove());
+  overlay.appendChild(botoTancar);
+
+  document.body.appendChild(overlay);
+
+  img.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    zoomat = !zoomat;
+    if (zoomat) {
+      img.style.transform = 'scale(2)';
+      img.style.cursor = 'grab';
+      container.style.overflow = 'scroll';
+    } else {
+      img.style.transform = 'scale(1)';
+      img.style.cursor = 'zoom-in';
+      container.scrollTo(0, 0);
+    }
+  });
+
+  img.addEventListener('mousedown', (e) => {
+    if (!zoomat) return;
+    isDragging = true;
+    startX = e.pageX - container.offsetLeft;
+    startY = e.pageY - container.offsetTop;
+    scrollLeft = container.scrollLeft;
+    scrollTop = container.scrollTop;
+    img.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - container.offsetLeft;
+    const y = e.pageY - container.offsetTop;
+    const walkX = (x - startX);
+    const walkY = (y - startY);
+    container.scrollLeft = scrollLeft - walkX;
+    container.scrollTop = scrollTop - walkY;
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    if (zoomat) img.style.cursor = 'grab';
+  });
+
+  overlay.addEventListener('click', () => {
+    overlay.remove();
+  });
+});
+</script>
+
+<script>
+function obreModalExposicio(nomFitxer) {
+  const modal = document.getElementById("modal-exposicio");
+  const inputFitxer = document.getElementById("fitxer-modal");
+  const inputRuta = document.getElementById("ruta-expo-modal");
+  const selector = document.getElementById("selector-exposicio");
+
+  inputFitxer.value = nomFitxer;
+  inputRuta.value = "";
+
+  // Reset
+  selector.innerHTML = "Carregant...";
+
+  fetch("/api/exposicions/arbre")
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        selector.innerHTML = "Error carregant exposicions.";
+        return;
+      }
+
+      const arbre = data.arbre;
+      selector.innerHTML = ""; // Netejem
+
+      const nivellPais = document.createElement("select");
+      const nivellAny = document.createElement("select");
+      const nivellMes = document.createElement("select");
+      const nivellExpo = document.createElement("select");
+
+      // Estil opcional
+      [nivellPais, nivellAny, nivellMes, nivellExpo].forEach(sel => {
+        sel.style.display = "block";
+        sel.style.marginBottom = "10px";
+      });
+
+      // País
+      const paisos = Object.keys(arbre).sort();
+      nivellPais.innerHTML = `<option disabled selected> EXPO → país</option>`;
+      paisos.forEach(pais => {
+        const opt = document.createElement("option");
+        opt.value = pais;
+        opt.textContent = pais;
+        nivellPais.appendChild(opt);
+      });
+
+      // Quan escollim país
+      nivellPais.addEventListener("change", () => {
+        const pais = nivellPais.value;
+        const anys = Object.keys(arbre[pais] || {}).sort();
+        nivellAny.innerHTML = `<option disabled selected> Any</option>`;
+        nivellMes.innerHTML = "";
+        nivellExpo.innerHTML = "";
+        inputRuta.value = "";
+
+        anys.forEach(any => {
+          const opt = document.createElement("option");
+          opt.value = any;
+          opt.textContent = any;
+          nivellAny.appendChild(opt);
+        });
+      });
+
+      // Quan escollim any
+      nivellAny.addEventListener("change", () => {
+        const pais = nivellPais.value;
+        const any = nivellAny.value;
+        const mesos = Object.keys(arbre[pais][any] || {}).sort();
+        nivellMes.innerHTML = `<option disabled selected>Mes</option>`;
+        nivellExpo.innerHTML = "";
+        inputRuta.value = "";
+
+        mesos.forEach(mes => {
+          const opt = document.createElement("option");
+          opt.value = mes;
+          opt.textContent = mes;
+          nivellMes.appendChild(opt);
+        });
+      });
+
+      // Quan escollim mes
+      nivellMes.addEventListener("change", () => {
+        const pais = nivellPais.value;
+        const any = nivellAny.value;
+        const mes = nivellMes.value;
+        const expos = arbre[pais][any][mes] || [];
+        nivellExpo.innerHTML = `<option disabled selected> Exposició</option>`;
+        inputRuta.value = "";
+
+        expos.forEach(expo => {
+          const opt = document.createElement("option");
+          opt.value = expo;
+          opt.textContent = expo;
+          nivellExpo.appendChild(opt);
+        });
+      });
+
+      // Quan escollim exposició final
+      nivellExpo.addEventListener("change", () => {
+        const pais = nivellPais.value;
+        const any = nivellAny.value;
+        const mes = nivellMes.value;
+        const expo = nivellExpo.value;
+        inputRuta.value = `${pais}/${any}/${mes}/${expo}`;
+      });
+
+      // Afegim els nivells
+      selector.appendChild(nivellPais);
+      selector.appendChild(nivellAny);
+      selector.appendChild(nivellMes);
+      selector.appendChild(nivellExpo);
+    });
+
+  modal.style.display = "block";
+}
+</script>
+
+<div id="modal-exposicio" class="modal-assignar" style="display: none;">
+  <div class="modal-contingut">
+    <span class="tancar-modal" onclick="tancaModalExposicio()">×</span>
+    <h2>Selecciona una exposició</h2>
+    <div id="selector-exposicio"></div>
+    <form method="POST" action="{{ url_for('admin_galeria.assignar_exposicio') }}">
+
+
+      <input type="hidden" name="fitxer" id="fitxer-modal">
+      <input type="hidden" name="ruta_expo" id="ruta-expo-modal">
+      <button type="submit" class="boto-accio">Afegir a aquesta exposició</button>
+    </form>
+  </div>
+</div>
+
+
+ {% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ entrada.titol }} - {{ _('Blog') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div class="entrada-completa-container">
+  <div class="navegacio-retorn">
+    <a href="{{ url_for('blog.blog') }}" class="boto_nav">
+      Tornar al blog
+    </a>
+  </div>
+
+  <article class="entrada-completa">
+    <h1>{{ entrada.titol }}</h1>
+    <p><strong>Data:</strong> {{ entrada.data_creacio.strftime('%d de %B de %Y') }}</p>
+    
+    <div class="contingut-entrada-complet">
+      {{ entrada.contingut | safe }}
+    </div>
+
+    {% if entrada.firma %}
+  <p class="firma-entrada">— 
+    <a href="{{ url_for('blog.entrades_per_firma', firma=entrada.firma) }}" class="enllac-autor">
+      {{ entrada.firma }}
+    </a>
+  </p>
+{% endif %}
+  </article>
+</div>
+
+{% endblock %}
+

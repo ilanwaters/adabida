@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Afegir Tema Global - THE OFFICE{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Afegir Tema Global</h1>
+        <a href="{{ url_for('admin_tematiques.llistar_paisos') }}" class="btn-secondary">← Tornar</a>
+    </div>
+
+    <div class="formulari-box">
+        <form method="POST">
+            <!-- Seleccionar categoria o crear nova -->
+            <div class="form-group">
+                <label for="categoria_id">Categoria:</label>
+                <select id="categoria_id" name="categoria_id">
+                    <option value="">-- Nova categoria --</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}">{{ cat.nom }} ({{ cat.pais.nom }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group" id="nova-categoria-group">
+                <label for="nova_categoria">Nom de la nova categoria:</label>
+                <input type="text" id="nova_categoria" name="nova_categoria" placeholder="Exemple: Política, Conflictes armats...">
+            </div>
+
+            <!-- Nom del tema -->
+            <div class="form-group">
+                <label for="nom_tema">Nom del tema: *</label>
+                <input type="text" id="nom_tema" name="nom_tema" required placeholder="Exemple: Guerra Civil, Pandèmia COVID-19...">
+            </div>
+
+            <!-- Opcions de distribució -->
+            <div class="form-group">
+                <label>Distribució del tema:</label>
+
+               <<!-- Opció 1: TOTS els països -->
+<div class="opcio-distribucio" onclick="seleccionarOpcio('tots')">
+    <div class="opcio-header">
+        <input type="radio" id="opt_tots" name="distribucio" value="tots" checked>
+        <label for="opt_tots"><strong>🌍 TOTS els països</strong></label>
+    </div>
+    <div class="opcio-descripcio">
+        El tema s'afegirà automàticament a tots els països existents i futurs
+    </div>
+</div>
+
+<!-- Opció 2: Copiar a seleccionats -->
+<div class="opcio-distribucio" onclick="seleccionarOpcio('copiar')">
+    <div class="opcio-header">
+        <input type="radio" id="opt_copiar" name="distribucio" value="copiar">
+        <label for="opt_copiar"><strong>📋 Copiar a països seleccionats</strong></label>
+    </div>
+    <div class="opcio-descripcio">
+        Es crearà un tema independent per cada país. Editar un no afecta els altres
+    </div>
+    
+    <div class="selector-paisos" id="selector-copiar">
+        <label><strong>Selecciona països:</strong></label>
+        <div class="llista-paisos">
+            {% for pais in paisos %}
+            <label class="pais-checkbox">
+                <input type="checkbox" name="paisos_copiar" value="{{ pais.id }}">
+                <span class="checkmark"></span>
+                {{ pais.nom }} ({{ pais.codi_iso }})
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Opció 3: Compartit entre seleccionats -->
+<div class="opcio-distribucio" onclick="seleccionarOpcio('compartit')">
+    <div class="opcio-header">
+        <input type="radio" id="opt_compartit" name="distribucio" value="compartit">
+        <label for="opt_compartit"><strong>🔗 Compartit entre països</strong></label>
+    </div>
+    <div class="opcio-descripcio">
+        Es crea UN sol tema vinculat a múltiples països. Editar-lo afecta tots
+    </div>
+    
+    <div class="selector-paisos" id="selector-compartit">
+        <label><strong>Selecciona països:</strong></label>
+        <div class="llista-paisos">
+            {% for pais in paisos %}
+            <label class="pais-checkbox">
+                <input type="checkbox" name="paisos_compartit" value="{{ pais.id }}">
+                <span class="checkmark"></span>
+                {{ pais.nom }} ({{ pais.codi_iso }})
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Crear Tema</button>
+                <a href="{{ url_for('admin_tematiques.llistar_paisos') }}" class="btn-secondary">Cancel·lar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Mostrar/ocultar camp nova categoria
+document.getElementById('categoria_id').addEventListener('change', function() {
+    const novaCategoria = document.getElementById('nova-categoria-group');
+    if (this.value === '') {
+        novaCategoria.style.display = 'block';
+        document.getElementById('nova_categoria').required = true;
+    } else {
+        novaCategoria.style.display = 'none';
+        document.getElementById('nova_categoria').required = false;
+    }
+});
+
+// Seleccionar opció de distribució
+function seleccionarOpcio(tipus) {
+    // Marcar el radio button
+    document.getElementById('opt_' + tipus).checked = true;
+    
+    // Resaltar opció seleccionada
+    document.querySelectorAll('.opcio-distribucio').forEach(el => {
+        el.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    
+    // Mostrar/ocultar selectors de països
+    document.querySelectorAll('.selector-paisos').forEach(el => {
+        el.classList.remove('visible');
+    });
+    
+    if (tipus === 'copiar') {
+        document.getElementById('selector-copiar').classList.add('visible');
+    } else if (tipus === 'compartit') {
+        document.getElementById('selector-compartit').classList.add('visible');
+    }
+}
+
+// Inicialitzar primera opció com seleccionada
+document.querySelector('.opcio-distribucio').classList.add('selected');
+</script>
+{% endblock %}f

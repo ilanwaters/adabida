@@ -1,0 +1,255 @@
+<div class="converses-pestanya">
+    <div class="header-pestanya">
+        <h2>Converses i Diàlegs</h2>
+        <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa-petit">
+            ➕ Nova Conversa
+        </a>
+    </div>
+    
+    {% if converses %}
+        <div class="llista-converses-compacta">
+            {% for conversa in converses %}
+            <div class="conversa-item">
+                <div class="conversa-info">
+                    <div class="conversa-data-compacta">
+                        {% if conversa.data_conversa %}
+                            {{ conversa.data_conversa.strftime('%d/%m/%Y') }}
+                        {% else %}
+                            Sense data
+                        {% endif %}
+                    </div>
+                    
+                    {% if conversa.participants %}
+                    <div class="participants-compacta">
+                        {% for participant in conversa.participants[:2] %}
+                            <span class="participant-nom">{{ participant.nom }}</span>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                        {% if conversa.participants|length > 2 %}
+                            <span class="mes-participants">i {{ conversa.participants|length - 2 }} més</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if conversa.lloc_municipi or conversa.lloc_regio or conversa.lloc_pais %}
+                    <div class="lloc-compacta">
+                        📍 
+                        {% if conversa.lloc_municipi %}{{ conversa.lloc_municipi }}{% endif %}
+                        {% if conversa.lloc_regio %}{% if conversa.lloc_municipi %}, {% endif %}{{ conversa.lloc_regio }}{% endif %}
+                        {% if conversa.lloc_pais %}{% if conversa.lloc_municipi or conversa.lloc_regio %}, {% endif %}{{ conversa.lloc_pais }}{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="conversa-accions-compactes">
+                    {% if conversa.arxiu_nom %}
+                    <span class="arxiu-badge">
+                        {% if conversa.arxiu_tipus == 'audio' %}🎤{% elif conversa.arxiu_tipus == 'video' %}🎥{% else %}📁{% endif %}
+                    </span>
+                    {% endif %}
+                    
+                    {% if conversa.durada_minuts %}
+                    <span class="durada-badge">{{ conversa.durada_minuts }}min</span>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('converses.detall_conversa', id=conversa.id) }}" class="btn-veure-petit">
+                        👁️
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer-pestanya">
+            <a href="{{ url_for('converses.llistat') }}" class="btn-veure-totes">
+                Veure totes les converses ({{ converses|length }})
+            </a>
+        </div>
+        
+    {% else %}
+        <div class="empty-state-petit">
+            <p>Encara no tens converses gravades.</p>
+            <a href="{{ url_for('converses.nova_conversa') }}" class="btn-nova-conversa-petit">
+                ➕ Crear la primera conversa
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+/* CSS específic per la pestanya converses dins pàgina personal */
+.converses-pestanya {
+    padding: 0;
+}
+
+.header-pestanya {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-pestanya h2 {
+    margin: 0;
+    font-size: 1.3em;
+    color: #333;
+}
+
+.btn-nova-conversa-petit {
+    background: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-nova-conversa-petit:hover {
+    background: #45a049;
+    text-decoration: none;
+    color: white;
+}
+
+.llista-converses-compacta {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.conversa-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: white;
+    transition: box-shadow 0.3s;
+}
+
+.conversa-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.conversa-info {
+    flex-grow: 1;
+}
+
+.conversa-data-compacta {
+    font-weight: bold;
+    color: #333;
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.participants-compacta {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.participant-nom {
+    font-weight: 500;
+}
+
+.mes-participants {
+    color: #999;
+    font-style: italic;
+}
+
+.lloc-compacta {
+    color: #888;
+    font-size: 0.8em;
+}
+
+.conversa-accions-compactes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arxiu-badge, .durada-badge {
+    background: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.arxiu-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.btn-veure-petit {
+    background: #2196F3;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 0.8em;
+    transition: background-color 0.3s;
+}
+
+.btn-veure-petit:hover {
+    background: #1976D2;
+    text-decoration: none;
+    color: white;
+}
+
+.footer-pestanya {
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-veure-totes {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9em;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.btn-veure-totes:hover {
+    background: #f5f5f5;
+    text-decoration: none;
+    color: #333;
+}
+
+.empty-state-petit {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.empty-state-petit p {
+    margin-bottom: 15px;
+    color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .conversa-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .conversa-accions-compactes {
+        align-self: flex-end;
+    }
+    
+    .header-pestanya {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+</style>

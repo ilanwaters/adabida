@@ -1,0 +1,262 @@
+form button[type="submit"] {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #3c7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.zona-documents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.document-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+  position: relative;
+  width: 120px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.miniatura {
+  width: 100%;
+  height: auto;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.icona-arxiu {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.nom-arxiu {
+  font-size: 0.75rem;
+  word-break: break-word;
+}
+
+.quadrat-eliminar {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #ffecec;
+  color: #b30000;
+  border: 1px solid #b30000;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quadrat-eliminar:hover {
+  background-color: #ffdddd;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+
+/* VISOR IMATGE AMPLIADA */
+.visor-ocult {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+#imatgeGran {
+  max-width: 90%;
+  max-height: 90%;
+  margin: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #000;
+}
+
+.tancar-visor {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+
+.error-text {
+  color: #cc0000;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.fila-formulari {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.camp-formulari {
+  flex: 1;
+  position: relative;
+}
+
+.contrasenya-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.contrasenya-container input {
+  width: 100%;
+  padding-right: 2.2em; /* espai per l’ull */
+}
+
+.icona-ull {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.2em;
+}
+.fila-doble {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.fila-doble .camp-formulari {
+  flex: 1 1 25%;
+}
+.contrasenya-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.contrasenya-container input {
+  flex: 1;
+  padding-right: 0.5rem; /* espai per l'icona */
+}
+
+.icona-ull {
+  position: absolute;
+  right: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.boto-textual {
+  background: none;
+  border: none;
+  color: #0074cc;
+
+  cursor: pointer;
+  padding: 0;
+  font-size: 1em;
+}
+
+.modal {
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content.petit {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.tancar-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.missatge-error {
+  background-color: #ffe0e0;
+  color: #a00;
+  border: 1px solid #a00;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border-radius: 5px;
+}
+
+.modal-flash {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background-color: #ffe0e0;
+  color: #a00;
+  padding: 1.2em 2em 1.2em 1.2em;
+  border: 2px solid #a00;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  min-width: 300px;
+  max-width: 90%;
+  font-size: 1em;
+  animation: fadein 0.3s ease-out;
+  position: fixed;
+}
+
+.modal-flash-contingut {
+  position: relative;
+  padding-right: 2em;
+}
+
+.tancar-flash {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  font-size: 1.3em;
+  font-weight: bold;
+  cursor: pointer;
+  color: #a00;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.plegable {
+  cursor: pointer;
+  color: #0645ad;
+  transition: color 0.2s ease;
+}
+
+.plegable:hover {
+  color: #042e78;
+  text-decoration: underline;
+}
+

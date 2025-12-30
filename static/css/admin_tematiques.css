@@ -1,0 +1,231 @@
+/* ===== CONTENIDORS PRINCIPALS ===== */
+.admin-container,
+.container-admin {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+
+.formulari-box {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== NAVEGACIÓ ===== */
+.nav-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #666;
+    text-decoration: none;
+}
+
+.nav-back:hover {
+    color: #333;
+}
+
+/* ===== TÍTOLS ===== */
+.container-admin h1,
+.admin-container h1 {
+    margin-bottom: 10px;
+}
+
+.container-admin h2,
+.admin-container h2 {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: normal;
+    margin-bottom: 30px;
+}
+
+/* ===== FORMULARIS ===== */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.flash {
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.btn {
+    margin-bottom: 25px;
+}
+
+/* ===== RADIO BUTTONS ===== */
+.opcio-distribucio {
+    border: 3px solid #ddd;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.opcio-distribucio:hover {
+    border-color: #2196F3;
+    background-color: #f8f9fa;
+}
+
+.opcio-distribucio.selected {
+    border-color: #2196F3;
+    background-color: #e3f2fd;
+}
+
+.opcio-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.opcio-header input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #2196F3;
+}
+
+.opcio-header label {
+    cursor: pointer;
+    margin: 0;
+    font-size: 16px;
+}
+
+/* ===== CHECKBOXES PAÏSOS ===== */
+.llista-paisos {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background: white;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.pais-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
+
+.pais-checkbox:hover {
+    background-color: #f0f0f0;
+    padding-right: 10px;
+    border-radius: 4px;
+}
+
+.pais-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.pais-checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    width: 24px;
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 4px;
+}
+
+.pais-checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
+    border-color: #2196F3;
+}
+
+.pais-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.pais-checkbox input:checked ~ .checkmark:after {
+    display: block;
+    left: 7px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+}
+
+.selector-paisos {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.selector-paisos.visible {
+    display: block;
+}
+
+/* ===== TAULES ===== */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+table thead tr {
+    background: #f5f5f5;
+}
+
+table thead th {
+    padding: 15px 20px;
+    text-align: left;
+}
+
+table tbody tr {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+table tbody td {
+    padding: 20px;
+}
+
+/* ===== SECCIÓ TEMES GLOBALS ===== */
+.seccio-temes-globals {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.header-seccio h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.descripcio-seccio {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+/* ===== ESTATS BUITS ===== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 40px;
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 20px;
+}

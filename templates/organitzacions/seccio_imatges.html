@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Imatges') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('organitzacions.llistat') }}">{{ _('Organitzacions') }}</a> › 
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}">{{ organitzacio.nom }}</a> › 
+      <span>{{ _('Imatges') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-images"></i> {{ _('Galeria de') }} {{ organitzacio.nom }}</h1>
+      <p class="subtitol">{{ _('Col·lecció d\'imatges compartides per aquesta organització') }}</p>
+    </div>
+
+    <!-- Controls galeria -->
+    {% if entrades_amb_imatges %}
+    <div class="controls-galeria">
+      <div class="targeta">
+        <div class="controls-row">
+          <div class="camp-cerca">
+            <input type="text" id="cerca-imatges" placeholder="{{ _('Cerca per títol o autor...') }}">
+            <i class="fas fa-search"></i>
+          </div>
+          
+          <div class="filtres-group">
+            <select id="filtre-any-imatges">
+              <option value="">{{ _('Tots els anys') }}</option>
+              {% for any in anys_imatges %}
+              <option value="{{ any }}">{{ any }}</option>
+              {% endfor %}
+            </select>
+            
+            <select id="ordenar-imatges">
+              <option value="recent">{{ _('Més recents') }}</option>
+              <option value="antic">{{ _('Més antigues') }}</option>
+              <option value="nom">{{ _('Per títol') }}</option>
+              <option value="autor">{{ _('Per autor') }}</option>
+            </select>
+          </div>
+          
+          <div class="vista-controls">
+            <button id="vista-mosaic" class="boto-vista actiu" title="{{ _('Vista mosaic') }}">
+              <i class="fas fa-th"></i>
+            </button>
+            <button id="vista-llista-img" class="boto-vista" title="{{ _('Vista llista') }}">
+              <i class="fas fa-list"></i>
+            </button>
+            <button id="vista-slider" class="boto-vista" title="{{ _('Mode presentació') }}">
+              <i class="fas fa-play"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Contingut galeria -->
+    <div class="contingut-seccio">
+      {% if entrades_amb_imatges %}
+        
+        <!-- Resum -->
+        <div class="resum-galeria">
+          <p>{{ _('Mostrant') }} <span id="imatges-visibles">{{ entrades_amb_imatges|length }}</span> {{ _('de') }} {{ entrades_amb_imatges|length }} {{ _('imatges') }}</p>
+        </div>
+
+        <!-- Mosaic d'imatges -->
+        <div id="mosaic-imatges" class="mosaic-imatges vista-mosaic">
+          {% for entrada in entrades_amb_imatges %}
+          <div class="imatge-item" 
+               data-id="{{ entrada.id }}"
+               data-any="{{ entrada.data_creacio.year }}"
+               data-cerca="{{ entrada.titol|lower }} {{ entrada.autor.nom|lower }}"
+               data-data="{{ entrada.data_creacio.timestamp() }}"
+               onclick="obrirImatge({{ entrada.id }})">
+            
+            <div class="imatge-container">
+              <img src="{{ url_for('static', filename='umberto/mini/' + entrada.nom_fitxer) }}" 
+                   alt="{{ entrada.titol }}" 
+                   loading="lazy">
+              
+              <!-- Overlay amb informació -->
+              <div class="imatge-overlay">
+                <div class="imatge-info">
+                  <h4 class="imatge-titol">{{ entrada.titol }}</h4>
+                  <p class="imatge-autor">{{ entrada.autor.nom }}</p>
+                  <p class="imatge-data">{{ entrada.data_creacio.strftime('%d/%m/%Y') }}</p>
+                </div>
+                
+                <div class="imatge-accions">
+                  <button class="boto-accio" title="{{ _('Veure') }}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="boto-accio" title="{{ _('Descarregar') }}" 
+                          onclick="event.stopPropagation(); descarregarImatge({{ entrada.id }})">
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Vista llista (amagada per defecte) -->
+        <div id="llista-imatges" class="llista-imatges" style="display: none;">
+          {% for entrada in entrades_amb_imatges %}
+          <div class="imatge-fila" 
+               data-id="{{ entrada.id }}"
+               data-any="{{ entrada.data_creacio.year }}"
+               data-cerca="{{ entrada.titol|lower }} {{ entrada.autor.nom|lower }}"
+               data-data="{{ entrada.data_creacio.timestamp() }}">
+            
+            <div class="miniatura-fila">
+              <img src="{{ url_for('static', filename='umberto/mini/' + entrada.nom_fitxer) }}" 
+                   alt="{{ entrada.titol }}">
+            </div>
+            
+            <div class="info-fila">
+              <h4>{{ entrada.titol }}</h4>
+              <p class="meta-fila">
+                <span class="autor"><i class="fas fa-user"></i> {{ entrada.autor.nom }}</span>
+                <span class="data"><i class="fas fa-calendar"></i> {{ entrada.data_creacio.strftime('%d/%m/%Y') }}</span>
+              </p>
+              {% if entrada.descripcio %}
+              <p class="descripcio-fila">{{ entrada.descripcio[:100] }}...</p>
+              {% endif %}
+            </div>
+            
+            <div class="accions-fila">
+              <button onclick="obrirImatge({{ entrada.id }})" class="boto boto-petit">
+                <i class="fas fa-eye"></i> {{ _('Veure') }}
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Sense resultats -->
+        <div id="sense-resultats-imatges" class="missatge-buit" style="display: none;">
+          <i class="fas fa-search"></i>
+          <h3>{{ _('No s\'han trobat imatges') }}</h3>
+          <p>{{ _('Prova a canviar els filtres de cerca') }}</p>
+        </div>
+
+      {% else %}
+        <!-- Estat buit -->
+        <div class="missatge-buit">
+          <i class="fas fa-images"></i>
+          <h3>{{ _('Encara no hi ha imatges') }}</h3>
+          <p>{{ _('Aquesta organització encara no té imatges compartides públicament.') }}</p>
+          
+          {% if es_membre %}
+          <div class="accions-buit">
+            <a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" class="boto boto-primari">
+              <i class="fas fa-plus"></i> {{ _('Compartir primera imatge') }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal visualitzador d'imatges -->
+<div id="modal-visualitzador" class="modal modal-fullscreen">
+  <div class="visualitzador-container">
+    
+    <!-- Controls superiors -->
+    <div class="visualitzador-controls-top">
+      <div class="info-imatge-modal">
+        <h3 id="modal-titol-imatge"></h3>
+        <p id="modal-autor-imatge"></p>
+      </div>
+      
+      <div class="controls-top-right">
+        <button id="btn-slideshow" class="boto-control" title="{{ _('Mode presentació') }}">
+          <i class="fas fa-play"></i>
+        </button>
+        <button id="btn-descarregar" class="boto-control" title="{{ _('Descarregar') }}">
+          <i class="fas fa-download"></i>
+        </button>
+        <button onclick="tancarVisualitzador()" class="boto-tancar-visualitzador" title="{{ _('Tancar') }}">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Imatge principal -->
+    <div class="visualitzador-main">
+      <button id="btn-anterior" class="btn-nav btn-anterior">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <div class="imatge-principal">
+        <img id="imatge-visualitzador" src="" alt="">
+      </div>
+      
+      <button id="btn-seguent" class="btn-nav btn-seguent">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Miniatures -->
+    <div class="visualitzador-miniatures">
+      <div id="container-miniatures" class="container-miniatures">
+        <!-- Miniatures generades dinàmicament -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/seccio_imatges.js') }}"></script>
+{% endblock %}

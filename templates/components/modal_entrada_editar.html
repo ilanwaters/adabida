@@ -1,0 +1,38 @@
+<div id="modal-entrada-editar" class="modal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-cos">
+
+      <div class="modal-imatge">
+        <a id="modal-enllac-editar" href="" data-lightbox="imatge-entrada">
+          <img id="modal-img-editar" src="" alt="imatge entrada">
+        </a>
+      </div>
+
+      <div class="modal-text">
+        <h2 id="modal-titol-editar">—</h2>
+
+        <div class="modal-dades">
+          <p><span id="modal-tema-editar"></span></p>
+          <p><span id="modal-ubicacio-any-editar">—</span></p>
+          <div id="modal-contingut-editar" class="contingut-formatat">—</div>  
+        </div>
+
+        <div class="modal-arxius" id="modal-arxius-editar"></div>
+
+        <div class="modal-info-imatge" id="modal-info-imatge-editar" style="display: none;">
+          <p><strong>{{ _('Arxiu') }}</strong> <span id="modal-titol-imatge-editar">—</span></p>
+          <p><span id="modal-ubicacio-any-imatge-editar">—</span></p>
+          <p><span id="modal-descripcio-imatge-editar">—</span></p>
+          <p id="modal-data-editar">—</p>
+          <p><strong>{{ _('Aquest arxiu es pot consultar a:') }}</strong> <span id="modal-referencia-imatge-editar">—</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-botons modal-botons-accions">
+      <a id="boto-editar" class="boto" href="">{{ _('Editar') }}</a>
+      <button id="boto-eliminar" type="button" class="boto" data-id="" onclick="confirmaEliminacio()">{{ _('Eliminar') }}</button>
+      <button onclick="tancaModal()" class="boto boto-tancar-modal">{{ _('Tancar') }}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+/* ====================================================
+   GRAELLA D'ENTRADES - CSS COMPARTIT
+   Disseny de graella 2 columnes per mostrar entrades
+   Ús: repositori, famílies, organitzacions, etc.
+   ==================================================== */
+
+/* Contenidor principal de la graella */
+.grid-entrades {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ← 2 columnes fixes */
+  gap: 20px; /* ← Gap més petit */
+  padding: 20px;
+}
+
+/* Caixa individual d'entrada */
+.caixa-entrada {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fdfdfd;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  min-height: 120px;
+  max-width: 400px; /* ← Mínim, però pot créixer */
+}
+
+.caixa-entrada:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Secció de la imatge/miniatura */
+.caixa-entrada .imatge-lateral {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  border-right: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.caixa-entrada .imatge-lateral img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Icona de conversa (si existeix) */
+.icona-conversa {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icona-conversa img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Contingut textual de l'entrada */
+.caixa-entrada .contingut-lateral {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Títol de l'entrada */
+.caixa-entrada .titol-entrada {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.caixa-entrada .titol-entrada .any {
+  font-weight: normal;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Resum del contingut */
+.caixa-entrada .resum {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+
+/* Metadades (autor, data, etc.) */
+.caixa-entrada .metadades {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: auto;
+}
+
+/* Responsive: en pantalles petites, una sola columna */
+@media (max-width: 768px) {
+  .grid-entrades {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 10px;
+  }
+}
+```

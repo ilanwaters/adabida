@@ -1,0 +1,81 @@
+/* 🎛️ Pestanyes principals */
+.pestanyes {
+  display: flex;
+  background-color: #14d8ce;
+  margin: 10px 0 0 0;
+  border-top: 1px solid #ccc;
+}
+
+.pestanya {
+  flex: 1;
+  padding: 8px 18px;
+  text-align: center;
+  background-color: #14d8ce;
+  color: white;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  text-decoration: none;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.pestanya:hover:not(.activa) {
+  background-color: hsl(212, 87%, 58%);
+}
+
+.pestanya.activa {
+  background-color: hsl(214, 89%, 15%);
+  border-bottom: 3px solid #f8c300;
+  font-weight: bold;
+}
+
+
+/* 🧩 Subpestanyes (ex: dins galeria) */
+.subpestanyes-galeria {
+  display: flex;
+  background-color: #14d8ce;
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.subpestanya {
+  flex: 1;
+  padding: 8px 18px;
+  text-align: center;
+  background-color: #14d8ce;
+  color: white;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  text-decoration: none;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.subpestanya:hover:not(.activa) {
+  background-color: hsl(212, 87%, 58%);
+}
+
+.subpestanya.activa {
+  background-color: hsl(214, 89%, 15%);
+  border-bottom: 3px solid #f8c300;
+  font-weight: bold;
+}
+
+
+/* 📦 Seccions mostrables */
+.seccio {
+  display: none;
+}
+
+.seccio.mostrar,
+.visible {
+  display: block;
+}

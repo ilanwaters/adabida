@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pestanyes.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <!-- Per navegadors moderns -->
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon_round.png') }}">
+<!-- Compatibilitat amb antics -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon_round.ico') }}"><table>
+  <header>
+  <nav class="navbar">
+    <a href="/" class="logo">
+      <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca">
+    </a>
+          {% if session['usuari'] %}
+<div class="usuari-connectat">
+ 
+ <a class="nom-usuari" href="#">{{ session['usuari'] }}</a>
+
+   <span class="punt-verd"></span>
+</div>
+{% endif %}
+</div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('repositori.consulta_repositori') }}">{{ _('Arxiu') }}</a></li>
+      <li class="menu-idioma">
+        <a href="#"><img src="{{ url_for('static', filename='img/idiomas.png') }}" alt="Idiomes"></a>
+        <ul class="submenu">
+          <li><a href="{{ url_for('inici.set_language', idioma='ca') }}">Català</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='es') }}">Español</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='eu') }}">Euskara</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='en') }}">English</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='fr') }}">Français</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='ru') }}">Русский</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='de') }}">Deutsch</a></li>
+          <li><a href="{{ url_for('inici.set_language', idioma='uk') }}">Українська</a></li>
+        </ul>
+      </li>
+  </nav>
+</header>
+  <thead>
+    <tr>
+      <th>Títol</th>
+      <th>Data</th>
+      <th>Autor</th>
+      <th>Accions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entrada in entrades %}
+    <tr>
+      <td>
+        <a href="{{ url_for('blog.editar_entrada_blog', entrada_id=entrada.id) }}">
+          {{ entrada.titol }}
+        </a>
+      </td>
+      <td>{{ entrada.data_creacio.strftime('%d-%m-%Y') }}</td>
+      <td>{{ entrada.firma }}</td>
+      <td>
+        <form method="POST" action="{{ url_for('blog.eliminar_entrada_blog', entrada_id=entrada.id) }}"
+              onsubmit="return confirm('Segur que vols esborrar aquesta entrada?');">
+          <button type="submit">🗑️</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

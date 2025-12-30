@@ -1,0 +1,103 @@
+.llista-fitxers {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.fila-fitxer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.miniatura-imatge {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.metadades-fitxer {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.icona-fitxer {
+  font-size: 50px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eee;
+  border-radius: 6px;
+}
+
+.taula-fitxers {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.9em;
+}
+
+.taula-fitxers th, .taula-fitxers td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.taula-fitxers th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.miniatura-imatge {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.boto-eliminar {
+  background-color: #ffdddd;
+  border: 1px solid #cc0000;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#popup-img {
+  display: none;
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  z-index: 999;
+  background: rgba(0,0,0,0.8);
+  text-align: center;
+  padding: 20px;
+}
+
+#popup-img img {
+  max-width: 100%;
+  max-height: 80vh;
+}
+
+#popup-img .tancar {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+

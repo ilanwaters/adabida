@@ -1,0 +1,136 @@
+#lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  position: relative;
+}
+
+#lightbox-img {
+  max-width: 90%;
+  max-height: 90%;
+  border: 4px solid white;
+  box-shadow: 0 0 20px black;
+}
+
+.grid-galeria {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.grid-galeria.visible {
+  display: grid !important;
+}
+
+.vista-gran {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.imatge-galeria-gran {
+  display: block;
+  margin: 0 auto;
+  max-width: 80%;
+  height: auto;
+  border: 4px solid lch(94.9% 2.13 19.25);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.ocult {
+  display: none !important;
+}
+
+.visible {
+  display: block;
+}
+
+.llegenda {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.vista-gran,
+.grid-galeria.visible {
+  background-color: lch(59.35% 1.57 19.29);
+  padding: 80px 40px;
+  box-sizing: border-box;
+
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+
+.targeta-imatge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.enllac-info {
+  color: #0055aa;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: 0.9em;
+}
+
+.enllac-info:hover {
+  color: #002a66;
+}
+
+.llegenda-img {
+  text-align: center;
+  font-size: 0.85em;
+  margin-top: 0.3em;
+  color: #555;
+}
+
+.enllac-info {
+  color: inherit;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.enllac-info:hover {
+  text-decoration: underline;
+  color: #222;
+}
+
+.capcalera-expo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1em;
+  flex-wrap: wrap;
+}
+
+.titol-expo {
+  flex: 1;
+  font-size: 2em;
+  margin: 0.5em 0;
+  text-align: left;
+}
+
+.selector-vista {
+  display: flex;
+  gap: 0.5em;
+}
+

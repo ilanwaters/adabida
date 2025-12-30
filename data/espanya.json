@@ -1,0 +1,216 @@
+{
+  "pais": {
+    "nom": "España",
+    "codi_iso": "ES"
+  },
+  "regions": [
+    {
+      "nom": "A Coruña",
+      "municipis": ["A Coruña", "Santiago de Compostela", "Ferrol", "Narón", "Oleiros"]
+    },
+    {
+      "nom": "Álava",
+      "municipis": ["Vitoria-Gasteiz", "Llodio", "Amurrio"]
+    },
+    {
+      "nom": "Albacete",
+      "municipis": ["Albacete", "Hellín", "Villarrobledo", "Almansa"]
+    },
+    {
+      "nom": "Alicante",
+      "municipis": ["Alacant", "Elx", "Torrevieja", "Oriola", "Benidorm", "Alcoi", "Elda"]
+    },
+    {
+      "nom": "Almería",
+      "municipis": ["Almería", "Roquetas de Mar", "El Ejido", "Vícar"]
+    },
+    {
+      "nom": "Asturias",
+      "municipis": ["Oviedo", "Gijón", "Avilés", "Siero", "Langreo"]
+    },
+    {
+      "nom": "Ávila",
+      "municipis": ["Ávila", "Arévalo", "Arenas de San Pedro"]
+    },
+    {
+      "nom": "Badajoz",
+      "municipis": ["Badajoz", "Mérida", "Don Benito", "Almendralejo", "Villanueva de la Serena"]
+    },
+    {
+      "nom": "Barcelona",
+      "municipis": ["Barcelona", "l'Hospitalet de Llobregat", "Badalona", "Terrassa", "Sabadell", "Mataró", "Santa Coloma de Gramenet", "Cornellà de Llobregat", "Sant Boi de Llobregat", "Rubí", "Manresa", "Granollers", "Viladecans", "Castelldefels", "el Prat de Llobregat"]
+    },
+    {
+      "nom": "Vizcaya",
+      "municipis": ["Bilbao", "Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Basauri"]
+    },
+    {
+      "nom": "Burgos",
+      "municipis": ["Burgos", "Miranda de Ebro", "Aranda de Duero"]
+    },
+    {
+      "nom": "Cáceres",
+      "municipis": ["Cáceres", "Plasencia", "Navalmoral de la Mata", "Coria"]
+    },
+    {
+      "nom": "Cádiz",
+      "municipis": ["Jerez de la Frontera", "Cádiz", "Algeciras", "San Fernando", "El Puerto de Santa María", "Chiclana de la Frontera"]
+    },
+    {
+      "nom": "Cantabria",
+      "municipis": ["Santander", "Torrelavega", "Castro-Urdiales", "Camargo"]
+    },
+    {
+      "nom": "Castellón",
+      "municipis": ["Castelló de la Plana", "Vila-real", "Borriana", "Vinaròs"]
+    },
+    {
+      "nom": "Ciudad Real",
+      "municipis": ["Ciudad Real", "Puertollano", "Tomelloso", "Alcázar de San Juan"]
+    },
+    {
+      "nom": "Córdoba",
+      "municipis": ["Córdoba", "Lucena", "Puente Genil", "Montilla"]
+    },
+    {
+      "nom": "Cuenca",
+      "municipis": ["Cuenca", "Tarancón", "Quintanar del Rey"]
+    },
+    {
+      "nom": "Guipúzcoa",
+      "municipis": ["Donostia-San Sebastián", "Irun", "Errenteria", "Eibar", "Zarautz"]
+    },
+    {
+      "nom": "Girona",
+      "municipis": ["Girona", "Figueres", "Blanes", "Lloret de Mar", "Olot", "Salt"]
+    },
+    {
+      "nom": "Granada",
+      "municipis": ["Granada", "Motril", "Almuñécar", "Baza"]
+    },
+    {
+      "nom": "Guadalajara",
+      "municipis": ["Guadalajara", "Azuqueca de Henares", "Alovera"]
+    },
+    {
+      "nom": "Huelva",
+      "municipis": ["Huelva", "Lepe", "Almonte", "Moguer"]
+    },
+    {
+      "nom": "Huesca",
+      "municipis": ["Huesca", "Monzón", "Barbastro", "Jaca"]
+    },
+    {
+      "nom": "Illes Balears",
+      "municipis": ["Palma", "Calvià", "Manacor", "Eivissa", "Maó", "Inca"]
+    },
+    {
+      "nom": "Jaén",
+      "municipis": ["Jaén", "Linares", "Andújar", "Úbeda"]
+    },
+    {
+      "nom": "León",
+      "municipis": ["León", "Ponferrada", "San Andrés del Rabanedo"]
+    },
+    {
+      "nom": "Lleida",
+      "municipis": ["Lleida", "Tàrrega", "Mollerussa", "Balaguer", "la Seu d'Urgell"]
+    },
+    {
+      "nom": "Lugo",
+      "municipis": ["Lugo", "Monforte de Lemos", "Viveiro"]
+    },
+    {
+      "nom": "Madrid",
+      "municipis": ["Madrid", "Móstoles", "Alcalá de Henares", "Fuenlabrada", "Leganés", "Getafe", "Alcorcón", "Torrejón de Ardoz", "Parla", "Alcobendas", "Las Rozas de Madrid", "San Sebastián de los Reyes", "Pozuelo de Alarcón", "Rivas-Vaciamadrid", "Majadahonda", "Collado Villalba"]
+    },
+    {
+      "nom": "Málaga",
+      "municipis": ["Málaga", "Marbella", "Mijas", "Vélez-Málaga", "Fuengirola", "Torremolinos", "Estepona", "Benalmádena", "Rincón de la Victoria", "Antequera"]
+    },
+    {
+      "nom": "Murcia",
+      "municipis": ["Murcia", "Cartagena", "Lorca", "Molina de Segura", "Alcantarilla", "Mazarrón"]
+    },
+    {
+      "nom": "Navarra",
+      "municipis": ["Pamplona", "Tudela", "Barañáin", "Burlada", "Estella"]
+    },
+    {
+      "nom": "Ourense",
+      "municipis": ["Ourense", "Verín", "O Barco de Valdeorras", "O Carballiño"]
+    },
+    {
+      "nom": "Palencia",
+      "municipis": ["Palencia", "Guardo", "Aguilar de Campoo"]
+    },
+    {
+      "nom": "Las Palmas",
+      "municipis": ["Las Palmas de Gran Canaria", "Telde", "Santa Lucía de Tirajana", "Arucas"]
+    },
+    {
+      "nom": "Pontevedra",
+      "municipis": ["Vigo", "Pontevedra", "Vilagarcía de Arousa", "Redondela", "Cangas"]
+    },
+    {
+      "nom": "La Rioja",
+      "municipis": ["Logroño", "Calahorra", "Arnedo", "Haro"]
+    },
+    {
+      "nom": "Salamanca",
+      "municipis": ["Salamanca", "Béjar", "Ciudad Rodrigo"]
+    },
+    {
+      "nom": "Santa Cruz de Tenerife",
+      "municipis": ["Santa Cruz de Tenerife", "San Cristóbal de La Laguna", "Arona", "Adeje", "Los Llanos de Aridane"]
+    },
+    {
+      "nom": "Segovia",
+      "municipis": ["Segovia", "San Ildefonso", "Cuéllar"]
+    },
+    {
+      "nom": "Sevilla",
+      "municipis": ["Sevilla", "Dos Hermanas", "Alcalá de Guadaíra", "Mairena del Aljarafe", "Utrera", "Écija"]
+    },
+    {
+      "nom": "Soria",
+      "municipis": ["Soria", "Almazán", "El Burgo de Osma"]
+    },
+    {
+      "nom": "Tarragona",
+      "municipis": ["Tarragona", "Reus", "Tortosa", "el Vendrell", "Valls", "Cambrils", "Salou"]
+    },
+    {
+      "nom": "Teruel",
+      "municipis": ["Teruel", "Alcañiz", "Andorra"]
+    },
+    {
+      "nom": "Toledo",
+      "municipis": ["Toledo", "Talavera de la Reina", "Illescas", "Seseña"]
+    },
+    {
+      "nom": "Valencia",
+      "municipis": ["València", "Torrent", "Gandia", "Paterna", "Sagunt", "Mislata", "Alzira", "Burjassot", "Xirivella", "Manises"]
+    },
+    {
+      "nom": "Valladolid",
+      "municipis": ["Valladolid", "Medina del Campo", "Laguna de Duero"]
+    },
+    {
+      "nom": "Zamora",
+      "municipis": ["Zamora", "Benavente", "Toro"]
+    },
+    {
+      "nom": "Zaragoza",
+      "municipis": ["Zaragoza", "Calatayud", "Ejea de los Caballeros", "Utebo"]
+    },
+    {
+      "nom": "Ceuta",
+      "municipis": ["Ceuta"]
+    },
+    {
+      "nom": "Melilla",
+      "municipis": ["Melilla"]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Editar secció') if seccio else _('Nova secció') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="formulari-seccio">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('pagina_personal.pagina_personal') }}">{{ _('El meu espai') }}</a> › 
+    <a href="{{ url_for('biografia_seccions.llistar') }}">{{ _('Biografia') }}</a> › 
+    <span>{{ _('Editar secció') if seccio else _('Nova secció') }}</span>
+  </div>
+
+  <h1>{{ _('Editar secció') if seccio else _('Nova secció de biografia') }}</h1>
+
+
+  <!-- Formulari -->
+  <form method="post">
+    
+    <!-- Títol -->
+    <div class="camp-formulari">
+      <label for="titol">{{ _('Títol de la secció') }} *</label>
+      <input 
+        type="text" 
+        id="titol" 
+        name="titol" 
+        value="{{ seccio.titol if seccio else '' }}" 
+        placeholder="{{ _('Ex: Infància i adolescència') }}"
+        required>
+    </div>
+<!-- Període (anys) -->
+<div class="camp-formulari">
+  <label for="any_inici">{{ _('Període') }}</label>
+  <div style="display: flex; gap: 1rem; align-items: center;">
+    <input 
+      type="number" 
+      id="any_inici" 
+      name="any_inici" 
+      value="{{ seccio.any_inici if seccio and seccio.any_inici else '' }}" 
+      placeholder="{{ _('Any inici') }}"
+      min="1900"
+      max="2100"
+      style="width: 150px;">
+    <span>—</span>
+    <input 
+      type="number" 
+      id="any_final" 
+      name="any_final" 
+      value="{{ seccio.any_final if seccio and seccio.any_final else '' }}" 
+      placeholder="{{ _('Any final (opcional)') }}"
+      min="1900"
+      max="2100"
+      style="width: 150px;">
+  </div>
+  <small style="color: #666; display: block; margin-top: 0.5rem;">
+    {{ _('Exemple: 1998 — 2000. Deixa el segon camp buit si és un moment puntual.') }}
+  </small>
+</div>
+    <!-- Contingut -->
+    <div class="camp-formulari">
+      <label for="editor-contingut">{{ _('Contingut') }}</label>
+      <textarea id="editor-contingut" name="contingut">{{ seccio.contingut if seccio else '' }}</textarea>
+    </div>
+
+    <!-- Visibilitat -->
+    <div class="camp-formulari checkbox-camp">
+      <input 
+        type="checkbox" 
+        id="visible" 
+        name="visible" 
+        {{ 'checked' if not seccio or seccio.visible else '' }}>
+      <label for="visible" style="margin: 0;">
+        {{ _('Visible al perfil públic') }}
+      </label>
+    </div>
+
+    <!-- Botons -->
+    <div class="botons-formulari">
+      <a href="{{ url_for('biografia_seccions.llistar') }}" class="boto-cancelar">
+        {{ _('Cancel·lar') }}
+      </a>
+      <button type="submit" class="boto-guardar">
+        💾 {{ _('Guardar secció') }}
+      </button>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- TinyMCE local -->
+<script src="{{ url_for('static', filename='js/tinymce/tinymce.min.js') }}"></script>
+
+<script>
+tinymce.init({
+  selector: '#editor-contingut',
+  height: 500,
+  menubar: false,
+  language: '{{ session.get("idioma", "ca") }}',
+  
+  plugins: [
+    'advlist', 'autolink', 'lists', 'link', 'image', 
+    'charmap', 'preview', 'anchor', 'searchreplace',
+    'visualblocks', 'code', 'fullscreen', 'insertdatetime',
+    'media', 'table', 'help', 'wordcount'
+  ],
+  
+  toolbar: 'undo redo | blocks | bold italic underline | ' +
+           'alignleft aligncenter alignright | ' +
+           'bullist numlist | link image | ' +
+           'removeformat | help',
+  
+  // Configuració d'imatges (pendent implementar ruta)
+  images_upload_url: '/perfil/biografia/pujar-imatge',
+  automatic_uploads: true,
+  
+  // Estils del contingut
+  content_style: `
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      padding: 20px;
+    }
+    h2 { font-size: 1.8rem; margin-top: 1.5rem; }
+    h3 { font-size: 1.4rem; margin-top: 1.2rem; }
+    p { margin-bottom: 1rem; }
+  `
+});
+
+// Confirmació abans de sortir si hi ha canvis
+let formModificat = false;
+
+document.querySelector('form').addEventListener('input', function() {
+  formModificat = true;
+});
+
+document.querySelector('.boto-cancelar').addEventListener('click', function(e) {
+  if (formModificat) {
+    if (!confirm('{{ _("Tens canvis sense guardar. Vols sortir igualment?") }}')) {
+      e.preventDefault();
+    }
+  }
+});
+</script>
+{% endblock %}

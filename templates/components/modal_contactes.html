@@ -1,0 +1,21 @@
+<!-- MODAL PER SELECCIONAR CONTACTE -->
+<div id="modal-contactes" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalContactes()">&times;</span>
+    <h3>{{ _('Selecciona contacte') }}</h3>
+    
+    <div id="llista-contactes" class="llista-contactes">
+      <!-- Es carrega amb AJAX -->
+      <div style="text-align: center; color: #666; margin: 2rem 0;">
+        {{ _('Carregant contactes...') }}
+      </div>
+    </div>
+    
+    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #ddd;">
+      <p style="color: #666; font-size: 0.9rem;">{{ _('No trobes el contacte?') }}</p>
+      <button onclick="obreModalNouMissatgeDirecte()" class="boto boto-secundari">
+        {{ _('Escriure a altre usuari') }}
+      </button>
+    </div>
+  </div>
+</div>

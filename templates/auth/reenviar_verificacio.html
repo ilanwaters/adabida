@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Reenviar verificació') }}{% endblock %}
+
+{% block css %}
+<style>
+  .reenviar-container {
+    max-width: 500px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .reenviar-container h1 {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .reenviar-container p {
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .camp-formulari {
+    margin-bottom: 1.5rem;
+  }
+
+  .camp-formulari label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .camp-formulari input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .camp-formulari input:focus {
+    outline: none;
+    border-color: #14d8ce;
+  }
+
+  .boto-enviar {
+    background: #14d8ce;
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .boto-enviar:hover {
+    background: #0e9f94;
+  }
+
+  .enllacos-ajuda {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .enllacos-ajuda a {
+    color: #14d8ce;
+    text-decoration: none;
+  }
+
+  .enllacos-ajuda a:hover {
+    text-decoration: underline;
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="reenviar-container">
+    <h1>{{ _('Reenviar email de verificació') }}</h1>
+    
+    <p>{{ _('Introdueix el teu email i t\'enviarem un nou enllaç de verificació.') }}</p>
+
+    <form method="POST">
+      <div class="camp-formulari">
+        <label for="email">{{ _('Email') }}</label>
+        <input type="email" id="email" name="email" required 
+               placeholder="{{ _('El teu email de registre') }}">
+      </div>
+
+      <button type="submit" class="boto-enviar">
+        {{ _('Reenviar verificació') }}
+      </button>
+    </form>
+
+    <div class="enllacos-ajuda">
+      <p>
+        <a href="{{ url_for('login.login') }}">{{ _('← Tornar al login') }}</a>
+      </p>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

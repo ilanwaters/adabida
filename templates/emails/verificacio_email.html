@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifica el teu compte</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: #14d8ce;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .content p {
+            margin: 0 0 20px 0;
+            color: #444;
+        }
+        .button {
+            display: inline-block;
+            background: #14d8ce;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            background: #f9f9f9;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #eee;
+        }
+        .link-alternative {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Benvingut/da a Adabida</h1>
+        </div>
+        
+        <div class="content">
+            <p>Hola <strong>{{ usuari.nom }}</strong>,</p>
+            
+            <p>Gràcies per registrar-te a <strong>Adabida</strong></p>
+            
+            <p>Per completar el teu registre i començar a compartir els teus testimonis, necessitem verificar el teu correu electrònic.</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ url_verificacio }}" class="button">Verifica el teu compte</a>
+            </div>
+            
+            <p style="margin-top: 30px;">Aquest enllaç és vàlid durant <strong>24 hores</strong>.</p>
+            
+            <p>Si no has creat cap compte a Adabida, pots ignorar aquest email.</p>
+            
+            <div class="link-alternative">
+                <strong>Si el botó no funciona, copia aquest enllaç al teu navegador:</strong><br>
+                {{ url_verificacio }}
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Els teus records són part de la història.</p>
+            <p>Barcelona, Catalunya</p>
+        </div>
+    </div>
+</body>
+</html>

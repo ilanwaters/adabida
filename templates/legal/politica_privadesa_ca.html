@@ -1,0 +1,648 @@
+{% extends "base.html" %}
+
+{% block titol %}Política de Privacitat - Adabida{% endblock %}
+
+{% block css %}
+<style>
+  .document-legal {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  .document-legal h1 {
+    color: #14d8ce;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 3px solid #14d8ce;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+
+  .document-legal .ultima-actualitzacio {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .document-legal h2 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    padding-left: 0.8rem;
+    border-left: 4px solid #14d8ce;
+    font-weight: 600;
+  }
+
+  .document-legal h3 {
+    color: #555;
+    font-size: 1.15rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+
+  .document-legal p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  .document-legal ul, .document-legal ol {
+    margin: 1rem 0;
+    padding-left: 2.5rem;
+  }
+
+  .document-legal li {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 0.6rem;
+  }
+
+  .document-legal .info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal .info-box p {
+    margin: 0.3rem 0;
+  }
+
+  .document-legal .advertencia {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal .success-box {
+    background: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal strong {
+    color: #222;
+    font-weight: 600;
+  }
+
+  .document-legal hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2.5rem 0;
+  }
+
+  .document-legal .seccio-final {
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .boto-tornar {
+    display: inline-block;
+    background: #14d8ce;
+    color: white;
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: background 0.3s;
+    font-weight: 500;
+  }
+
+  .boto-tornar:hover {
+    background: #0e9f94;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .document-legal {
+      padding: 1.2rem;
+      margin: 1rem;
+    }
+
+    .document-legal h1 {
+      font-size: 1.6rem;
+    }
+
+    .document-legal h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="document-legal">
+    
+    <h1>POLÍTICA DE PRIVACITAT I PROTECCIÓ DE DADES</h1>
+    <p class="ultima-actualitzacio">Última actualització: 29 de novembre de 2025</p>
+
+    <hr>
+
+    <!-- 1. INTRODUCCIÓ -->
+    <h2>1. INTRODUCCIÓ</h2>
+    
+    <p>
+      Adabida respecta la privacitat dels seus usuaris i es compromet a protegir les dades personals que confia al servei.
+    </p>
+
+    <p>
+      Aquesta Política de Privacitat explica com Adabida recull, utilitza, emmagatzema i protegeix les dades personals dels usuaris, en compliment del Reglament General de Protecció de Dades (RGPD - Reglament UE 2016/679) i la Llei Orgànica 3/2018, de 5 de desembre, de Protecció de Dades Personals i garantia dels drets digitals (LOPDGDD).
+    </p>
+
+    <!-- 2. RESPONSABLE DEL TRACTAMENT -->
+    <h2>2. RESPONSABLE DEL TRACTAMENT</h2>
+
+    <div class="info-box">
+      <p><strong>IDENTITAT DEL RESPONSABLE:</strong></p>
+      <p>Nom: Ilan Sánchez</p>
+      <p>Domicili: Calella, 08370, Barcelona, Espanya</p>
+      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Lloc web: www.adabida.cat</p>
+    </div>
+
+    <p><strong>DELEGAT DE PROTECCIÓ DE DADES:</strong></p>
+    <p>
+      Atesa la naturalesa i dimensió del tractament, Adabida no està obligada a designar un Delegat de Protecció de Dades. Per a qualsevol consulta sobre protecció de dades, contactar amb: <strong>contacte@adabida.cat</strong>
+    </p>
+
+    <!-- 3. PRINCIPIS APLICABLES -->
+    <h2>3. PRINCIPIS APLICABLES AL TRACTAMENT DE DADES</h2>
+    
+    <p>El tractament de dades personals a Adabida es regeix pels següents principis:</p>
+
+    <ul>
+      <li><strong>LICITUD, LLEIALTAT I TRANSPARÈNCIA:</strong> Les dades es tracten de manera lícita, lleial i transparent.</li>
+      <li><strong>LIMITACIÓ DE LA FINALITAT:</strong> Les dades es recullen amb finalitats determinades, explícites i legítimes.</li>
+      <li><strong>MINIMITZACIÓ DE DADES:</strong> Només es tracten les dades necessàries per a les finalitats previstes.</li>
+      <li><strong>EXACTITUD:</strong> Les dades són exactes i s'actualitzen quan cal.</li>
+      <li><strong>LIMITACIÓ DEL TERMINI DE CONSERVACIÓ:</strong> Les dades es conserven només durant el temps necessari.</li>
+      <li><strong>INTEGRITAT I CONFIDENCIALITAT:</strong> Les dades es tracten de manera que es garanteixi la seva seguretat.</li>
+      <li><strong>RESPONSABILITAT PROACTIVA:</strong> Adabida és responsable del compliment d'aquests principis i pot demostrar-ho.</li>
+    </ul>
+
+    <!-- 4. DADES PERSONALS TRACTADES -->
+    <h2>4. DADES PERSONALS TRACTADES</h2>
+
+    <p>Adabida tracta les següents categories de dades personals:</p>
+
+    <h3>4.1. DADES DE REGISTRE I COMPTE</h3>
+    <ul>
+      <li>Nom i cognoms</li>
+      <li>Correu electrònic</li>
+      <li>Contrasenya (emmagatzemada de forma xifrada)</li>
+      <li>Data de registre</li>
+      <li>Idioma preferit</li>
+    </ul>
+
+    <h3>4.2. DADES BIOGRÀFIQUES I GENEALÒGIQUES (opcional)</h3>
+    <ul>
+      <li>Data i lloc de naixement</li>
+      <li>Data i lloc de defunció (si escau)</li>
+      <li>Lloc de residència actual</li>
+      <li>Relacions familiars (pares, fills, germans, cònjuges)</li>
+      <li>Biografia personal</li>
+    </ul>
+
+    <h3>4.3. DADES DE VERIFICACIÓ (opcional)</h3>
+    <ul>
+      <li>Documents d'identitat (DNI, NIE, passaport)</li>
+      <li>Partides de naixement, matrimoni o defunció</li>
+      <li>Altres documents acreditatius</li>
+    </ul>
+
+    <div class="advertencia">
+      <p><strong>⚠️ IMPORTANT:</strong> Aquests documents s'emmagatzemen però NO es validen. Adabida no pot garantir la seva autenticitat.</p>
+    </div>
+
+    <h3>4.4. CONTINGUT GENERAT PER L'USUARI</h3>
+    <ul>
+      <li>Entrades i testimonis (text, àudio, vídeo)</li>
+      <li>Fotografies i imatges</li>
+      <li>Documents personals pujats</li>
+      <li>Comentaris i interaccions</li>
+    </ul>
+
+    <h3>4.5. DADES DE NAVEGACIÓ I ÚS DEL SERVEI</h3>
+    <ul>
+      <li>Adreça IP</li>
+      <li>Tipus de navegador i dispositiu</li>
+      <li>Data i hora d'accés</li>
+      <li>Pàgines visitades</li>
+      <li>Funcionalitats utilitzades</li>
+    </ul>
+
+    <div class="success-box">
+      <p><strong>✓ IMPORTANT:</strong> Adabida NO utilitza cookies de tercers per seguiment publicitari. Només cookies tècniques estrictament necessàries per al funcionament del servei.</p>
+    </div>
+
+    <!-- 5. FINALITATS DEL TRACTAMENT -->
+    <h2>5. FINALITATS DEL TRACTAMENT</h2>
+
+    <p>Les dades personals es tracten amb les següents finalitats:</p>
+
+    <h3>5.1. GESTIÓ DEL REGISTRE I COMPTE D'USUARI</h3>
+    <p>
+      Creació i manteniment del compte, autenticació i accés al servei, gestió de perfil i preferències.<br>
+      <strong>BASE LEGAL:</strong> Execució del contracte (prestació del servei)
+    </p>
+
+    <h3>5.2. PRESTACIÓ DEL SERVEI D'ARXIU DE MEMÒRIA ORAL</h3>
+    <p>
+      Publicació d'entrades i testimonis, gestió de perfils biogràfics, administració d'espais familiars i organitzacions, emmagatzematge i preservació de contingut.<br>
+      <strong>BASE LEGAL:</strong> Execució del contracte i consentiment explícit de l'usuari
+    </p>
+
+    <h3>5.3. COMUNICACIONS RELACIONADES AMB EL SERVEI</h3>
+    <p>
+      Notificacions sobre l'activitat del compte, avisos sobre canvis en el servei, resposta a consultes i sol·licituds, informació sobre novetats rellevants d'Adabida.<br>
+      <strong>BASE LEGAL:</strong> Execució del contracte i interès legítim
+    </p>
+
+    <h3>5.4. MILLORA DEL SERVEI</h3>
+    <p>
+      Anàlisi d'ús i funcionalitats, detecció i correcció d'errors, desenvolupament de noves funcionalitats.<br>
+      <strong>BASE LEGAL:</strong> Interès legítim
+    </p>
+
+    <h3>5.5. COMPLIMENT D'OBLIGACIONS LEGALS</h3>
+    <p>
+      Col·laboració amb autoritats judicials o policials, compliment de requeriments legals.<br>
+      <strong>BASE LEGAL:</strong> Obligació legal
+    </p>
+
+    <h3>5.6. SISTEMA DE VERIFICACIÓ D'IDENTITAT (opcional)</h3>
+    <p>
+      Marcatge visual de perfils verificats.<br>
+      <strong>BASE LEGAL:</strong> Consentiment explícit de l'usuari
+    </p>
+
+    <div class="info-box">
+      <p><strong>ℹ️ Verificació voluntària:</strong> La verificació d'identitat és voluntària. L'usuari decideix si aporta documentació per obtenir el distintiu visual de "perfil verificat".</p>
+    </div>
+
+    <!-- 6. BASE LEGAL DEL TRACTAMENT -->
+    <h2>6. BASE LEGAL DEL TRACTAMENT</h2>
+
+    <p>El tractament de dades personals a Adabida es fonamenta en:</p>
+
+    <ul>
+      <li><strong>EXECUCIÓ DEL CONTRACTE (article 6.1.b RGPD):</strong> Tractament necessari per prestar el servei d'arxiu de memòria oral.</li>
+      <li><strong>CONSENTIMENT DE L'USUARI (article 6.1.a RGPD):</strong> Per a tractaments específics com publicació de contingut biogràfic, sistema de verificació d'identitat, comunicacions promocionals.</li>
+      <li><strong>INTERÈS LEGÍTIM (article 6.1.f RGPD):</strong> Per a millora del servei, detecció de fraus i usos indeguts, comunicacions relacionades amb el servei.</li>
+      <li><strong>OBLIGACIÓ LEGAL (article 6.1.c RGPD):</strong> Compliment de requeriments legals i col·laboració amb autoritats.</li>
+    </ul>
+
+    <!-- 7. DESTINATARIS DE LES DADES -->
+    <h2>7. DESTINATARIS DE LES DADES</h2>
+
+    <h3>7.1. NO CESSIÓ A TERCERS</h3>
+    <div class="success-box">
+      <p><strong>✓ Adabida NO cedeix, ven ni comparteix dades personals amb tercers amb finalitats comercials o publicitàries.</strong></p>
+    </div>
+
+    <h3>7.2. PROVEÏDORS DE SERVEIS TÈCNICS</h3>
+    <p>Les dades poden ser tractades per proveïdors de serveis tècnics necessaris per al funcionament d'Adabida:</p>
+    <ul>
+      <li>Hosting i allotjament web</li>
+      <li>Serveis de correu electrònic</li>
+      <li>Còpies de seguretat</li>
+    </ul>
+    <p>Aquests proveïdors actuen com a ENCARREGATS DEL TRACTAMENT, amb contractes que garanteixen la protecció adequada de les dades i el compliment del RGPD.</p>
+
+    <h3>7.3. AUTORITATS PÚBLIQUES</h3>
+    <p>
+      Les dades poden ser comunicades a autoritats públiques (jutjats, policia, Agència Tributària, etc.) quan existeixi una obligació legal o requeriment judicial.
+    </p>
+
+    <h3>7.4. CONTINGUT PÚBLIC</h3>
+    <p>El contingut que l'usuari publica com a PÚBLIC (entrades, testimonis) és accessible per:</p>
+    <ul>
+      <li>Qualsevol visitant del web</li>
+      <li>Motors de cerca (Google, Bing, etc.)</li>
+      <li>Investigadors, periodistes i públic general</li>
+    </ul>
+    <p>Aquest contingut es publica amb el NOM DE L'USUARI visible. Si l'usuari no desitja que una informació sigui pública, no l'ha de publicar.</p>
+
+    <!-- 8. TRANSFERÈNCIES INTERNACIONALS -->
+    <h2>8. TRANSFERÈNCIES INTERNACIONALS DE DADES</h2>
+
+    <p>
+      Adabida NO realitza transferències internacionals de dades fora de l'Espai Econòmic Europeu (EEE).
+    </p>
+
+    <p>
+      En cas que en el futur es contractin serveis ubicats fora de l'EEE, es garantirà que aquestes transferències comptin amb les garanties adequades (clàusules contractuals tipus, Privacy Shield, etc.) i es notificarà als usuaris.
+    </p>
+
+    <!-- 9. TERMINI DE CONSERVACIÓ -->
+    <h2>9. TERMINI DE CONSERVACIÓ DE LES DADES</h2>
+
+    <h3>9.1. COMPTE ACTIU</h3>
+    <p>Mentre el compte de l'usuari estigui actiu, les dades es conservaran per prestar el servei.</p>
+
+    <h3>9.2. SOL·LICITUD DE BAIXA</h3>
+    <p>Quan l'usuari sol·liciti la baixa del servei:</p>
+    <ul>
+      <li><strong>Període de reflexió:</strong> 30 dies (l'usuari pot cancel·lar la baixa)</li>
+      <li><strong>Després de 30 dies:</strong> Eliminació definitiva de dades personals de contacte, documents privats, configuracions del compte i credencials d'accés</li>
+    </ul>
+
+    <h3>9.3. CONTINGUT PÚBLIC</h3>
+    <p>El contingut públic (entrades i testimonis) presenta dues opcions:</p>
+    
+    <div class="info-box">
+      <p><strong>OPCIÓ A: Eliminació completa</strong><br>
+      L'usuari pot sol·licitar que també s'elimini tot el contingut públic.</p>
+      
+      <p><strong>OPCIÓ B: Conservació amb anonimització</strong><br>
+      L'usuari pot demanar que el contingut públic romangui a l'arxiu (pel seu valor històric), però amb dades personals anonimitzades.</p>
+    </div>
+
+    <h3>9.4. OBLIGACIONS LEGALS</h3>
+    <p>
+      Certes dades poden conservar-se durant més temps si ho exigeix la llei (p.ex. facturació, compliment de requeriments judicials). En aquests casos, les dades es bloquegen i només són accessibles per a les autoritats competents.
+    </p>
+
+    <h3>9.5. LOGS I REGISTRES DE SEGURETAT</h3>
+    <p>Els registres d'activitat (logs) es conserven durant un màxim de 12 mesos per motius de seguretat i detecció de fraus.</p>
+
+    <!-- 10. DRETS DELS USUARIS -->
+    <h2>10. DRETS DELS USUARIS (DRETS ARCO-POL)</h2>
+
+    <p>L'usuari té els següents drets sobre les seves dades personals:</p>
+
+    <h3>10.1. DRET D'ACCÉS</h3>
+    <p>Obtenir confirmació sobre si Adabida tracta les seves dades personals i, en cas afirmatiu, obtenir informació sobre quines dades es tracten, amb quines finalitats, a qui s'han comunicat i durant quant de temps es conservaran.</p>
+
+    <h3>10.2. DRET DE RECTIFICACIÓ</h3>
+    <p>Corregir dades inexactes o incompletes.</p>
+
+    <h3>10.3. DRET DE SUPRESSIÓ (DRET A L'OBLIT DIGITAL)</h3>
+    <p>Sol·licitar l'eliminació de les seves dades personals quan:</p>
+    <ul>
+      <li>Ja no siguin necessàries per a les finalitats per a les quals es van recollir</li>
+      <li>Retiri el consentiment i no hi hagi altra base legal</li>
+      <li>S'oposés al tractament i no hi hagi motius legítims prevalents</li>
+      <li>Les dades s'hagin tractat il·lícitament</li>
+      <li>Calgui suprimir-les per complir una obligació legal</li>
+    </ul>
+
+    <div class="advertencia">
+      <p><strong>⚠️ IMPORTANT:</strong> El dret a l'oblit no és absolut. Pot tenir limitacions en cas de:</p>
+      <ul>
+        <li>Exercici de la llibertat d'expressió i informació</li>
+        <li>Compliment d'obligacions legals</li>
+        <li>Interès públic (arxiu històric amb valor científic)</li>
+        <li>Exercici o defensa de reclamacions</li>
+      </ul>
+      <p>En el cas de contingut públic amb valor històric, Adabida pot proposar l'anonimització en lloc de l'eliminació completa.</p>
+    </div>
+
+    <h3>10.4. DRET A LA LIMITACIÓ DEL TRACTAMENT</h3>
+    <p>Sol·licitar la limitació del tractament de les seves dades en casos específics.</p>
+
+    <h3>10.5. DRET A LA PORTABILITAT DE DADES</h3>
+    <p>
+      Rebre les dades personals que hagi facilitat a Adabida en un format estructurat, d'ús comú i lectura mecànica (p.ex. ZIP amb PDFs, JSON, CSV). També pot sol·licitar que es transmetin directament a un altre responsable del tractament, quan sigui tècnicament possible.
+    </p>
+
+    <h3>10.6. DRET D'OPOSICIÓ</h3>
+    <p>
+      Oposar-se en qualsevol moment al tractament de les seves dades personals basat en l'interès legítim d'Adabida.
+    </p>
+
+    <h3>10.7. DRET A NO SER OBJECTE DE DECISIONS AUTOMATITZADES</h3>
+    <p>Adabida NO utilitza sistemes de presa de decisions automatitzades ni de perfilat que produeixin efectes legals o afectin significativament l'usuari.</p>
+
+    <h3>10.8. COM EXERCIR ELS DRETS</h3>
+    <p>Per exercir qualsevol d'aquests drets:</p>
+    <ol>
+      <li>Enviar sol·licitud a: <strong>contacte@adabida.cat</strong></li>
+      <li>Indicar clarament quin dret s'exerceix</li>
+      <li>Adjuntar còpia del DNI o document identificatiu equivalent</li>
+      <li>Especificar l'adreça de contacte per a la resposta</li>
+    </ol>
+
+    <p>
+      Adabida respondrà la sol·licitud en un termini màxim d'<strong>1 MES</strong> des de la recepció. Aquest termini pot prorrogar-se 2 mesos més si la sol·licitud és complexa, informant l'usuari de la pròrroga.
+    </p>
+
+    <h3>10.9. DRET A PRESENTAR RECLAMACIÓ</h3>
+    <p>
+      Si l'usuari considera que Adabida ha vulnerat els seus drets de protecció de dades, pot presentar una reclamació davant l'autoritat de control:
+    </p>
+
+    <div class="info-box">
+      <p><strong>AGÈNCIA ESPANYOLA DE PROTECCIÓ DE DADES (AEPD)</strong></p>
+      <p>C/ Jorge Juan, 6<br>28001 Madrid</p>
+      <p>Telèfon: 901 100 099 / 912 663 517</p>
+      <p>Web: <a href="https://www.aepd.es" target="_blank" style="color: #14d8ce;">www.aepd.es</a></p>
+    </div>
+
+    <!-- 11. MESURES DE SEGURETAT -->
+    <h2>11. MESURES DE SEGURETAT</h2>
+
+    <p>
+      Adabida aplica mesures tècniques i organitzatives adequades per garantir un nivell de seguretat apropiat al risc, protegint les dades personals contra destrucció, pèrdua, alteració, difusió o accés no autoritzats.
+    </p>
+
+    <h3>11.1. MESURES TÈCNIQUES</h3>
+    <ul>
+      <li>Xifratge de contrasenyes (hash amb algoritmes segurs)</li>
+      <li>Connexions segures HTTPS (SSL/TLS)</li>
+      <li>Còpies de seguretat periòdiques i redundants</li>
+      <li>Protecció contra atacs informàtics (firewall, antivirus)</li>
+      <li>Control d'accés amb autenticació d'usuaris</li>
+      <li>Registres d'activitat (logs) per a auditoria</li>
+    </ul>
+
+    <h3>11.2. MESURES ORGANITZATIVES</h3>
+    <ul>
+      <li>Política de confidencialitat i seguretat</li>
+      <li>Control d'accés físic i lògic als sistemes</li>
+      <li>Procediments de resposta davant incidents de seguretat</li>
+      <li>Formació i conscienciació en protecció de dades</li>
+    </ul>
+
+    <h3>11.3. NOTIFICACIÓ DE BRETXES DE SEGURETAT</h3>
+    <p>En cas de violació de la seguretat de les dades personals que comporti un risc per als drets i llibertats dels usuaris:</p>
+    <ul>
+      <li>Adabida notificarà la bretxa a l'AEPD en un termini màxim de 72 hores</li>
+      <li>Si el risc és ALT, es notificarà també als usuaris afectats</li>
+      <li>Es prendran mesures immediates per mitigar els efectes</li>
+    </ul>
+
+    <!-- 12. COOKIES -->
+    <h2>12. COOKIES I TECNOLOGIES SIMILARS</h2>
+
+    <h3>12.1. ÚS DE COOKIES</h3>
+    <p>Adabida utilitza NOMÉS cookies tècniques estrictament necessàries per al funcionament del servei:</p>
+    <ul>
+      <li>Cookie de sessió (per mantenir l'usuari autenticat)</li>
+      <li>Cookie de preferències d'idioma</li>
+      <li>Cookie CSRF (protecció contra atacs)</li>
+    </ul>
+    <p>Aquestes cookies són ESSENCIALS i NO requereixen consentiment previ segons la normativa.</p>
+
+    <h3>12.2. NO COOKIES DE TERCERS</h3>
+    <div class="success-box">
+      <p><strong>✓ Adabida NO utilitza:</strong></p>
+      <ul>
+        <li>Cookies de seguiment publicitari (Google Ads, Facebook Pixel, etc.)</li>
+        <li>Cookies analítiques de tercers (Google Analytics, etc.)</li>
+        <li>Cookies de xarxes socials</li>
+      </ul>
+    </div>
+
+    <h3>12.3. GESTIÓ DE COOKIES</h3>
+    <p>L'usuari pot configurar el seu navegador per acceptar o rebutjar cookies, o eliminar cookies existents.</p>
+    
+    <div class="advertencia">
+      <p><strong>⚠️ IMPORTANT:</strong> Si es desactiven les cookies tècniques, el servei pot deixar de funcionar correctament (p.ex. no es podrà mantenir la sessió iniciada).</p>
+    </div>
+
+    <!-- 13. PROTECCIÓ DE MENORS -->
+    <h2>13. PROTECCIÓ DE MENORS</h2>
+
+    <h3>13.1. EDAT MÍNIMA</h3>
+    <p>Adabida està destinat a persones majors de 18 anys. El servei NO està dirigit a menors d'edat.</p>
+
+    <h3>13.2. PROHIBICIÓ DE REGISTRE DE MENORS</h3>
+    <p>
+      Es prohibeix el registre de menors de 18 anys. Si Adabida té coneixement que un menor s'ha registrat, procedirà a l'eliminació immediata del compte i les dades associades.
+    </p>
+
+    <h3>13.3. CONTINGUT SOBRE MENORS</h3>
+    <p>Els usuaris poden publicar contingut (fotos, vídeos, informació) sobre menors sempre que:</p>
+    <ul>
+      <li>Tinguin l'autorització dels progenitors o tutors legals</li>
+      <li>No revelin dades sensibles del menor</li>
+      <li>No vulnerin la dignitat o els drets del menor</li>
+    </ul>
+
+    <!-- 14. ENLLAÇOS A TERCERS -->
+    <h2>14. ENLLAÇOS A TERCERS</h2>
+    <p>
+      La Plataforma Adabida pot contenir enllaços a llocs web de tercers. Aquesta Política de Privacitat NO s'aplica a aquests llocs externs.
+    </p>
+    <p>
+      Adabida NO és responsable de les polítiques de privacitat o pràctiques de tractament de dades de tercers. Es recomana llegir les polítiques de privacitat dels llocs de tercers abans de facilitar-los dades personals.
+    </p>
+
+    <!-- 15. MODIFICACIONS -->
+    <h2>15. MODIFICACIONS DE LA POLÍTICA DE PRIVACITAT</h2>
+
+    <p>Adabida es reserva el dret de modificar aquesta Política de Privacitat per adaptar-la a canvis normatius, criteris de les autoritats de protecció de dades, millores tècniques o organitzatives, o noves funcionalitats del servei.</p>
+
+    <h3>15.1. NOTIFICACIÓ DE CANVIS</h3>
+    <p>Els usuaris seran notificats de les modificacions substancials amb un mínim de 30 dies d'antelació a través de:</p>
+    <ul>
+      <li>Correu electrònic a l'adreça de registre</li>
+      <li>Avís destacat a la Plataforma</li>
+    </ul>
+
+    <h3>15.2. ACCEPTACIÓ DE CANVIS</h3>
+    <p>
+      L'ús continuat del servei després de la publicació de les modificacions implica l'acceptació de la nova Política de Privacitat. Si l'usuari no està d'acord amb els canvis, pot exercir el seu dret a l'oblit i donar-se de baixa del servei.
+    </p>
+
+    <!-- 16. COMPROMÍS ÈTIC -->
+    <h2>16. COMPROMÍS ÈTIC AMB LA PRIVACITAT</h2>
+
+    <p>Més enllà del compliment legal, Adabida assumeix un COMPROMÍS ÈTIC amb la privacitat dels usuaris:</p>
+
+    <div class="success-box">
+      <h3 style="color: #4CAF50; margin-top: 0;">ZERO EXPLOTACIÓ DE DADES</h3>
+      <ul>
+        <li>✓ Mai vendrem dades d'usuaris</li>
+        <li>✓ Mai compartim dades amb finalitats comercials</li>
+        <li>✓ Mai utilitzarem dades per a publicitat personalitzada</li>
+      </ul>
+
+      <h3 style="color: #4CAF50;">TRANSPARÈNCIA TOTAL</h3>
+      <ul>
+        <li>✓ Informació clara sobre què fem amb les dades</li>
+        <li>✓ Canvis comunicats amb antelació</li>
+        <li>✓ Resposta ràpida i honest a consultes</li>
+      </ul>
+
+      <h3 style="color: #4CAF50;">TECNOLOGIES LLIURES I INDEPENDENTS</h3>
+      <ul>
+        <li>✓ Programari de codi obert sempre que sigui possible</li>
+        <li>✓ Servidors independents (no dependem de grans corporacions)</li>
+        <li>✓ Control real sobre la infraestructura</li>
+      </ul>
+
+      <h3 style="color: #4CAF50;">DIGNITAT I RESPECTE</h3>
+      <ul>
+        <li>✓ Les dades personals no són mercaderia</li>
+        <li>✓ Els records i testimonis mereixen respecte</li>
+        <li>✓ La memòria personal és sagrada</li>
+      </ul>
+    </div>
+
+    <!-- 17. CONTACTE -->
+    <h2>17. CONTACTE - PROTECCIÓ DE DADES</h2>
+
+    <p>Per a qualsevol consulta, dubte o exercici de drets relacionats amb la protecció de dades personals:</p>
+
+    <div class="info-box">
+      <p><strong>RESPONSABLE DEL TRACTAMENT:</strong></p>
+      <p>Nom: Ilan Sánchez</p>
+      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Adreça postal: Calella, 08370, Barcelona, Espanya</p>
+    </div>
+
+    <div class="info-box">
+      <p><strong>AUTORITAT DE CONTROL:</strong></p>
+      <p>Agència Espanyola de Protecció de Dades (AEPD)</p>
+      <p>Web: <a href="https://www.aepd.es" target="_blank" style="color: #14d8ce;">www.aepd.es</a></p>
+      <p>Telèfon: 901 100 099 / 912 663 517</p>
+    </div>
+
+    <hr>
+
+    <!-- ACCEPTACIÓ -->
+    <div class="seccio-final">
+      <h2 style="color: #333; border: none; padding: 0; margin-bottom: 1rem;">ACCEPTACIÓ DE LA POLÍTICA DE PRIVACITAT</h2>
+      <p>
+        L'ús del servei Adabida implica l'acceptació plena i sense reserves d'aquesta Política de Privacitat.
+      </p>
+      <p>
+        Durant el procés de registre, l'usuari ha d'acceptar explícitament aquesta política marcant la casella corresponent.
+      </p>
+      <p>
+        <strong>Si l'usuari no està d'acord amb aquesta Política de Privacitat, ha d'abstenir-se d'utilitzar el servei.</strong>
+      </p>
+    </div>
+
+    <p class="ultima-actualitzacio" style="margin-top: 2rem;">
+      Data de la darrera actualització: 29 de novembre de 2025
+    </p>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="boto-tornar">← Tornar a l'inici</a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

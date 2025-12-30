@@ -1,0 +1,84 @@
+/* Sistema de tooltips d'informació */
+.info-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.info-tooltip .boto-info {
+  cursor: help;
+}
+
+/* Tooltip box */
+/* Tooltip box */
+.info-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2aeea6;
+  color: #040404;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: normal;  /* CANVIAT */
+  max-width: 200px;     /* AFEGIT - ajusta segons vulguis */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.info-tooltip:hover::after {
+  opacity: 1;
+}
+
+/* Fletxa del tooltip */
+.info-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1001;
+}
+
+.info-tooltip:hover::before {
+  opacity: 1;
+}
+
+/* Per tooltips amb text llarg */
+.info-tooltip.multiline::after {
+  white-space: normal;
+  max-width: 300px;
+  text-align: left;
+}
+
+.boto-info {
+  background: #14d8ce;
+  border: none;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  font-style: italic;
+  transition: all 0.3s;
+}
+
+.boto-info:hover {
+  background: #0ea99f;
+  transform: scale(1.1);
+}

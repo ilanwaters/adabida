@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/crear_organitzacio.css') }}">
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+
+{% endblock %}
+
+{% block contingut %}
+
+    <main class="contingut-principal">
+        <div class="contenidor">
+            <div class="capçalera-pagina" style="text-align: center;">
+                <h1>{{ _('Crear Nova Organització') }}</h1>
+            </div>
+
+            <div class="formulari-container">
+                <form method="POST" action="{{ url_for('organitzacions.crear') }}" class="formulari-principal">
+                    
+                    
+                    <!-- DADES BÀSIQUES -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Dades bàsiques') }}</h2>
+                        
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="nom">{{ _('Nom de l\'organització') }} *</label>
+                                <input type="text" id="nom" name="nom" required 
+                                       placeholder="{{ _('Hospital Sant Pau, Escola Montessori...') }}">
+                            </div>
+                            <div>
+                                <label for="tipus">{{ _('Tipus d\'organització') }} *</label>
+                                <select id="tipus" name="tipus" required>
+                                    <option value="">{{ _('Selecciona tipus...') }}</option>
+                                    <option value="hospital">{{ _('Hospital') }}</option>
+                                    <option value="residencia">{{ _('Residència de gent gran') }}</option>
+                                    <option value="escola">{{ _('Escola o institut') }}</option>
+                                    <option value="universitat">{{ _('Universitat') }}</option>
+                                    <option value="associacio">{{ _('Associació') }}</option>
+                                    <option value="fundacio">{{ _('Fundació') }}</option>
+                                    <option value="empresa">{{ _('Empresa') }}</option>
+                                    <option value="altre">{{ _('Altre') }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="descripcio">{{ _('Descripció de l\'organització') }}</label>
+                                <textarea id="descripcio" name="descripcio" rows="4" 
+                                          placeholder="{{ _('Explica breument què fa la vostra organització i per què voleu preservar la seva memòria...') }}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UBICACIÓ GEOGRÀFICA -->
+<div class="bloc-formulari">
+    <h2 class="titol-bloc">{{ _('Ubicació geogràfica') }}</h2>
+    
+    <div class="fila-formulari">
+        <div>
+            <label for="pais">{{ _('País') }} *</label>
+            <select name="pais" id="pais" class="campo-largo" required disabled>
+                <option value="">{{ _('Carregant...') }}</option>
+            </select>
+        </div>
+        <div>
+            <label for="regio">{{ _('Regió/Comunitat') }} *</label>
+            <select name="regio" id="regio" class="campo-largo" required disabled>
+                <option value="">{{ _('Selecciona primer el país') }}</option>
+            </select>
+        </div>
+        <div>
+            <label for="municipi">{{ _('Municipi/Ciutat') }} *</label>
+            <select name="municipi" id="municipi" class="campo-largo" required disabled>
+                <option value="">{{ _('Selecciona primer la regió') }}</option>
+            </select>
+        </div>
+        <div>
+            <label for="codi_postal">{{ _('Codi Postal') }}</label>
+            <input type="text" id="codi_postal" name="codi_postal" 
+                   placeholder="{{ _('08025, 17001...') }}">
+        </div>
+    </div>
+
+    <div class="info-ajuda">
+        <p>{{ _('ℹ️ Aquesta informació ens permet organitzar les organitzacions geogràficament i oferir un millor servei localitzat.') }}</p>
+    </div>
+</div>
+
+                    
+
+                    <!-- URL PÚBLICA -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('URL pública') }}</h2>
+                        
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="url_publica">{{ _('Nom per la URL') }} *</label>
+                                <div class="input-amb-prefix">
+                                    <span class="prefix">adabida.cat/o/</span>
+                                    <input type="text" id="url_publica" name="url_publica" required 
+                                           placeholder="{{ _('hospital-sant-pau') }}"
+                            
+                                           title="{{ _('Només lletres minúscules, números i guions') }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-ajuda">
+                            <p>{{ _(' Utilitza només lletres minúscules, números i guions. Exemple: hospital-sant-pau') }}</p>
+                            <p class="url-preview">{{ _('La vostra pàgina serà:') }} <strong>adabida.cat/o/<span id="preview-url">nom-organitzacio</span></strong></p>
+                        </div>
+                    </div>
+
+                    <!-- CONTACTE -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Informació de contacte') }}</h2>
+                        
+                        <div class="info-email-adabida">
+                            <p>{{ _('Es crearà automàticament un email:') }} 
+                               <strong><span id="email-preview">organitzacio</span>@adabida.cat</strong>
+                            </p>
+                            <p class="text-petit">{{ _('Aquest email rebrà automàticament totes les sol·licituds d\'adhesió i notificacions de la vostra organització.') }}</p>
+                        </div>
+
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="email_extern">{{ _('Email de contacte extern') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="email" id="email_extern" name="email_extern" 
+                                       placeholder="{{ _('contacte@organitzacio.cat') }}">
+                                <small class="text-ajuda">{{ _('Si voleu que les consultes es redirigeixin a un altre email') }}</small>
+                            </div>
+                            <div>
+                                <label for="telefon_contacte">{{ _('Telèfon') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="tel" id="telefon_contacte" name="telefon_contacte" 
+                                       placeholder="{{ _('93 123 45 67') }}">
+                            </div>
+                        </div>
+
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="adresa">{{ _('Adreça completa') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="text" id="adresa" name="adresa" 
+                                       placeholder="{{ _('Carrer Sant Antoni Maria Claret, 167') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTONS ACCIÓ -->
+       <!-- BOTONS ACCIÓ -->
+<div class="botons-accio">
+    <a href="/pagina_personal" class="boto_nav" style="display: inline-block; padding: 10px 20px;">
+        {{ _('Cancel·lar') }}
+    </a>
+    <button type="submit" class="boto_nav">
+        {{ _('Crear Organització') }}
+    </button>
+</div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- TRADUCCIONS PER JAVASCRIPT -->
+<script>
+window.traduccions = {
+    seleccionaPais: "Selecciona un país",
+    seleccionaRegio: "Selecciona província/regió",
+    seleccionaMunicipi: "Selecciona o escriu el teu municipi",
+    carregant: "Carregant...",
+    errorCarregant: "Error carregant",
+    seleccionaPrimerRegio: "Selecciona primer la regió",
+    seleccionaPrimerPais: "Selecciona primer el país"
+};
+</script>
+
+<!-- SISTEMA D'UBICACIONS -->
+<script src="{{ url_for('static', filename='js/ubicacions.js') }}"></script>
+
+
+    <script>
+        // Actualitzar preview URL en temps real
+        document.getElementById('url_publica').addEventListener('input', function() {
+            const url = this.value.toLowerCase()
+                           .replace(/[^a-z0-9\s-]/g, '')  // Treure caràcters no vàlids
+                           .replace(/\s+/g, '-')          // Espais a guions
+                           .replace(/-+/g, '-');          // Múltiples guions a un
+            
+            document.getElementById('preview-url').textContent = url || 'nom-organitzacio';
+            document.getElementById('email-preview').textContent = url || 'organitzacio';
+        });
+
+        // Auto-generar URL des del nom
+        document.getElementById('nom').addEventListener('input', function() {
+            if (!document.getElementById('url_publica').value) {
+                const urlSuggested = this.value.toLowerCase()
+                                        .replace(/[^a-z0-9\s-]/g, '')
+                                        .replace(/\s+/g, '-')
+                                        .replace(/-+/g, '-');
+                document.getElementById('url_publica').value = urlSuggested;
+                document.getElementById('url_publica').dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Validació abans submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const urlPublica = document.getElementById('url_publica').value;
+            if (!/^[a-z0-9-]+$/.test(urlPublica)) {
+                e.preventDefault();
+                alert('{{ _("La URL només pot contenir lletres minúscules, números i guions") }}');
+                return false;
+            }
+        });
+    </script>
+
+{% endblock %}
+   

@@ -1,0 +1,161 @@
+/* ─────────────────────────────
+   ESTIL GENERAL MODAL
+──────────────────────────────*/
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;                    /* JS activa display: flex */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ─────────────────────────────
+   COS DE LA MODAL
+──────────────────────────────*/
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-behavior: smooth;
+}
+
+/* ─────────────────────────────
+   CAPÇALERA I TÍTOL
+──────────────────────────────*/
+.modal-capsalera h2,
+.modal-text h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* ─────────────────────────────
+   CONTINGUT DE TEXT
+──────────────────────────────*/
+.modal-dades p,
+.modal-arxius p {
+  margin: 5px 0;
+}
+
+.any {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.contingut-formatat {
+  white-space: pre-line;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* ─────────────────────────────
+   IMATGE PRINCIPAL
+──────────────────────────────*/
+.modal-imatge img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+/* ─────────────────────────────
+   ARXIUS ADJUNTS
+──────────────────────────────*/
+#modal-arxius img,
+.modal-arxius img {
+  display: inline-block;
+  margin: 10px;
+  max-height: 100px;
+  max-width: 100px;
+}
+
+/* ─────────────────────────────
+   BOTONS DE LA MODAL
+──────────────────────────────*/
+.modal-botons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-botons .boto-editar-modal,
+.modal-botons .boto-eliminar-modal,
+.modal-botons .boto-tancar-modal,
+.boto-tancar-modal {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modal-botons .boto-eliminar-modal {
+  background-color: #ffdddd;
+  color: #900;
+}
+
+.modal-botons .boto-editar-modal {
+  background-color: #ddf4ff;
+  color: #0077aa;
+}
+
+.modal-botons .boto-tancar-modal {
+  background-color: #eee;
+}
+
+/* ─────────────────────────────
+   ALTRES ELEMENTS INTERACTIUS
+──────────────────────────────*/
+.titol-entrada {
+  cursor: pointer;
+  user-select: none;
+  transition: 0.2s ease;
+}
+
+.titol-entrada:hover {
+  text-decoration: underline;
+}
+
+
+#modal-contingut {
+  display: block;
+  color: #111;
+  font-size: 16px;
+  padding: 10px;
+  white-space: pre-line;
+}
+.contingut-formatat {
+  white-space: pre-line;
+  color: #111;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.modal-missatge {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+

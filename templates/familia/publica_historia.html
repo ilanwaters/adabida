@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Història') }} - {{ familia.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="biografia-container">
+  
+  <!-- Capçalera -->
+  <div style="text-align: center; margin-bottom: 2rem;">
+    {% if familia.heraldica_fitxer %}
+      <img src="{{ url_for('static', filename='heraldica/' + familia.heraldica_fitxer) }}" 
+           alt="{{ _('Escut de') }} {{ familia.nom }}" 
+           style="max-height: 80px; margin-bottom: 1rem;">
+    {% endif %}
+    <h1>{{ _('Història de') }} {{ familia.nom }}</h1>
+    {% if familia.motiu %}
+      <p style="font-style: italic; color: #666; font-size: 1.1rem;">"{{ familia.motiu }}"</p>
+    {% endif %}
+  </div>
+
+  <!-- Descripció general -->
+  {% if familia.descripcio %}
+  <div class="seccio-biografia" style="background: #f8f9fa; border-left: 4px solid #1a4b75;">
+    <h2>{{ _('Orígens') }}</h2>
+    <div class="seccio-contingut">
+      {{ familia.descripcio|safe }}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Seccions públiques -->
+  {% if seccions_publiques %}
+    {% for seccio in seccions_publiques %}
+    <div class="seccio-biografia">
+      <h2 class="seccio-titol">{{ seccio.titol }}</h2>
+      
+      <div class="seccio-info">
+        <span>{{ _('Última actualització:') }} {{ seccio.data_modificacio.strftime('%d/%m/%Y') if seccio.data_modificacio else seccio.data_creacio.strftime('%d/%m/%Y') }}</span>
+      </div>
+
+      <div class="seccio-contingut">
+        {{ seccio.contingut|safe }}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="seccio-buida">
+      <p>{{ _('La història d\'aquesta família encara s\'està escrivint...') }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Enllaç tornar -->
+  <div style="text-align: center; margin-top: 3rem;">
+    <a href="{{ url_for('familia.publica', url=familia.url) }}" class="link-tornar">
+      ← {{ _('Tornar al perfil familiar') }}
+    </a>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!-- templates/components/caixa_entrada.html -->
+<div class="caixa-entrada">
+    <div class="imatge-lateral">
+        <a href="{{ entrada.imatge_gran or entrada.miniatura }}" data-lightbox="galeria-{{ entrada.id }}">
+            <img src="{{ entrada.miniatura }}" class="miniatura" alt="Miniatura">
+        </a>
+    </div>
+    <div class="contingut-lateral">
+        <h3 class="titol-entrada clicable" 
+            {% if session.usuari_id == (entrada.usuari_id if entrada.usuari_id else usuari.id) %}
+              onclick="obreModalCompleta({{ entrada.id }}, '{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}')"
+            {% else %}
+              onclick='obreModal({{ entrada.id }}, "{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}", "organitzacio")'
+            {% endif %}>
+            {{ entrada.titol or entrada.tema }} 
+            {% if entrada.any %}<span class="any">({{ entrada.any }})</span>{% endif %}
+        </h3>
+
+        {% if entrada.tema and entrada.titol %}
+        <p style="margin: 0.3rem 0; color: #555;">{{ entrada.tema }}</p>
+        {% endif %}
+
+        {% if entrada.lloc %}
+        <p class="lloc" style="font-size: 0.9rem; color: #555; margin: 0.3rem 0;">
+             {{ entrada.lloc }}
+        </p>
+        {% endif %}
+
+        {% if entrada.resum %}
+        <p class="resum">{{ entrada.resum }}</p>
+        {% endif %}
+
+        <div class="metadades">
+            <!-- BANDERETA AQUÍ -->
+            {% if entrada.usuari and entrada.usuari.bandera_preferida %}
+            <img src="/static/banderes/{{ entrada.usuari.bandera_preferida }}.svg" 
+                 class="mini-bandera-caixa" 
+                 alt="Bandera"
+                 style="width: 16px; height: 11px; margin-right: 5px; vertical-align: middle;">
+            {% endif %}
+            <small>De: {{ entrada.usuari.nom if entrada.usuari else usuari.nom }} ({{ entrada.data }})</small>
+        </div>
+    </div>
+</div>

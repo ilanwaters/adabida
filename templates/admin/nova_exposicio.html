@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Nova exposició') }}{% endblock %}
+
+{% block contingut %}
+<a href="{{ url_for('admin.pagina_admin') }}" class="boto-retorn">{{ _("Torna al panell d'administració") }}</a>
+
+<div class="formulari-container">
+  <h1>{{ _('Crear nova exposició') }}</h1>
+
+  <form method="POST" action="{{ url_for('admin.guardar_exposicio') }}" enctype="multipart/form-data">
+    
+    <label for="titol">{{ _('Títol de l’exposició') }}</label>
+    <input type="text" id="titol" name="titol" required>
+
+    <label for="descripcio">{{ _('Descripció') }}</label>
+    <textarea id="descripcio" name="descripcio" rows="4" required></textarea>
+
+    <label for="imatge">{{ _('Imatge de portada') }}</label>
+    <input type="file" id="imatge" name="imatge" accept="image/*" required>
+
+    <button type="submit">{{ _('Guardar exposició') }}</button>
+  </form>
+</div>
+{% endblock %}

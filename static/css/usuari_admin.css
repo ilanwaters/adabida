@@ -1,0 +1,103 @@
+
+.flash-container {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+}
+
+
+.flash-missatge {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 15px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-weight: 600;
+  font-size: 16px;
+  opacity: 1;
+  transition: opacity 1s ease, transform 0.4s ease;
+}
+
+.bloc > h2 { margin: 0 0 .5rem; font-size: 1.2rem; }
+.bloc-contingut { margin-top: .25rem; }
+.muted { color: #666; font-size: .9rem; }
+
+.bloc {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Neteja caixes imbricades */
+.bloc .bloc {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+.taula-dades form {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+/* Evitar "caixa" als formularis dins taula (botó 🗑) */
+.taula-dades form{ background:none; border:0; padding:0; margin:0; display:inline; }
+
+/* Tallar caixes imbricades si algun .bloc acaba dins un altre .bloc */
+.bloc .bloc{ background:transparent; border:0; box-shadow:none; padding:0; margin:0; }
+.bloc:first-of-type {
+  margin-top: 24px; /* ajusta el valor a gust: 24px = 1.5rem */
+}
+.titol-bloc {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.titol-bloc::after {
+  content: "▾"; /* fletxa avall */
+  position: absolute;
+  right: 0;
+}
+.bloc.plegat .titol-bloc::after {
+  content: "▸"; /* fletxa lateral */
+}
+.contingut-bloc {
+  display: block;
+}
+.bloc.plegat .contingut-bloc {
+  display: none;
+}
+
+.fila-form-inline {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* espai entre checkbox i botó */
+  margin-top: 10px;
+}
+
+.fila-form-inline .checkbox-etica {
+  margin: 0;
+}
+
+.fila-form-inline .boto-formulari {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+form {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+

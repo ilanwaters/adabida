@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+{% endblock %}
+
+{% block contingut %}
+  <div class="subpestanyes-galeria">
+    <button class="subpestanya activa" data-subpestanya="destacades">{{ _('Imatges destacades') }}</button>
+    <button class="subpestanya" data-subpestanya="exposicions">{{ _('Exposicions') }}</button>
+  </div>
+
+  <div id="subpestanya-destacades" class="visible">
+    <div class="grid-galeria">
+      {% for img in imatges_destacades %}
+      <div>
+        <img
+          src="{{ url_for('serveis_media.serveix_media', filepath='galeria/' ~ img.data_publicacio.strftime('%Y/%m') ~ '/' ~ img.nom_fitxer) }}"
+          alt="Imatge destacada"
+          class="imatge-galeria"
+          {% if img.entrada and img.entrada.usuari %}
+          onclick="obreModal({{ img.entrada_id }}, '{{ img.entrada.usuari.nom_login }}')">
+          {% else %}
+          onclick="alert('⚠️ Aquesta imatge no té entrada vinculada')">
+          {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="subpestanya-exposicions" class="ocult">
+    <div class="grid-exposicions">
+      {% for exposicio in exposicions %}
+      <div class="targeta-exposicio">
+        <img src="{{ url_for('serveis_media.serveix_media', filepath=exposicio.carpeta + '/portada.jpg') }}"
+             alt="{{ exposicio.titol }}">
+        <div class="info-item">
+          <h3>{{ exposicio.titol }}</h3>
+          <p>{{ exposicio.descripcio[:100] }}...</p>
+          <a href="{{ url_for('exposicio.mostra_exposicio', codi_expo=exposicio.codi) }}" class="boto-explora">
+            {{ _('Explora la col·lecció') }}
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% include "components/modal_entrada.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/galeria.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+{% endblock %}

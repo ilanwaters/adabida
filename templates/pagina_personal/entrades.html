@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Les meves entrades') }} - {{ usuari.nom }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+  
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
+    <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
+  </h1>
+</div>
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">{{ entrades|length }} {{ _('entrades') }}</h1>
+</div>
+
+<section class="arxiu-entrades">
+  {% if entrades %}
+  <div class="llista-entrades">
+      {% for entrada in entrades %}
+        {% include "components/caixa_entrada.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>{{ _('No hi ha cap entrada enregistrada encara.') }}</p>
+    {% endif %}
+  </section>
+<!-- Modals necessaris -->
+{% include "components/modal_entrada.html" %}
+{% include "components/modal_entrada_editar.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,506 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/caixa.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+
+{% endblock %}
+
+{% block contingut %}
+    <main class="contingut-principal">
+        <div class="contenidor">
+            <div class="capçalera-pagina">
+                <h1>{{ _('Administrar Organització') }}: {{ organitzacio.nom }}</h1>
+                <div class="accions-capçalera">
+                    <a href="{{ url_for('organitzacions.publica', slug=organitzacio.url_publica) }}"
+                       class="boto boto-secundari" target="_blank">
+                        {{ _('Veure pàgina pública') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="pestanyes-contingut">
+                
+                <!-- PESTANYA CONFIGURACIÓ -->
+                <div class="pestanya-contingut activa" id="configuracio">
+                    <div class="bloc">
+                        <h2 class="titol-bloc">{{ _('Dades bàsiques') }}</h2>
+                        <form method="POST" action="{{ url_for('organitzacions_admin.actualitzar', id=organitzacio.id) }}">
+                            <div class="fila-formulari">
+                                <div class="w-100">
+                                    <label for="nom">{{ _('Nom de l\'organització') }} *</label>
+                                    <input type="text" id="nom" name="nom" value="{{ organitzacio.nom }}" required>
+                                </div>
+                                <div>
+                                    <label for="tipus">{{ _('Tipus') }}</label>
+                                    <select id="tipus" name="tipus">
+                                        <option value="hospital" {% if organitzacio.tipus == 'hospital' %}selected{% endif %}>
+                                            {{ _('Hospital') }}
+                                        </option>
+                                        <option value="residencia" {% if organitzacio.tipus == 'residencia' %}selected{% endif %}>
+                                            {{ _('Residència') }}
+                                        </option>
+                                        <option value="escola" {% if organitzacio.tipus == 'escola' %}selected{% endif %}>
+                                            {{ _('Escola') }}
+                                        </option>
+                                        <option value="associacio" {% if organitzacio.tipus == 'associacio' %}selected{% endif %}>
+                                            {{ _('Associació') }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="fila-formulari">
+                                <div class="w-100">
+                                    <label for="descripcio">{{ _('Descripció') }}</label>
+                                    <textarea id="descripcio" name="descripcio" rows="4">{{ organitzacio.descripcio }}</textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="boto boto-primari">
+                                {{ _('Actualitzar dades') }}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="bloc">
+                        <h2 class="titol-bloc">{{ _('URL pública') }}</h2>
+                        <div class="info-url">
+                            <strong>{{ request.host_url }}o/{{ organitzacio.slug }}</strong>
+                            <button type="button" class="boto boto-petit" onclick="copyToClipboard('{{ request.host_url }}o/{{ organitzacio.slug }}')">
+                                {{ _('Copiar') }}
+                            </button>
+                        </div>
+                    </div>
+                    <!-- BLOC MEMBRES DE L'ORGANITZACIÓ -->
+<div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Membres de l\'organització') }} ({{ organitzacio.membres|length }})
+    </h3>
+    <div class="contingut-plegable">
+        {% if organitzacio.membres %}
+            <div style="margin-top: 1rem;">
+                {% for membre in organitzacio.membres %}
+                <div class="membre-fila" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <div>
+                        <strong>{{ membre.usuari.nom }}</strong>
+                        <small style="color: #666; margin-left: 0.5rem;">
+                            {{ _('Adherit el') }} {{ membre.data_adhesio.strftime('%d/%m/%Y') }}
+                        </small>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <select onchange="canviarRol({{ membre.id }}, this.value)" style="padding: 0.2rem; border: 1px solid #ccc; border-radius: 4px;">
+                            <option value="admin" {% if membre.rol == 'admin' %}selected{% endif %}>
+                                {{ _('Administrador') }}
+                            </option>
+                            <option value="entrevistador" {% if membre.rol == 'entrevistador' %}selected{% endif %}>
+                                {{ _('Entrevistador') }}
+                            </option>
+                            <option value="adherit" {% if membre.rol == 'adherit' %}selected{% endif %}>
+                                {{ _('Adherit') }}
+                            </option>
+                        </select>
+                        {% if membre.usuari.id != current_user.id %}
+                        <button onclick="expulsarMembre({{ membre.id }})" class="boto boto-petit" style="background: #dc3545; color: white; font-size: 0.8rem;">
+                            {{ _('Expulsar') }}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: #666; font-style: italic; margin-top: 1rem;">
+                {{ _('Encara no hi ha membres a aquesta organització') }}
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- BLOC ENTRADES COMPARTIDES -->
+<div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Entrades compartides') }} ({{ entrades_compartides|length }})
+    </h3>
+    <div class="contingut-plegable">
+        {% if entrades_compartides %}
+            <div class="graella-entrades" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                {% for entrada in entrades_compartides %}
+                    {% include 'components/caixa_entrada.html' with context %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: #666; font-style: italic; margin-top: 1rem;">
+                {{ _('Encara no hi ha entrades compartides amb aquesta organització') }}
+            </p>
+        {% endif %}
+    </div>
+</div>
+<!-- Modal detalls sol·licitud -->
+<div id="modal-detalls-solicitud" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="boto-tancar" onclick="tancarModalDetalls()">&times;</span>
+        <h3 id="modal-nom-solicitant"></h3>
+        <div id="modal-missatge-complet" style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px;"></div>
+        <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end;">
+            <button type="button" onclick="tancarModalDetalls()" class="boto boto-secundari">{{ _('Tancar') }}</button>
+        </div>
+    </div>
+</div>
+<!-- BLOC MISSATGERIA DE L'ORGANITZACIÓ -->
+<div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Missatgeria de l\'organització') }} 
+        {% if missatges_organitzacio|length > 0 %}
+            <span class="comptador-missatges">({{ missatges_organitzacio|length }})</span>
+        {% endif %}
+    </h3>
+    <div class="contingut-plegable">
+        
+        <!-- Enllaç per enviar nou missatge -->
+        <div style="margin-bottom: 1rem;">
+            <button onclick="obreModalNouMissatgeOrg()" class="boto boto-primari">
+                {{ _('Nou missatge') }}
+            </button>
+        </div>
+
+        <!-- Pestanyes rebuts / enviats (com la missatgeria normal) -->
+        <div class="selector-busties">
+            <span class="pestanya-bustia activa" onclick="canviaBustiaOrg('rebuts')">{{ _('Rebuts') }}</span>
+            <span class="pestanya-bustia" onclick="canviaBustiaOrg('enviats')">{{ _('Enviats') }}</span>
+        </div>
+        
+
+        <!-- Bústia de rebuts de l'organització -->
+        <div id="bustia-rebuts-org" class="bustia-missatges">
+            {% if missatges_organitzacio %}
+                {% for m in missatges_organitzacio %}
+                <div class="missatge-item {% if not m.llegit %}no-llegit{% endif %}">
+                    <div class="missatge-contingut" onclick="obreMissatgeOrg({{ m.id }})">
+                        <span class="remitent">{{ m.emissor.nom }}</span>
+                        <span class="assumpte">{{ m.assumpte }}</span>
+                        <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
+                    </div>
+                    <button onclick="eliminarMissatgeOrg({{ m.id }})" class="boto-esborra" 
+                            title="{{ _('Eliminar missatge') }}">🗑</button>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-style: italic; text-align: center; margin: 2rem 0;">
+                    {{ _('No hi ha missatges rebuts per aquesta organització') }}
+                </p>
+            {% endif %}
+        </div>
+
+        <!-- Bústia d'enviats de l'organització -->
+        <div id="bustia-enviats-org" class="bustia-missatges" style="display: none;">
+            {% if missatges_enviats_org %}
+                {% for m in missatges_enviats_org %}
+                <div class="missatge-item">
+                    <div class="missatge-contingut" onclick="obreMissatgeOrg({{ m.id }})">
+                        <span class="remitent">{{ _('A') }} {{ m.receptor.nom }}</span>
+                        <span class="assumpte">{{ m.assumpte }}</span>
+                        <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
+                    </div>
+                    <button onclick="eliminarMissatgeEnviatOrg({{ m.id }})" class="boto-esborra" 
+                            title="{{ _('Eliminar missatge') }}">🗑</button>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-style: italic; text-align: center; margin: 2rem 0;">
+                    {{ _('Aquesta organització no ha enviat cap missatge') }}
+                </p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL PER VEURE MISSATGE COMPLET D'ORGANITZACIÓ -->
+<div id="modal-missatge-org" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalMissatgeOrg()">&times;</span>
+    <h3 id="modal-assumpte-missatge-org"></h3>
+    <div class="detalls-missatge">
+      <p><strong>{{ _('De:') }}</strong> <span id="modal-remitent-org"></span></p>
+      <p><strong>{{ _('A:') }}</strong> {{ organitzacio.nom }}</p>
+      <p><strong>{{ _('Data:') }}</strong> <span id="modal-data-org"></span></p>
+    </div>
+    <div id="modal-contingut-missatge-org" style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px; white-space: pre-wrap;"></div>
+    <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <button type="button" onclick="respondreComOrganitzacio()" class="boto boto-primari">{{ _('Respondre') }}</button>
+      <button type="button" onclick="tancarModalMissatgeOrg()" class="boto boto-secundari">{{ _('Tancar') }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PER ENVIAR NOU MISSATGE COM A ORGANITZACIÓ -->
+<div id="modal-nou-missatge-org" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalNouMissatgeOrg()">&times;</span>
+    <h3>{{ _('Enviar missatge com a') }} {{ organitzacio.nom }}</h3>
+    
+    <div class="camp-formulari">
+      <label for="nou-receptor-org">{{ _('Per a:') }} *</label>
+      <input type="text" id="nou-receptor-org" placeholder="{{ _('Nom o login de l\'usuari...') }}" 
+             oninput="cercarUsuarisOrg()">
+      <span id="receptor-nom-org" style="display: none; color: #28a745; font-weight: bold;"></span>
+      <div id="resultats-cerca-org" class="resultats-cerca"></div>
+    </div>
+    
+    <div class="camp-formulari">
+      <label for="nou-assumpte-org">{{ _('Assumpte:') }} *</label>
+      <input type="text" id="nou-assumpte-org" placeholder="{{ _('Assumpte del missatge...') }}">
+    </div>
+    
+    <div class="camp-formulari">
+      <label for="nou-contingut-org">{{ _('Missatge:') }} *</label>
+      <textarea id="nou-contingut-org" rows="8" placeholder="{{ _('Escriu el missatge en nom de l\'organització...') }}"></textarea>
+    </div>
+    
+    <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+      <button type="button" onclick="tancarModalNouMissatgeOrg()" class="boto boto-secundari">{{ _('Cancel·lar') }}</button>
+      <button type="button" onclick="enviarNouMissatgeOrg()" class="boto boto-primari">{{ _('Enviar') }}</button>
+    </div>
+  </div>
+</div>
+<!-- BLOC SOL·LICITUDS PENDENTS -->
+<div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Sol·licituds d\'adhesió') }} 
+        {% if solicituds_pendents|length > 0 %}
+            <span class="comptador-solicituds">({{ solicituds_pendents|length }})</span>
+        {% endif %}
+    </h3>
+    <div class="contingut-plegable">
+        {% if solicituds_pendents %}
+            <div class="llista-solicituds">
+                {% for sol in solicituds_pendents %}
+                <div class="solicitud-item" style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+                    <div class="info-solicitud" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="margin: 0;">{{ sol.usuari.nom }}</h4>
+                            <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">
+                                {{ sol.data_solicitud.strftime('%d/%m/%Y %H:%M') }}
+                            </p>
+                            {% if sol.missatge %}
+                                <p style="margin: 0.5rem 0; font-style: italic; color: #555;">
+                                    "{{ sol.missatge[:100] }}{% if sol.missatge|length > 100 %}..."{% endif %}
+                                </p>
+                            {% endif %}
+                        </div>
+                        <div class="accions-solicitud" style="display: flex; gap: 0.5rem;">
+                            {% if sol.missatge %}
+                                <button onclick="veureDetallsSolicitud({{ sol.id }}, '{{ sol.usuari.nom }}', '{{ sol.missatge|e }}')" 
+                                        class="boto boto-petit" style="background: #17a2b8;">
+                                    {{ _('Veure detalls') }}
+                                </button>
+                            {% endif %}
+                            <button onclick="acceptarSolicitud({{ sol.id }})" 
+                                    class="boto boto-petit" style="background: #28a745;">
+                                {{ _('Acceptar') }}
+                            </button>
+                            <button onclick="rebutjarSolicitud({{ sol.id }})" 
+                                    class="boto boto-petit" style="background: #dc3545;">
+                                {{ _('Rebutjar') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: #666; font-style: italic;">{{ _('No hi ha sol·licituds pendents') }}</p>
+        {% endif %}
+    </div>
+</div>
+<!-- Modal entrada -->
+{% include 'components/modal_entrada.html' %}
+                    <!-- ZONA PERILLOSA - ESBORRAR ORGANITZACIÓ -->
+                   <div class="bloc-plegable tancat" style="border: 1px solid #dc3545; background: #fff5f5;">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)" style="color: #dc3545;">
+        {{ _('Eliminar organització') }}
+    </h3>
+    <div class="contingut-plegable">
+        <p style="color: #666;">{{ _('Aquesta acció no es pot desfer') }}</p>
+        <button onclick="esborrarOrganitzacio()" class="boto boto-perill">
+            {{ _('Eliminar organització') }}
+        </button>
+    </div>
+</div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+    let orgIdActual = {{ organitzacio.id }};
+</script>
+ <script src="{{ url_for('static', filename='js/missatgeria_organitzacio.js') }}"></script>
+    <script>
+        // Funció per copiar URL
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('{{ _("URL copiada al portapapers!") }}');
+            });
+        }
+
+        // FUNCIÓ ESBORRAR ORGANITZACIÓ - AMB TRADUCCIONS
+        function esborrarOrganitzacio() {
+            const nomOrg = '{{ organitzacio.nom }}';
+            const missatge1 = `{{ _('Segur que vols esborrar l\'organització') }} "${nomOrg}"? {{ _('Aquesta acció no es pot desfer i s\'esborraran tots els membres.') }}`;
+            const missatge2 = '{{ _('ÚLTIMA CONFIRMACIÓ: Això esborrarà TOTES les dades de l\'organització. Continuar?') }}';
+            const missatgeExit = '{{ _('Organització esborrada correctament') }}';
+            const missatgeError = '{{ _('Error de connexió') }}';
+            
+            if (confirm(missatge1)) {
+                if (confirm(missatge2)) {
+                    fetch(`{{ url_for('organitzacions_admin.esborrar', id=organitzacio.id) }}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(missatgeExit);
+                            window.location.href = '{{ url_for("pagina_personal.pagina_personal") }}?pestanya=perfil';
+                        } else {
+                            alert('{{ _('Error') }}: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert(missatgeError);
+                    });
+                }
+            }
+
+        /* 
+        FUNCIONS AJAX COMENTADES (per implementar després):
+        - canviarRol() 
+        - expulsarMembre()
+        - acceptarSolicitud()
+        - rebutjarSolicitud() 
+        - togglePublicaEntrada()
+        */
+    </script>
+    <script>// Canviar rol d'un membre
+function canviarRol(membreId, nouRol) {
+    fetch(`{{ url_for('organitzacions_admin.canviar_rol') }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            membre_id: membreId,
+            nou_rol: nouRol
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('{{ _("Rol actualitzat correctament") }}');
+        } else {
+            alert('{{ _("Error") }}: ' + data.error);
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('{{ _("Error de connexió") }}');
+        location.reload();
+    });
+}
+
+// Expulsar membre
+function expulsarMembre(membreId) {
+    if (confirm('{{ _("Segur que vols expulsar aquest membre?") }}')) {
+        fetch(`{{ url_for('organitzacions_admin.expulsar_membre') }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                membre_id: membreId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('{{ _("Error") }}: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('{{ _("Error de connexió") }}');
+        });
+    }
+}</script>
+<script>// Funció per plegar/desplegar blocs
+function toggleBloc(element) {
+    const bloc = element.parentElement;
+    bloc.classList.toggle('tancat');
+}</script>
+<script>function veureDetallsSolicitud(solicitudId, nomUsuari, missatge) {
+    document.getElementById('modal-nom-solicitant').textContent = `{{ _('Sol·licitud de') }} ${nomUsuari}`;
+    document.getElementById('modal-missatge-complet').textContent = missatge;
+    document.getElementById('modal-detalls-solicitud').style.display = 'flex';
+}
+
+function tancarModalDetalls() {
+    document.getElementById('modal-detalls-solicitud').style.display = 'none';
+}
+
+function acceptarSolicitud(solicitudId) {
+    if (confirm('{{ _("Acceptar aquesta sol·licitud d\'adhesió?") }}')) {
+        fetch(`{{ url_for('organitzacions_admin.processar_solicitud') }}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ solicitud_id: solicitudId, accio: 'acceptar' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('{{ _("Sol·licitud acceptada") }}');
+                location.reload();
+            } else {
+                alert('{{ _("Error") }}: ' + data.error);
+            }
+        });
+    }
+}
+
+function rebutjarSolicitud(solicitudId) {
+    if (confirm('{{ _("Rebutjar aquesta sol·licitud?") }}')) {
+        fetch(`{{ url_for('organitzacions_admin.processar_solicitud') }}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ solicitud_id: solicitudId, accio: 'rebutjar' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('{{ _("Sol·licitud rebutjada") }}');
+                location.reload();
+            } else {
+                alert('{{ _("Error") }}: ' + data.error);
+            }
+        });
+    }
+}</script>
+
+
+{% endblock %}

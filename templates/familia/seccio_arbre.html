@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Arbre Genealògic - {{ familia.nom }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/arbre_genealogic.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+    
+    <!-- Navegació -->
+    <div class="nav-tornar">
+        <a href="{{ url_for('familia.veure', url=familia.url) }}">
+            ← Tornar a {{ familia.nom }}
+        </a>
+    </div>
+
+    <!-- Capçalera -->
+    <div class="capçalera-pagina">
+        <h1>Arbre Genealògic</h1>
+        <h2>{{ familia.nom }}</h2>
+    </div>
+
+    <div class="separador"></div>
+
+    <!-- Controls -->
+    <div class="card-visualitzacio controls-arbre">
+        <div class="controls-grup">
+            <div>
+                <label for="select-persona">Centrar arbre en:</label>
+                <select id="select-persona">
+                    <option value="">Carregant...</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="select-nivell">Nivell de parentiu:</label>
+                <select id="select-nivell">
+                    <option value="1">Nivell 1 (pares, fills, germans)</option>
+                    <option value="2">Nivell 2 (+ avis, néts, tiets, cosins)</option>
+                    <option value="3">Nivell 3 (+ besavis, besnéts, tiets-avis)</option>
+                    <option value="999">Tots els membres</option>
+                </select>
+            </div>
+
+            <button id="btn-reset-zoom" class="btn-custom btn-outline-custom">
+                🔍 Reiniciar zoom
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenidor de l'arbre -->
+    <div class="card-visualitzacio" style="padding: 0; overflow: hidden;">
+        <div id="arbre-container">
+            <svg id="arbre-svg"></svg>
+        </div>
+    </div>
+
+    <!-- Llegenda -->
+    <div class="card-visualitzacio llegenda-arbre">
+        <h4>Llegenda</h4>
+        <div class="llegenda-items">
+            <div class="llegenda-item">
+                <span class="node-example node-home"></span> Tu
+            </div>
+            <div class="llegenda-item">
+                <span class="node-example node-mascle"></span> Home
+            </div>
+            <div class="llegenda-item">
+                <span class="node-example node-femella"></span> Dona
+            </div>
+            <div class="llegenda-item">
+                <span class="node-example node-desconegut"></span> Gènere desconegut
+            </div>
+            <div class="llegenda-item">
+                <span class="node-example node-difunt"></span> Difunt/a
+            </div>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+            <strong>Consells:</strong> Usa la roda del ratolí per zoom. Arrossega per moure't. Clica un node per veure'n els detalls.
+        </p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+    const FAMILIA_URL = "{{ familia.url }}";
+    const API_URL = "{{ url_for('familia.arbre_dades', url=familia.url) }}";
+</script>
+<script src="{{ url_for('static', filename='js/arbre_genealogic.js') }}"></script>
+{% endblock %}

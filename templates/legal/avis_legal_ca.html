@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block titol %}Avís Legal - Adabida{% endblock %}
+
+{% block css %}
+<style>
+  .document-legal {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  .document-legal h1 {
+    color: #14d8ce;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 3px solid #14d8ce;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+
+  .document-legal .ultima-actualitzacio {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .document-legal h2 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    padding-left: 0.8rem;
+    border-left: 4px solid #14d8ce;
+    font-weight: 600;
+  }
+
+  .document-legal h3 {
+    color: #555;
+    font-size: 1.15rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+
+  .document-legal p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  .document-legal ul, .document-legal ol {
+    margin: 1rem 0;
+    padding-left: 2.5rem;
+  }
+
+  .document-legal li {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 0.6rem;
+  }
+
+  .document-legal .info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal .info-box p {
+    margin: 0.3rem 0;
+  }
+
+  .document-legal .advertencia {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal strong {
+    color: #222;
+    font-weight: 600;
+  }
+
+  .document-legal hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2.5rem 0;
+  }
+
+  .document-legal .separator-line {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ccc;
+    margin: 2rem 0;
+  }
+
+  .document-legal .seccio-final {
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .boto-tornar {
+    display: inline-block;
+    background: #14d8ce;
+    color: white;
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: background 0.3s;
+    font-weight: 500;
+  }
+
+  .boto-tornar:hover {
+    background: #0e9f94;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .document-legal {
+      padding: 1.2rem;
+      margin: 1rem;
+    }
+
+    .document-legal h1 {
+      font-size: 1.6rem;
+    }
+
+    .document-legal h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="document-legal">
+    
+    <h1>AVÍS LEGAL</h1>
+    <p class="ultima-actualitzacio">Última actualització: 29 de novembre de 2025</p>
+
+    <hr>
+
+    <!-- 1. DADES IDENTIFICATIVES -->
+    <h2>1. DADES IDENTIFICATIVES</h2>
+    
+    <p>
+      En compliment de la Llei 34/2002, d'11 de juliol, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), s'informa de les dades del titular d'aquest lloc web:
+    </p>
+
+    <div class="info-box">
+      <p><strong>TITULAR DEL WEB:</strong></p>
+      <p>Nom i cognoms: Ilan Sánchez</p>
+      <p>NIF/DNI: [Dada disponible a sol·licitud]</p>
+      <p>Domicili: Calella, 08370, Barcelona, Espanya</p>
+      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Lloc web: www.adabida.cat</p>
+    </div>
+
+    <p><strong>ACTIVITAT:</strong></p>
+    <p>
+      Adabida és un arxiu històric digital dedicat a la preservació de la memòria oral i el llegat personal de les persones, amb vocació acadèmica i rigor historiogràfic.
+    </p>
+
+    <!-- 2. OBJECTE -->
+    <h2>2. OBJECTE</h2>
+    
+    <p>
+      Aquest Avís Legal regula l'ús i accés al lloc web www.adabida.cat (d'ara endavant, "el Lloc Web" o "la Plataforma").
+    </p>
+
+    <p>
+      L'accés i utilització del Lloc Web atribueix la condició d'usuari i implica l'acceptació plena i sense reserves de totes les disposicions incloses en aquest Avís Legal, així com de les Condicions d'Ús i la Política de Privacitat publicades al Lloc Web.
+    </p>
+
+    <div class="advertencia">
+      <p><strong>⚠️ Important:</strong> Si l'usuari no està d'acord amb qualsevol de les disposicions aquí establertes, ha d'abstenir-se d'utilitzar el Lloc Web.</p>
+    </div>
+
+    <!-- 3. CONDICIONS D'ACCÉS I UTILITZACIÓ -->
+    <h2>3. CONDICIONS D'ACCÉS I UTILITZACIÓ</h2>
+
+    <h3>3.1. CARÀCTER GRATUÏT</h3>
+    <p>L'accés al Lloc Web té caràcter gratuït per als usuaris.</p>
+
+    <h3>3.2. REGISTRE D'USUARIS</h3>
+    <p>
+      L'accés a certes funcionalitats del Lloc Web requereix el registre previ de l'usuari mitjançant la creació d'un compte. El registre implica l'acceptació de les Condicions d'Ús i la Política de Privacitat.
+    </p>
+
+    <h3>3.3. ÚS CORRECTE</h3>
+    <p>
+      L'usuari es compromet a fer un ús adequat i lícit del Lloc Web, d'acord amb la legislació aplicable, la moral, els bons costums i l'ordre públic.
+    </p>
+
+    <h3>3.4. USOS PROHIBITS</h3>
+    <p>Queda expressament prohibit:</p>
+    
+    <ul>
+      <li>Utilitzar el Lloc Web amb finalitats il·lícites o contràries a la llei</li>
+      <li>Provocar danys als sistemes del Lloc Web o de tercers</li>
+      <li>Introduir o difondre virus informàtics o qualsevol altre sistema que pugui causar danys</li>
+      <li>Intentar accedir sense autorització a àrees restringides</li>
+      <li>Utilitzar el Lloc Web per transmetre, difondre o posar a disposició de tercers informació, dades, continguts, missatges, gràfics, sons, imatges, arxius, enllaços, programari o qualsevol altre material que:
+        <ul>
+          <li>Sigui contrari a la llei, la moral o l'ordre públic</li>
+          <li>Incorpori virus o altres elements físics o electrònics que puguin danyar o impedir el normal funcionament de la xarxa, del sistema o dels equips informàtics de tercers</li>
+          <li>Indueixi, inciti o promogui actuacions delictives, difamatòries, violentes, denigrants, xenòfobes, pornogràfiques, difusores de terrorisme o contràries als drets humans</li>
+          <li>Vulneri els drets a l'honor, la intimitat personal i familiar o la pròpia imatge de tercers</li>
+          <li>Vulneri la propietat intel·lectual, industrial, el secret empresarial, compromisos contractuals de qualsevol classe</li>
+          <li>Realitzi publicitat il·lícita, enganyosa o deslleial</li>
+          <li>Contingui informació falsa, ambigua, inexacta, exagerada o extemporània de forma que pugui induir a error sobre el seu objecte</li>
+          <li>Suplanti la identitat de tercers</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>3.5. RESPONSABILITAT DE L'USUARI</h3>
+    <p>
+      L'usuari és l'únic responsable de les infraccions en què pugui incórrer o dels perjudicis que pugui causar per la utilització del Lloc Web, quedant el titular del Lloc Web exempt de qualsevol classe de responsabilitat que es pogués derivar per actes de l'usuari.
+    </p>
+
+    <!-- 4. CONTINGUT DEL LLOC WEB -->
+    <h2>4. CONTINGUT DEL LLOC WEB</h2>
+
+    <h3>4.1. INFORMACIÓ GENERAL</h3>
+    <p>
+      El titular del Lloc Web no garanteix l'absència d'errors en l'accés al Lloc Web, en el seu contingut, ni que aquest es trobi actualitzat en tot moment.
+    </p>
+    <p>
+      El titular del Lloc Web es reserva el dret de modificar, en qualsevol moment i sense avís previ, la presentació, configuració i continguts del Lloc Web, així com les condicions requerides per al seu accés i/o utilització.
+    </p>
+
+    <h3>4.2. CONTINGUT GENERAT PER USUARIS</h3>
+    <p>
+      El contingut publicat pels usuaris (entrades, testimonis, documents, imatges, vídeos) és responsabilitat exclusiva de l'usuari que el publica.
+    </p>
+    <p>
+      El titular del Lloc Web NO és responsable del contingut generat per usuaris, actuant com a prestador de servei d'allotjament de dades segons l'article 16 de la LSSI-CE.
+    </p>
+    <p>
+      El titular es reserva el dret de retirar, sense avís previ, qualsevol contingut que consideri inadequat o que incompleixi les Condicions d'Ús.
+    </p>
+
+    <h3>4.3. EXCLUSIÓ DE GARANTIES I RESPONSABILITAT</h3>
+    <p>El titular del Lloc Web NO garanteix:</p>
+    <ul>
+      <li>La disponibilitat tècnica, exactitud, veracitat, validesa o legalitat del Lloc Web ni dels seus continguts</li>
+      <li>Que el Lloc Web funcioni sense interrupcions o lliure d'errors</li>
+      <li>L'absència de virus o altres elements nocius</li>
+      <li>La invulnerabilitat del Lloc Web i la inexpugnabilitat de les mesures de seguretat adoptades</li>
+    </ul>
+
+    <p>El titular del Lloc Web exclou qualsevol responsabilitat pels danys i perjudicis de qualsevol naturalesa que poguessin ocasionar-se per:</p>
+    <ul>
+      <li>La falta de disponibilitat, manteniment i funcionament efectiu del Lloc Web</li>
+      <li>La falta d'utilitat del Lloc Web per a qualsevol activitat</li>
+      <li>La infracció de la legislació de propietat intel·lectual i industrial, dels drets a l'honor, a la intimitat personal i familiar i a la imatge de tercers, de les normes reguladores de la protecció de dades, o de qualsevol altra normativa aplicable, per part dels usuaris</li>
+      <li>La utilització il·lícita del Lloc Web per part dels usuaris</li>
+    </ul>
+
+    <h3>4.4. FASE DEMO</h3>
+    <div class="advertencia">
+      <p><strong>Adabida està actualment en FASE DEMO.</strong> Això significa que:</p>
+      <ul>
+        <li>Pot haver-hi interrupcions temporals del servei</li>
+        <li>Algunes funcionalitats poden canviar o evolucionar</li>
+        <li>No es garanteix la disponibilitat permanent del servei</li>
+      </ul>
+      <p>Es recomana als usuaris mantenir còpies de seguretat del contingut important.</p>
+    </div>
+
+    <!-- 5. PROPIETAT INTEL·LECTUAL I INDUSTRIAL -->
+    <h2>5. PROPIETAT INTEL·LECTUAL I INDUSTRIAL</h2>
+
+    <h3>5.1. TITULARITAT</h3>
+    <p>
+      Tots els continguts del Lloc Web (inclosos, sense caràcter limitatiu, textos, fotografies, gràfics, imatges, icones, tecnologia, programari, disseny gràfic, codi font, així com la seva presentació i muntatge) són propietat del titular del Lloc Web o disposa de la corresponent llicència o autorització.
+    </p>
+    <p>
+      Constitueixen obres protegides per la normativa de propietat intel·lectual i industrial, i no està permesa la seva reproducció, distribució, comunicació pública o transformació, total o parcial, sense autorització expressa del titular.
+    </p>
+
+    <h3>5.2. MARCA "ADABIDA"</h3>
+    <p>
+      La marca "ADABIDA", així com els logotips i signes distintius que apareixen al Lloc Web, són propietat del titular i estan protegits per les lleis de propietat industrial.
+    </p>
+    <p>
+      Queda prohibida la seva utilització, reproducció, distribució o comunicació pública sense autorització expressa del titular.
+    </p>
+
+    <h3>5.3. CONTINGUT GENERAT PER USUARIS</h3>
+    <p>
+      El contingut generat i publicat pels usuaris (entrades, testimonis, documents, imatges, vídeos) és propietat dels respectius usuaris.
+    </p>
+    <p>
+      En publicar contingut al Lloc Web, l'usuari concedeix al titular una llicència d'ús segons s'especifica a les Condicions d'Ús.
+    </p>
+
+    <h3>5.4. DENÚNCIA D'INFRACCIONS</h3>
+    <p>
+      Si qualsevol persona considera que al Lloc Web s'ha vulnerat algun dret de propietat intel·lectual o industrial, pot notificar-ho a: <strong>contacte@adabida.cat</strong>
+    </p>
+    <p>La notificació ha d'incloure:</p>
+    <ul>
+      <li>Identificació del contingut objecte de la infracció</li>
+      <li>Acreditació dels drets infringits</li>
+      <li>Dades de contacte del notificant</li>
+    </ul>
+
+    <!-- 6. ENLLAÇOS -->
+    <h2>6. ENLLAÇOS</h2>
+
+    <h3>6.1. ENLLAÇOS A TERCERS</h3>
+    <p>
+      El Lloc Web pot contenir enllaços a llocs web de tercers. Aquests enllaços es faciliten únicament amb finalitat informativa.
+    </p>
+    <p>
+      El titular del Lloc Web NO és responsable del contingut, polítiques de privacitat, termes d'ús ni pràctiques dels llocs web de tercers.
+    </p>
+    <p>
+      L'usuari accedeix als llocs de tercers sota la seva pròpia responsabilitat.
+    </p>
+
+    <h3>6.2. ENLLAÇOS DES DE TERCERS CAP A ADABIDA</h3>
+    <p>Qualsevol lloc web pot establir enllaços cap a Adabida sempre que:</p>
+    <ul>
+      <li>No reprodueixi el contingut d'Adabida sense autorització</li>
+      <li>No faci manifestacions falses, inexactes o incorrectes sobre Adabida</li>
+      <li>No declari ni doni a entendre que el titular d'Adabida ha autoritzat l'enllaç o que supervisa o assumeix de qualsevol forma els serveis ofererts o posats a disposició del lloc web des del qual s'estableix l'enllaç</li>
+    </ul>
+    <p>
+      Si qualsevol persona desitja establir un enllaç amb un marc (frame) o similar que inclogui contingut d'Adabida, ha de sol·licitar autorització prèvia a: <strong>contacte@adabida.cat</strong>
+    </p>
+
+    <!-- 7. PROTECCIÓ DE DADES PERSONALS -->
+    <h2>7. PROTECCIÓ DE DADES PERSONALS</h2>
+    <p>
+      El titular del Lloc Web tracta les dades personals dels usuaris de conformitat amb el Reglament General de Protecció de Dades (RGPD - Reglament UE 2016/679) i la Llei Orgànica 3/2018, de 5 de desembre, de Protecció de Dades Personals i garantia dels drets digitals (LOPDGDD).
+    </p>
+    <p>
+      Per a informació completa sobre el tractament de dades personals, consultar la <a href="{{ url_for('legal.politica_privadesa') }}" style="color: #14d8ce; text-decoration: underline;">Política de Privacitat</a> del Lloc Web.
+    </p>
+
+    <!-- 8. COOKIES -->
+    <h2>8. COOKIES</h2>
+    <p>
+      El Lloc Web utilitza NOMÉS cookies tècniques estrictament necessàries per al seu funcionament (sessió, idioma, seguretat CSRF).
+    </p>
+    <p>
+      NO s'utilitzen cookies de seguiment, publicitàries o de tercers.
+    </p>
+    <p>
+      Per a més informació, consultar la <a href="{{ url_for('legal.politica_privadesa') }}" style="color: #14d8ce; text-decoration: underline;">Política de Privacitat</a>.
+    </p>
+
+    <!-- 9. LEGISLACIÓ APLICABLE I JURISDICCIÓ -->
+    <h2>9. LEGISLACIÓ APLICABLE I JURISDICCIÓ</h2>
+
+    <h3>9.1. LEGISLACIÓ APLICABLE</h3>
+    <p>El present Avís Legal es regeix per la legislació espanyola.</p>
+
+    <h3>9.2. JURISDICCIÓ</h3>
+    <p>
+      Per a la resolució de qualsevol controvèrsia que pugui sorgir en relació amb el Lloc Web o les activitats desenvolupades en el mateix, seran competents els Jutjats i Tribunals de Barcelona, amb renúncia expressa per part de l'usuari a qualsevol altre fur que pogués correspondre-li.
+    </p>
+
+    <h3>9.3. IDIOMA</h3>
+    <p>
+      En cas de discrepància entre la versió en català i qualsevol traducció a altres idiomes, prevaldrà la versió en català.
+    </p>
+
+    <!-- 10. CONTACTE -->
+    <h2>10. CONTACTE</h2>
+    <p>
+      Per a qualsevol consulta, suggeriment, dubte o reclamació relacionada amb el Lloc Web o aquest Avís Legal, l'usuari pot contactar amb:
+    </p>
+    
+    <div class="info-box">
+      <p><strong>TITULAR DEL LLOC WEB:</strong></p>
+      <p>Nom: Ilan Sánchez</p>
+      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Adreça postal: Calella, 08370, Barcelona, Espanya</p>
+    </div>
+
+    <!-- 11. RESOLUCIÓ DE CONFLICTES EN LÍNIA -->
+    <h2>11. RESOLUCIÓ DE CONFLICTES EN LÍNIA</h2>
+    <p>
+      Conforme al Reglament (UE) 524/2013, s'informa que la Comissió Europea facilita una plataforma de resolució de litigis en línia, disponible a:
+    </p>
+    <p style="text-align: center;">
+      <a href="https://ec.europa.eu/consumers/odr/" target="_blank" style="color: #14d8ce; text-decoration: underline;">https://ec.europa.eu/consumers/odr/</a>
+    </p>
+    <p>
+      Adabida no està obligat a participar en procediments de resolució de conflictes davant d'entitats de resolució alternativa de litigis de consum, però pot fer-ho voluntàriament.
+    </p>
+
+    <!-- 12. MODIFICACIONS -->
+    <h2>12. MODIFICACIONS</h2>
+    <p>
+      El titular del Lloc Web es reserva el dret de modificar aquest Avís Legal en qualsevol moment, publicant les modificacions al Lloc Web.
+    </p>
+    <p>
+      Es recomana als usuaris revisar periòdicament aquest Avís Legal per estar informats de possibles canvis.
+    </p>
+    <p>
+      L'ús continuat del Lloc Web després de la publicació de modificacions implica l'acceptació de les mateixes.
+    </p>
+
+    <hr>
+
+    <!-- ACCEPTACIÓ -->
+    <div class="seccio-final">
+      <h2 style="color: #333; border: none; padding: 0; margin-bottom: 1rem;">ACCEPTACIÓ DE L'AVÍS LEGAL</h2>
+      <p>
+        L'accés i utilització del Lloc Web implica l'acceptació expressa i sense reserves de totes les condicions establertes en aquest Avís Legal.
+      </p>
+      <p>
+        <strong>Si l'usuari no està d'acord amb alguna de les condicions aquí establertes, ha d'abstenir-se d'accedir i utilitzar el Lloc Web.</strong>
+      </p>
+    </div>
+
+    <p class="ultima-actualitzacio" style="margin-top: 2rem;">
+      Data de la darrera actualització: 29 de novembre de 2025
+    </p>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="boto-tornar">← Tornar a l'inici</a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

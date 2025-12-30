@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Blog') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div class="blog-seccio">
+  <div class="columna-entrades">
+    
+    <!-- Selector d'entrades per pàgina -->
+   
+
+    <!-- Entrades del blog -->
+    {% for entrada in entrades_blog.items %}
+      <div class="entrada-blog">
+        <h2 class="titol-entrada">
+          <a href="{{ url_for('blog.entrada_completa', entrada_id=entrada.id) }}" target="_blank">
+            {{ entrada.titol }}
+          </a>
+        </h2>
+        <p class="data-entrada">{{ entrada.data_creacio.strftime('%d-%m-%Y') }}</p>
+        
+        <div class="contingut-entrada">
+          {% if entrada.contingut|length > 1000 %}
+            {{ entrada.contingut[:1000] | safe }}...
+            <div class="llegir-mes">
+              <a href="{{ url_for('blog.entrada_completa', entrada_id=entrada.id) }}" target="_blank">
+                {{ _('Llegir més...') }}
+              </a>
+            </div>
+          {% else %}
+            {{ entrada.contingut | safe }}
+          {% endif %}
+        </div>
+        
+       {% if entrada.firma %}
+  <p class="firma-entrada">— 
+    <a href="{{ url_for('blog.entrades_per_firma', firma=entrada.firma) }}" class="enllac-autor">
+      {{ entrada.firma }}
+    </a>
+  </p>
+{% endif %}
+        <hr>
+      </div>
+    {% else %}
+      <p>{{ _('Encara no hi ha entrades al blog.') }}</p>
+    {% endfor %}
+
+    <!-- Paginació -->
+    {% if entrades_blog.pages > 1 %}
+      <div class="paginacio">
+        {% if entrades_blog.has_prev %}
+          <a href="{{ url_for('blog.blog', page=entrades_blog.prev_num, per_page=per_page) }}" class="btn-paginacio">
+            {{ _('← Anterior') }}
+          </a>
+        {% endif %}
+
+        {% for page_num in entrades_blog.iter_pages() %}
+          {% if page_num %}
+            {% if page_num != entrades_blog.page %}
+              <a href="{{ url_for('blog.blog', page=page_num, per_page=per_page) }}" class="btn-paginacio">
+                {{ page_num }}
+              </a>
+            {% else %}
+              <span class="btn-paginacio actiu">{{ page_num }}</span>
+            {% endif %}
+          {% else %}
+            <span class="btn-paginacio">...</span>
+          {% endif %}
+        {% endfor %}
+
+        {% if entrades_blog.has_next %}
+          <a href="{{ url_for('blog.blog', page=entrades_blog.next_num, per_page=per_page) }}" class="btn-paginacio">
+            {{ _('Següent →') }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="info-paginacio">
+        {{ _('Mostrant %(start)s-%(end)s de %(total)s entrades', 
+             start=(entrades_blog.page-1)*entrades_blog.per_page+1,
+             end=entrades_blog.page*entrades_blog.per_page if entrades_blog.page*entrades_blog.per_page < entrades_blog.total else entrades_blog.total,
+             total=entrades_blog.total) }}
+      </div>
+    {% endif %}
+     <div class="controls-blog">
+      <form method="GET" action="{{ url_for('blog.blog') }}" style="display: inline;">
+        <label for="per_page">{{ _('Entrades per pàgina:') }}</label>
+        <select name="per_page" id="per_page" onchange="this.form.submit()">
+          <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+          <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+          <option value="15" {% if per_page == 15 %}selected{% endif %}>15</option>
+        </select>
+        {% if request.args.get('page') %}
+          <input type="hidden" name="page" value="{{ request.args.get('page') }}">
+        {% endif %}
+      </form>
+    </div>
+
+  </div>
+
+  <div class="columna-lateral">
+    <h3>{{ _('Arxiu') }}</h3>
+    <ul>
+      {% for any, mes in mesos_disponibles %}
+        <li>
+          <a href="{{ url_for('blog.arxiu_per_mes', any=any|int, mes=mes|int) }}">
+            {{ _('%(nom_mes)s %(any)s', nom_mes=datetime(2000, mes|int, 1).strftime('%B').capitalize(), any=any|int) }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3>{{ _('Cercador') }}</h3>
+    <form method="GET" action="{{ url_for('blog.cercar_blog') }}">
+      <input type="text" name="q" placeholder="{{ _('Paraula clau...') }}">
+      <button type="submit">{{ _('Cerca') }}</button>
+    </form>
+
+    
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<style>
+.controls-blog {
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.llegir-mes {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.llegir-mes a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.llegir-mes a:hover {
+  text-decoration: underline;
+}
+
+.paginacio {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.btn-paginacio {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
+  border-radius: 3px;
+}
+
+.btn-paginacio:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-paginacio.actiu {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.info-paginacio {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.titol-entrada a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titol-entrada a:hover {
+  color: #007bff;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block titol %}Consulta pública{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/repositori.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/grid_entrades.css') }}">
+{% endblock %}
+
+{% block contingut %}
+  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+    <h1 style="margin: 0;">{{ _("Consulta pública de l'arxiu") }}</h1>
+    <button type="button" onclick="obrirModalInfo()" class="boto-info" title="{{ _('Informació important sobre els testimonis') }}">
+      i
+    </button>
+  </div>
+
+<form method="get" action="{{ url_for('repositori.consulta_repositori') }}" class="formulari-cerca">
+
+  <!-- 1a línia -->
+  <div class="cerca-principal">
+    <input type="text" name="text" placeholder="{{ _('Paraula clau') }}" value="{{ request.args.get('text', '') }}">
+  </div>
+
+  <!-- CAMPS OCULTS -->
+  <div id="camps-extres" style="display: none;">
+
+    <!-- 2a línia -->
+    <div class="fila-camps">
+      <input type="text" name="nom" placeholder="{{ _('Nom o títol') }}" value="{{ request.args.get('nom', '') }}">
+      <input type="text" name="tema" placeholder="{{ _('Tema') }}" value="{{ request.args.get('tema', '') }}">
+    </div>
+
+    <!-- 3a línia -->
+    <div class="fila-camps">
+      <input type="text" name="usuari" placeholder="{{ _("Nom d'usuari o autor") }}" value="{{ request.args.get('usuari', '') }}">
+      <input type="text" name="pais" placeholder="{{ _('País') }}" value="{{ request.args.get('pais', '') }}">
+      <input type="text" name="ciutat" placeholder="{{ _('Ciutat o poble') }}" value="{{ request.args.get('ciutat', '') }}">
+    </div>
+
+    <!-- 4a línia -->
+    <div class="fila-camps">
+      <input type="number" name="any_inici" placeholder="{{ _('Any des de') }}" value="{{ request.args.get('any_inici', '') }}">
+      <input type="number" name="any_fi" placeholder="{{ _('Fins a') }}" value="{{ request.args.get('any_fi', '') }}">
+    </div>
+
+    <!-- NOMÉS visible en desplegar -->
+   <div class="fila-camps">
+  <label class="checkbox-etica">
+    <input type="checkbox" name="strict" id="strict"
+           {% if request.args.get('strict') %}checked{% endif %}>
+    <span class="checkmark"></span>
+    {{ _('Cerca estricta (coincidència de tots els criteris)') }}
+  </label>
+
+  <label class="checkbox-etica">
+    <input type="checkbox" name="validat" id="validat"
+           {% if request.args.get('validat') %}checked{% endif %}>
+    <span class="checkmark"></span>
+    {{ _('Només usuaris validats') }}
+  </label>
+</div>
+
+  </div>
+  <div class="linia-final-cerca">
+    <span id="toggle-cerca" class="boto-textual">{{ _('Ampliar la cerca') }}</span>
+
+    <button type="submit">{{ _('Cerca') }}</button>
+  </div>
+
+</form>
+
+{% if resultats_parcials %}
+  <div class="avis-parcial">
+    {{ _("No s'han trobat entrades que compleixin totes les condicions. Et mostrem resultats similars.") }}
+  </div>
+{% endif %}
+
+  {% if cerca %}
+    <!-- CANVI IMPORTANT: Ara usem grid-entrades en lloc de grid-caixes -->
+    <div class="grid-entrades">
+      {% for entrada in entrades %}
+        {% include "components/caixa_entrada.html" %}
+      {% endfor %}
+    </div>
+
+      {% if pagination %}
+        <div class="paginacio">
+          {% if pagination.has_prev %}
+            <a href="{{ url_for('repositori.consulta_repositori', page=pagination.prev_num, **args_copia) }}" class="boto-paginacio">← Anterior</a>
+          {% endif %}
+          <span class="pagina-actual">Pàgina {{ pagination.page }} de {{ pagination.pages }}</span>
+          {% if pagination.has_next %}
+           <a href="{{ url_for('repositori.consulta_repositori', page=pagination.next_num, **args_copia) }}" class="boto-paginacio">Següent →</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p>{{ _('No hi ha cap entrada disponible amb aquests criteris.') }}</p>
+
+    {% endif %}
+
+<div class="submenu-login" id="submenu-login">
+  <form method="POST" action="{{ url_for('login.login') }}">
+    <div class="camp-login">
+      <label for="usuari">{{ _('Usuari') }}:</label>
+      <input type="text" name="usuari" id="usuari" placeholder="{{ _('Usuari') }}">
+    </div>
+
+    <div class="camp-login">
+      <label for="contrasenya">{{ _('Contrasenya') }}:</label>
+      <div class="camp-contrasenya">
+        <input type="password" name="contrasenya" id="contrasenya" placeholder="{{ _('Contrasenya') }}">
+        <span id="toggle-visibilitat" class="icona-ull" aria-label="Mostrar contrasenya">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#666" viewBox="0 0 24 24">
+            <path d="M12 5c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7zm0 12
+                     c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8
+                     c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <button type="submit">{{ _('Entrar') }}</button>
+  </form>
+
+  <div class="registre-entrada">
+    <ul class="tipus-compte">
+      <li><a href="#" onclick="mostraDisclaimer()">{{ _('Crear un compte nou') }}</a></li>
+    </ul>
+    <div class="enllaços-extra">
+      <a href="#">{{ _('He oblidat la contrasenya') }}</a>
+    </div>
+  </div>
+</div>
+<div id="disclaimer-modal" class="modal">
+  <div class="modal-content">
+    <h2>{{ _("Accés a un projecte acadèmic i científic") }}</h2>
+    <p>
+      {{ _("Estàs a punt d'accedir a un espai destinat a la recollida de testimonis personals amb finalitats d'investigació històrica, educativa i social. El Projecte Abadia forma part d'un arxiu de memòria oral amb vocació científica i pública.") }}
+    </p>
+    <p>
+      {{ _('El registre és voluntari. Molts dels camps del formulari no són obligatoris, però omplir-los amb detall millora significativament el valor documental del teu testimoni.') }}
+    </p>
+    <p>
+      {{ _('Pots gestionar o suprimir les teves dades en qualsevol moment. La informació aportada es tracta amb criteris ètics, transparència i respecte absolut a la persona.') }}
+    </p>
+    <button onclick="acceptarDisclaimer()">{{ _('Acceptar i continuar') }}</button>
+  </div>
+</div>
+<div id="modal-info-testimonis" class="modal">
+  <div class="modal-content">
+    <button onclick="tancarModalInfo()" style="float: right; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+    
+    {% include 'modals/info_testimonis/' ~ session.get('idioma', 'ca') ~ '.html' %}
+    
+    <button onclick="tancarModalInfo()" style="margin-top: 2rem; padding: 0.8rem 2rem; background: #14d8ce; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+      {{ _('Entesos') }}
+    </button>
+  </div>
+</div>
+
+{% include "components/modal_entrada.html" %}
+{% include "components/modal_entrada_editar.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>  
+  
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  window.mostraDisclaimer = function () {
+    const modal = document.getElementById("disclaimer-modal");
+    if (modal) {
+      modal.classList.add("mostrar");
+      document.body.style.overflow = "hidden";
+    }
+  };
+
+  window.tancaDisclaimer = function () {
+    const modal = document.getElementById("disclaimer-modal");
+    if (modal) {
+      modal.classList.remove("mostrar");
+      document.body.style.overflow = "";
+    }
+  };
+
+  window.acceptarDisclaimer = function () {
+    window.location.href = "{{ url_for('registre_individual.registre_individual') }}";
+  };
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const toggle = document.getElementById('toggle-cerca');
+  const camps = document.getElementById('camps-extres');
+  const checkboxes = document.querySelectorAll('.toggle-only');
+  let mostrat = false;
+
+  toggle.addEventListener('click', function () {
+    mostrat = !mostrat;
+    camps.style.display = mostrat ? 'block' : 'none';
+    toggle.textContent = mostrat
+      ? "{{ _('Reduir la cerca') }}"
+      : "{{ _('Ampliar la cerca') }}";
+
+    checkboxes.forEach(cb => {
+      cb.style.display = mostrat ? 'inline-flex' : 'none';
+    });
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const botoLogin = document.getElementById('login-toggle');
+  const loginBox = document.getElementById('submenu-login');
+
+  if (botoLogin && loginBox) {
+    botoLogin.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();  // ← AFEGIT stopPropagation aquí
+      loginBox.classList.toggle('mostrar');
+    });
+
+    // CANVIAT: només tanca si cliques FORA del loginBox i del botó
+    document.addEventListener('click', function (e) {
+      if (!loginBox.contains(e.target) && !botoLogin.contains(e.target)) {
+        loginBox.classList.remove('mostrar');
+      }
+    });
+
+    loginBox.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+  }
+});
+</script>
+
+<script>
+function obrirModalInfo() {
+  const modal = document.getElementById('modal-info-testimonis');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function tancarModalInfo() {
+  const modal = document.getElementById('modal-info-testimonis');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+  
+  const infoCompleta = document.getElementById('info-completa');
+  const boto = document.getElementById('toggle-info-completa');
+  if (infoCompleta && boto) {
+    infoCompleta.style.display = 'none';
+    boto.innerHTML = '▼ {{ _("Llegir més informació") }}';
+  }
+}
+
+function toggleInfoCompleta() {
+  const infoCompleta = document.getElementById('info-completa');
+  const boto = document.getElementById('toggle-info-completa');
+  
+  if (infoCompleta.style.display === 'none' || !infoCompleta.style.display) {
+    infoCompleta.style.display = 'block';
+    boto.innerHTML = '▲ {{ _("Amagar informació") }}';
+  } else {
+    infoCompleta.style.display = 'none';
+    boto.innerHTML = '▼ {{ _("Llegir més informació") }}';
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    tancarModalInfo();
+  }
+});
+</script>
+
+{% endblock %}

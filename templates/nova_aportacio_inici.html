@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Fes una aportació') }}{% endblock %}
+{% block css %}
+
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/aportacions_inici.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container">
+  <div class="aportacio-inici">
+    
+    <!-- Columna esquerra: Informació -->
+    <div class="info-columna">
+      <h1>{{ _('Adabida és i serà sempre 100% gratuït per a tothom') }}</h1>
+      
+      <div class="destacat">
+        <p>{{ _('No hi ha subscripcions. No hi ha funcionalitats de pagament. No hi ha publicitat. No venem les teves dades.') }}</p>
+      </div>
+
+      <h2>{{ _('Per què aportacions voluntàries?') }}</h2>
+      
+      <p>{{ _('Adabida no és només un projecte tecnològic, és un projecte amb valors. Hem escollit el model d\'aportacions voluntàries per raons ètiques fonamentals:') }}</p>
+
+      <ul>
+        <li><strong>{{ _('Independència:') }}</strong> {{ _('No dependre de grans corporacions tecnològiques ni inversors') }}</li>
+        <li><strong>{{ _('Privacitat:') }}</strong> {{ _('Les teves dades MAI seran el producte. Mai les vendrem ni les monetitzarem') }}</li>
+        <li><strong>{{ _('Accessibilitat universal:') }}</strong> {{ _('Qualsevol persona ha de poder preservar la seva memòria, independentment dels seus recursos econòmics') }}</li>
+        <li><strong>{{ _('Dignitat:') }}</strong> {{ _('Els records i testimonis de les persones no són una mercaderia') }}</li>
+        <li><strong>{{ _('Comunitat:') }}</strong> {{ _('El projecte és de tots i per a tots, no d\'una empresa amb ànim de lucre') }}</li>
+      </ul>
+
+      
+    </div>
+
+    <!-- Columna dreta: Formulari -->
+    <div class="form-columna">
+      <div class="aportacio-card">
+        <h3>{{ _('Fes una aportació') }}</h3>
+
+        <form method="POST" id="formAportacio">
+          
+          <!-- Periodicitat -->
+          <div class="periodicitat">
+            <input type="radio" name="periodicitat" id="unica" value="unica" checked>
+            <label for="unica">{{ _('Única') }}</label>
+            
+            <input type="radio" name="periodicitat" id="mensual" value="mensual">
+            <label for="mensual">{{ _('Mensual') }}</label>
+            
+            <input type="radio" name="periodicitat" id="anual" value="anual">
+            <label for="anual">{{ _('Anual') }}</label>
+          </div>
+
+          <!-- Quantitats predefinides -->
+          <div class="quantitats">
+            <input type="radio" name="quantitat_btn" id="q2" value="2">
+            <label for="q2">2€</label>
+            
+            <input type="radio" name="quantitat_btn" id="q5" value="5" checked>
+            <label for="q5">5€</label>
+            
+            <input type="radio" name="quantitat_btn" id="q10" value="10">
+            <label for="q10">10€</label>
+            
+            <input type="radio" name="quantitat_btn" id="q20" value="20">
+            <label for="q20">20€</label>
+            
+            <input type="radio" name="quantitat_btn" id="q50" value="50">
+            <label for="q50">50€</label>
+            
+            <input type="radio" name="quantitat_btn" id="q100" value="100">
+            <label for="q100">100€</label>
+          </div>
+
+          <!-- Altra quantitat -->
+          <div class="altra-quantitat">
+            <input type="number" step="0.01" id="altra" name="altra_quantitat" placeholder="{{ _('Altra quantitat') }}">
+          </div>
+
+          <input type="hidden" name="quantitat" id="quantitat_final" value="5">
+
+          <!-- Mètode de pagament -->
+          <div class="metodes">
+            <select name="metode_pagament" id="metode" required>
+              <option value="">{{ _('-- Selecciona mètode --') }}</option>
+              <option value="Transferència">{{ _('Transferència') }}</option>
+              <option value="Bizum">Bizum</option>
+              <option value="PayPal">PayPal</option>
+              <option value="Targeta">{{ _('Targeta') }}</option>
+            </select>
+          </div>
+
+          <!-- Camps ocults -->
+          <input type="hidden" name="usuari_id" value="">
+          <input type="hidden" name="data" value="{{ today }}">
+          <input type="hidden" name="estat" value="pendent">
+          <input type="hidden" name="pais" value="Espanya">
+
+          <button type="submit" class="boto_nav">{{ _('Continuar') }}</button>
+          
+          <p class="nota-seguretat">🔒 {{ _('Pagament segur') }}</p>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Actualitzar quantitat final
+document.querySelectorAll('input[name="quantitat_btn"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    document.getElementById('quantitat_final').value = this.value;
+    document.getElementById('altra').value = '';
+  });
+});
+
+document.getElementById('altra').addEventListener('input', function() {
+  if (this.value) {
+    document.querySelectorAll('input[name="quantitat_btn"]').forEach(r => r.checked = false);
+    document.getElementById('quantitat_final').value = this.value;
+  }
+});
+
+// Validació abans d'enviar
+document.getElementById('formAportacio').addEventListener('submit', function(e) {
+  const quantitat = parseFloat(document.getElementById('quantitat_final').value);
+  if (!quantitat || quantitat <= 0) {
+    e.preventDefault();
+    alert('{{ _("Si us plau, selecciona una quantitat") }}');
+  }
+});
+</script>
+{% endblock %}

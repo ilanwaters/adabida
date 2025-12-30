@@ -1,0 +1,134 @@
+.container-benvinguts {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.capçalera-benvinguda {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+}
+
+.capçalera-benvinguda h1 {
+    color: #1a4b75;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.missatge-calid {
+    font-size: 1.15em;
+    line-height: 1.8;
+    color: #495057;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.seccio {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.seccio h2 {
+    color: #1a4b75;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.seccio h3 {
+    color: #5a7a8a;
+    font-size: 1.3em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.llista-normes {
+    list-style: none;
+    padding: 0;
+}
+
+.llista-normes li {
+    padding: 12px 0 12px 35px;
+    position: relative;
+    line-height: 1.6;
+    color: #495057;
+}
+
+.llista-normes li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #1a4b75;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.primers-passos {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.primers-passos ol {
+    margin-left: 20px;
+    line-height: 1.8;
+}
+
+.primers-passos li {
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+.destacat {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.enllaços-utils {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.enllac-card {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: #1a4b75;
+}
+
+.enllac-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .capçalera-benvinguda h1 {
+        font-size: 2em;
+    }
+    
+    .missatge-calid {
+        font-size: 1em;
+    }
+    
+    .seccio {
+        padding: 20px;
+    }
+}

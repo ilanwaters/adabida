@@ -1,0 +1,224 @@
+/* ========================================
+   CSS ARBRE GENEALÒGIC
+======================================== */
+
+#arbre-container {
+    width: 100%;
+    height: 700px;
+    background: #f9f9f9;
+    position: relative;
+    border-radius: 8px;
+}
+
+#arbre-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+
+#arbre-svg:active {
+    cursor: grabbing;
+}
+
+/* Controls */
+.controls-arbre {
+    margin-bottom: 1.5rem;
+}
+
+.controls-grup {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.controls-grup > div {
+    flex: 1;
+    min-width: 200px;
+}
+
+.controls-grup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.controls-grup select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+/* Nodes de l'arbre */
+.node-arbre {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+g[class*="dummy"] .node-rect,
+g[class*="dummy"] .node-text {
+    display: none;
+}
+
+.node-arbre:hover {
+    filter: brightness(1.1);
+}
+
+.node-rect {
+    stroke-width: 2px;
+    rx: 8px;
+    ry: 8px;
+}
+
+/* Colors per gènere i estat */
+.node-mascle .node-rect {
+    fill: #cce5ff;
+    stroke: #66b3ff;
+}
+
+.node-femella .node-rect {
+    fill: #ffe6f0;
+    stroke: #ff99cc;
+}
+
+.node-desconegut .node-rect {
+    fill: #e6e6e6;
+    stroke: #999999;
+}
+
+.node-home .node-rect {
+    fill: #fff3cd;
+    stroke: #ffc107;
+    stroke-width: 3px;
+}
+
+.node-difunt .node-rect {
+    fill: #d3d3d3;
+    stroke: #808080;
+    opacity: 0.7;
+}
+
+.node-text {
+    font-size: 14px;
+    font-weight: 500;
+    fill: #333;
+    pointer-events: none;
+}
+
+.node-text-petit {
+    font-size: 11px;
+    fill: #666;
+    pointer-events: none;
+}
+
+/* Línies de connexió */
+.link-arbre {
+    fill: none;
+    stroke: #999;
+    stroke-width: 2px;
+}
+
+.link-matrimoni {
+    fill: none;
+    stroke: #e74c3c;
+    stroke-width: 2.5px;
+    stroke-dasharray: 5,5;
+}
+
+.link-pare, .link-mare {
+    fill: none;
+    stroke: #3498db;
+    stroke-width: 2px;
+}
+
+/* Llegenda */
+.llegenda-arbre {
+    margin-top: 1.5rem;
+}
+
+.llegenda-items {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.llegenda-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.node-example {
+    width: 30px;
+    height: 20px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.node-example.node-home {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+}
+
+.node-example.node-mascle {
+    background: #cce5ff;
+    border: 2px solid #66b3ff;
+}
+
+.node-example.node-femella {
+    background: #ffe6f0;
+    border: 2px solid #ff99cc;
+}
+
+.node-example.node-desconegut {
+    background: #e6e6e6;
+    border: 2px solid #999999;
+}
+
+.node-example.node-difunt {
+    background: #d3d3d3;
+    border: 2px solid #808080;
+    opacity: 0.7;
+}
+
+/* Tooltip */
+.tooltip-arbre {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.tooltip-arbre.visible {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #arbre-container {
+        height: 500px;
+    }
+    
+    .controls-grup {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .controls-grup > div {
+        width: 100%;
+    }
+    
+    .llegenda-items {
+        gap: 1rem;
+    }
+}

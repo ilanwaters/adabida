@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}{{ membre.nom }} {{ membre.primer_cognom }} - {{ familia.nom }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/veure_membre.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+    
+    <!-- Navegació -->
+    <div class="nav-tornar">
+        <a href="{{ url_for('familia.veure', url=familia.url) }}">
+            Tornar a {{ familia.nom }}
+        </a>
+    </div>
+
+    <!-- Capçalera del membre -->
+    <div class="capçalera-pagina">
+        <h1>
+            {{ membre.nom }} {{ membre.primer_cognom }} {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}
+           {% if membre.data_naixement %}
+    <span class="badge-custom badge-dates">
+        {{ membre.data_naixement.strftime('%Y') }}{% if membre.data_defuncio %}-{{ membre.data_defuncio.strftime('%Y') }}{% endif %}
+    </span>
+{% endif %}
+        </h1>
+        
+        {% if es_admin %}
+        <div class="boto-group" style="justify-content: center; margin-top: 1rem;">
+            <a href="{{ url_for('membres.editar', membre_id=membre.id) }}" class="btn-custom btn-primary-custom">
+                Editar Membre
+            </a>
+            <a href="{{ url_for('membres.gestionar_relacions', membre_id=membre.id) }}" class="btn-custom btn-secondary-custom">
+                Gestionar Relacions
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="separador"></div>
+
+    <!-- Infobox estil Wikipedia -->
+    <div class="infobox">
+        <div class="infobox-header">
+           
+        </div>
+        <div class="infobox-body">
+            
+            <!-- Naixement -->
+            {% if membre.data_naixement or ub.municipi_naix %}
+            <div class="infobox-row">
+                <div class="infobox-label">Naixement</div>
+                <div class="infobox-value">
+                    {% if membre.data_naixement %}
+                        {{ membre.data_naixement.strftime('%d/%m/%Y') }}<br>
+                    {% endif %}
+                    {% if ub.municipi_naix or ub.regio_naix or ub.pais_naix %}
+                        {% if ub.municipi_naix %}{{ ub.municipi_naix }}{% endif %}{% if ub.regio_naix %}, {{ ub.regio_naix }}{% endif %}{% if ub.pais_naix %}, {{ ub.pais_naix }}{% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Defunció -->
+            {% if membre.data_defuncio or ub.municipi_def %}
+            <div class="infobox-row">
+                <div class="infobox-label">Defunció</div>
+                <div class="infobox-value">
+                    {% if membre.data_defuncio %}
+                        {{ membre.data_defuncio.strftime('%d/%m/%Y') }}
+                        {% if membre.data_naixement %}
+                            ({{ ((membre.data_defuncio - membre.data_naixement).days / 365.25) | int }} anys)
+                        {% endif %}
+                        <br>
+                    {% endif %}
+                    {% if ub.municipi_def or ub.regio_def or ub.pais_def %}
+                        {% if ub.municipi_def %}{{ ub.municipi_def }}{% endif %}{% if ub.regio_def %}, {{ ub.regio_def }}{% endif %}{% if ub.pais_def %}, {{ ub.pais_def }}{% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Ubicació actual (només si viu) -->
+            {% if ub.municipi_act and not membre.data_defuncio %}
+            <div class="infobox-row">
+                <div class="infobox-label">Residència</div>
+                <div class="infobox-value">
+                    {% if ub.municipi_act %}{{ ub.municipi_act }}{% endif %}{% if ub.regio_act %}, {{ ub.regio_act }}{% endif %}{% if ub.pais_act %}, {{ ub.pais_act }}{% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Aquí es podrien afegir més camps en el futur: 
+                 Nacionalitat, Fills, Cònjuges, etc. -->
+            
+        </div>
+    </div>
+
+    <!-- Biografia -->
+    {% if membre.biografia %}
+    <div class="biografia-section">
+        <h2>Apunts Biogràfics</h2>
+        <div class="biografia-content">{{ membre.biografia }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Documents -->
+    {% if documents or es_admin %}
+    <div class="documents-section">
+        <h2>Documentació</h2>
+        
+        {% if documents %}
+        <ul class="llista-elegant">
+            {% for doc in documents %}
+            <li>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>
+                            {% if doc.tipus_document == 'dni' %}DNI/Passaport
+                            {% elif doc.tipus_document == 'partida_naixement' %}Partida de Naixement
+                            {% elif doc.tipus_document == 'partida_defuncio' %}Partida de Defunció
+                            {% elif doc.tipus_document == 'certificat' %}Certificat
+                            {% elif doc.tipus_document == 'fotografia' %}Fotografia
+                            {% else %}Document
+                            {% endif %}
+                        </strong>
+                        {% if doc.visibilitat == 'admin' %}
+                            <span class="badge-custom badge-provisional">Només admins</span>
+                        {% endif %}
+                        {% if doc.descripcio %}
+                            <br><span class="text-petit">{{ doc.descripcio }}</span>
+                        {% endif %}
+                    </div>
+                    <a href="{{ url_for('static', filename='documents_membres/' + familia.id|string + '/' + doc.nom_fitxer) }}" 
+                       target="_blank" 
+                       class="btn-custom btn-outline-custom" style="padding: 0.25rem 0.75rem;">
+                        Veure
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% elif es_admin %}
+        <div class="alerta-info">
+            <p class="text-muted-custom">Aquest membre encara no té documents adjunts.</p>
+            <a href="{{ url_for('membres.editar', membre_id=membre.id) }}" class="btn-custom btn-primary-custom" style="margin-top: 0.5rem;">
+                Afegir Documents
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

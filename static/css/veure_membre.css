@@ -1,0 +1,94 @@
+.infobox {
+        background: #f8f9fa;
+        border: 1px solid #a2a9b1;
+        border-spacing: 3px;
+        padding: 0;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto 2rem auto;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .infobox-header {
+        background: #1a4b75;
+        color: white;
+        text-align: center;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .infobox-body {
+        padding: 1rem;
+    }
+    
+    .infobox-row {
+        display: flex;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .infobox-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    .infobox-label {
+        font-weight: 600;
+        color: #1a4b75;
+        min-width: 100px;
+        flex-shrink: 0;
+    }
+    
+    .infobox-value {
+        color: #333;
+    }
+    
+    .infobox-section {
+        background: #e8ecef;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        color: #1a4b75;
+        margin: 0 -1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .biografia-section {
+        margin-top: 2rem;
+    }
+    
+    .biografia-section h2 {
+        color: #1a4b75;
+        border-bottom: 2px solid #1a4b75;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .biografia-content {
+        text-align: justify;
+        line-height: 1.8;
+        color: #333;
+        white-space: pre-wrap;
+    }
+    
+    .documents-section {
+        clear: both;
+        margin-top: 2rem;
+    }
+    
+    .documents-section h2 {
+        color: #1a4b75;
+        border-bottom: 2px solid #1a4b75;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .infobox {
+            float: none;
+            margin: 0 auto 1.5rem;
+        }
+    }

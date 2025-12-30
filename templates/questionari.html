@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Qüestionari biogràfic') }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/questionari.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+</head>
+<body>
+  <header class="nav-wrapper">
+    <nav class="nav">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="logo">
+        <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca" height="32">
+      </a>
+      <div class="hamburger" onclick="document.querySelector('.nav ul').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+      <ul>
+        {% if session.get('usuari') %}
+          <li><a href="{{ url_for('pagina_personal.pagina_personal', usuari_login=session['usuari']) }}">{{ _('Tornar a la meva fitxa') }}</a></li>
+          <li><a href="#">{{ _('Tancar sessió') }}</a></li>
+        {% else %}
+          <li><a href="{{ url_for('login.login') }}">{{ _('Login') }}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="centrat">{{ _('Qüestionari biogràfic') }}</h1>
+
+    <form method="POST">
+
+      <div class="col-esquerra">
+        <h2>{{ _('Dades familiars') }}</h2>
+
+        <label for="pare_nom">{{ _('Nom del pare:') }}</label>
+        <input type="text" name="pare_nom" class="campo-largo" value="{{ perfil.pare_nom or '' }}">
+
+        <label for="mare_nom">{{ _('Nom de la mare:') }}</label>
+        <input type="text" name="mare_nom" class="campo-largo" value="{{ perfil.mare_nom or '' }}">
+
+        <label for="germans">{{ _('Germans (noms o número):') }}</label>
+        <input type="text" name="germans" class="campo-largo" value="{{ perfil.germans or '' }}">
+
+        <label for="parella">{{ _('Parella (si escau):') }}</label>
+        <input type="text" name="parella" class="campo-largo" value="{{ perfil.parella or '' }}">
+
+        <label for="lloc_neixement">Lloc de naixement:</label>
+        <input type="text" name="lloc_neixement" class="campo-largo" value="{{ perfil.lloc_neixement or '' }}">
+
+        <label for="data_neixement">Data de naixement:</label>
+        <input type="text" name="data_neixement" class="campo-largo" value="{{ perfil.data_neixement or '' }}">
+
+
+        <label for="fills">{{ _('Fills:') }}</label>
+        <input type="text" name="fills" class="campo-largo" value="{{ perfil.fills or '' }}">
+
+        <h2>{{ _('Migracions') }}</h2>
+        <label for="llocs_residencia">{{ _('Llocs de residència (amb anys):') }}</label>
+        <textarea name="llocs_residencia">{{ perfil.llocs_residencia or '' }}</textarea>
+
+        <h2>{{ _('Salut') }}</h2>
+        <label for="salut">{{ _('Problemes de salut rellevants:') }}</label>
+        <textarea name="salut">{{ perfil.salut or '' }}</textarea>
+      </div>
+
+      <div class="col-dreta">
+        <h2>{{ _('Moments significatius') }}</h2>
+        <label for="moments">{{ _('Moments clau de la vida:') }}</label>
+        <textarea name="moments">{{ perfil.moments or '' }}</textarea>
+
+        <h2>{{ _('Aficions') }}</h2>
+        <label for="aficions">{{ _('Aficions personals:') }}</label>
+        <textarea name="aficions">{{ perfil.aficions or '' }}</textarea>
+
+        <h2>{{ _('Valors') }}</h2>
+        <label for="valors">{{ _('Valors que et defineixen:') }}</label>
+        <textarea name="valors">{{ perfil.valors or '' }}</textarea>
+      </div>
+
+      <div class="botons-final">
+        <label class="checkbox-etica">
+          <input type="checkbox" name="accepta" required>
+          <span class="checkmark"></span> {{ _('Accepto les condicions d\'ús') }}
+        </label>
+
+        <button type="submit">{{ _('Desar qüestionari') }}</button>
+      </div>
+
+    </form>
+  </main>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-missatges">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+</body>
+</html>

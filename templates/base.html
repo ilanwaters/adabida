@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}" dir="{{ 'rtl' if is_rtl else 'ltr' }}">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titol %}Projecte Abadia{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_abadia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navegacio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pestanyes.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contenidors.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icona_info.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  {% block css %}{% endblock %}
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon_round.png') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon_round.ico') }}">
+  
+  <style>
+    .icona-missatges {
+      position: relative;
+      font-size: 1.5rem;
+      text-decoration: none;
+      margin: 0 1rem;
+      display: inline-block;
+    }
+    
+    .badge-notificacions {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: #d32f2f;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      min-width: 18px;
+      text-align: center;
+    }
+    
+    .icona-missatges:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body data-usuari="{{ session.get('usuari') or '' }}">
+  <header class="nav-wrapper">
+    <nav class="nav">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="logo">
+        <img src="{{ url_for('static', filename='img/bioteca_logo.png') }}" alt="Bioteca" height="32">
+      </a>
+<div class="hamburger" onclick="toggleMenu()">
+  <span></span><span></span><span></span>
+</div>
+   {% if session['usuari'] %}
+ <!-- VERSIÓ AMB PUNT MÉS GRAN -->
+  
+
+{% if session['usuari'] %}
+   <div class="usuari-connectat">
+    <a class="nom-usuari" href="#">{{ session['usuari'] }}</a>
+    {% if current_user.is_authenticated and current_user.nivell_usuari %}
+      <span class="punt-nivell punt-nivell-{{ current_user.nivell_usuari }}" 
+            data-tooltip="{{ nivell_text.get(current_user.nivell_usuari, 'Usuari') }}"></span>
+    {% else %}
+      <span class="punt-verd"></span>
+    {% endif %}
+  </div>
+{% endif %}
+        <a href="{{ url_for('missatges.missatgeria') }}" class="icona-missatges" title="{{ _('Missatges') }}">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="none">
+    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+  </svg>
+  {% if missatges_nous > 0 %}
+    <span class="badge-notificacions">{{ missatges_nous }}</span>
+  {% endif %}
+</a>
+       
+
+ <!-- Botó compartir -->
+        <button onclick="compartirPagina()" class="icona-missatges" style="background: none; border: none; cursor: pointer; padding: 0;" title="{{ _('Compartir') }}">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="none">
+    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+  </svg>
+</button>
+      {% endif %}
+   {% if session.get('es_admin') %}
+  <li><a href="{{ url_for('admin.pagina_admin') }}">THE OFFICE</a></li>
+{% endif %}
+<ul> 
+    
+
+  {% if not request.path.startswith('/exposicio/') %}
+  
+    {% if not amaga_nav and request.endpoint not in ['admin.pagina_admin', 'repositori.consulta_repositori'] %}
+      <li><a href="{{ url_for('repositori.consulta_repositori') }}">{{ _('Arxiu') }}</a></li>
+    {% endif %}
+
+
+    {% if session.get('usuari') %}
+      <li><a href="{{ url_for('login.logout') }}">{{ _('Tancar sessió') }}</a></li>
+    {% endif %}
+
+  {% if mostra_boto_exposicions %}
+    <li>
+      <a href="{{ url_for('inici.inici_pagina') }}#galeria-exposicions">
+        {{ _('Torna a la Sala d\'exposicions') }}
+      </a>
+    </li>
+  {% endif %}
+  {% endif %}
+
+  <li class="menu-idioma">
+    <a href="#"><img src="{{ url_for('static', filename='img/idiomas.png') }}" alt="Idiomes"></a>
+    <ul class="submenu">
+      <li><a href="{{ url_for('inici.set_language', idioma='ca') }}">Català</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='es') }}">Español</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='eu') }}">Euskara</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='en') }}">English</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='fr') }}">Français</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='ru') }}">Русский</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='de') }}">Deutsch</a></li>
+      <li><a href="{{ url_for('inici.set_language', idioma='uk') }}">Українська</a></li>
+    </ul>
+  </li>
+</ul>
+</nav>
+  </header>
+{% block contingut %}
+<div class="page-container">
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+  <footer>
+    <div class="footer-legal">
+      <a href="{{ url_for('legal.avis_legal') }}">Avís Legal</a> |
+      <a href="{{ url_for('legal.politica_privadesa') }}">Política de Privacitat</a> |
+      <a href="{{ url_for('legal.termes_condicions') }}">Termes i Condicions</a>
+    </div>
+    <p>&copy; 2025 Adabida - Arxiu Digital de Memòria Oral</p>
+  </footer>
+
+
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+
+</body>
+</html>

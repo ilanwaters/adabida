@@ -1,0 +1,56 @@
+.contenidor-inici {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+}
+
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* 3 columnes horitzontals */
+  gap: 30px;
+  justify-items: center;
+  margin: 40px auto;
+  max-width: 900px;
+}
+
+.tiles-grid a svg {
+  width: 250px;   /* la mida que vols */
+  height: 350px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.tiles-grid a svg:hover {
+  transform: scale(1.05);
+}
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, auto); /* 3 columnes segons mida de tile */
+  gap: 30px;
+  justify-content: center;  /* centra tota la graella */
+}
+
+.tiles-grid a svg {
+  width: 350px;
+  height: 350px;
+}
+
+.tile {
+  background: #f4f4f4;            /* gris clar neutre */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.tile:hover {
+  background: linear-gradient(135deg, #f4f4f4, #e0f7f5); /* toc turquesa molt subtil */
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.grad-top { stop-color: #f4f4f4; }      /* gris clar a dalt */
+.grad-mid { stop-color: #0e9f94; }      /* turquesa fosc */
+.grad-light { stop-color: #ffffff; stop-opacity: 0.6; }
+.grad-bottom { stop-color: #14d8ce; }   /* turquesa viu */

@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Relacions de {{ membre.nom }} {{ membre.primer_cognom }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gestionar_relacions.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+    
+    <!-- Navegació -->
+    <div class="nav-tornar">
+        <a href="{{ url_for('membres.veure', membre_id=membre.id) }}">
+            ← {{ _('Tornar al perfil de') }} {{ membre.nom }}
+        </a>
+    </div>
+
+    <!-- Capçalera -->
+    <div class="capçalera-pagina">
+        <h1>{{ _('Gestió de Relacions Familiars') }}</h1>
+        <h2>{{ membre.nom }} {{ membre.primer_cognom }} {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}</h2>
+        <p class="text-muted-custom">{{ familia.nom }}</p>
+    </div>
+
+    <div class="separador"></div>
+
+    <!-- Grid de 2 columnes -->
+    <div class="grid-2-cols">
+        
+        <!-- Pares -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-primary">
+                 {{ _('Pares') }}
+            </div>
+            
+            <h4 style="margin-top: 1rem;">{{ _('Pare') }}</h4>
+            {% if membre.pare %}
+                <div class="alerta-info">
+                    <a href="{{ url_for('membres.veure', membre_id=membre.pare.id) }}">
+                        <strong>{{ membre.pare.nom }} {{ membre.pare.primer_cognom }}</strong>
+                    </a>
+                    {% if membre.pare.data_naixement %}
+                        <br><span class="text-petit">{{ _('Nascut') }}: {{ membre.pare.data_naixement.strftime('%d/%m/%Y') }}</span>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p class="text-muted-custom">{{ _('No especificat') }}</p>
+                <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}?relacio=pare&membre_id={{ membre.id }}" 
+                   class="btn-custom btn-outline-custom">
+                   + {{ _('Afegir Pare') }}
+                </a>
+            {% endif %}
+
+            <h4 style="margin-top: 1.5rem;">{{ _('Mare') }}</h4>
+            {% if membre.mare %}
+                <div class="alerta-info">
+                    <a href="{{ url_for('membres.veure', membre_id=membre.mare.id) }}">
+                        <strong>{{ membre.mare.nom }} {{ membre.mare.primer_cognom }}</strong>
+                    </a>
+                    {% if membre.mare.data_naixement %}
+                        <br><span class="text-petit">{{ _('Nascuda') }}: {{ membre.mare.data_naixement.strftime('%d/%m/%Y') }}</span>
+                    {% endif %}
+                </div>
+            {% else %}
+                <p class="text-muted-custom">{{ _('No especificat') }}</p>
+                <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}?relacio=mare&membre_id={{ membre.id }}" 
+                   class="btn-custom btn-outline-custom">
+                   + {{ _('Afegir Mare') }}
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Matrimonis -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-danger">
+             {{ _('Matrimonis') }} ({{ matrimonis|length }})
+            </div>
+            
+            {% if matrimonis %}
+                {% for matrimoni in matrimonis %}
+                    {% set conjuge = matrimoni.membre_2 if matrimoni.membre_1_id == membre.id else matrimoni.membre_1 %}
+                    <div class="alerta-{% if matrimoni.estat == 'actiu' %}success{% elif matrimoni.estat == 'divorciat' %}warning{% else %}info{% endif %}" style="margin-bottom: 1rem;">
+                        <a href="{{ url_for('membres.veure', membre_id=conjuge.id) }}">
+                            <strong>{{ conjuge.nom }} {{ conjuge.primer_cognom }}</strong>
+                        </a>
+                        <br>
+                        {% if matrimoni.data_casament %}
+                            <span class="text-petit">🗓 {{ _('Casament') }}: {{ matrimoni.data_casament.strftime('%d/%m/%Y') }}</span><br>
+                        {% endif %}
+                        {% if matrimoni.data_fi %}
+                            <span class="text-petit">{{ _('Fi') }}: {{ matrimoni.data_fi.strftime('%d/%m/%Y') }}</span><br>
+                        {% endif %}
+                        <span class="badge-custom 
+                            {% if matrimoni.estat == 'actiu' %}badge-actiu
+                            {% elif matrimoni.estat == 'divorciat' %}badge-provisional
+                            {% else %}badge-membre{% endif %}">
+                            {{ _(matrimoni.estat|capitalize) }}
+                        </span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted-custom">{{ _('No hi ha matrimonis registrats') }}</p>
+            {% endif %}
+            <button class="btn-custom btn-outline-custom" onclick="obrirModalMatrimoni()">
+                {{ _('Afegir Matrimoni') }}
+            </button>
+        </div>
+
+        <!-- Germans -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-success">
+                {{ _('Germans/es') }} ({{ germans|length }})
+            </div>
+            
+            {% if germans %}
+                <ul class="llista-elegant">
+                    {% for germa in germans %}
+                    <li>
+                        <a href="{{ url_for('membres.veure', membre_id=germa.id) }}">
+                            <strong>{{ germa.nom }} {{ germa.primer_cognom }}</strong>
+                        </a>
+                        {% if germa.data_naixement %}
+                            <br><span class="text-petit">{{ germa.data_naixement.strftime('%d/%m/%Y') }}</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted-custom">{{ _('No hi ha germans registrats') }}</p>
+            {% endif %}
+            <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}?relacio=germa&membre_id={{ membre.id }}" 
+               class="btn-custom btn-outline-custom" style="margin-top: 1rem;">
+                {{ _('Afegir Germà/na') }}
+            </a>
+        </div>
+
+        <!-- Fills -->
+        <div class="card-visualitzacio">
+            <div class="card-header-custom card-header-warning">
+                {{ _('Fills/es') }} ({{ fills|length }})
+            </div>
+            
+            {% if fills %}
+                <ul class="llista-elegant">
+                    {% for fill in fills %}
+                    <li>
+                        <a href="{{ url_for('membres.veure', membre_id=fill.id) }}">
+                            <strong>{{ fill.nom }} {{ fill.primer_cognom }}</strong>
+                        </a>
+                        {% if fill.data_naixement %}
+                            <br><span class="text-petit">{{ fill.data_naixement.strftime('%d/%m/%Y') }}</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted-custom">{{ _('No hi ha fills registrats') }}</p>
+            {% endif %}
+            <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}?relacio=fill&membre_id={{ membre.id }}" 
+               class="btn-custom btn-outline-custom">
+                {{ _('Afegir Fill/a') }}
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Explicació -->
+    <div class="card-visualitzacio" style="margin-top: 2rem;">
+        <h4>{{ _('Com funciona el sistema de relacions?') }}</h4>
+        <ul style="line-height: 1.8;">
+            <li><strong>{{ _('Pares') }}:</strong> {{ _('Pots afegir el pare i la mare d\'aquesta persona') }}</li>
+            <li><strong>{{ _('Germans') }}:</strong> {{ _('Es calculen automàticament! Si dues persones comparteixen el mateix pare o la mateixa mare, són germans') }}</li>
+            <li><strong>{{ _('Fills') }}:</strong> {{ _('Afegeix fills/es especificant que aquesta persona és el seu pare o mare') }}</li>
+            <li><strong>{{ _('Matrimonis') }}:</strong> {{ _('Pots registrar múltiples matrimonis amb dates i estat (actiu/divorciat/vidu)') }}</li>
+        </ul>
+    </div>
+
+</div>
+
+
+<!-- MODAL AFEGIR MATRIMONI -->
+<div id="modalMatrimoni" class="modal-overlay" onclick="tancarModalSiFora(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3> {{ _('Afegir Matrimoni') }}</h3>
+            <button type="button" class="btn-tancar" onclick="tancarModalMatrimoni()">&times;</button>
+        </div>
+        
+        <form method="POST" action="{{ url_for('membres.afegir_matrimoni', membre_id=membre.id) }}">
+            <div class="form-group">
+                <label for="conjuge_id">{{ _('Cònjuge') }} <span style="color: red;">*</span></label>
+                <select id="conjuge_id" name="conjuge_id" required>
+                    <option value="">-- {{ _('Selecciona un membre') }} --</option>
+                    {% for m in tots_membres %}
+                        {% if m.id != membre.id %}
+                        <option value="{{ m.id }}">
+                            {{ m.nom }} {{ m.primer_cognom }} 
+                            {% if m.data_naixement %}({{ m.data_naixement.strftime('%Y') }}){% endif %}
+                        </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <small>{{ _('Selecciona el cònjuge d\'aquest matrimoni') }}</small>
+                <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}" 
+                   style="display: inline-block; margin-top: 0.5rem; color: #1a4b75; text-decoration: underline; font-size: 0.9rem;">
+                    {{ _('Afegir nou membre') }}
+                </a>
+            </div>
+            
+            <div class="form-group">
+                <label for="data_casament">{{ _('Data de casament') }}</label>
+                <input type="date" id="data_casament" name="data_casament">
+                <small>{{ _('Opcional - Deixa en blanc si no es coneix') }}</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="data_fi">{{ _('Data de fi del matrimoni') }}</label>
+                <input type="date" id="data_fi" name="data_fi">
+                <small>{{ _('Només si el matrimoni ha acabat (divorci o defunció)') }}</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="estat">{{ _('Estat') }} <span style="color: red;">*</span></label>
+                <select id="estat" name="estat" required>
+                    <option value="actiu">{{ _('Actiu') }}</option>
+                    <option value="divorciat">{{ _('Divorciat') }}</option>
+                    <option value="vidu">{{ _('Vidu/Vídua') }}</option>
+                </select>
+            </div>
+            
+            <div class="btn-group-modal">
+                <button type="button" class="btn-cancel-modal" onclick="tancarModalMatrimoni()">{{ _('Cancel·lar') }}</button>
+                <button type="submit" class="btn-submit-modal">{{ _('Afegir Matrimoni') }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function obrirModalMatrimoni() {
+    document.getElementById('modalMatrimoni').classList.add('actiu');
+    document.body.style.overflow = 'hidden'; // Evita scroll del fons
+}
+
+function tancarModalMatrimoni() {
+    document.getElementById('modalMatrimoni').classList.remove('actiu');
+    document.body.style.overflow = 'auto';
+}
+
+function tancarModalSiFora(event) {
+    if (event.target.id === 'modalMatrimoni') {
+        tancarModalMatrimoni();
+    }
+}
+
+// Tancar amb tecla ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        tancarModalMatrimoni();
+    }
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

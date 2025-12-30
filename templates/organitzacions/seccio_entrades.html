@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Entrades') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/entrades_grid.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('organitzacions.llistat') }}">{{ _('Organitzacions') }}</a> › 
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}">{{ organitzacio.nom }}</a> › 
+      <span>{{ _('Entrades') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-folder-open"></i> {{ _('Entrades de') }} {{ organitzacio.nom }}</h1>
+      <p class="subtitol">{{ _('Testimonis i històries compartides amb aquesta organització') }}</p>
+    </div>
+
+    <!-- Filtres i cerca DESPLEGABLE -->
+    <div class="controls-entrades">
+      <div class="targeta formulari-cerca" style="border: 3px solid blue;">
+        <!-- Cerca principal sempre visible -->
+        <div class="cerca-principal" style="background: lightblue; padding: 10px;">
+          <input type="text" id="cerca-entrades" placeholder="{{ _('Cerca per títol, autor o contingut...') }}" style="width: 80%;">
+          <i class="fas fa-search"></i>
+        </div>
+
+        <!-- Filtres avançats ocults -->
+        <div id="filtres-extres" style="display: none; background: lightyellow; padding: 10px;">
+          <div class="fila-camps" style="margin: 10px 0;">
+            <select id="filtre-any" style="margin-right: 10px;">
+              <option value="">{{ _('Tots els anys') }}</option>
+              {% for any in anys_disponibles %}
+              <option value="{{ any }}">{{ any }}</option>
+              {% endfor %}
+            </select>
+            
+            <select id="filtre-tipus">
+              <option value="">{{ _('Tots els tipus') }}</option>
+              <option value="audio">{{ _('Àudio') }}</option>
+              <option value="video">{{ _('Vídeo') }}</option>
+              <option value="imatge">{{ _('Imatges') }}</option>
+              <option value="text">{{ _('Text') }}</option>
+            </select>
+          </div>
+
+          <div class="fila-camps" style="margin: 10px 0;">
+            <input type="text" id="filtre-autor" placeholder="{{ _('Filtrar per autor...') }}" style="margin-right: 10px;">
+            <input type="text" id="filtre-tema" placeholder="{{ _('Filtrar per tema...') }}">
+          </div>
+        </div>
+
+        <!-- Línia final amb toggle i controls de vista -->
+        <div class="linia-final-cerca" style="background: lightgreen; padding: 10px; display: flex; justify-content: space-between;">
+          <span id="toggle-filtres" class="boto-textual" style="cursor: pointer; color: blue; font-weight: bold;">{{ _('AMPLIAR FILTRES') }}</span>
+          
+          <div class="vista-controls">
+            <button id="vista-grid" class="boto-vista actiu" title="{{ _('Vista en graella') }}">
+              <i class="fas fa-th"></i>
+            </button>
+            <button id="vista-llista" class="boto-vista" title="{{ _('Vista en llista') }}">
+              <i class="fas fa-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contingut entrades -->
+    <div class="contingut-seccio">
+      {% if entrades %}
+        
+        <!-- Resum -->
+        <div class="resum-entrades">
+          <p>{{ _('Mostrant') }} <span id="entrades-visibles">{{ entrades|length }}</span> {{ _('de') }} {{ entrades|length }} {{ _('entrades') }}</p>
+        </div>
+
+        <!-- Grid d'entrades simplificat -->
+        <div id="grid-entrades" class="llista-entrades">
+          {% for entrada in entrades %}
+          <div class="caixa-entrada clicable" 
+               onclick='obreModalSimple({{ entrada.id }})'
+               data-any="{{ entrada.data_creacio.year }}"
+               data-tipus="{{ entrada.tipus_fitxer }}"
+               data-cerca="{{ entrada.titol|lower }} {{ entrada.contingut|lower if entrada.contingut }} {{ entrada.usuari.nom|lower }}">
+               
+              <div class="miniatura">
+                  {% if entrada.tipus_fitxer in ['jpg', 'jpeg', 'png', 'webp'] %}
+                      <img src="{{ url_for('static', filename='umberto/mini/' + entrada.nom_fitxer) }}" 
+                           alt="{{ entrada.titol }}" loading="lazy">
+                  {% elif entrada.tipus_fitxer in ['mp4', 'webm', 'avi'] %}
+                      <img src="/static/icons/video.png" alt="Vídeo">
+                  {% elif entrada.tipus_fitxer in ['mp3', 'wav', 'ogg'] %}
+                      <img src="/static/icons/audio.png" alt="Àudio">
+                  {% else %}
+                      <img src="/static/icons/document.png" alt="Document">
+                  {% endif %}
+              </div>
+              
+              <div class="contingut-entrada">
+                  <h3>{{ entrada.titol or entrada.tema }}</h3>
+                  <p>
+                      {% if entrada.any_text %}<strong>{{ entrada.any_text }}</strong>{% endif %}
+                      {% if entrada.tema %} – {{ entrada.tema }}{% endif %}
+                  </p>
+                  {% if entrada.contingut %}
+                      <p class="resum">{{ entrada.contingut[:140] }}...</p>
+                  {% endif %}
+                  <p class="autor" style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
+                      De: {{ entrada.usuari.nom }} ({{ entrada.data_creacio.strftime('%d/%m/%Y') }})
+                  </p>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Missatge sense resultats -->
+        <div id="sense-resultats" class="missatge-buit" style="display: none;">
+          <i class="fas fa-search"></i>
+          <h3>{{ _('No s\'han trobat entrades') }}</h3>
+          <p>{{ _('Prova a canviar els filtres de cerca') }}</p>
+        </div>
+
+      {% else %}
+        <!-- Estat buit -->
+        <div class="missatge-buit">
+          <i class="fas fa-folder-open"></i>
+          <h3>{{ _('Encara no hi ha entrades') }}</h3>
+          <p>{{ _('Aquesta organització encara no té entrades compartides públicament.') }}</p>
+          
+          {% if es_membre %}
+          <div class="accions-buit">
+            <a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" class="boto boto-primari">
+              <i class="fas fa-plus"></i> {{ _('Crear primera entrada') }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- Incloure el modal existent -->
+{% include 'components/modal_entrada.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+// Funció simplificada per obrir modals d'entrades d'organitzacions
+function obreModalSimple(entradaId) {
+  fetch(`/organitzacions/api/entrada/${entradaId}`)
+    .then(res => res.json())
+    .then(data => {
+      window.entradaIdActual = data.id;
+
+      document.getElementById('modal-titol').innerText = data.titol || "—";
+      document.getElementById('modal-tema').innerText = data.tema || "";
+
+      const any = data.any?.trim();
+      const ubicacio = data.ubicacio?.trim();
+      const separador = (ubicacio && any) ? ', ' : '';
+      document.getElementById("modal-ubicacio-any").textContent = `${ubicacio || ''}${separador}${any || ''}`;
+
+      const dataSpan = document.getElementById('modal-data');
+      if (dataSpan) dataSpan.innerText = data.data_creacio || "";
+
+      const autorSpan = document.getElementById('modal-autor');
+      if (autorSpan && data.usuari_nom && data.usuari_login) {
+        autorSpan.innerHTML = `<a href="/perfil/${data.usuari_login}" class="enllac-perfil" target="_blank">${data.usuari_nom}</a>`;
+      }
+
+      document.getElementById('modal-contingut').innerText = data.contingut || "";
+
+      // Gestionar arxius
+      let arxiusDiv = document.getElementById('modal-arxius');
+      arxiusDiv.innerHTML = "";
+
+      data.arxius.forEach(fitxer => {
+        const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
+        const link = document.createElement("a");
+        link.href = ruta;
+        link.target = "_blank";
+
+        if (fitxer.tipus.match(/(jpg|png|jpeg|webp)/i)) {
+          link.setAttribute("data-lightbox", "galeria-" + data.id);
+          link.setAttribute("data-title", fitxer.nom_fitxer);
+
+          const img = document.createElement("img");
+          img.src = ruta;
+          img.style.maxWidth = "100px";
+          img.style.margin = "10px";
+          link.appendChild(img);
+        } else {
+          const icona = document.createElement("img");
+          icona.src = `/static/icons/${fitxer.tipus}.png`;
+          icona.title = fitxer.nom_fitxer;
+          icona.style.maxWidth = "40px";
+          icona.style.margin = "10px";
+          link.appendChild(icona);
+        }
+
+        arxiusDiv.appendChild(link);
+      });
+
+      // Imatge principal
+      const principal = data.arxius.find(f => f.tipus.match(/(jpg|png|jpeg|webp)/i));
+      if (principal) {
+        const url = `/umberto/${data.usuari_login}/${data.id}/${principal.nom_fitxer}`;
+        const img = document.getElementById('modal-img');
+        img.src = url;
+        img.style.maxWidth = "400px";
+        img.style.height = "auto";
+        document.getElementById('modal-enllac').href = url;
+      }
+
+      // Informació de la imatge
+      const titolImg = data.titol_imatge?.trim();
+      const anyImg = data.any_imatge?.trim();
+      const ubicacioImg = data.ubicacio_imatge?.trim();
+      const descripcioImg = data.descripcio_imatge?.trim();
+      const referenciaImg = data.referencia?.trim();
+
+      const infoVisible = titolImg || anyImg || ubicacioImg || descripcioImg || referenciaImg;
+
+      if (infoVisible) {
+        document.getElementById("modal-info-imatge").style.display = "block";
+        document.getElementById("modal-titol-imatge").textContent = titolImg || "—";
+        document.getElementById("modal-descripcio-imatge").textContent = descripcioImg || "—";
+        document.getElementById("modal-referencia-imatge").textContent = referenciaImg || "—";
+
+        const sep = (ubicacioImg && anyImg) ? ", " : "";
+        document.getElementById("modal-ubicacio-any-imatge").textContent = `${ubicacioImg || ''}${sep}${anyImg || ''}` || "—";
+      } else {
+        document.getElementById("modal-info-imatge").style.display = "none";
+      }
+
+      // Gestionar botons guardar/eliminar
+      const botoGuardar = document.getElementById("boto-guardar");
+      const botoEliminar = document.getElementById("boto-eliminar-guardada");
+
+      if (botoGuardar) {
+        botoGuardar.disabled = false;
+        botoGuardar.textContent = "Guardar";
+      }
+
+      if (data.ja_guardada) {
+        if (botoGuardar) botoGuardar.style.display = "none";
+        if (botoEliminar) botoEliminar.style.display = "inline-block";
+      } else {
+        if (botoGuardar) botoGuardar.style.display = "inline-block";
+        if (botoEliminar) botoEliminar.style.display = "none";
+      }
+
+      document.getElementById("modal-entrada").style.display = "flex";
+    })
+    .catch(error => {
+      console.error('Error carregant entrada:', error);
+      alert('Error carregant la entrada');
+    });
+}
+
+// JavaScript per filtres i desplegament
+document.addEventListener('DOMContentLoaded', function() {
+  // Gestió del desplegament de filtres
+  const toggleFiltres = document.getElementById('toggle-filtres');
+  const filtresExtres = document.getElementById('filtres-extres');
+  let mostratFiltres = false;
+
+  if (toggleFiltres && filtresExtres) {
+    toggleFiltres.addEventListener('click', function() {
+      mostratFiltres = !mostratFiltres;
+      filtresExtres.style.display = mostratFiltres ? 'block' : 'none';
+      toggleFiltres.textContent = mostratFiltres 
+        ? 'Reduir filtres'
+        : 'Ampliar filtres';
+    });
+  }
+
+  // Elements de filtres
+  const cercaInput = document.getElementById('cerca-entrades');
+  const filtreAny = document.getElementById('filtre-any');
+  const filtreTipus = document.getElementById('filtre-tipus');
+  const filtreAutor = document.getElementById('filtre-autor');
+  const filtreTema = document.getElementById('filtre-tema');
+  
+  function filtrarEntrades() {
+    const cerca = cercaInput ? cercaInput.value.toLowerCase() : '';
+    const any = filtreAny ? filtreAny.value : '';
+    const tipus = filtreTipus ? filtreTipus.value : '';
+    const autor = filtreAutor ? filtreAutor.value.toLowerCase() : '';
+    const tema = filtreTema ? filtreTema.value.toLowerCase() : '';
+    
+    const entrades = document.querySelectorAll('.caixa-entrada');
+    let visibles = 0;
+    
+    entrades.forEach(entrada => {
+      const textCerca = entrada.dataset.cerca || entrada.textContent.toLowerCase();
+      const anyEntrada = entrada.dataset.any || '';
+      const tipusEntrada = entrada.dataset.tipus || '';
+      
+      const compleixCerca = !cerca || textCerca.includes(cerca);
+      const compleixAny = !any || anyEntrada === any;
+      const compleixTipus = !tipus || tipusEntrada.includes(tipus);
+      const compleixAutor = !autor || textCerca.includes(autor);
+      const compleixTema = !tema || textCerca.includes(tema);
+      
+      if (compleixCerca && compleixAny && compleixTipus && compleixAutor && compleixTema) {
+        entrada.style.display = 'block';
+        visibles++;
+      } else {
+        entrada.style.display = 'none';
+      }
+    });
+    
+    const contadorVisibles = document.getElementById('entrades-visibles');
+    if (contadorVisibles) {
+      contadorVisibles.textContent = visibles;
+    }
+    
+    const senseResultats = document.getElementById('sense-resultats');
+    if (senseResultats) {
+      senseResultats.style.display = visibles === 0 ? 'block' : 'none';
+    }
+  }
+  
+  // Event listeners amb verificació d'existència
+  if (cercaInput) cercaInput.addEventListener('input', filtrarEntrades);
+  if (filtreAny) filtreAny.addEventListener('change', filtrarEntrades);
+  if (filtreTipus) filtreTipus.addEventListener('change', filtrarEntrades);
+  if (filtreAutor) filtreAutor.addEventListener('input', filtrarEntrades);
+  if (filtreTema) filtreTema.addEventListener('input', filtrarEntrades);
+});
+</script>
+{% endblock %}

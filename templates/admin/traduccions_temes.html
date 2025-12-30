@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block titol %}Traduccions de Temes{% endblock %}
+
+{% block css %}
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+{% endblock %}
+
+{% block contingut %}
+<div class="container-traduccions">
+    <div class="header-traduccions">
+        <h1>📝 Traduccions de Temes</h1>
+        <p>Total temes: {{ temes_data|length }}</p>
+    </div>
+
+    {% for item in temes_data %}
+    <div class="tema-card">
+        <div class="tema-header" onclick="toggleForm({{ item.tema.id }})">
+            <div class="tema-info">
+                <h3>
+                    {{ item.tema.nom }}
+                    {% if item.traduccions_count == 0 %}
+                        <span class="tema-badge badge-pendent">🔴 Sense traduccions</span>
+                    {% elif item.traduccions_count < item.total_idiomes %}
+                        <span class="tema-badge badge-parcial">🟡 {{ item.traduccions_count }}/{{ item.total_idiomes }}</span>
+                    {% else %}
+                        <span class="tema-badge badge-complet">✅ Complet</span>
+                    {% endif %}
+                </h3>
+            </div>
+            <button class="btn-expandir" type="button">
+                {% if item.traduccions_count == 0 %}
+                    + Afegir traduccions
+                {% else %}
+                    ✏️ Editar
+                {% endif %}
+            </button>
+        </div>
+
+        <div class="tema-form" id="form-{{ item.tema.id }}">
+            <form method="POST" action="{{ url_for('admin_traduccions.guardar_traduccions', tema_id=item.tema.id) }}">
+                <div class="form-grid">
+                    {% for idioma in idiomes %}
+                    <div class="form-group">
+                        <label for="trad_{{ idioma }}_{{ item.tema.id }}">{{ idioma.upper() }}</label>
+                        <input 
+                            type="text" 
+                            id="trad_{{ idioma }}_{{ item.tema.id }}"
+                            name="trad_{{ idioma }}"
+                            value="{% for trad in item.tema.traduccions %}{% if trad.idioma == idioma %}{{ trad.nom }}{% endif %}{% endfor %}"
+                            placeholder="Traducció en {{ idioma }}"
+                        >
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn-traduccions btn-guardar">💾 Guardar</button>
+                <button type="button" class="btn-traduccions btn-cancelar" onclick="toggleForm({{ item.tema.id }})">✕ Cancel·lar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function toggleForm(temaId) {
+    const form = document.getElementById('form-' + temaId);
+    form.classList.toggle('obert');
+}
+</script>
+{% endblock %}

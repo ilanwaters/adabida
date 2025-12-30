@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block contingut %}
+
+<h2>{{ _('Ja tens converses sobre el tema') }}: <strong>{{ tema.nom }}</strong></h2>
+
+<p>{{ _('Vols continuar una conversa existent o començar una de nova?') }}</p>
+
+<ul>
+  {% for ent in entrevistes %}
+    <li>
+      <a href="{{ url_for('ia_lleugera.entrevista_ia', perfil_id=perfil.id, tema=tema.nom) }}?numero={{ ent.numero }}">
+        {{ tema.nom }} {{ ent.numero }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<form method="post" action="{{ url_for('ia_lleugera.nova_entrevista') }}">
+  <input type="hidden" name="tema_id" value="{{ tema.id }}">
+  <button type="submit">{{ _('Crear nova conversa') }}</button>
+</form>
+
+{% endblock %}

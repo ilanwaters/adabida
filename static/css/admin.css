@@ -1,0 +1,153 @@
+.container-traduccions {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.header-traduccions {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1a4b75;
+}
+
+.header-traduccions h1 {
+    color: #1a4b75;
+    margin: 0;
+}
+
+.tema-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+.tema-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.tema-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tema-info h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.tema-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.badge-complet {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-parcial {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badge-pendent {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.tema-form {
+    display: none;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.tema-form.obert {
+    display: block;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1a4b75;
+}
+
+.btn-traduccions {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-guardar {
+    background: #28a745;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background: #218838;
+}
+
+.btn-cancelar {
+    background: #6c757d;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-cancelar:hover {
+    background: #5a6268;
+}
+
+.btn-expandir {
+    background: #1a4b75;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.btn-expandir:hover {
+    background: #143a5c;
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,126 @@
+{# Macro reutilitzable per targetes de membres (famílies i organitzacions) #}
+
+{% macro targeta_membre(membre, mode='public') %}
+{# 
+  Paràmetres:
+  - membre: objecte MembreFamilia o equivalent
+  - mode: 'public' (visitants) o 'admin' (administradors)
+#}
+
+<div class="caixa-membre">
+  
+  <!-- Foto -->
+<div class="foto-membre">
+  {% if membre.usuari and membre.usuari.perfil and membre.usuari.perfil.imatge_perfil %}
+    {# Membre vinculat amb usuari Adabida - foto obligatòria #}
+    <img src="{{ url_for('static', filename='avatars/' + membre.usuari.perfil.imatge_perfil) }}" 
+         alt="{{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}">
+  {% elif membre.foto %}
+    {# Membre sense usuari però amb foto afegida per admin #}
+    <img src="{{ url_for('static', filename='fotos_membres/' + membre.foto) }}" 
+         alt="{{ membre.nom }} {{ membre.primer_cognom }}">
+  {% else %}
+    {# Placeholder #}
+    <span class="foto-membre-placeholder">👤</span>
+  {% endif %}
+  
+  {% if mode == 'admin' %}
+    <button class="btn-canviar-foto" onclick="canviarFotoMembre({{ membre.id }})">
+      📷
+    </button>
+  {% endif %}
+</div>
+
+  <!-- Contingut -->
+  <div class="contingut-membre">
+    
+    <!-- Nom (amb enllaç si té perfil públic) -->
+    <h3 class="nom-membre">
+      {% if membre.usuari %}
+        {# Membre vinculat - enllaç al seu perfil públic #}
+        <a href="{{ url_for('perfil_public.perfil_public', usuari_login=membre.usuari.nom_login) }}" 
+           style="color: #1a4b75; text-decoration: none;"
+           target="_blank">
+          {{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}
+          {% if membre.usuari.segon_cognom %}{{ membre.usuari.segon_cognom }}{% endif %}
+        </a>
+      {% else %}
+        {# Membre sense usuari - només nom #}
+        {{ membre.nom }} {{ membre.primer_cognom }}
+        {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}
+      {% endif %}
+      
+       
+      {# Badge usuari Adabida #}
+      {% if membre.usuari %}
+        <span class="badge-adabida">{{ _('Usuari Adabida') }}</span>
+      {% endif %}
+    </h3>
+
+    <!-- Dates (OBLIGATORI: any naixement mínim) -->
+
+    <div class="dates-membre">
+      {% if membre.usuari and membre.usuari.data_naixement %}
+        {# Usuari vinculat - data del perfil #}
+        {% if membre.usuari.data_naixement.year %}{{ membre.usuari.data_naixement.year }}{% else %}{{ membre.usuari.data_naixement }}{% endif %}
+        {% if membre.data_defuncio %}
+          - ✝ {% if membre.data_defuncio.year %}{{ membre.data_defuncio.year }}{% else %}{{ membre.data_defuncio }}{% endif %}
+        {% endif %}
+      {% elif membre.data_naixement %}
+        {# Membre sense usuari - data introduïda per admin #}
+        {% if membre.data_naixement.year %}{{ membre.data_naixement.year }}{% else %}{{ membre.data_naixement }}{% endif %}
+        {% if membre.data_defuncio %}
+          - ✝ {% if membre.data_defuncio.year %}{{ membre.data_defuncio.year }}{% else %}{{ membre.data_defuncio }}{% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <!-- Lloc naixement (OPCIONAL) -->
+    {% if membre.usuari %}
+      {# Lloc del perfil usuari #}
+      {% if membre.usuari.municipi_naixement or membre.usuari.pais_naixement %}
+      <div class="lloc-membre">
+         {{ _('Nascut/da a') }}: 
+        {% if membre.usuari.municipi_naixement %}{{ membre.usuari.municipi_naixement }}, {% endif %}
+        {% if membre.usuari.pais_naixement %}{{ membre.usuari.nom_pais_naixement }}{% endif %}
+      </div>
+      {% endif %}
+    {% else %}
+      {# Lloc introduït per admin #}
+      {% if membre.municipi_naixement or membre.pais_naixement %}
+      <div class="lloc-membre">
+   {{ _('Nascut/da a') }}: 
+  {% if membre.municipi_naixement %}{{ membre.nom_municipi_naixement }}, {% endif %}
+  {% if membre.regio_naixement %}{{ membre.nom_regio_naixement }}, {% endif %}
+  {% if membre.pais_naixement %}{{ membre.nom_pais_naixement }}{% endif %}
+</div>
+      {% endif %}
+    {% endif %}
+
+    <!-- Biografia curta (només si mode public) -->
+    {% if mode == 'public' and membre.biografia %}
+    <div class="biografia-membre">
+      {{ membre.biografia[:200] }}{% if membre.biografia|length > 200 %}...{% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Botons admin (només si mode admin) -->
+    {% if mode == 'admin' %}
+    <div class="accions-membre" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <a href="{{ url_for('membres.editar', membre_id=membre.id) }}" 
+         class="btn-custom btn-outline-custom btn-sm">
+        {{ _('Editar') }}
+      </a>
+  
+      
+      <button class="btn-custom btn-outline-custom btn-sm"
+              onclick="toggleVisibilitatMembre({{ membre.id }})">
+        {% if membre.visible_public %} {{ _('Públic') }}{% else %} {{ _('Privat') }}{% endif %}
+      </button>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endmacro %}

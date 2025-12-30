@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% import "components/targeta_membre.html" as targeta %}
+{% block titol %}{{ familia.nom }} - {{ _('Membres') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/familia.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/targetes_membres.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('inici.inici_pagina') }}">{{ _('Inici') }}</a> › 
+      <a href="{{ url_for('familia.veure', url=familia.url) }}">{{ familia.nom }}</a> › 
+      <span>{{ _('Membres') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-users"></i> {{ _('Membres de') }} {{ familia.nom }}</h1>
+      <p class="subtitol">{{ _('Persones que formen part d\'aquesta família') }}</p>
+    </div>
+
+    <!-- Estadístiques membres -->
+    <div class="stats-membres">
+      <div class="targeta">
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-numero">{{ membres|length }}</div>
+            <div class="stat-label">{{ _('Total membres') }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">{{ membres_admins|length if membres_admins else 0 }}</div>
+            <div class="stat-label">{{ _('Administradors') }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">{{ generacions if generacions else '-' }}</div>
+            <div class="stat-label">{{ _('Generacions') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contingut membres -->
+    <div class="contingut-seccio">
+      {% if membres %}
+        
+        <!-- Controls -->
+        <div class="controls-membres">
+          <div class="targeta">
+            <div class="controls-row">
+              <div class="camp-cerca">
+                <input type="text" id="cerca-membres" placeholder="{{ _('Cerca membres per nom...') }}">
+                <i class="fas fa-search"></i>
+              </div>
+              
+              <div class="filtres-group">
+                <select id="filtre-rol">
+                  <option value="">{{ _('Tots els rols') }}</option>
+                  <option value="administrador">{{ _('Administradors') }}</option>
+                  <option value="membre">{{ _('Membres') }}</option>
+                </select>
+                
+                <select id="ordenar-per">
+                  <option value="nom">{{ _('Ordenar per nom') }}</option>
+                  <option value="data_adhesio">{{ _('Per data d\'adhesió') }}</option>
+                  <option value="naixement">{{ _('Per edat') }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de membres -->
+        <!-- Grid de membres -->
+<!-- Grid de membres -->
+<div id="grid-membres" class="grid-membres">
+  {% for membre in membres %}
+    <div data-nom="{{ ((membre.nom or '') + ' ' + (membre.primer_cognom or '') + ' ' + (membre.segon_cognom or ''))|lower }}"
+     data-rol="{{ membre.rol or 'membre' }}"
+     data-data="{{ membre.data_adhesio.timestamp() if membre.data_adhesio else 0 }}">
+      {{ targeta.targeta_membre(membre, mode='public' if not es_admin else 'admin') }}
+    </div>
+  {% endfor %}
+</div>
+
+      {% else %}
+        <!-- Estat buit -->
+        <div class="missatge-buit">
+          <i class="fas fa-users"></i>
+          <h3>{{ _('Encara no hi ha membres') }}</h3>
+          <p>{{ _('Aquesta família encara no té membres registrats.') }}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('familia.veure', url=familia.url) }}" 
+         class="boto_nav">
+        {{ _('Tornar') }}
+      </a>
+      
+      {% if es_admin %}
+      <a href="{{ url_for('administrar.index', familia_id=familia.id) }}" 
+         class="boto_nav">
+        {{ _('Administrar') }}
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal detalls membre -->
+<div id="modal-membre" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalMembre()">&times;</span>
+    <div id="contingut-modal-membre">
+      <!-- Contingut carregat dinàmicament -->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/familia.js') }}"></script>
+{% endblock %}

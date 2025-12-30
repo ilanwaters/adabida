@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('La meva biografia') }} - Adabida{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('pagina_personal.pagina_personal') }}">{{ _('El meu espai') }}</a> › 
+      <span>{{ _('Biografia') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-book"></i> {{ _('La meva biografia') }}</h1>
+      <p class="subtitol">{{ _('La meva història, els meus orígens') }}</p>
+    </div>
+
+    <!-- PART SUPERIOR: TEXT RENDERITZAT (VISOR) -->
+    <div class="bloc-visor">
+      <div class="targeta">
+        <div class="targeta-header">
+          <h3><i class="fas fa-eye"></i> {{ _('Biografia publicada') }}</h3>
+        </div>
+        
+        {% if current_user.biografia %}
+          <div class="contingut-biografia">
+            {{ current_user.biografia | safe }}
+          </div>
+        {% else %}
+          <div class="missatge-buit">
+            <i class="fas fa-pen-fancy" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <p>{{ _('Encara no has escrit la teva biografia.') }}</p>
+            <p class="text-petit">{{ _('Utilitza l\'editor de sota per començar a escriure la teva història.') }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- PART INFERIOR: EDITOR (només si és el propietari) -->
+    <div class="bloc-editor">
+      <div class="targeta">
+        <div class="targeta-header">
+          <h3><i class="fas fa-edit"></i> {{ _('Editar biografia') }}</h3>
+        </div>
+        
+        <form id="form-biografia" method="POST">
+          
+          <!-- Editor TinyMCE -->
+          <textarea id="editor-biografia" name="biografia">{{ current_user.biografia or '' }}</textarea>
+          
+          <!-- Botons d'acció -->
+          <div class="botons-editor">
+            <button type="button" class="boto_nav" onclick="cancelarEdicio()">
+              <i class="fas fa-times"></i> {{ _('Cancel·lar') }}
+            </button>
+            <button type="submit" class="boto boto-primari">
+              <i class="fas fa-save"></i> {{ _('Guardar biografia') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('pagina_personal.pagina_personal') }}" class="boto_nav">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- Component: Modal seleccionar entrada -->
+{% include 'components/modal_seleccionar_entrada.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+<!-- TinyMCE CDN -->
+<script src="{{ url_for('static', filename='js/tinymce/tinymce.min.js') }}"></script>
+
+<script>
+// Configuració TinyMCE
+tinymce.init({
+  selector: '#editor-biografia',
+  height: 500,
+  menubar: false,
+  language: '{{ session.get("lang", "ca") }}',
+  
+  plugins: [
+    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+    'insertdatetime', 'media', 'table', 'help', 'wordcount'
+  ],
+  
+  toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | ' +
+           'bullist numlist | link image | custom_entrada | removeformat | help',
+  
+  content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; }',
+  
+  // Configuració d'imatges
+  images_upload_url: '{{ url_for("personal_biografia.pujar_imatge_biografia") }}',
+  automatic_uploads: true,
+  images_reuse_filename: false,
+  
+  // Botó personalitzat per enllaçar entrades
+  setup: function(editor) {
+    editor.ui.registry.addButton('custom_entrada', {
+      text: '📄 Entrada',
+      tooltip: 'Enllaçar una entrada',
+      onAction: function() {
+        obrirModalEntrades();
+      }
+    });
+  }
+});
+
+// Funció per cancel·lar edició
+function cancelarEdicio() {
+  if (confirm('{{ _("Segur que vols cancel·lar? Es perdran els canvis no guardats.") }}')) {
+    location.reload();
+  }
+}
+
+// Gestió del formulari
+document.getElementById('form-biografia').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // Obtenir contingut de TinyMCE
+  const contingut = tinymce.get('editor-biografia').getContent();
+  
+  // Enviar amb AJAX
+  fetch('{{ url_for("personal_biografia.guardar_biografia") }}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      biografia: contingut
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Biografia guardada correctament!") }}');
+      location.reload();
+    } else {
+      alert('{{ _("Error:") }} ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+});
+
+// ===== MODAL ENTRADES =====
+
+function obrirModalEntrades() {
+  // Carregar entrades de l'usuari
+  fetch('{{ url_for("personal_biografia.llistar_entrades_biografia") }}')
+    .then(response => response.json())
+    .then(data => {
+      mostrarModalEntrades(data.entrades);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('{{ _("Error carregant entrades") }}');
+    });
+}
+
+function mostrarModalEntrades(entrades) {
+  const modal = document.getElementById('modal-seleccionar-entrada');
+  const llista = document.getElementById('llista-entrades');
+  
+  // Netejar llista
+  llista.innerHTML = '';
+  
+  if (entrades.length === 0) {
+    llista.innerHTML = '<p class="text-muted">{{ _("No tens entrades disponibles") }}</p>';
+  } else {
+    entrades.forEach(entrada => {
+      const item = document.createElement('div');
+      item.className = 'entrada-item';
+      item.innerHTML = `
+        <input type="radio" name="entrada_seleccionada" value="${entrada.id}" id="entrada_${entrada.id}">
+        <label for="entrada_${entrada.id}">
+          <strong>${entrada.titol}</strong>
+          <span class="entrada-data">${entrada.data}</span>
+        </label>
+      `;
+      llista.appendChild(item);
+    });
+  }
+  
+  // Mostrar modal
+  modal.style.display = 'flex';
+}
+
+function tancarModalEntrades() {
+  document.getElementById('modal-seleccionar-entrada').style.display = 'none';
+}
+
+function inserirEnllaçEntrada() {
+  const seleccionada = document.querySelector('input[name="entrada_seleccionada"]:checked');
+  
+  if (!seleccionada) {
+    alert('{{ _("Selecciona una entrada") }}');
+    return;
+  }
+  
+  const entradaId = seleccionada.value;
+  const entradaTitol = seleccionada.nextElementSibling.querySelector('strong').textContent;
+  
+  // Inserir enllaç a TinyMCE
+  const enllac = `<a href="/entrada/${entradaId}">${entradaTitol}</a>`;
+  tinymce.activeEditor.insertContent(enllac);
+  
+  // Tancar modal
+  tancarModalEntrades();
+}
+
+// Tancar modal amb ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    tancarModalEntrades();
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Missatgeria') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block page_content %}
+
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ session['usuari_nom'] }} {{ session['usuari_primer_cognom'] }} {{ session['usuari_segon_cognom'] }}
+    <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
+  </h1>
+</div>
+
+<div class="enllacos-perfil">
+
+  
+<a href="#" onclick="obreModalContactes()" class="enllac-nou-missatge">{{ _('Nou missatge') }}</a>
+</div>
+
+<!-- SECCIÓ MISSATGES -->
+<h3>{{ _('Missatges') }} ({{ missatges|length }})</h3>
+
+<div class="contingut-plegable">
+  <!-- Pestanyes rebuts / enviats -->
+  <div class="selector-busties">
+    <span class="pestanya-bustia activa" onclick="canviaBustia('rebuts')">{{ _('Rebuts') }}</span>
+    <span class="pestanya-bustia" onclick="canviaBustia('enviats')">{{ _('Enviats') }}</span>
+  </div>
+
+  <!-- Bústia de rebuts -->
+  <div id="bustia-rebuts" class="bustia-missatges">
+    {% for m in missatges %}
+      {% if m.receptor_id == current_user.id %}
+      <div class="missatge-item {% if not m.llegit %}no-llegit{% endif %}">
+        <div class="missatge-contingut" onclick="obreMissatge({{ m.id }})">
+          <span class="remitent">{{ m.emissor.nom }}</span>
+          <span class="assumpte">{{ m.assumpte }}</span>
+          <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
+        </div>
+        <form method="POST" action="{{ url_for('missatges.elimina_missatge', missatge_id=m.id) }}" 
+              onsubmit="return confirm('{{ _('Segur que vols eliminar aquest missatge?') }}')">
+          <button type="submit" class="boto-esborra">🗑</button>
+        </form>
+      </div>
+      {% endif %}
+    {% else %}
+      <p style="color: #666; font-style: italic; text-align: center; margin: 2rem 0;">
+        {{ _('No tens missatges rebuts') }}
+      </p>
+    {% endfor %}
+  </div>
+
+  <!-- Bústia d'enviats -->
+  <div id="bustia-enviats" class="bustia-missatges" style="display: none;">
+    {% for m in missatges %}
+      {% if m.emissor_id == current_user.id %}
+      <div class="missatge-item {% if not m.llegit %}no-llegit{% endif %}">
+        <div class="missatge-contingut" onclick="obreMissatge({{ m.id }})">
+          <span class="remitent">{{ _('A') }} {{ m.receptor.nom }}</span>
+          <span class="assumpte">{{ m.assumpte }}</span>
+          <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
+        </div>
+        <form method="POST" action="{{ url_for('missatges.elimina_missatge_enviat', missatge_id=m.id) }}"
+              onsubmit="return confirm('{{ _('Segur que vols eliminar aquest missatge?') }}')">
+          <button type="submit" class="boto-esborra">🗑</button>
+        </form>
+      </div>
+      {% endif %}
+    {% else %}
+      <p style="color: #666; font-style: italic; text-align: center; margin: 2rem 0;">
+        {{ _('No has enviat cap missatge') }}
+      </p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- MODAL PER VEURE MISSATGE COMPLET -->
+<div id="modal-missatge" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalMissatge()">&times;</span>
+    <h3 id="modal-assumpte-missatge"></h3>
+    <div class="detalls-missatge">
+      <p><strong>{{ _('De:') }}</strong> <span id="modal-remitent"></span></p>
+      <p><strong>{{ _('A:') }}</strong> <span id="modal-receptor"></span></p>
+      <p><strong>{{ _('Data:') }}</strong> <span id="modal-data"></span></p>
+    </div>
+    <div id="modal-contingut-missatge" style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px; white-space: pre-wrap;"></div>
+    <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <button type="button" onclick="tancarModalMissatge()" class="boto boto-secundari">{{ _('Tancar') }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PER ENVIAR NOU MISSATGE -->
+<div id="modal-nou-missatge" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalNouMissatge()">&times;</span>
+    <h3>{{ _('Nou missatge') }}</h3>
+    
+    <div class="camp-formulari">
+      <label for="nou-receptor">{{ _('Per a:') }} *</label>
+      <input type="text" id="nou-receptor" placeholder="{{ _('Nom o login de l\'usuari...') }}" 
+             oninput="cercarUsuaris()">
+      <span id="receptor-nom" style="display: none; color: #28a745; font-weight: bold;"></span>
+      <div id="resultats-cerca" class="resultats-cerca"></div>
+    </div>
+    
+    <div class="camp-formulari">
+      <label for="nou-assumpte">{{ _('Assumpte:') }} *</label>
+      <input type="text" id="nou-assumpte" placeholder="{{ _('Assumpte del missatge...') }}">
+    </div>
+    
+    <div class="camp-formulari">
+      <label for="nou-contingut">{{ _('Missatge:') }} *</label>
+      <textarea id="nou-contingut" rows="8" placeholder="{{ _('Escriu el teu missatge aquí...') }}"></textarea>
+    </div>
+    
+    <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+      <button type="button" onclick="tancarModalNouMissatge()" class="boto boto-secundari">{{ _('Cancel·lar') }}</button>
+      <button type="button" onclick="enviarNouMissatge()" class="boto boto-primari">{{ _('Enviar') }}</button>
+    </div>
+  </div>
+</div>
+
+{% include 'components/modal_contactes.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/missatgeria.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/modal_contactes.js') }}"></script>
+{% endblock %}

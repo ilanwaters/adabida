@@ -1,0 +1,17 @@
+
+
+
+
+.menu-idioma img {
+  width: 32px;
+  height: auto;
+  cursor: pointer;
+}
+
+
+
+
+.menu-idioma:hover .submenu {
+  display: block;
+}
+

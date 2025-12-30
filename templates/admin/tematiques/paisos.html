@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Gestió de Països - THE OFFICE{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+<style>
+.badge-nou {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 8px;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.badge-revisat {
+    background-color: #51cf66;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+.accions-pais {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-petit {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-editar {
+    background-color: #4dabf7;
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #339af0;
+}
+
+.btn-revisar {
+    background-color: #51cf66;
+    color: white;
+}
+
+.btn-revisar:hover {
+    background-color: #40c057;
+}
+
+.alert-info {
+    background-color: #d0ebff;
+    border-left: 4px solid #4dabf7;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+</style>
+{% endblock %}
+
+{% block contingut %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1> Gestió de Països</h1>
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('admin_tematiques.afegir_pais') }}" class="btn-primary">+ Afegir País</a>
+            <a href="{{ url_for('admin_tematiques.afegir_tema_global') }}" class="btn-primary" style="background-color: #51cf66;">+ Afegir Tema</a>
+        </div>
+    </div>
+
+    {% if paisos_nous > 0 %}
+    <div class="alert-info">
+        <strong>⚠️ Atenció:</strong> Hi ha {{ paisos_nous }} país{% if paisos_nous != 1 %}os{% endif %} nou{% if paisos_nous != 1 %}s{% endif %} pendent{% if paisos_nous != 1 %}s{% endif %} de revisió.
+    </div>
+    {% endif %}
+
+    {% if paisos %}
+    <div class="llista-elements">
+        <table class="taula-admin">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Codi ISO</th>
+                    <th>Categories</th>
+                    <th>Estat</th>
+                    <th>Accions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pais in paisos %}
+                <tr>
+                    <td>
+                        {{ pais.nom }}
+                        {% if not pais.revisat_per_admin %}
+                        <span class="badge-nou">🆕 Nou</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ pais.codi_iso }}</strong></td>
+                    <td>{{ pais.categories|length }}</td>
+                    <td>
+                        {% if pais.revisat_per_admin %}
+                        <span class="badge-revisat">✓ Revisat</span>
+                        {% else %}
+                        <span style="color: #868e96;">Pendent</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="accions-pais">
+                            <a href="{{ url_for('admin_tematiques.editar_pais', pais_id=pais.id) }}" 
+                               class="btn-petit btn-editar">✏️ Editar</a>
+                            
+                            {% if not pais.revisat_per_admin %}
+                            <form method="POST" action="{{ url_for('admin_tematiques.marcar_pais_revisat', pais_id=pais.id) }}" style="margin: 0;">
+                                <button type="submit" class="btn-petit btn-revisar">✓ Revisar</button>
+                            </form>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('admin_tematiques.llistar_categories', pais_id=pais.id) }}" 
+                               class="btn-petit" style="background-color: #868e96; color: white;">📁 Categories</a>
+                            
+                            {% if pais.categories|length == 0 %}
+                            <form method="POST" action="{{ url_for('admin_tematiques.eliminar_pais', pais_id=pais.id) }}" 
+                                  onsubmit="return confirm('Segur que vols eliminar {{ pais.nom }}?')" style="margin: 0;">
+                                <button type="submit" class="btn-petit" style="background-color: #ff6b6b; color: white;">🗑️</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-buit">No hi ha països. Afegeix-ne un per començar!</p>
+    {% endif %}
+</div>
+{% endblock %}

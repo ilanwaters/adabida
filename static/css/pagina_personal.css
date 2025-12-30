@@ -1,0 +1,176 @@
+/* =================================
+   PÀGINA PERSONAL
+   Cards amb imatges i overlay blau
+   ================================= */
+
+/* Fila nom usuari */
+.fila-nom-usuari {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--espai-lg) var(--espai-lg) 0;  /* Canviat: var(--espai-md) → 0 */
+}
+
+.nom-complet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 1px;
+}
+
+
+
+/* Grid de cards */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--espai-lg);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--espai-lg);
+  margin-top: var(--espai-lg);
+}
+
+/* Card individual */
+.card {
+  display: block;
+  position: relative;
+  background: var(--color-blanc);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--ombra-sm);
+  transition: all 0.3s;
+  text-decoration: none;
+  height: 200px;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombra-lg);
+}
+
+/* Imatge de fons */
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Overlay blau semi-transparent */
+
+
+/* Contingut de la card */
+.card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--espai-lg);
+  text-align: center;
+}
+
+.card-content h3 {
+  color: var(--color-blanc);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.fila-nom-usuari:first-of-type {
+  padding-bottom: 0;
+  margin-bottom: 0.5rem;
+}
+
+.arxiu-entrades {
+  width: 100%;
+}
+
+
+.arxiu-entrades .llista-entrades {
+  align-items: flex-start;
+}
+
+.fila-nom-usuari + .fila-nom-usuari {
+  margin-top: 0.5rem;  /* Canviat: -1rem → 0.5rem */
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: var(--espai-md);
+  }
+  
+  .nom-complet {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espai-sm);
+  }
+  
+  .card {
+    height: 150px;
+  }
+}
+
+/* =================================
+   BLOCS PLEGABLES
+   ================================= */
+
+.bloc-plegable {
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.titol-plegable {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  margin: 0;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.titol-plegable:hover {
+  background: #e9ecef;
+}
+
+/* Fletxa indicadora */
+.titol-plegable::after {
+  content: '▼';
+  position: absolute;
+  right: 1.5rem;
+  transition: transform 0.3s ease;
+  font-size: 0.8em;
+  color: #666;
+}
+
+.bloc-plegable.tancat .titol-plegable::after {
+  transform: rotate(-90deg);
+}
+
+/* Contingut del bloc */
+.contingut-plegable {
+  padding: 1.5rem;
+  display: block;
+}
+
+.bloc-plegable.tancat .contingut-plegable {
+  display: none;
+}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Explorador de dades') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/datatables.min.css') }}">
+{% endblock %}
+
+{% block page_content %}
+<div class="admin-dades">
+   <a href="{{ url_for('admin.pagina_admin') }}" class="accio-textual">{{ _("Torna al panell d'administració") }}</a>
+
+  <h1>{{ _('Explorador de dades') }}</h1>
+
+  <select id="selector-taula">
+  <option value="usuaris">Usuaris</option>
+  <option value="perfils">Perfils biogràfics</option>
+  <option value="entrades">Entrades</option>
+</select>
+
+
+  <div id="contenidor-taula" style="margin-top: 2em;">
+    <table id="taula-dades" class="display" style="width:100%">
+      <thead>
+        <tr id="capcalera-taula"></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin_dades.js') }}"></script>
+{% endblock %}

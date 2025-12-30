@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block titol %}Afegir Tema - {{ categoria.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-admin">
+  <a href="{{ url_for('admin_tematiques.llistar_temes', categoria_id=categoria.id) }}" class="nav-back">← Tornar a temes</a>
+  
+  <h1>Afegir Tema a "{{ categoria.nom }}"</h1>
+  <h2>{{ categoria.pais.nom }} ({{ categoria.pais.codi_iso }})</h2>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  
+  <form method="POST">
+    <div class="form-group">
+      <label for="nom">Nom del tema *</label>
+      <input type="text" 
+             id="nom" 
+             name="nom" 
+             placeholder="Exemple: Guerra Civil, Dictadura Franco, ETA..." 
+             required>
+    </div>
+    
+    <div class="form-group">
+      <label for="ordre">Ordre (opcional)</label>
+      <input type="number" 
+             id="ordre" 
+             name="ordre" 
+             value="0"
+             min="0"
+             placeholder="0">
+      <small style="color: #666; font-size: 0.9em;">Determina l'ordre de visualització (menor = primer)</small>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-success">✓ Crear Tema</button>
+      <a href="{{ url_for('admin_tematiques.llistar_temes', categoria_id=categoria.id) }}" class="btn btn-secondary">Cancel·lar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Temes d'entrevista</title>
+</head>
+<body>
+  <h1>📚 Temes d'entrevista</h1>
+
+  <ul>
+    {% for tema in temes %}
+      <li>{{ tema.nom }}</li>
+    {% endfor %}
+  </ul>
+
+  <form method="POST">
+    <input type="text" name="nou_tema" placeholder="Proposa un nou tema" required>
+    <button type="submit">Afegir</button>
+  </form>
+</body>
+</html>

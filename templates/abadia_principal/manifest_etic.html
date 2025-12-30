@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Manifest Ètic') }}{% endblock %}
+
+{% block css %}
+<style>
+  .manifest-container {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+  }
+
+  .manifest-container h1 {
+    margin-bottom: 2rem;
+  }
+
+  .manifest-container p {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .manifest-container ul {
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .manifest-container ul li {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+
+  .manifest-container .financament {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+  }
+
+  .manifest-container .financament p {
+    line-height: 1.8;
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="manifest-container">
+    <h1>{{ _('Manifest Ètic del Projecte') }}</h1>
+
+    <p>{{ _('Aquest arxiu no és només una col·lecció de dades. És una aposta per la memòria, la dignitat i la veu de les persones anònimes.') }}</p>
+
+    <ul>
+      <li>{{ _('Donem prioritat a testimonis vius, quotidians i plurals.') }}</li>
+      <li>{{ _('Els continguts compartits són voluntaris i poden ser modificats o retirats.') }}</li>
+      <li>{{ _('No compartim dades personals amb tercers.') }}</li>
+      <li>{{ _('Afirmem el valor històric de cada història, sigui breu o incompleta.') }}</li>
+    </ul>
+
+    <h2>{{ _('L\'Internet dels Elevats') }}</h2>
+
+    <p>{{ _('Internet s\'està dividint en dos espais compartimentats, el dels condemnats i els dels elevats.') }}</p>
+
+    <p><strong>{{ _('Els condemnats') }}</strong> {{ _('són el producte en un cicle de consum ràpid, clics automatitzats, aplicacions addictives i contingut buit. Són usuaris de pas, però atrapats en un ecosistema dissenyat per esborrar-los tan ràpid com els ha capturat.') }}</p>
+
+    <p><strong>{{ _('Els elevats') }}</strong> {{ _('són els veritables productors que gaudeixen de la xarxa com un instrument per pensar, recordar, preservar, construir amb temps. No busquen viralitat, ni guanys immediats, ni dades d\'altres. Busquen sentit.') }}</p>
+
+    <p>{{ _('Aquest projecte pertany a l\'Internet dels Elevats.') }}<br>
+    {{ _('Una internet lenta, lliure, ètica i plena.') }}<br>
+    {{ _('Una internet com una fortalesa silenciosa enmig del soroll global.') }}</p>
+
+    <p><strong>{{ _('Aquesta és la trinxera on es construeix l\'Abadia.') }}</strong></p>
+
+    <p>{{ _('Amb aquest manifest, volem garantir que aquest arxiu sigui un espai de confiança, respecte i memòria col·lectiva.') }}</p>
+
+    <div class="financament">
+      <p>{{ _('Aquest projecte no té inversors, no té publicitat, no ven dades. És i serà sempre 100% gratuït per a tothom.') }}</p>
+      
+      <p>{{ _('Això és possible només gràcies a les aportacions voluntàries de persones que creuen en una internet diferent. Si creus en aquesta visió, si vols que l\'Abadia perduri,') }} <a href="{{ url_for('aportacions.aportacions') }}">{{ _('pots fer una aportació voluntària aquí') }}</a>.</p>
+
+      <p>{{ _('No hi ha imports mínims. Qualsevol aportació, per petita que sigui, ajuda a mantenir els servidors, el desenvolupament i la independència ètica.') }}</p>
+
+      <p><strong>{{ _('Els teus records són part de la història. Gràcies per ajudar-nos a preservar-los.') }}</strong></p>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

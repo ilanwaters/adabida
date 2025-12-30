@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Crear Espai Familiar') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/crear_organitzacio.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_entrada_personal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+    <main class="contingut-principal">
+        <div class="contenidor">
+            <div class="capçalera-pagina" style="text-align: center;">
+    <h1>{{ _('Crear Espai Familiar') }}</h1>
+</div>
+            <div class="formulari-container">
+                <form method="POST" action="{{ url_for('familia.crear') }}" enctype="multipart/form-data" class="formulari-principal">
+                    
+                    <!-- DADES BÀSIQUES -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Identificació de la família') }}</h2>
+                        
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="nom">{{ _('Nom de la família') }} *</label>
+                                <input type="text" id="nom" name="nom" required 
+                                       placeholder="{{ _('Sanchez Fernández-Fernández Alcarria, García López...') }}">
+                                <small class="text-ajuda">{{ _('Pots posar cognoms compostos, cognoms dels dos, o el nom que identifiqui la teva família') }}</small>
+                            </div>
+                        </div>
+
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="motiu">{{ _('Motiu o sobrenom familiar') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="text" id="motiu" name="motiu" 
+                                       placeholder="{{ _('Els Raboses, Ca la Maria, Els del Molí...') }}">
+                                <small class="text-ajuda">{{ _('El sobrenom o motiu pel qual es coneix la família al poble o barri') }}</small>
+                            </div>
+                        </div>
+
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="descripcio">{{ _('Descripció i context') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <textarea id="descripcio" name="descripcio" rows="4" 
+                                          placeholder="{{ _('Explica breument l\'origen de la família, el context històric, l\'origen del motiu...') }}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LLOCS D'ORIGEN (MÚLTIPLES) -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Llocs d\'origen de la família') }}</h2>
+                        
+                        <div id="ubicacions-origen-container">
+                            <!-- Primera ubicació d'origen (obligatòria) -->
+                            <div class="ubicacio-grup" data-index="0">
+                                <div class="fila-formulari">
+                                    <div>
+                                        <label for="pais_origen_0">{{ _('País') }} *</label>
+                                        <select id="pais_origen_0" name="pais_origen[]" class="campo-largo" required disabled>
+                                            <option value="">{{ _('Carregant...') }}</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="regio_origen_0">{{ _('Regió/Província') }} *</label>
+                                        <select id="regio_origen_0" name="regio_origen[]" class="campo-largo" required disabled>
+                                            <option value="">{{ _('Selecciona primer el país') }}</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="municipi_origen_0">{{ _('Municipi/Localitat') }} *</label>
+                                        <select id="municipi_origen_0" name="municipi_origen[]" class="campo-largo" required disabled>
+                                            <option value="">{{ _('Selecciona primer la regió') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" id="afegir-origen" class="boto_nav">
+                            + {{ _('Afegir altra ubicació d\'origen') }}
+                        </button>
+
+        
+        <span class="info-tooltip" data-tooltip="{{ _('Explica d\'on ve la teva família històricament o indica ls llocs on la família va tenir el seu origen o d\'on prové tradicionalment') }}">
+            <button type="button" class="boto-info">i</button>
+        </span>
+    
+
+                    </div>
+
+                    <!-- UBICACIONS ACTUALS (MÚLTIPLES PROVISIONALS) -->
+                    <div class="bloc-formulari" style="border-left-color: #28a745;">
+                        <h2 class="titol-bloc">{{ _('Ubicacions actuals (provisional)') }}</h2>
+                        
+                        <div id="ubicacions-actuals-container">
+                            <!-- Primera ubicació actual -->
+                            <div class="ubicacio-grup" data-index="0">
+                                <div class="fila-formulari">
+                                    <div>
+                                        <label for="pais_actual_0">{{ _('País') }}</label>
+                                        <select id="pais_actual_0" name="pais_actual[]" class="campo-largo" disabled>
+                                            <option value="">{{ _('Carregant...') }}</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="regio_actual_0">{{ _('Regió/Província') }}</label>
+                                        <select id="regio_actual_0" name="regio_actual[]" class="campo-largo" disabled>
+                                            <option value="">{{ _('Selecciona primer el país') }}</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="municipi_actual_0">{{ _('Municipi/Ciutat') }}</label>
+                                        <select id="municipi_actual_0" name="municipi_actual[]" class="campo-largo" disabled>
+                                            <option value="">{{ _('Selecciona primer la regió') }}</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-end;">
+                                        <button type="button" class="boto-eliminar-ubicacio" data-target="actuals" data-index="0" style="visibility: hidden;">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" id="afegir-actual" class="boto_nav">
+                            + {{ _('Afegir altra ubicació actual') }}
+                        </button>
+          <span class="info-tooltip" data-tooltip="{{ _(' Indica on viuen actualment els membres de la família. Aquestes ubicacions són provisionals i s\'actualitzaran automàticament quan afegeixis membres amb les seves ubicacions') }}">
+            <button type="button" class="boto-info">i</button>
+        </span>
+                       
+                       
+                    </div>
+
+                    <!-- ANY/PERÍODE DE REFERÈNCIA -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Període de referència') }}</h2>
+                        
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="periode_referencia">{{ _('Any o període') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="text" id="periode_referencia" name="periode_referencia" 
+                                       placeholder="{{ _('Des de 1920, s.XIX, s.XX-XXI...') }}">
+                                <small class="text-ajuda">{{ _('El període més antic documentat o des de quan es té constància de la família') }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HERÀLDICA -->
+                    <div class="bloc-formulari">
+                        <h2 class="titol-bloc">{{ _('Heràldica familiar') }}</h2>
+                        
+                        <div class="fila-formulari">
+                            <div class="w-100">
+                                <label for="heraldica">{{ _('Escut o emblema familiar') }} <span class="opcional">({{ _('opcional') }})</span></label>
+                                <input type="file" id="heraldica" name="heraldica" accept="image/*">
+                                <small class="text-ajuda">{{ _('Si la teva família té un escut heràldic o emblema, pots pujar-lo aquí') }}</small>
+                            </div>
+                        </div>
+
+                        <div class="info-ajuda">
+                            <p>{{ _('🛡️ Formats acceptats: JPG, PNG, GIF. Mida màxima: 5MB') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- BOTONS ACCIÓ -->
+                    <div class="botons-accio">
+    <a href="/pagina_personal" class="boto_nav" style="display: inline-block; padding: 10px 20px;">
+        {{ _('Cancel·lar') }}
+    </a>
+                        <button type="submit" class="boto_nav">
+                            {{ _('Crear Espai Familiar') }}
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- TRADUCCIONS PER JAVASCRIPT -->
+    <script>
+    window.traduccions = {
+        seleccionaPais: "Selecciona un país",
+        seleccionaRegio: "Selecciona província/regió",
+        seleccionaMunicipi: "Selecciona o escriu el teu municipi",
+        carregant: "Carregant...",
+        errorCarregant: "Error carregant",
+        seleccionaPrimerRegio: "Selecciona primer la regió",
+        seleccionaPrimerPais: "Selecciona primer el país"
+    };
+    </script>
+
+    <!-- SISTEMA D'UBICACIONS -->
+    <script src="{{ url_for('static', filename='js/ubicacions.js') }}"></script>
+
+    <script>
+        let contadorOrigen = 1;
+        let contadorActual = 1;
+
+        // Funció auxiliar per inicialitzar un grup d'ubicació amb cascada
+        function inicialitzarGrupUbicacio(paisId, regioId, municipiId) {
+            const paisSelect = document.getElementById(paisId);
+            const regioSelect = document.getElementById(regioId);
+            const municipiSelect = document.getElementById(municipiId);
+            
+            if (!paisSelect || !regioSelect || !municipiSelect) return;
+            
+            // Crear un grup manual per aquest conjunt
+            const grup = {
+                pais: paisSelect,
+                regio: regioSelect,
+                municipi: municipiSelect
+            };
+            
+            // Carregar països
+            carregarPaisosManual(paisSelect);
+            
+            // Event listeners per cascada
+            paisSelect.addEventListener('change', function() {
+                const paisIdValue = this.value;
+                if (paisIdValue === 'ALTRE') {
+                    convertirGrupATextLliure(grup);
+                    return;
+                }
+                if (paisIdValue) {
+                    carregarRegionsManual(paisIdValue, regioSelect);
+                    municipiSelect.value = '';
+                    municipiSelect.disabled = true;
+                }
+            });
+            
+            regioSelect.addEventListener('change', function() {
+                const regioIdValue = this.value;
+                if (regioIdValue) {
+                    carregarMunicopisManual(regioIdValue, municipiSelect);
+                }
+            });
+        }
+
+        // Funcions manuals de càrrega (duplicades del ubicacions.js per no interferir)
+        async function carregarPaisosManual(selectPais) {
+            try {
+                const response = await fetch('/api/paisos');
+                const paisos = await response.json();
+                
+                selectPais.innerHTML = '<option value="">Selecciona un país</option>';
+                
+                paisos.forEach(pais => {
+                    const option = document.createElement('option');
+                    option.value = pais.id;
+                    option.textContent = pais.nom;
+                    selectPais.appendChild(option);
+                });
+                
+                const optionNou = document.createElement('option');
+                optionNou.value = 'ALTRE';
+                optionNou.textContent = 'Altre país...';
+                selectPais.appendChild(optionNou);
+                
+                selectPais.disabled = false;
+            } catch (error) {
+                console.error('Error carregant països:', error);
+            }
+        }
+
+        async function carregarRegionsManual(paisId, selectRegio) {
+            selectRegio.disabled = true;
+            selectRegio.innerHTML = '<option value="">Carregant...</option>';
+            
+            try {
+                const response = await fetch(`/api/regions/${paisId}`);
+                const regions = await response.json();
+                
+                selectRegio.innerHTML = '<option value="">Selecciona província/regió</option>';
+                
+                regions.forEach(regio => {
+                    const option = document.createElement('option');
+                    option.value = regio.id;
+                    option.textContent = regio.nom;
+                    selectRegio.appendChild(option);
+                });
+                
+                selectRegio.disabled = false;
+            } catch (error) {
+                console.error('Error carregant regions:', error);
+                selectRegio.innerHTML = '<option value="">Error carregant</option>';
+            }
+        }
+
+        async function carregarMunicopisManual(regioId, selectMunicipi) {
+            selectMunicipi.disabled = true;
+            selectMunicipi.innerHTML = '<option value="">Carregant...</option>';
+            
+            try {
+                const response = await fetch(`/api/municipis/${regioId}`);
+                const municipis = await response.json();
+                
+                selectMunicipi.innerHTML = '<option value="">Selecciona o escriu el teu municipi</option>';
+                
+                municipis.forEach(municipi => {
+                    const option = document.createElement('option');
+                    option.value = municipi.id;
+                    option.textContent = municipi.nom;
+                    selectMunicipi.appendChild(option);
+                });
+                
+                selectMunicipi.disabled = false;
+            } catch (error) {
+                console.error('Error carregant municipis:', error);
+                selectMunicipi.innerHTML = '<option value="">Error carregant</option>';
+            }
+        }
+
+        function convertirGrupATextLliure(grup) {
+            // Convertir selects a inputs de text
+            ['pais', 'regio', 'municipi'].forEach(tipus => {
+                if (grup[tipus] && grup[tipus].tagName === 'SELECT') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = grup[tipus].id;
+                    input.name = grup[tipus].name;
+                    input.className = grup[tipus].className;
+                    input.required = grup[tipus].required;
+                    input.placeholder = tipus === 'pais' ? 'Escriu el país' : 
+                                       tipus === 'regio' ? 'Escriu la regió' : 
+                                       'Escriu el municipi';
+                    grup[tipus].parentElement.replaceChild(input, grup[tipus]);
+                    grup[tipus] = input;
+                }
+            });
+        }
+
+        // Inicialitzar els grups inicials quan es carrega la pàgina
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicialitzar primera ubicació d'origen
+            inicialitzarGrupUbicacio('pais_origen_0', 'regio_origen_0', 'municipi_origen_0');
+            
+            // Inicialitzar primera ubicació actual
+            inicialitzarGrupUbicacio('pais_actual_0', 'regio_actual_0', 'municipi_actual_0');
+        });
+
+        // Afegir ubicació d'origen
+        document.getElementById('afegir-origen').addEventListener('click', function() {
+            const container = document.getElementById('ubicacions-origen-container');
+            const nouGrup = document.createElement('div');
+            nouGrup.className = 'ubicacio-grup';
+            nouGrup.setAttribute('data-index', contadorOrigen);
+            nouGrup.innerHTML = `
+                <div class="fila-formulari">
+                    <div>
+                        <label for="pais_origen_${contadorOrigen}">{{ _('País') }} *</label>
+                        <select id="pais_origen_${contadorOrigen}" name="pais_origen[]" class="campo-largo" required disabled>
+                            <option value="">{{ _('Carregant...') }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="regio_origen_${contadorOrigen}">{{ _('Regió/Província') }} *</label>
+                        <select id="regio_origen_${contadorOrigen}" name="regio_origen[]" class="campo-largo" required disabled>
+                            <option value="">{{ _('Selecciona primer el país') }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="municipi_origen_${contadorOrigen}">{{ _('Municipi/Localitat') }} *</label>
+                        <select id="municipi_origen_${contadorOrigen}" name="municipi_origen[]" class="campo-largo" required disabled>
+                            <option value="">{{ _('Selecciona primer la regió') }}</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button type="button" class="boto-eliminar-ubicacio" onclick="eliminarUbicacio(this, 'origen')">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(nouGrup);
+            
+            // Inicialitzar el nou grup
+            inicialitzarGrupUbicacio(`pais_origen_${contadorOrigen}`, `regio_origen_${contadorOrigen}`, `municipi_origen_${contadorOrigen}`);
+            
+            contadorOrigen++;
+        });
+
+        // Afegir ubicació actual
+        document.getElementById('afegir-actual').addEventListener('click', function() {
+            const container = document.getElementById('ubicacions-actuals-container');
+            const nouGrup = document.createElement('div');
+            nouGrup.className = 'ubicacio-grup';
+            nouGrup.setAttribute('data-index', contadorActual);
+            nouGrup.innerHTML = `
+                <div class="fila-formulari">
+                    <div>
+                        <label for="pais_actual_${contadorActual}">{{ _('País') }}</label>
+                        <select id="pais_actual_${contadorActual}" name="pais_actual[]" class="campo-largo" disabled>
+                            <option value="">{{ _('Carregant...') }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="regio_actual_${contadorActual}">{{ _('Regió/Província') }}</label>
+                        <select id="regio_actual_${contadorActual}" name="regio_actual[]" class="campo-largo" disabled>
+                            <option value="">{{ _('Selecciona primer el país') }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="municipi_actual_${contadorActual}">{{ _('Municipi/Ciutat') }}</label>
+                        <select id="municipi_actual_${contadorActual}" name="municipi_actual[]" class="campo-largo" disabled>
+                            <option value="">{{ _('Selecciona primer la regió') }}</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button type="button" class="boto-eliminar-ubicacio" onclick="eliminarUbicacio(this, 'actual')">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(nouGrup);
+            
+            // Inicialitzar el nou grup
+            inicialitzarGrupUbicacio(`pais_actual_${contadorActual}`, `regio_actual_${contadorActual}`, `municipi_actual_${contadorActual}`);
+            
+            contadorActual++;
+        });
+
+        // Eliminar ubicació
+        function eliminarUbicacio(boto, tipus) {
+            const grup = boto.closest('.ubicacio-grup');
+            grup.remove();
+        }
+    </script>
+
+{% endblock %}

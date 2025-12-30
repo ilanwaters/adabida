@@ -1,0 +1,72 @@
+{
+  "pais": {
+    "nom": "Xile",
+    "codi_iso": "CL"
+  },
+  "regions": [
+    {
+      "nom": "Arica y Parinacota",
+      "municipis": ["Arica", "Putre", "Camarones", "General Lagos"]
+    },
+    {
+      "nom": "Tarapacá",
+      "municipis": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Pica", "Huara", "Camiña", "Colchane"]
+    },
+    {
+      "nom": "Antofagasta",
+      "municipis": ["Antofagasta", "Calama", "Tocopilla", "Mejillones", "Taltal", "Sierra Gorda", "María Elena", "Ollagüe", "San Pedro de Atacama"]
+    },
+    {
+      "nom": "Atacama",
+      "municipis": ["Copiapó", "Vallenar", "Chañaral", "Caldera", "Diego de Almagro", "Tierra Amarilla", "Huasco", "Freirina", "Alto del Carmen"]
+    },
+    {
+      "nom": "Coquimbo",
+      "municipis": ["La Serena", "Coquimbo", "Ovalle", "Illapel", "Vicuña", "Andacollo", "Monte Patria", "Combarbalá", "Los Vilos"]
+    },
+    {
+      "nom": "Valparaíso",
+      "municipis": ["Valparaíso", "Viña del Mar", "Quilpué", "Villa Alemana", "San Antonio", "Quillota", "Los Andes", "Limache", "San Felipe", "Concón", "Casablanca", "La Calera", "Cartagena"]
+    },
+    {
+      "nom": "Región Metropolitana de Santiago",
+      "municipis": ["Santiago", "Maipú", "La Florida", "Puente Alto", "Las Condes", "San Bernardo", "Ñuñoa", "Peñalolén", "Pudahuel", "Rancagua", "La Pintana", "El Bosque", "Recoleta", "Quilicura", "Cerrillos", "Colina", "Melipilla", "Talagante", "Buin", "Paine"]
+    },
+    {
+      "nom": "Libertador General Bernardo O'Higgins",
+      "municipis": ["Rancagua", "San Fernando", "Rengo", "Machalí", "Santa Cruz", "Graneros", "Chimbarongo", "San Vicente", "Pichilemu", "Malloa"]
+    },
+    {
+      "nom": "Maule",
+      "municipis": ["Talca", "Curicó", "Linares", "Constitución", "Cauquenes", "Parral", "Molina", "San Javier", "San Clemente", "Maule"]
+    },
+    {
+      "nom": "Ñuble",
+      "municipis": ["Chillán", "San Carlos", "Bulnes", "Quirihue", "Yungay", "Coelemu", "El Carmen", "Pemuco", "Quillón"]
+    },
+    {
+      "nom": "Biobío",
+      "municipis": ["Concepción", "Talcahuano", "Los Ángeles", "Chiguayante", "Coronel", "San Pedro de la Paz", "Tomé", "Lota", "Penco", "Hualpén", "Nacimiento", "Arauco", "Lebu", "Cabrero", "Cañete"]
+    },
+    {
+      "nom": "La Araucanía",
+      "municipis": ["Temuco", "Villarrica", "Angol", "Pucón", "Lautaro", "Victoria", "Nueva Imperial", "Curacautín", "Collipulli", "Carahue", "Pitrufquén"]
+    },
+    {
+      "nom": "Los Ríos",
+      "municipis": ["Valdivia", "La Unión", "Río Bueno", "Panguipulli", "Mariquina", "Paillaco", "Lanco", "Corral", "Futrono", "Los Lagos"]
+    },
+    {
+      "nom": "Los Lagos",
+      "municipis": ["Puerto Montt", "Osorno", "Castro", "Ancud", "Puerto Varas", "Calbuco", "Quellón", "Maullín", "Frutillar", "Llanquihue", "Dalcahue", "Chonchi"]
+    },
+    {
+      "nom": "Aysén del General Carlos Ibáñez del Campo",
+      "municipis": ["Coyhaique", "Puerto Aysén", "Chile Chico", "Cochrane", "Puerto Cisnes", "Río Ibáñez", "Tortel", "Lago Verde", "Guaitecas", "O'Higgins"]
+    },
+    {
+      "nom": "Magallanes y de la Antártica Chilena",
+      "municipis": ["Punta Arenas", "Puerto Natales", "Porvenir", "Puerto Williams", "Cabo de Hornos", "Primavera", "Timaukel", "San Gregorio", "Río Verde", "Laguna Blanca", "Torres del Paine"]
+    }
+  ]
+}

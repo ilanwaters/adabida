@@ -1,0 +1,177 @@
+<!-- TILE ESTÀNDARD COMPLET - ORGANITZACIONS -->
+<a href="{{ url_for('organitzacions.llistat') }}" class="boto-principal">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    
+    <!-- Forma principal (fons neutre) -->
+    <path d="M10,20 Q75,0 140,20 L140,130 Q75,150 10,130 Z"
+          fill="#f5f5f5" stroke="none"/>
+
+    <!-- Definicions úniques per aquest tile -->
+    <defs>
+      <!-- Gradient amb brillantor al centre -->
+      <linearGradient id="grad-org" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#14d8ce"/>
+        <stop offset="45%" stop-color="#0e9f94"/>
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.6"/> <!-- brillantor -->
+        <stop offset="55%" stop-color="#0e9f94"/>
+        <stop offset="100%" stop-color="#14d8ce"/>
+      </linearGradient>
+
+      <!-- ClipPath superior per imatge -->
+      <clipPath id="clip-top-org">
+        <path d="M10,20 Q75,0 140,20 L140,95 L10,95 Z"/>
+      </clipPath>
+
+      <!-- ClipPath inferior per gradient -->
+      <clipPath id="clip-bottom-org">
+        <path d="M10,95 L140,95 L140,130 Q75,150 10,130 Z"/>
+      </clipPath>
+    </defs>
+
+    <!-- Zona superior amb imatge -->
+    <image href="{{ url_for('static', filename='img/organitzacions.png') }}"
+           x="10" y="0" width="130" height="100"
+           preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-top-org)"/>
+
+    <!-- Zona inferior amb gradient arrodonit -->
+    <rect x="10" y="95" width="130" height="55"
+          fill="url(#grad-org)" clip-path="url(#clip-bottom-org)"/>
+
+    <!-- Text -->
+    <text x="75" y="120" text-anchor="middle" font-size="14"
+          font-family="Montserrat" fill="#fff">
+      {{ _('Organitzacions') }}
+    </text>
+
+  </svg>
+</a>
+
+<!-- TILE ESTÀNDARD COMPLET - GALERIA (diferent color) -->
+<a href="{{ url_for('galeria.galeria') }}" class="boto-principal">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    
+    <!-- Forma principal (fons neutre) -->
+    <path d="M10,20 Q75,0 140,20 L140,130 Q75,150 10,130 Z"
+          fill="#f5f5f5" stroke="none"/>
+
+    <!-- Definicions úniques per aquest tile -->
+    <defs>
+      <!-- Gradient amb brillantor al centre -->
+      <linearGradient id="grad-gal" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#C8A2C8"/>
+        <stop offset="45%" stop-color="#8B4B8B"/>
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.6"/> <!-- brillantor -->
+        <stop offset="55%" stop-color="#8B4B8B"/>
+        <stop offset="100%" stop-color="#C8A2C8"/>
+      </linearGradient>
+
+      <!-- ClipPath superior per imatge -->
+      <clipPath id="clip-top-gal">
+        <path d="M10,20 Q75,0 140,20 L140,95 L10,95 Z"/>
+      </clipPath>
+
+      <!-- ClipPath inferior per gradient -->
+      <clipPath id="clip-bottom-gal">
+        <path d="M10,95 L140,95 L140,130 Q75,150 10,130 Z"/>
+      </clipPath>
+    </defs>
+
+    <!-- Zona superior amb imatge -->
+    <image href="{{ url_for('static', filename='img/galeria.png') }}"
+           x="10" y="0" width="130" height="100"
+           preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-top-gal)"/>
+
+    <!-- Zona inferior amb gradient arrodonit -->
+    <rect x="10" y="95" width="130" height="55"
+          fill="url(#grad-gal)" clip-path="url(#clip-bottom-gal)"/>
+
+    <!-- Text -->
+    <text x="75" y="120" text-anchor="middle" font-size="14"
+          font-family="Montserrat" fill="#fff">
+      {{ _('Galeria i exposicions') }}
+    </text>
+
+  </svg>
+</a>
+
+<!-- TILE ESTÀNDARD COMPLET - ESPAI PERSONAL (color blau) -->
+<a href="{{ url_for('pagina_personal.pagina_personal') }}" class="boto-principal">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    
+    <!-- Forma principal (fons neutre) -->
+    <path d="M10,20 Q75,0 140,20 L140,130 Q75,150 10,130 Z"
+          fill="#f5f5f5" stroke="none"/>
+
+    <!-- Definicions úniques per aquest tile -->
+    <defs>
+      <!-- Gradient amb brillantor al centre -->
+      <linearGradient id="grad-personal" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#4A90E2"/>
+        <stop offset="45%" stop-color="#357ABD"/>
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.6"/> <!-- brillantor -->
+        <stop offset="55%" stop-color="#357ABD"/>
+        <stop offset="100%" stop-color="#4A90E2"/>
+      </linearGradient>
+
+      <!-- ClipPath superior per imatge -->
+      <clipPath id="clip-top-personal">
+        <path d="M10,20 Q75,0 140,20 L140,95 L10,95 Z"/>
+      </clipPath>
+
+      <!-- ClipPath inferior per gradient -->
+      <clipPath id="clip-bottom-personal">
+        <path d="M10,95 L140,95 L140,130 Q75,150 10,130 Z"/>
+      </clipPath>
+    </defs>
+
+    <!-- Zona superior amb imatge -->
+    <image href="{{ url_for('static', filename='img/personal.png') }}"
+           x="10" y="0" width="130" height="100"
+           preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-top-personal)"/>
+
+    <!-- Zona inferior amb gradient arrodonit -->
+    <rect x="10" y="95" width="130" height="55"
+          fill="url(#grad-personal)" clip-path="url(#clip-bottom-personal)"/>
+
+    <!-- Text -->
+    <text x="75" y="120" text-anchor="middle" font-size="14"
+          font-family="Montserrat" fill="#fff">
+      {{ _('Espai personal') }}
+    </text>
+
+  </svg>
+</a>
+
+<a href="{{ url_for('blog.blog') }}" class="boto-principal">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    
+    <path d="M10,20 Q75,0 140,20 L140,130 Q75,150 10,130 Z"
+          fill="#f5f5f5" stroke="none"/>
+    <def>
+      <linearGradient id="grad-blog" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#7ED321"/>
+        <stop offset="45%" stop-color="#5CB717"/>
+        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.6"/> <!-- brillantor -->
+        <stop offset="55%" stop-color="#5CB717"/>
+        <stop offset="100%" stop-color="#7ED321"/>
+      </linearGradient>
+      <clipPath id="clip-top-blog">
+        <path d="M10,20 Q75,0 140,20 L140,95 L10,95 Z"/>
+      </clipPath>
+      <clipPath id="clip-bottom-blog">
+        <path d="M10,95 L140,95 L140,130 Q75,150 10,130 Z"/>
+      </clipPath>
+    </defs>
+
+    <image href="{{ url_for('static', filename='img/favicon.png') }}"
+           x="10" y="0" width="130" height="100"
+           preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-top-blog)"/>
+    <rect x="10" y="95" width="130" height="55"
+          fill="url(#grad-blog)" clip-path="url(#clip-bottom-blog)"/>
+    <text x="75" y="120" text-anchor="middle" font-size="14"
+          font-family="Montserrat" fill="#fff">
+      {{ _('Blog') }}
+    </text>
+
+  </svg>
+</a>

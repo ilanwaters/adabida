@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Editar secció') if seccio else _('Nova secció') }} - {{ organitzacio.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+<style>
+.formulari-seccio {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+}
+
+.camp-formulari {
+  margin-bottom: 1.5rem;
+}
+
+.camp-formulari label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.camp-formulari input[type="text"] {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.camp-formulari input[type="text"]:focus {
+  outline: none;
+  border-color: #14d8ce;
+  box-shadow: 0 0 0 3px rgba(20, 216, 206, 0.1);
+}
+
+.checkbox-camp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-camp input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.botons-formulari {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+}
+
+.boto-guardar {
+  padding: 0.8rem 2rem;
+  background: linear-gradient(135deg, #14d8ce 0%, #0ea99f 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boto-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 216, 206, 0.3);
+}
+
+.boto-cancelar {
+  padding: 0.8rem 2rem;
+  background: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.boto-cancelar:hover {
+  background: #e9ecef;
+}
+
+.breadcrumb {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.breadcrumb a {
+  color: #14d8ce;
+  text-decoration: none;
+}
+
+.ajuda {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-left: 4px solid #14d8ce;
+  margin-bottom: 2rem;
+  border-radius: 4px;
+}
+
+.ajuda h4 {
+  margin: 0 0 0.5rem 0;
+  color: #14d8ce;
+}
+
+.ajuda ul {
+  margin: 0.5rem 0 0 1.5rem;
+  color: #666;
+}
+</style>
+{% endblock %}
+
+{% block contingut %}
+<div class="formulari-seccio">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('organitzacions.publica', slug=organitzacio.url_publica) }}">{{ organitzacio.nom }}</a> › › 
+    <span>{{ _('Editar secció') if seccio else _('Nova secció') }}</span>
+  </div>
+
+  <h1>{{ _('Editar secció') if seccio else _('Nova secció d\'història de l\'organització') }}</h1>
+
+  <!-- Ajuda -->
+  <div class="ajuda">
+    <h4>💡 {{ _('Consells') }}</h4>
+    <ul>
+      <li>{{ _('Podeu organitzar la història per períodes: "Orígens", "Anys 80", "Expansió"...') }}</li>
+      <li>{{ _('O per temes: "Fundació", "Projectes destacats", "Persones clau"...') }}</li>
+      <li>{{ _('Cada secció es pot marcar com a privada si només voleu que la vegin els membres') }}</li>
+      <li>{{ _('Podeu afegir imatges, enllaços i format al text') }}</li>
+    </ul>
+  </div>
+
+  <!-- Formulari -->
+  <form method="post">
+    
+    <!-- Títol -->
+    <div class="camp-formulari">
+      <label for="titol">{{ _('Títol de la secció') }} *</label>
+      <input 
+        type="text" 
+        id="titol" 
+        name="titol" 
+        value="{{ seccio.titol if seccio else '' }}" 
+        placeholder="{{ _('Ex: Fundació de l\'organització') }}"
+        required>
+    </div>
+
+    <!-- Contingut -->
+    <div class="camp-formulari">
+      <label for="editor-contingut">{{ _('Contingut') }}</label>
+      <textarea id="editor-contingut" name="contingut">{{ seccio.contingut if seccio else '' }}</textarea>
+    </div>
+
+    <!-- Visibilitat -->
+    <div class="camp-formulari checkbox-camp">
+      <input 
+        type="checkbox" 
+        id="visible" 
+        name="visible" 
+        {{ 'checked' if not seccio or seccio.visible else '' }}>
+      <label for="visible" style="margin: 0;">
+        {{ _('Visible públicament (si no, només membres de l\'organització)') }}
+      </label>
+    </div>
+
+    <!-- Botons -->
+    <div class="botons-formulari">
+      <a href="{{ url_for('historia_organitzacio.llistar', organitzacio_id=organitzacio.id) }}" class="boto-cancelar">
+        {{ _('Cancel·lar') }}
+      </a>
+      <button type="submit" class="boto-guardar">
+        💾 {{ _('Guardar secció') }}
+      </button>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- TinyMCE local -->
+<script src="{{ url_for('static', filename='js/tinymce/tinymce.min.js') }}"></script>
+
+<script>
+tinymce.init({
+  selector: '#editor-contingut',
+  height: 500,
+  menubar: false,
+  language: '{{ session.get("idioma", "ca") }}',
+  
+  plugins: [
+    'advlist', 'autolink', 'lists', 'link', 'image', 
+    'charmap', 'preview', 'anchor', 'searchreplace',
+    'visualblocks', 'code', 'fullscreen', 'insertdatetime',
+    'media', 'table', 'help', 'wordcount'
+  ],
+  
+  toolbar: 'undo redo | blocks | bold italic underline | ' +
+           'alignleft aligncenter alignright | ' +
+           'bullist numlist | link image | ' +
+           'removeformat | help',
+  
+  // Configuració d'imatges (pendent implementar ruta)
+  images_upload_url: '/perfil/biografia/pujar-imatge',
+  automatic_uploads: true,
+  
+  // Estils del contingut
+  content_style: `
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      padding: 20px;
+    }
+    h2 { font-size: 1.8rem; margin-top: 1.5rem; }
+    h3 { font-size: 1.4rem; margin-top: 1.2rem; }
+    p { margin-bottom: 1rem; }
+  `
+});
+
+// Confirmació abans de sortir si hi ha canvis
+let formModificat = false;
+
+document.querySelector('form').addEventListener('input', function() {
+  formModificat = true;
+});
+
+document.querySelector('.boto-cancelar').addEventListener('click', function(e) {
+  if (formModificat) {
+    if (!confirm('{{ _("Teniu canvis sense guardar. Voleu sortir igualment?") }}')) {
+      e.preventDefault();
+    }
+  }
+});
+</script>
+{% endblock %}

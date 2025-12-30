@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ usuari.nom_complet }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil_public.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/repositori.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+{% endblock %}
+
+{% block page_content %}
+<div class="perfil-public">
+  <div class="capcalera-perfil">
+  <h1 class="nom-usuari-perfil">
+    {{ usuari.nom }} {{ usuari.primer_cognom }}{% if usuari.segon_cognom %} {{ usuari.segon_cognom }}{% endif %}
+  </h1>
+
+  <!-- Informació de contacte -->
+
+
+{% if current_user.is_authenticated 
+      and current_user.id != usuari.id 
+      and usuari.rebre_missatges %}
+  <div class="botons-accio">
+    <!-- Botó enviar missatge (acció immediata) -->
+    <button type="button" class="boto-enviar-missatge" onclick="obreModalMissatge()">
+      ✉ {{ _('Enviar missatge') }}
+    </button>
+    
+    <!-- Botó afegir contactes (guardar per al futur) -->
+    {% if not current_user.es_contacte(usuari) %}
+      <button type="button" class="boto-afegir-contacte" onclick="afegirContacte({{ usuari.id }}, '{{ usuari.nom_login }}', '{{ usuari.nom_complet }}')">
+        + {{ _('Afegir a contactes') }}
+      </button>
+    {% else %}
+      <span class="contacte-afegit">✓ {{ _('Ja és als teus contactes') }}</span>
+    {% endif %}
+  </div>
+{% endif %}
+</div>
+{% if perfil and perfil.mostrar_biografia %}
+  {% set seccions_bio = usuari.obtenir_seccions_biografia_ordenades(nomes_visibles=True) %}
+
+   {% if perfil and perfil.mostrar_ubicacio %}
+      <p><strong>{{ _('Lloc:') }}</strong> {{ usuari.pais_residencia or '—' }}</p>
+    {% endif %}
+
+    {% if perfil and perfil.mostrar_data_naixement %}
+      {% set lloc_naix = [perfil.municipi_naixement, perfil.regio_naixement, perfil.pais_naixement]|reject('equalto', None)|reject('equalto','')|list %}
+      <p><strong>{{ _('Naixement:') }}</strong>
+        {{ perfil.data_naixement or '—' }}{% if lloc_naix|length %} — {{ lloc_naix|join(', ') }}{% endif %}
+      </p>
+    {% endif %}
+  
+  <div class="bloc-plegable">
+    <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+      {{ _('Biografia') }} 
+     
+    </h2>
+    
+    <div class="contingut-plegable">
+      {% if seccions_bio %}
+        
+        {% for seccio in seccions_bio %}
+        <div class="seccio-biografia-publica" style="margin-bottom: 2rem;">
+          
+          <!-- Títol de la secció -->
+          <h3 style="font-size: 1.5rem; color: #2c3e50; margin-bottom: 1rem; border-bottom: 2px solid #14d8ce; padding-bottom: 0.5rem;">
+            {{ seccio.titol }}
+          </h3>
+          
+          <!-- Contingut de la secció -->
+          <div class="contingut-seccio" style="line-height: 1.8; color: #333;">
+            {{ seccio.contingut|safe }}
+          </div>
+          
+        </div>
+        {% endfor %}
+        
+      {% else %}
+        <p class="muted">{{ _('Encara no hi ha biografia publicada.') }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+
+
+<div class="bloc-plegable">
+  <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+    {{ entrades|length }} {{ _('entrades') }}
+  </h2>
+  <div class="contingut-plegable">
+    {% if entrades %}
+      <div class="llista-entrades">
+        {% for entrada in entrades %}
+          {% include "components/caixa_entrada.html" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p><em>{{ _('No hi ha entrades públiques.') }}</em></p>
+    {% endif %}
+  </div>
+</div>
+
+  {% if perfil and perfil.mostrar_experiencia %}
+    {% set exps = experiencies|list %}
+    <div class="bloc-plegable">
+      <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+        {{ _('Experiència professional') }} <small>({{ exps|length }})</small>
+      </h2>
+      <div class="contingut-plegable">
+        {% if exps %}
+          <ul>
+            {% for exp in exps %}
+              <li>
+                <strong>{{ exp.carrec }}</strong>{% if exp.organitzacio %} — {{ exp.organitzacio }}{% endif %}
+                {% if exp.any_inici or exp.any_fi or exp.actualment %}
+                  <br><small>
+                    {% if exp.actualment %}
+                      {{ exp.any_inici or '' }}–{{ _('actual') }}
+                    {% else %}
+                      {{ exp.any_inici or '' }}{% if exp.any_fi %}–{{ exp.any_fi }}{% endif %}
+                    {% endif %}
+                  </small>
+                {% endif %}
+                {% if exp.ambit %}<br><small>{{ exp.ambit }}</small>{% endif %}
+                {% if exp.descripcio %}<br>{{ exp.descripcio }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="muted">{{ _('Encara no hi ha experiència afegida.') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if perfil and perfil.mostrar_estudis %}
+    {% set ests = estudis|list %}
+    <div class="bloc-plegable">
+      <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+        {{ _('Formació acadèmica') }} <small>({{ ests|length }})</small>
+      </h2>
+      <div class="contingut-plegable">
+        {% if ests %}
+          <ul>
+            {% for s in ests %}
+              <li>
+                <strong>{{ s.titulacio }}</strong>{% if s.centre %} — {{ s.centre }}{% endif %}
+                {% set lloc = [s.ciutat, s.pais]|reject('equalto', None)|reject('equalto','')|list %}
+                {% if lloc|length %}<br><small>({{ lloc|join(', ') }})</small>{% endif %}
+                {% if s.any_inici or s.any_fi %}<br><small>{{ s.any_inici or '' }}{% if s.any_fi %}–{{ s.any_fi }}{% endif %}</small>{% endif %}
+                {% if s.descripcio %}<br>{{ s.descripcio }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="muted">{{ _('Encara no hi ha estudis afegits.') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if perfil and perfil.mostrar_carrecs %}
+    {% set cps = carrecs|list %}
+    <div class="bloc-plegable">
+      <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+        {{ _('Càrrecs públics') }} <small>({{ cps|length }})</small>
+      </h2>
+      <div class="contingut-plegable">
+        {% if cps %}
+          <ul>
+            {% for c in cps %}
+              <li>
+                <strong>{{ c.titol }}</strong>
+                {% if c.any_inici or c.any_fi %}<br><small>{{ c.any_inici or '' }}{% if c.any_fi %}–{{ c.any_fi }}{% endif %}</small>{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="muted">{{ _('Encara no hi ha càrrecs públics afegits.') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if perfil and perfil.mostrar_obres %}
+    {% set obs = obres|list %}
+    <div class="bloc-plegable">
+      <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+        {{ _('Obra') }} <small>({{ obs|length }})</small>
+      </h2>
+      <div class="contingut-plegable">
+        {% if obs %}
+          <ul>
+            {% for o in obs %}
+              <li>
+                <strong>{{ o.titol }}</strong>{% if o.any %} — {{ o.any }}{% endif %}
+                {% if o.descripcio %}<br>{{ o.descripcio }}{% endif %}
+                {% if o.ruta_relativa %}<br><a href="/{{ o.ruta_relativa }}" target="_blank" rel="noopener">{{ o.nom_fitxer }}</a>{% endif %}
+                {% if o.tipus %} <small>({{ o.tipus }})</small>{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="muted">{{ _('Encara no hi ha obra pujada.') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if perfil and (perfil.mostrar_pare or perfil.mostrar_mare) %}
+    <div class="bloc-plegable">
+      <h2 class="titol-plegable" onclick="this.parentElement.classList.toggle('actiu')">
+        {{ _('Família') }}
+      </h2>
+      <div class="contingut-plegable">
+        {% if perfil.mostrar_pare %}
+          <h3 style="margin-top:.5rem">{{ _('Pare') }}</h3>
+          {# ... contingut pare ... #}
+        {% endif %}
+
+        {% if perfil.mostrar_mare %}
+          <hr>
+          <h3>{{ _('Mare') }}</h3>
+          {# ... contingut mare ... #}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+
+
+<div id="modal-missatge" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>{{ _('Enviar missatge a') }} {{ usuari.nom }}</h2>
+    <form method="post" action="{{ url_for('missatges.enviar') }}">
+      <input type="hidden" name="receptor_id" value="{{ usuari.id }}">
+
+      <label for="assumpte">{{ _('Assumpte') }}</label>
+      <input name="assumpte" id="assumpte" required>
+
+      <label for="contingut">{{ _('Missatge') }}</label>
+      <textarea name="contingut" id="contingut" rows="5" required></textarea>
+
+      <div style="text-align: right; margin-top: 1rem;">
+        <button type="submit" class="boto-enviar">{{ _('Enviar') }}</button>
+        <button type="button" onclick="tancaModalMissatge()">{{ _('Cancel·la') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+  {% include "components/modal_entrada.html" %}
+  <script>
+function obreModalMissatge() {
+  document.getElementById("modal-missatge").style.display = "flex";
+}
+
+function tancaModalMissatge() {
+  document.getElementById("modal-missatge").style.display = "none";
+}
+</script>
+  <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
+<script>
+// Funció per plegar/desplegar blocs
+function toggleBloc(element) {
+  const bloc = element.parentElement;
+  bloc.classList.toggle('actiu');
+}
+
+// Opcional: començar amb tots oberts
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.bloc-plegable').forEach(bloc => {
+    bloc.classList.add('actiu'); // tots oberts per defecte
+  });
+});
+</script>
+<script>function afegirContacte(usuariId, login, nom) {
+        console.log('Afegint contacte:', usuariId, login, nom);
+        fetch('/contactes/afegir_contacte', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contacte_id: usuariId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Resposta:', data);
+            if (data.success) {
+                alert(`${nom} afegit als teus contactes!`);
+                location.reload();
+            } else {
+                alert('Error: ' + (data.error || 'No s\'ha pogut afegir el contacte'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de connexió');
+        });
+    }</script>
+
+{% endblock %}

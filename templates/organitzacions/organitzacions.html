@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Arxiu internacional de memòria oral') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="seccio visible">
+    
+    <!-- Capçalera organització -->
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <h1 style="margin: 0; font-size: 2rem; color: #333;">{{ organitzacio.nom }}</h1>
+          <div style="margin-top: 0.5rem; color: #666;">
+            <span style="font-weight: bold;">{{ organitzacio.tipus|title }}</span>
+            <span style="margin: 0 0.5rem;">•</span>
+            <span>{{ organitzacio.municipi }}, {{ organitzacio.regio }}</span>
+          </div>
+        </div>
+        
+        <!-- Botó administrar només per admins -->
+        {% if es_admin %}
+          <a href="{{ url_for('organitzacions_admin.admin', id=organitzacio.id) }}"
+             style="display: inline-block; background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border-radius: 4px; text-decoration: none; transition: background 0.3s;">
+            {{ _('Administrar') }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="cards-grid">
+      
+      <!-- Card: Espai Principal -->
+      <a href="{{ url_for('organitzacions.seccio', slug=organitzacio.slug, seccio='qui-som') }}" class="card">
+        {% if es_admin %}
+          <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('qui-som');" title="{{ _('Canviar imatge') }}">
+            <i class="fas fa-camera"></i>
+          </div>
+        {% endif %}
+        {% if organitzacio.imatge_card_qui_som %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_organitzacio/' + organitzacio.imatge_card_qui_som) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/organitzacio-qui-som.png') }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Qui som') }}</h3>
+          <p>{{ _('Informació completa') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Història -->
+      <a href="{{ url_for('historia_organitzacio.llistar', organitzacio_id=organitzacio.id) }}" class="card">
+        {% if es_admin %}
+          <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('historia');" title="{{ _('Canviar imatge') }}">
+            <i class="fas fa-camera"></i>
+          </div>
+        {% endif %}
+        {% if organitzacio.imatge_card_historia %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_organitzacio/' + organitzacio.imatge_card_historia) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/organitzacio-historia.png') }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Història') }}</h3>
+          <p>{{ _('La nostra trajectòria') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Entrades -->
+      <a href="{{ url_for('organitzacions.seccio', slug=organitzacio.slug, seccio='entrades') }}" class="card">
+        {% if es_admin %}
+          <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('entrades');" title="{{ _('Canviar imatge') }}">
+            <i class="fas fa-camera"></i>
+          </div>
+        {% endif %}
+        {% if organitzacio.imatge_card_entrades %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_organitzacio/' + organitzacio.imatge_card_entrades) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/organitzacio-entrades.png') }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Entrades') }}</h3>
+          <p>{{ _('Testimonis compartits') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Membres -->
+      <a href="{{ url_for('organitzacions.seccio', slug=organitzacio.slug, seccio='membres') }}" class="card">
+        {% if es_admin %}
+          <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('membres');" title="{{ _('Canviar imatge') }}">
+            <i class="fas fa-camera"></i>
+          </div>
+        {% endif %}
+        {% if organitzacio.imatge_card_membres %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_organitzacio/' + organitzacio.imatge_card_membres) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/organitzacio-membres.png') }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Membres') }}</h3>
+          <p>{{ _('Comunitat') }}</p>
+        </div>
+      </a>
+
+      <!-- Card: Imatges -->
+      <a href="{{ url_for('organitzacions.seccio', slug=organitzacio.slug, seccio='imatges') }}" class="card">
+        {% if es_admin %}
+          <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('imatges');" title="{{ _('Canviar imatge') }}">
+            <i class="fas fa-camera"></i>
+          </div>
+        {% endif %}
+        {% if organitzacio.imatge_card_imatges %}
+          <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_organitzacio/' + organitzacio.imatge_card_imatges) }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% else %}
+          <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/organitzacio-imatges.png') }}');">
+            <div class="card-overlay"></div>
+          </div>
+        {% endif %}
+        <div class="card-content">
+          <h3>{{ _('Imatges') }}</h3>
+          <p>{{ _('Galeria visual') }}</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Botó sol·licitar adhesió si no és membre -->
+    {% if not es_membre and organitzacio.activa %}
+      <div style="text-align: center; margin: 3rem 0;">
+        <button onclick="obrirModalAdhesio()" 
+                style="background: #14d8ce; color: white; padding: 1rem 2rem; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; transition: background 0.3s;">
+          {{ _('Sol·licitar adhesió') }}
+        </button>
+      </div>
+    {% endif %}
+
+  </div>
+</main>
+
+<!-- Modal sol·licitar adhesió -->
+<div id="modal-adhesio" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+  <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
+    <span class="boto-tancar" onclick="tancarModalAdhesio()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</span>
+    
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem;">{{ _('Sol·licitar adhesió a') }} {{ organitzacio.nom }}</h3>
+    
+    <form id="form-adhesio">
+      <div style="margin-bottom: 1.5rem;">
+        <label for="missatge-adhesio" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ _('Missatge (opcional)') }}</label>
+        <textarea id="missatge-adhesio" name="missatge" rows="4" 
+                  style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-family: inherit;"
+                  placeholder="{{ _('Explica breument per què vols adherir-te a aquesta organització...') }}"></textarea>
+      </div>
+      
+      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+        <button type="button" onclick="tancarModalAdhesio()" 
+                style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+          {{ _('Cancel·lar') }}
+        </button>
+        <button type="submit" 
+                style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+          {{ _('Enviar sol·licitud') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal canviar imatge card -->
+<div id="modal-imatge-card" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+  <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
+    <span class="boto-tancar" onclick="tancarModalImatge()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</span>
+    
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem;">{{ _('Canviar imatge del card') }}</h3>
+    
+    <form id="form-imatge-card" enctype="multipart/form-data">
+      <input type="hidden" id="card-type" name="card_type">
+      
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ _('Selecciona una opció:') }}</label>
+        
+        <!-- Opció 1: Pujar des de l'ordinador -->
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="document.getElementById('file-input').click()" 
+                  style="width: 100%; background: #14d8ce; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-upload"></i>
+            {{ _('Pujar des de l\'ordinador') }}
+          </button>
+          <input type="file" id="file-input" name="imatge" accept="image/*" style="display: none;" onchange="previewImatge(this)">
+        </div>
+        
+        <!-- Opció 2: Fer foto amb càmera -->
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="activarCamera()" 
+                  style="width: 100%; background: #667eea; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-camera"></i>
+            {{ _('Fer foto amb la càmera') }}
+          </button>
+        </div>
+        
+        <!-- Preview imatge -->
+        <div id="preview-container" style="display: none; margin-top: 1rem; text-align: center;">
+          <img id="preview-image" style="max-width: 100%; max-height: 300px; border-radius: 4px;">
+        </div>
+        
+        <!-- Video càmera (ocult) -->
+        <video id="camera-video" style="display: none; max-width: 100%; border-radius: 4px;" autoplay></video>
+        <canvas id="camera-canvas" style="display: none;"></canvas>
+        
+        <div id="camera-controls" style="display: none; margin-top: 1rem; text-align: center;">
+          <button type="button" onclick="capturarFoto()" 
+                  style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">
+            <i class="fas fa-camera"></i> {{ _('Capturar') }}
+          </button>
+          <button type="button" onclick="tancarCamera()" 
+                  style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+            {{ _('Cancel·lar') }}
+          </button>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+        <button type="button" onclick="tancarModalImatge()" 
+                style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+          {{ _('Cancel·lar') }}
+        </button>
+        <button type="submit" id="btn-guardar-imatge" disabled
+                style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; opacity: 0.5;">
+          {{ _('Guardar imatge') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Modal adhesió
+function obrirModalAdhesio() {
+  document.getElementById('modal-adhesio').style.display = 'block';
+}
+
+function tancarModalAdhesio() {
+  document.getElementById('modal-adhesio').style.display = 'none';
+}
+
+// Enviar sol·licitud adhesió
+document.getElementById('form-adhesio').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const missatge = document.getElementById('missatge-adhesio').value;
+  
+  fetch(`{{ url_for('organitzacions.solicitar') }}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify({
+      organitzacio_id: {{ organitzacio.id }},
+      missatge: missatge
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Sol·licitud enviada correctament") }}');
+      tancarModalAdhesio();
+      location.reload();
+    } else {
+      alert('{{ _("Error") }}: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+});
+
+// Modal imatge card
+let currentStream = null;
+
+function obrirModalImatge(cardType) {
+  document.getElementById('card-type').value = cardType;
+  document.getElementById('modal-imatge-card').style.display = 'block';
+}
+
+function tancarModalImatge() {
+  document.getElementById('modal-imatge-card').style.display = 'none';
+  tancarCamera();
+  document.getElementById('preview-container').style.display = 'none';
+  document.getElementById('btn-guardar-imatge').disabled = true;
+  document.getElementById('btn-guardar-imatge').style.opacity = '0.5';
+  document.getElementById('file-input').value = '';
+}
+
+function previewImatge(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview-image').src = e.target.result;
+      document.getElementById('preview-container').style.display = 'block';
+      document.getElementById('btn-guardar-imatge').disabled = false;
+      document.getElementById('btn-guardar-imatge').style.opacity = '1';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function activarCamera() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      currentStream = stream;
+      const video = document.getElementById('camera-video');
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('camera-controls').style.display = 'block';
+      document.getElementById('preview-container').style.display = 'none';
+    })
+    .catch(err => {
+      alert('{{ _("No s\'ha pogut accedir a la càmera") }}');
+      console.error(err);
+    });
+}
+
+function capturarFoto() {
+  const video = document.getElementById('camera-video');
+  const canvas = document.getElementById('camera-canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  
+  canvas.toBlob(blob => {
+    const file = new File([blob], "camera-photo.jpg", { type: "image/jpeg" });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    document.getElementById('file-input').files = dataTransfer.files;
+    
+    document.getElementById('preview-image').src = canvas.toDataURL();
+    document.getElementById('preview-container').style.display = 'block';
+    document.getElementById('btn-guardar-imatge').disabled = false;
+    document.getElementById('btn-guardar-imatge').style.opacity = '1';
+    
+    tancarCamera();
+  }, 'image/jpeg');
+}
+
+function tancarCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  document.getElementById('camera-video').style.display = 'none';
+  document.getElementById('camera-controls').style.display = 'none';
+}
+
+// Enviar formulari imatge
+document.getElementById('form-imatge-card').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(this);
+  
+  fetch(`{{ url_for('organitzacions_admin.pujar_imatge_card', slug=organitzacio.slug) }}`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'same-origin'
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Imatge guardada correctament") }}');
+      location.reload();
+    } else {
+      alert('{{ _("Error") }}: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+});
+
+// Tancar modals amb ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    tancarModalAdhesio();
+    tancarModalImatge();
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,290 @@
+
+button:hover,
+.boto:hover,
+.boto-explora:hover,
+
+
+
+.boto:active {
+  background-color: hsl(214, 89%, 15%);
+}
+
+.boto {
+  padding: 10px 20px !important;
+  background-color: #14d8ce !important;
+  color: white !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+
+  font-family: Montserrat, sans-serif !important;
+  font-size: 1em !important;
+  font-weight: normal !important;
+
+  border: none !important;
+  border-bottom: 3px solid transparent !important;
+  border-radius: 0 !important;
+
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+  outline: none !important;
+  appearance: none !important;
+  transform: none !important;
+
+  transition: none !important;
+}
+
+.icona-boto {
+  font-size: 0.75em;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+
+.boto-explora {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background-color: #004B87;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.boton-checkbox {
+  background-color: #005577;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: fit-content;
+}
+
+.boton-checkbox:hover {
+  background-color: #003f5c;
+}
+
+.boton-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.boton-checkbox label {
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-elegant {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #eaeaea;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.checkbox-elegant input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+/* Checkboxs del formulari de visibilitat */
+.fila-formulari label {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: normal;
+  margin-bottom: 0.3em;
+}
+
+.fila-formulari input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #444; /* Per assegurar que el tick es veu */
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* 🔧 Reforç per corregir errors de visualització dels checkbox */
+.fila-formulari input[type="checkbox"] {
+  all: unset;
+  appearance: checkbox;
+  width: 16px;
+  height: 16px;
+  accent-color: #444;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.checkbox-etica {
+  display: block;
+  position: relative;
+  padding-left: 2em;
+  margin-bottom: 0.8em;
+  cursor: pointer;
+  font-size: 1em;
+  user-select: none;
+}
+
+.checkbox-etica input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0.1em;
+  left: 0;
+  height: 1.2em;
+  width: 1.2em;
+  background-color: #f1f1f1;
+  border: 2px solid #999;
+  border-radius: 0.2em;
+}
+
+.checkbox-etica input:checked ~ .checkmark {
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-etica input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-etica .checkmark:after {
+  left: 0.4em;
+  top: 0.1em;
+  width: 0.3em;
+  height: 0.6em;
+  border: solid white;
+  border-width: 0 0.2em 0.2em 0;
+  transform: rotate(45deg);
+}
+
+.boto-textual {
+  background: none;
+  border: none;
+  color: #005;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.boto-textual:hover {
+  color: #222;
+}
+
+.boto-multimedia {
+  margin-right: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bloc-gravacio {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.botons-gravacio {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ocult {
+  display: none;
+}
+
+.botons-final {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+}
+
+.botons-final button {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+}
+.botons-final{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1.5rem;
+  margin-top:2rem;
+  padding:0 1rem;
+  flex-wrap:nowrap;
+}
+
+
+.boto_nav {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: var(--espai-sm) var(--espai-lg);
+  background: var(--color-blau);
+  color: var(--color-blanc);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.boto_nav:hover {
+  background: var(--color-blau-fosc);
+  color: var(--color-blanc);
+}
+a.boto_nav {
+  display: inline-block;
+}
+
+.enllac-nou-missatge {
+  color: #666;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-left: 15px;
+}
+
+.enllac-nou-missatge:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.boto_adabida {
+  color: hsl(0, 0%, 7%);
+  text-decoration: none;
+  font-weight: normal;
+  font-size: 1.2em;
+  margin-left: 15px;
+}
+
+.boto_adabida:hover {
+  color: hsl(219, 100%, 20%);
+  text-decoration: none;
+}

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Les meves famílies') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+  <div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
+    <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
+  </h1>
+</div>
+<main>
+  <!-- SECCIÓ ESPAIS FAMILIARS ON SÓC ADMIN -->
+  <div class="bloc-plegable">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+      {{ _('Espais familiars que administro') }} ({{ families_admin|length }})
+    </h3>
+    <div class="contingut-plegable">
+      {% if families_admin %}
+        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+          {% for membre in families_admin %}
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
+              <div>
+                <strong>{{ membre.espai_familiar.nom }}</strong>
+                <small style="color: #666; margin-left: 8px;">({{ _('Administrador') }})</small>
+                {% if membre.espai_familiar.motiu %}
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px; font-style: italic;">
+                  "{{ membre.espai_familiar.motiu }}"
+                </div>
+                {% endif %}
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
+                   {{ membre.espai_familiar.nombre_membres }} {{ _('membres') }}
+                </div>
+                {% if membre.espai_familiar.ubicacions_mostrar %}
+                <div style="font-size: 0.9rem; color: #666;">
+                   
+                  {% for ub in membre.espai_familiar.ubicacions_mostrar[:2] %}
+                    {{ ub.municipi }}{% if ub.pais %}, {{ ub.pais }}{% endif %}{% if not loop.last %} · {% endif %}
+                  {% endfor %}
+                  {% if membre.espai_familiar.ubicacions_mostrar|length > 2 %}...{% endif %}
+                </div>
+                {% endif %}
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="{{ url_for('familia.veure', url=membre.espai_familiar.url) }}"
+                   class="boto_nav">
+                  {{ _('Veure') }}
+                </a>
+                <a href="{{ url_for('administrar.index', familia_id=membre.espai_familiar.id) }}"
+                   class="boto_nav">
+                  {{ _('Administrar') }}
+                </a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="color: #666; font-style: italic; margin-top: 1rem;">
+          <em>{{ _('Encara no administres cap espai familiar') }}</em>
+        </p>
+        <p style="margin-top: 1rem;">
+          <a href="{{ url_for('familia.crear') }}" class="boto_nav">
+            {{ _('Crear el meu primer espai familiar') }}
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SECCIÓ ESPAIS FAMILIARS ON SÓC MEMBRE -->
+  <div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+      {{ _('Espais familiars on sóc membre') }} ({{ families_membre|length }})
+    </h3>
+    <div class="contingut-plegable">
+      {% if families_membre %}
+        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+          {% for membre in families_membre %}
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
+              <div>
+                <strong>{{ membre.espai_familiar.nom }}</strong>
+                <small style="color: #666; margin-left: 8px;">({{ _(membre.rol.title()) }})</small>
+                {% if membre.espai_familiar.motiu %}
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px; font-style: italic;">
+                  "{{ membre.espai_familiar.motiu }}"
+                </div>
+                {% endif %}
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
+                   {{ membre.espai_familiar.nombre_membres }} {{ _('membres') }}
+                </div>
+              </div>
+              <div>
+                <a href="{{ url_for('familia.veure', url=membre.espai_familiar.url) }}"
+                   class="boto_nav">
+                  {{ _('Veure') }}
+                </a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="color: #666; font-style: italic; margin-top: 1rem;">
+          <em>{{ _('Encara no pertanys a cap espai familiar com a membre') }}</em>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleBloc(element) {
+  const bloc = element.parentElement;
+  bloc.classList.toggle('tancat');
+}
+
+// Per defecte, primer bloc obert, segon tancat
+document.addEventListener("DOMContentLoaded", function () {
+  const blocs = document.querySelectorAll(".bloc-plegable");
+  if (blocs.length > 1) {
+    blocs[1].classList.add("tancat"); // segon bloc tancat
+  }
+});
+</script>
+{% endblock %}

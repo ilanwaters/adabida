@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Tema - THE OFFICE{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>✏️ Editar Tema</h1>
+        <a href="{{ url_for('admin_tematiques.llistar_temes', categoria_id=tema.categoria_id) }}" class="btn-secondary">← Tornar</a>
+    </div>
+
+    <div class="formulari-box">
+        <form method="POST">
+            <div class="form-group">
+                <label for="nom">Nom del tema:</label>
+                <input type="text" id="nom" name="nom" value="{{ tema.nom }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ordre">Ordre (opcional):</label>
+                <input type="number" id="ordre" name="ordre" value="{{ tema.ordre }}" min="0">
+                <small>Els números més baixos apareixen primer</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">💾 Guardar canvis</button>
+                <a href="{{ url_for('admin_tematiques.llistar_temes', categoria_id=tema.categoria_id) }}" class="btn-secondary">Cancel·lar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,422 @@
+ /* Layout principal */
+    .perfil-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    /* Capçalera amb dues columnes */
+    .perfil-header {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Columna esquerra: Info */
+    .perfil-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .perfil-info h1 {
+      margin: 0 0 1rem 0;
+      font-size: 2.5rem;
+      color: #333;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .perfil-meta {
+      display: flex;
+      gap: 2rem;
+      margin: 1rem 0;
+      color: #666;
+    }
+    
+    .perfil-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .perfil-meta-item i {
+      color: #14d8ce;
+    }
+    
+    /* Columna dreta: Avatar */
+    .perfil-avatar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .perfil-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #14d8ce;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 4rem;
+      font-weight: 600;
+    }
+    
+    .perfil-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .avatar-edit-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 25px;   /* ← Més petit (era 45px) */
+  height: 25px;  /* ← Més petit */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+  font-size: 0.9rem;  /* ← Icona més petita */
+  color: #666;
+}
+
+.avatar-edit-btn:hover {
+  background: #14d8ce;
+  color: white;
+  transform: scale(1.1);
+}
+    
+    /* Boto administrar */
+    .btn-admin {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #14d8ce;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-admin:hover {
+      background: #0fc4ba;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(20, 216, 206, 0.3);
+    }
+    
+    /* Grid d'info bàsica */
+    .info-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .info-card h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: #14d8ce;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+     
+    .info-item:last-child {
+      border-bottom: none;
+    }
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.info-value {
+  color: #333;
+  text-align: right;
+}
+    
+    /* Blocs plegables moderns */
+    .bloc-modern {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    
+    .bloc-header {
+      background: linear-gradient(135deg, hsl(231, 3%, 49%) 0%, hsl(240, 18%, 39%) 100%);
+      color: white;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    
+    .bloc-header:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+    }
+    
+    .bloc-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    
+    .bloc-chevron {
+      transition: transform 0.3s;
+    }
+    
+    .bloc-header.actiu .bloc-chevron {
+      transform: rotate(180deg);
+    }
+    
+    .bloc-contingut {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .bloc-contingut.actiu {
+      max-height: 2000px;
+      transition: max-height 0.5s ease-in;
+    }
+    
+    .bloc-inner {
+      padding: 1.5rem;
+    }
+    
+    /* Llista millor estil */
+    .llista-elegante {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .llista-elegante li {
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+    }
+    
+    .llista-elegante li:hover {
+      background: #f8f9fa;
+    }
+    
+    .llista-elegante li:last-child {
+      border-bottom: none;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .perfil-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .perfil-avatar {
+        width: 150px;
+        height: 150px;
+        font-size: 3rem;
+      }
+      
+      .perfil-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+/* ========================================
+   SELECTOR DE BANDERES
+   ======================================== */
+
+/* Bandera petita al nom */
+.mini-bandera {
+    width: 35px;
+    height: 28px;
+    margin-right: 8px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+    vertical-align: middle;
+}
+
+.mini-bandera:hover {
+    opacity: 1;
+}
+
+.placeholder {
+    font-size: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contingut del modal */
+.modal-banderes-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Header del modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.tancar {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    transition: color 0.3s;
+}
+
+.tancar:hover {
+    color: #333;
+}
+
+/* Input cerca */
+.cerca-input {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    transition: border-color 0.3s;
+}
+
+.cerca-input:focus {
+    outline: none;
+    border-color: #14d8ce;
+}
+
+/* Grid de banderes */
+.banderes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 0 20px 20px 20px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+/* Cada bandera */
+.bandera-opcio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+}
+
+.bandera-opcio:hover {
+    border-color: #14d8ce;
+    background: #f0fffe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(20, 216, 206, 0.2);
+}
+
+.bandera-opcio img {
+    width: 60px;
+    height: 40px;
+    margin-bottom: 8px;
+    object-fit: cover;
+}
+
+.bandera-opcio span {
+    font-size: 0.85rem;
+    text-align: center;
+    color: #555;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .banderes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .bandera-opcio img {
+        width: 50px;
+        height: 33px;
+    }
+}

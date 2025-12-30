@@ -1,0 +1,462 @@
+# ADABIDA - CONTEXT COMPLET ACTUALITZAT 24 NOVEMBRE 2025
+
+## RESUM SESSIÓ 24 NOVEMBRE 2025
+
+### Tasques completades:
+
+1. **Sistema Gestió de Relacions Familiars**
+   * Taula `Matrimoni` creada per múltiples matrimonis amb dates i estats
+   * Models actualitzats: `pare_id`, `mare_id` a MembreFamilia
+   * Ruta `gestionar_relacions()` implementada
+   * Template `gestionar_relacions.html` creat
+   * Germans calculats automàticament (mateix pare o mare)
+   * Fills calculats automàticament
+
+2. **Sistema Editar Membres**
+   * Ruta `editar()` implementada a membres.py
+   * Template `editar_membre.html` amb camps pre-omplerts
+   * Funcionalitat completa d'edició
+
+3. **Sistema Veure Perfil Membre**
+   * Ruta `veure()` implementada
+   * Template `veure_membre.html` creat
+   * Mostra: dades vitals, biografia, documents, relacions
+   * Enllaços clicables des de taula de membres
+
+4. **Reorganització Blueprints**
+   * Creat `routes/familia/membres.py` separat
+   * Blueprint `membres_bp` registrat a app.py
+   * Rutes organitzades: afegir, veure, editar, gestionar_relacions
+   * Neteja de `familia.py`
+
+5. **Disseny Unificat**
+   * Creat `static/css/visualitzacio.css` per pàgines de contingut
+   * Paleta de colors uniforme (blaus suaus, grisos)
+   * Templates redissenyats: veure_membre.html, gestionar_relacions.html
+   * Estil pla i elegant, centrat (max-width: 1200px)
+   * Grid de 2 columnes responsive
+   * Cards amb shadow i border-radius consistent
+
+6. **Sistema Afegir Relacions (EN CURS)**
+   * Ruta `afegir()` actualitzada per detectar paràmetres de relació
+   * Enllaços "Afegir Pare/Mare" funcionals
+   * Sistema automàtic de vinculació de relacions
+   * PENDENT DE PROVAR: funcionalitat completa
+
+---
+
+## ESTRUCTURA DEL PROJECTE
+
+```
+adabida/
+├── .env
+├── app.py (Blueprints: familia_bp, membres_bp)
+├── models.py (Models actualitzats amb relacions)
+├── config.py
+├── requirements.txt
+├── routes/
+│   ├── blog.py
+│   ├── familia/
+│   │   ├── familia.py (hub, crear, veure, les_meves)
+│   │   └── membres.py (NOU - afegir, veure, editar, gestionar_relacions)
+│   ├── organitzacions/
+│   ├── auth.py
+│   └── login.py
+├── templates/
+│   ├── base.html
+│   ├── familia/
+│   │   ├── familia.html
+│   │   ├── crear_espai_familiar.html
+│   │   ├── veure_espai.html
+│   │   ├── les_meves_families.html
+│   │   ├── afegir_membre.html
+│   │   ├── veure_membre.html (NOU - redissenyat)
+│   │   ├── editar_membre.html (NOU)
+│   │   └── gestionar_relacions.html (NOU - redissenyat)
+│   ├── pagina_personal/
+│   └── ...
+├── static/
+│   ├── css/
+│   │   ├── estils_abadia.css
+│   │   ├── estils_formularis.css
+│   │   ├── registre_individual.css
+│   │   └── visualitzacio.css (NOU - CSS unificat)
+│   ├── heraldica/
+│   ├── documents_membres/
+│   └── ...
+├── umberto/ (Sistema arxiu digital)
+└── migrations/
+```
+
+---
+
+## MODELS BASE DE DADES
+
+### Model MembreFamilia (ACTUALITZAT)
+```python
+class MembreFamilia(db.Model):
+    # Camps bàsics
+    id, usuari_id (nullable=True), espai_familiar_id
+    rol, data_adhesio
+    
+    # Dades personals
+    nom, primer_cognom, segon_cognom
+    data_naixement, municipi_naixement, regio_naixement, pais_naixement
+    data_defuncio, municipi_defuncio, regio_defuncio, pais_defuncio
+    municipi_actual, regio_actual, pais_actual
+    biografia
+    
+    # RELACIONS FAMILIARS (NOU)
+    pare_id, mare_id
+    
+    # Relacions
+    usuari → Usuari
+    espai_familiar → EspaiFamiliar
+    pare → MembreFamilia (self-referential)
+    mare → MembreFamilia (self-referential)
+    fills_com_pare → [MembreFamilia] (backref)
+    fills_com_mare → [MembreFamilia] (backref)
+    documents → [DocumentMembreFamilia]
+    matrimonis_com_1 → [Matrimoni] (backref)
+    matrimonis_com_2 → [Matrimoni] (backref)
+```
+
+### Model Matrimoni (NOU)
+```python
+class Matrimoni(db.Model):
+    __tablename__ = 'matrimonis'
+    
+    id
+    espai_familiar_id
+    membre_1_id  # Primer cònjuge
+    membre_2_id  # Segon cònjuge
+    data_casament
+    data_fi  # Data divorci o mort
+    estat  # 'actiu', 'divorciat', 'vidu'
+    
+    # Relacions
+    espai_familiar → EspaiFamiliar
+    membre_1 → MembreFamilia
+    membre_2 → MembreFamilia
+```
+
+### Model DocumentMembreFamilia
+```python
+class DocumentMembreFamilia(db.Model):
+    id, membre_familia_id
+    tipus_document  # 'dni', 'partida_naixement', etc.
+    nom_fitxer
+    descripcio
+    visibilitat  # 'familia' o 'admin'
+    data_pujada
+    pujat_per_id
+    
+    # Relacions
+    membre → MembreFamilia
+    pujat_per → Usuari
+```
+
+### Model EspaiFamiliar
+```python
+class EspaiFamiliar(db.Model):
+    id, nom, motiu, descripcio
+    periode_referencia, heraldica_fitxer
+    data_creacio, creat_per_id, activa
+    
+    # Relacions
+    creador → Usuari
+    membres → [MembreFamilia]
+    ubicacions_origen → [UbicacioOrigenFamilia]
+    ubicacions_actuals → [UbicacioActualFamilia]
+    
+    # Properties
+    @property ubicacions_principals_calculades
+    @property ubicacions_mostrar
+    @property nombre_membres
+```
+
+---
+
+## FUNCIONALITATS IMPLEMENTADES
+
+### Sistema Espais Familiars
+✅ Crear espai amb nom, motiu, descripció
+✅ Múltiples ubicacions d'origen
+✅ Múltiples ubicacions actuals provisionals
+✅ Upload heràldica/escut
+✅ Període de referència
+✅ Llistar espais de l'usuari
+✅ Veure detalls espai
+
+### Sistema Membres
+✅ Afegir membres amb:
+  - Dades personals completes
+  - Dates i llocs naixement/defunció
+  - Ubicació actual
+  - Biografia
+  - Documents amb visibilitat (família vs admins)
+✅ Veure perfil membre amb disseny elegant
+✅ Editar membres amb camps pre-omplerts
+✅ Enllaços clicables des de llistes
+
+### Sistema Relacions Familiars
+✅ Model de dades per pares (pare_id, mare_id)
+✅ Model Matrimoni per múltiples matrimonis
+✅ Càlcul automàtic de germans (mateix pare/mare)
+✅ Càlcul automàtic de fills
+✅ Pàgina gestió relacions amb vista de:
+  - Pares
+  - Matrimonis (amb dates i estat)
+  - Germans (calculats)
+  - Fills (calculats)
+⏳ Afegir pare/mare (implementat, pendent provar)
+⏳ Afegir fill/a (pendent)
+⏳ Afegir germà/na (pendent)
+⏳ Afegir matrimoni (pendent formulari específic)
+
+### Sistema Documents
+✅ Upload múltiples documents per membre
+✅ Tipus: DNI, partides, certificats, fotos
+✅ Visibilitat configurable (família vs admins)
+✅ Descripció opcional per document
+✅ Visualització segons permisos
+
+### Disseny i UX
+✅ CSS unificat per visualització (visualitzacio.css)
+✅ Paleta de colors consistent (blaus suaus, grisos)
+✅ Layout centrat amb max-width 1200px
+✅ Grid responsive de 2 columnes
+✅ Cards elegants amb shadow
+✅ Llistes amb hover effects
+✅ Badges discrets
+✅ Estil pla i professional
+
+---
+
+## RUTES PRINCIPALS
+
+### Blueprint `familia` (/familia/)
+- `hub()` - GET - Pàgina principal gestió familiar
+- `crear()` - GET/POST - Crear espai familiar
+- `veure(familia_id)` - GET - Veure detalls espai
+- `les_meves()` - GET - Llistar espais de l'usuari
+
+### Blueprint `membres` (/familia/membre/)
+- `afegir(familia_id)` - GET/POST - Afegir membre (amb sistema relacions)
+- `veure(membre_id)` - GET - Perfil del membre
+- `editar(membre_id)` - GET/POST - Editar membre
+- `gestionar_relacions(membre_id)` - GET - Gestió relacions familiars
+
+---
+
+## CSS VISUALITZACIÓ
+
+### Fitxer: static/css/visualitzacio.css
+
+**Classes principals:**
+- `.container-visualitzacio` - Contenidor centrat max-width 1200px
+- `.capçalera-pagina` - Capçaleres centrades
+- `.card-visualitzacio` - Cards elegants amb shadow
+- `.card-header-custom` - Headers amb colors
+  - `.card-header-primary` - Blau principal (#1a4b75)
+  - `.card-header-success` - Blau gris (#5a7a8a)
+  - `.card-header-danger` - Gris (#6c757d)
+  - `.card-header-warning` - Gris clar (#8a95a0)
+  - `.card-header-info` - Blau gris (#7b8fa3)
+  - `.card-header-secondary` - Gris (#8a9199)
+- `.grid-2-cols` - Grid responsive 2 columnes
+- `.llista-elegant` - Llistes amb hover
+- `.badge-custom` - Badges discrets
+- `.btn-custom` - Botons uniformes
+- `.alerta-info/success/warning` - Alertes amb border lateral
+- `.biografia-text` - Text pre-wrap per biografies
+- `.nav-tornar` - Enllaç de navegació
+- `.separador` - Línia separadora
+
+**Paleta de colors:**
+- Primari: #1a4b75 (blau Adabida)
+- Secundaris: Tons blaus suaus i grisos (#5a7a8a, #7b8fa3, #8a95a0)
+- Fons cards: #fff amb shadow
+- Hover: #f0f0f0
+
+---
+
+## SISTEMA DE RELACIONS FAMILIARS
+
+### Com funciona:
+
+**Relacions directes (BD):**
+- Pare: `membre.pare_id` → Apunta a un altre MembreFamilia
+- Mare: `membre.mare_id` → Apunta a un altre MembreFamilia
+- Matrimonis: Taula separada `Matrimoni` amb membre_1_id i membre_2_id
+
+**Relacions calculades:**
+- **Germans:** Si dues persones tenen el mateix `pare_id` o `mare_id`
+- **Fills:** Backref automàtic `pare.fills_com_pare` i `mare.fills_com_mare`
+
+**Flux afegir relació:**
+1. Usuario clica "Afegir Pare" des de gestió relacions
+2. URL: `/familia/membre/afegir/5?relacio=pare&membre_id=12`
+3. Formulari normal d'afegir membre amb camps ocults
+4. Al guardar: `membre_12.pare_id = nou_membre.id`
+5. Redirigeix a gestió relacions
+6. Automàticament es veuen les relacions actualitzades
+
+**Filosofia:**
+- Membres "flotants" permesos (sense pares)
+- L'arbre es completa orgànicament amb el temps
+- Flexibilitat: crear només qui interessa
+- No obliga a completar tota la cadena genealògica
+
+---
+
+## PENDENTS / BACKLOG
+
+### Prioritat CRÍTICA (acabar relacions)
+1. ✅ Provar funcionalitat afegir pare/mare
+2. Implementar afegir fill/a (igual que pare/mare)
+3. Implementar afegir germà/na (copia pare/mare del germà)
+4. Crear formulari afegir matrimoni (petit i específic)
+5. Provar tot el flux complet de relacions
+
+### Prioritat Alta
+6. Cerca en temps real per evitar duplicats al crear membres
+7. Bucle infinit: des del formulari d'afegir, gestionar relacions del nou membre
+8. Visualització bàsica d'arbre genealògic
+
+### Prioritat Mitjana
+9. Aplicar visualitzacio.css a veure_espai.html
+10. Aplicar visualitzacio.css a les_meves_families.html
+11. Aplicar visualitzacio.css a organitzacions
+12. Sistema permisos dins espais familiars
+13. Recalcular ubicacions actuals quan s'afegeixen membres
+14. Notificacions dins espais familiars
+
+### Prioritat Baixa
+15. Integrar documents amb sistema Umberto (seguretat)
+16. Export espai familiar a PDF
+17. Timeline familiar visual
+18. Mapa ubicacions família
+19. Estadístiques espai familiar
+20. Arbre genealògic visual avançat amb D3.js o similar
+
+---
+
+## NOTES TÈCNIQUES IMPORTANTS
+
+### Gestió de Fitxers
+
+el fitxer es gaurden a desktop/adabida/umberto
+
+### Relacions Self-Referential
+- `pare` i `mare` són relacions self-referential a MembreFamilia
+- Importància del `remote_side=[id]` i `foreign_keys=[...]`
+- Backrefs: `fills_com_pare` i `fills_com_mare`
+
+### Matrimonis vs Cònjuge
+- ❌ NO usar camp `conjuge_id` (massa simple)
+- ✅ Usar taula `Matrimoni` (permet múltiples, dates, estats)
+- Permet històric complet de matrimonis
+- Suporta divorcis i viudetat
+
+### Germans
+- NO necessiten taula separada
+- Es calculen automàticament amb queries
+- Comparteixen mateix `pare_id` OR `mare_id`
+- Futur: Distingir germans complets vs paterns/materns
+
+### Blueprints
+- `familia_bp` → Gestió espais familiars
+- `membres_bp` → Gestió membres individuals
+- Separació clara de responsabilitats
+- Facilita manteniment i escalabilitat
+
+---
+
+## CONVENCIONS CODI
+
+### Nomenclatura
+- Variables/funcions: `snake_case` en català
+- Classes: `CamelCase`
+- Templates: `snake_case.html`
+- URLs: kebab-case (`/afegir-membre`)
+
+### Commits
+- Descriptius en català
+- Format: "Afegir funcionalitat X" o "Corregir bug Y"
+
+### Templates
+- Hereten de `base.html`
+- Blocs: `{% block contingut %}` (NO content)
+- CSS específic a `{% block css %}`
+- Scripts a `{% block scripts %}`
+
+### CSS
+- Fitxers específics per funcionalitat
+- `visualitzacio.css` per pàgines de contingut
+- `estils_formularis.css` per formularis
+- Prefixar classes custom: `.card-visualitzacio`, `.btn-custom`
+
+---
+
+## FILOSOFIA DEL PROJECTE
+
+**Adabida és un arxiu digital de memòria oral i testimonis personals amb vocació acadèmica i rigor històric, però amb una interfície accessible i amigable.**
+
+**Espais Familiars:**
+- Permet crear arxius familiars professionals
+- Preservar memòria amb rigor però calidesa
+- Diferenciar famílies amb cognoms similars per ubicació
+- Arbre genealògic orgànic i flexible
+- Sistema de relacions que creix amb el temps
+- Documents privats amb control de visibilitat
+
+**Principis de disseny:**
+- Pla i elegant, sense colors cridaners
+- Paleta consistent (blaus suaus, grisos)
+- Tipografia clara (Montserrat)
+- Espaciats generosos
+- Responsive i accessible
+- Professional però humà
+
+---
+
+## STACK TECNOLÒGIC
+
+* Python 3.13
+* Flask 3.x
+* SQLAlchemy + Alembic
+* Flask-Login, Flask-Mail, Flask-Babel
+* PostgreSQL (producció) / SQLite (dev)
+* Jinja2 templates
+* CSS custom (no Bootstrap en visualització)
+* JavaScript vanilla per interactivitat
+
+---
+
+## PROPERS PASSOS SESSIÓ 25 NOVEMBRE
+
+1. **PROVAR** funcionalitat afegir pare/mare
+2. **IMPLEMENTAR** afegir fill/a (copiar lògica pare/mare)
+3. **IMPLEMENTAR** afegir germà/na (copiar pare/mare del germà)
+4. **CREAR** formulari petit afegir matrimoni
+5. **PROVAR** tot el flux complet de relacions
+6. Si sobra temps: Començar cerca en temps real o bucle infinit
+
+---
+
+## RECORDATORIS IMPORTANTS
+
+- ✅ Els germans es calculen automàticament (NO cal botó si hi ha pares)
+- ✅ Membres poden estar "solts" sense relacions (flexibilitat)
+- ✅ L'arbre creix orgànicament amb el temps
+- ✅ Matrimonis múltiples per persona (divorci, viudetat)
+- ✅ CSS visualitzacio.css per pàgines de contingut
+- ✅ Estils unificats en blaus suaus i grisos
+
+---
+
+*Document actualitzat: 24 novembre 2025 - 23:45h*
+*Sessió durada: ~4 hores*
+*"Pas a pas, amb calma i bon disseny" - Ilan & Claude*
+*Next: Acabar sistema relacions i provar tot el flux!*

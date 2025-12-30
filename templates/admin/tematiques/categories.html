@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block titol %}Categories - {{ pais.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-admin">
+  <a href="{{ url_for('admin_tematiques.llistar_paisos') }}" class="nav-back">← Tornar a països</a>
+  
+  <h1>Categories de {{ pais.nom }} ({{ pais.codi_iso }})</h1>
+  <h2>Organitza els temes en categories temàtiques</h2>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  
+  <a href="{{ url_for('admin_tematiques.afegir_categoria', pais_id=pais.id) }}" class="btn">+ Afegir Categoria</a>
+  
+  {% if categories %}
+  <table>
+    <thead>
+      <tr>
+        <th>Ordre</th>
+        <th>Nom</th>
+        <th>Temes</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for categoria in categories %}
+      <tr>
+        <td><strong>{{ categoria.ordre }}</strong></td>
+        <td>{{ categoria.nom }}</td>
+        <td>
+          <span class="badge">{{ categoria.temes|length }}</span>
+        </td>
+        <td>
+          <a href="{{ url_for('admin_tematiques.llistar_temes', categoria_id=categoria.id) }}" 
+             class="btn btn-small btn-success">Gestionar Temes</a>
+          
+          <form method="POST" 
+                action="{{ url_for('admin_tematiques.eliminar_categoria', categoria_id=categoria.id) }}" 
+                style="display:inline;"
+                onsubmit="return confirm('Segur que vols eliminar {{ categoria.nom }}?');">
+            <button type="submit" class="btn btn-small btn-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>📁 No hi ha categories per {{ pais.nom }}</p>
+    <a href="{{ url_for('admin_tematiques.afegir_categoria', pais_id=pais.id) }}" class="btn">Afegir la primera categoria</a>
+  </div>
+  {% endif %}
+</div>
+<!-- TEMES GLOBALS APLICATS -->
+<div class="container-admin">
+  <div class="header-seccio">
+    <h2>Temes Globals aplicats a {{ pais.nom }}</h2>
+    <p class="descripcio-seccio">Aquests temes s'han creat des de "Afegir tema global" i apareixen automàticament</p>
+  </div>
+  
+  {% if temes_globals %}
+  <table>
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Nom del Tema</th>
+        <th>Accions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tema in temes_globals %}
+      <tr>
+        <td>{{ tema.categoria.nom }}</td>
+        <td>{{ tema.nom }}</td>
+        <td>
+          <form method="POST" 
+      action="{{ url_for('admin_tematiques.excloure_tema_de_pais', tema_id=tema.id, pais_id=pais.id) }}" 
+      style="display:inline;"
+      onsubmit="return confirm('Això eliminarà {{ tema.nom }} NOMÉS de {{ pais.nom }}. Continuar?');">
+  <button type="submit" class="btn btn-small btn-danger">Excloure de {{ pais.codi_iso }}</button>
+</form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>No hi ha temes globals aplicats a {{ pais.nom }}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

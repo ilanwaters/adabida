@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Les meves organitzacions') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div id="les-meves-organitzacions" class="seccio visible">
+  <div class="fila-nom-usuari">
+    <h1 class="nom-complet">
+      {{ _('Les meves organitzacions') }}
+    </h1>
+  </div>
+
+  <div class="enllacos-perfil">
+    <a href="{{ url_for('organitzacions.hub') }}" class="boto-perfil">{{ _('← Tornar') }}</a>
+    <a href="{{ url_for('organitzacions.crear') }}" class="boto-perfil">{{ _('Crear nova organització') }}</a>
+  </div>
+
+  <!-- SECCIÓ ORGANITZACIONS ON SÓC ADMIN -->
+  <div class="bloc-plegable">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+      {{ _('Organitzacions que administro') }} ({{ organitzacions_admin|length }})
+    </h3>
+    <div class="contingut-plegable">
+      {% if organitzacions_admin %}
+        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+          {% for membre in organitzacions_admin %}
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
+              <div>
+                <strong>{{ membre.organitzacio.nom }}</strong>
+                <small style="color: #666; margin-left: 8px;">({{ _('Administrator') }})</small>
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
+                  📍 {{ membre.organitzacio.municipi }}, {{ membre.organitzacio.regio }}
+                </div>
+                <div style="font-size: 0.9rem; color: #666;">
+                  👥 {{ membre.organitzacio.membres|length }} {{ _('membres') }}
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="{{ url_for('organitzacions.publica', slug=membre.organitzacio.url_publica) }}" 
+                   class="boto boto-secundari boto-petit" target="_blank">
+                  {{ _('Veure pàgina') }}
+                </a>
+                <a href="{{ url_for('organitzacions.admin', id=membre.organitzacio.id) }}" 
+                   class="boto boto-primari boto-petit">
+                  {{ _('Administrar') }}
+                </a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="color: #666; font-style: italic; margin-top: 1rem;">
+          <em>{{ _('Encara no administres cap organització') }}</em>
+        </p>
+        <p style="margin-top: 1rem;">
+          <a href="{{ url_for('organitzacions.crear') }}" class="boto boto-primari">
+            {{ _('Crear la meva primera organització') }}
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SECCIÓ ORGANITZACIONS ON SÓC MEMBRE -->
+  <div class="bloc-plegable tancat">
+    <h3 class="titol-plegable" onclick="toggleBloc(this)">
+      {{ _('Organitzacions on sóc membre') }} ({{ organitzacions_membre|length }})
+    </h3>
+    <div class="contingut-plegable">
+      {% if organitzacions_membre %}
+        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+          {% for membre in organitzacions_membre %}
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
+              <div>
+                <strong>{{ membre.organitzacio.nom }}</strong>
+                <small style="color: #666; margin-left: 8px;">({{ _(membre.rol.title()) }})</small>
+                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
+                  📍 {{ membre.organitzacio.municipi }}, {{ membre.organitzacio.regio }}
+                </div>
+                <div style="font-size: 0.9rem; color: #666;">
+                  {{ _('Membre des del') }} {{ membre.data_adhesio.strftime('%d/%m/%Y') }}
+                </div>
+              </div>
+              <div>
+                <a href="{{ url_for('organitzacions.publica', slug=membre.organitzacio.url_publica) }}" 
+                   class="boto boto-secundari boto-petit" target="_blank">
+                  {{ _('Veure pàgina') }}
+                </a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="color: #666; font-style: italic; margin-top: 1rem;">
+          <em>{{ _('Encara no pertanys a cap organització com a membre') }}</em>
+        </p>
+        <p style="margin-top: 1rem;">
+          <a href="{{ url_for('organitzacions.llistat') }}" class="boto boto-secundari">
+            {{ _('Explorar organitzacions') }}
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleBloc(element) {
+  const bloc = element.parentElement;
+  bloc.classList.toggle('tancat');
+}
+
+// Per defecte, primer bloc obert, segon tancat
+document.addEventListener("DOMContentLoaded", function () {
+  const blocs = document.querySelectorAll(".bloc-plegable");
+  if (blocs.length > 1) {
+    blocs[1].classList.add("tancat"); // segon bloc tancat
+  }
+});
+</script>
+{% endblock %}

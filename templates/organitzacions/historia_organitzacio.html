@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Història de l\'organització') }} - {{ organitzacio.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/biografia.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="biografia-container">
+  
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="{{ url_for('organitzacions.publica', slug=organitzacio.url_publica) }}">{{ organitzacio.nom }}</a> ›
+    <span>{{ _('Història de l\'organització') }}</span>
+  </div>
+
+  <h1>📖 {{ _('Història de l\'organització') }}</h1>
+  <p style="color: #666; margin-bottom: 2rem;">
+    {{ _('La memòria col·lectiva organitzada en seccions. Cada secció es pot editar individualment.') }}
+  </p>
+
+  {% if seccions %}
+    <!-- Seccions d'història -->
+    {% for seccio in seccions %}
+    <div class="seccio-biografia" data-seccio-id="{{ seccio.id }}">
+      
+      <div class="seccio-header">
+        <h2 class="seccio-titol">{{ seccio.titol }}</h2>
+        
+        {% if es_admin %}
+        <div class="seccio-accions">
+          <!-- Botons moure -->
+          {% if not loop.first %}
+          <button class="boto-moure" onclick="moureSeccio({{ seccio.id }}, 'amunt')" title="{{ _('Moure amunt') }}">
+            ↑
+          </button>
+          {% endif %}
+          
+          {% if not loop.last %}
+          <button class="boto-moure" onclick="moureSeccio({{ seccio.id }}, 'avall')" title="{{ _('Moure avall') }}">
+            ↓
+          </button>
+          {% endif %}
+          
+          <!-- Visibilitat -->
+          <button 
+            class="boto-visibilitat {{ 'publica' if seccio.visible else 'privada' }}" 
+            onclick="toggleVisibilitat({{ seccio.id }})"
+            id="visibilitat-{{ seccio.id }}">
+            {{ _('Pública') if seccio.visible else _('Privada') }}
+          </button>
+          
+          <!-- Editar -->
+          <a href="{{ url_for('historia_organitzacio.editar_seccio', organitzacio_id=organitzacio.id, seccio_id=seccio.id) }}" class="boto-editar">
+            {{ _('Editar') }}
+          </a>
+          
+          <!-- Eliminar -->
+          <button class="boto-eliminar" onclick="eliminarSeccio({{ seccio.id }}, '{{ seccio.titol }}')">
+            🗑️
+          </button>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Info de la secció -->
+      <div class="seccio-info">
+        <span>{{ _('Última modificació:') }} {{ seccio.data_modificacio.strftime('%d/%m/%Y') if seccio.data_modificacio else seccio.data_creacio.strftime('%d/%m/%Y') }}</span>
+        <span class="badge {{ 'badge-publica' if seccio.visible else 'badge-privada' }}">
+          {{ _('Visible públicament') if seccio.visible else _('Només visible per membres') }}
+        </span>
+      </div>
+
+      <!-- Contingut -->
+      <div class="seccio-contingut">
+        {% if seccio.contingut %}
+          {{ seccio.contingut|safe }}
+        {% else %}
+          <p class="seccio-buida">{{ _('Aquesta secció encara no té contingut.') }}</p>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <!-- Missatge si no hi ha seccions -->
+    <div class="seccio-buida">
+      <h3>{{ _('Encara no s\'ha escrit cap secció de la història de l\'organització') }}</h3>
+      <p>{{ _('Comenceu creant la primera secció. Podeu organitzar-la per períodes, esdeveniments o com preferiu.') }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Botó afegir nova secció (només admins) -->
+  {% if es_admin %}
+  <div class="afegir-seccio">
+    <a href="{{ url_for('historia_organitzacio.crear_seccio', organitzacio_id=organitzacio.id) }}" class="boto-afegir">
+      + {{ _('Afegir nova secció') }}
+    </a>
+  </div>
+  {% endif %}
+
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="{{ url_for('organitzacions.publica', slug=organitzacio.url_publica) }}">{{ organitzacio.nom }}</a> › 
+      ← {{ _('Tornar a l\'organització') }}
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const organitzacioId = {{ organitzacio.id }};
+
+// Moure secció amunt/avall
+function moureSeccio(seccioId, direccio) {
+  fetch(`/organitzacio/${organitzacioId}/historia/${seccioId}/moure/${direccio}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      alert(data.message || 'Error al moure la secció');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}
+
+// Toggle visibilitat
+function toggleVisibilitat(seccioId) {
+  fetch(`/organitzacio/${organitzacioId}/historia/${seccioId}/toggle-visibilitat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const boto = document.getElementById(`visibilitat-${seccioId}`);
+      boto.textContent = data.visible ? '{{ _("Pública") }}' : '{{ _("Privada") }}';
+      boto.className = `boto-visibilitat ${data.visible ? 'publica' : 'privada'}`;
+      
+      // Actualitzar badge
+      location.reload();
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}
+
+// Eliminar secció
+function eliminarSeccio(seccioId, titol) {
+  if (!confirm(`Esteu segurs que voleu eliminar la secció "${titol}"?\n\nAquesta acció no es pot desfer.`)) {
+    return;
+  }
+  
+  fetch(`/organitzacio/${organitzacioId}/historia/${seccioId}/eliminar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      alert(data.error || 'Error al eliminar la secció');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}
+</script>
+{% endblock %}

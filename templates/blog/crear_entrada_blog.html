@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear nova entrada</title>
+  <style>
+    body {
+      font-family: Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    textarea {
+      height: 250px;
+      resize: vertical;
+    }
+
+    .botones {
+      text-align: center;
+    }
+
+    input[type="submit"] {
+      padding: 0.6rem 1.2rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nova entrada al blog</h1>
+        {% if session['usuari'] %}
+<div class="usuari-connectat">
+ 
+ <a class="nom-usuari" href="#">{{ session['usuari'] }}</a>
+
+   <span class="punt-verd"></span>
+</div>
+{% endif %}
+  </header>
+
+  <main>
+   <form method="POST" action="{% if mode == 'editar' %}{{ url_for('blog.editar_entrada_blog', entrada_id=entrada.id) }}{% else %}{{ url_for('blog.guardar_entrada_blog') }}{% endif %}">
+  <label for="titol">Títol:</label>
+  <input type="text" name="titol" id="titol" value="{{ entrada.titol if mode == 'editar' else '' }}">
+
+  <label for="firma">Firma:</label>
+  <input type="text" name="firma" id="firma" value="{{ entrada.firma if mode == 'editar' else '' }}">
+
+  <label for="contingut">Contingut:</label>
+  <textarea name="contingut" id="contingut">{{ entrada.contingut if mode == 'editar' else '' }}</textarea>
+
+  <button type="submit">{% if mode == 'editar' %}Actualitzar{% else %}Crear entrada{% endif %}</button>
+</form>
+
+
+      <div class="botones">
+        <input type="submit" value="Guardar entrada">
+      </div>
+    </form>
+  </main>
+</body>
+</html>

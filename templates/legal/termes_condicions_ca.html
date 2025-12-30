@@ -1,0 +1,667 @@
+{% extends "base.html" %}
+
+{% block titol %}Condicions d'Ús - Adabida{% endblock %}
+
+{% block css %}
+<style>
+  .document-legal {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  .document-legal h1 {
+    color: #14d8ce;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 3px solid #14d8ce;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+
+  .document-legal .ultima-actualitzacio {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .document-legal h2 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    padding-left: 0.8rem;
+    border-left: 4px solid #14d8ce;
+    font-weight: 600;
+  }
+
+  .document-legal h3 {
+    color: #555;
+    font-size: 1.15rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+
+  .document-legal p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  .document-legal ul, .document-legal ol {
+    margin: 1rem 0;
+    padding-left: 2.5rem;
+  }
+
+  .document-legal li {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 0.6rem;
+  }
+
+  .document-legal .info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #2196F3;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal .info-box p {
+    margin: 0.3rem 0;
+  }
+
+  .document-legal .advertencia {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal .success-box {
+    background: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 4px;
+  }
+
+  .document-legal strong {
+    color: #222;
+    font-weight: 600;
+  }
+
+  .document-legal hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 2.5rem 0;
+  }
+
+  .document-legal .seccio-final {
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .boto-tornar {
+    display: inline-block;
+    background: #14d8ce;
+    color: white;
+    padding: 0.8rem 1.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: background 0.3s;
+    font-weight: 500;
+  }
+
+  .boto-tornar:hover {
+    background: #0e9f94;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .document-legal {
+      padding: 1.2rem;
+      margin: 1rem;
+    }
+
+    .document-legal h1 {
+      font-size: 1.6rem;
+    }
+
+    .document-legal h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="document-legal">
+    
+    <h1>CONDICIONS D'ÚS I TERMES DEL SERVEI</h1>
+    <p class="ultima-actualitzacio">Última actualització: 29 de novembre de 2025</p>
+
+    <hr>
+
+    <!-- 1. IDENTIFICACIÓ -->
+    <h2>1. IDENTIFICACIÓ I TITULARITAT DEL SERVEI</h2>
+    
+    <p>
+      En compliment de la Llei 34/2002, d'11 de juliol, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), s'informa el següent:
+    </p>
+
+    <div class="info-box">
+      <p><strong>Titular del servei:</strong> Ilan Sánchez</p>
+      <p><strong>Domicili:</strong> Calella, 08370, Barcelona, Espanya</p>
+      <p><strong>Correu electrònic:</strong> contacte@adabida.cat</p>
+      <p><strong>Lloc web:</strong> www.adabida.cat</p>
+    </div>
+
+    <p>
+      Adabida és un arxiu històric digital dedicat a la preservació de la memòria oral i el llegat personal de les persones, amb vocació acadèmica i rigor historiogràfic.
+    </p>
+
+    <!-- 2. OBJECTE I ÀMBIT -->
+    <h2>2. OBJECTE I ÀMBIT D'APLICACIÓ</h2>
+
+    <h3>2.1. OBJECTE</h3>
+    <p>
+      Les presents Condicions d'Ús regulen l'accés i utilització del servei Adabida (d'ara endavant, "el Servei" o "la Plataforma"), accessible a través del lloc web www.adabida.cat i les seves aplicacions associades.
+    </p>
+
+    <h3>2.2. ÀMBIT D'APLICACIÓ</h3>
+    <p>
+      Aquestes condicions s'apliquen a tots els usuaris del Servei, tant registrats com visitants no registrats. L'ús del Servei implica l'acceptació plena i sense reserves de totes les clàusules incloses en aquest document.
+    </p>
+
+    <h3>2.3. MODIFICACIONS</h3>
+    <p>
+      Adabida es reserva el dret de modificar aquestes Condicions d'Ús en qualsevol moment. Les modificacions entraran en vigor des de la seva publicació al lloc web. Els usuaris seran notificats de canvis substancials per correu electrònic amb un mínim de 30 dies d'antelació. L'ús continuat del Servei després de la publicació de les modificacions implica l'acceptació de les noves condicions.
+    </p>
+
+    <!-- 3. DEFINICIONS -->
+    <h2>3. DEFINICIONS</h2>
+
+    <p>Als efectes d'aquestes Condicions d'Ús, s'entén per:</p>
+
+    <ul>
+      <li><strong>USUARI:</strong> Qualsevol persona que accedeix i utilitza el Servei.</li>
+      <li><strong>USUARI REGISTRAT:</strong> Persona que ha completat el procés de registre i disposa d'un compte actiu a la Plataforma.</li>
+      <li><strong>ENTRADA/TESTIMONI:</strong> Contingut de memòria oral (text, àudio, vídeo, imatges) publicat per un usuari a l'arxiu públic d'Adabida.</li>
+      <li><strong>PERFIL PERSONAL:</strong> Espai individual de l'usuari amb dades biogràfiques i genealògiques.</li>
+      <li><strong>ESPAI FAMILIAR:</strong> Àrea col·laborativa per a la gestió de la memòria d'una família o línia genealògica.</li>
+      <li><strong>ORGANITZACIÓ:</strong> Espai per a clubs, associacions o entitats que desitgen preservar la seva memòria col·lectiva.</li>
+      <li><strong>DOCUMENT:</strong> Fitxer digital (imatge, PDF, etc.) pujat per l'usuari a la Plataforma.</li>
+      <li><strong>SISTEMA DE VERIFICACIÓ:</strong> Mecanisme d'identificació basat en documentació aportada per l'usuari.</li>
+    </ul>
+
+    <!-- 4. ACCÉS I REGISTRE -->
+    <h2>4. ACCÉS AL SERVEI I REGISTRE D'USUARIS</h2>
+
+    <h3>4.1. CONDICIONS D'ACCÉS</h3>
+    <p>L'accés al Servei és gratuït i universal. No obstant això, algunes funcionalitats requereixen registre previ.</p>
+
+    <h3>4.2. EDAT MÍNIMA</h3>
+    <p>Per registrar-se com a usuari a Adabida, cal tenir almenys 18 anys. Amb el registre, l'usuari declara i garanteix ser major d'edat.</p>
+
+    <h3>4.3. PROCÉS DE REGISTRE</h3>
+    <p>El registre requereix:</p>
+    <ul>
+      <li>Nom i cognoms</li>
+      <li>Correu electrònic vàlid</li>
+      <li>Contrasenya segura</li>
+      <li>Acceptació de les presents Condicions d'Ús</li>
+      <li>Acceptació de la Política de Privacitat</li>
+    </ul>
+
+    <h3>4.4. VERACITAT DE LES DADES</h3>
+    <p>
+      L'usuari garanteix que totes les dades facilitades durant el registre són veraces, exactes, completes i actualitzades. L'usuari és responsable de mantenir actualitzades aquestes dades.
+    </p>
+
+    <h3>4.5. CONFIDENCIALITAT DE LES CREDENCIALS</h3>
+    <p>
+      L'usuari és responsable de mantenir la confidencialitat de la seva contrasenya i credencials d'accés. Qualsevol activitat realitzada des del seu compte es presumirà realitzada per ell.
+    </p>
+
+    <h3>4.6. SUSPENSIÓ I CANCEL·LACIÓ DE COMPTES</h3>
+    <p>Adabida es reserva el dret de suspendre o cancel·lar comptes que:</p>
+    <ul>
+      <li>Incompleixin aquestes Condicions d'Ús</li>
+      <li>Publiquin contingut il·legal o inadequat</li>
+      <li>Utilitzin el Servei de manera fraudulenta</li>
+      <li>Atemptin contra la dignitat o drets de tercers</li>
+    </ul>
+
+    <!-- 5. NATURALESA DEL SERVEI -->
+    <h2>5. NATURALESA DEL SERVEI: ARXIU DE MEMÒRIA ORAL</h2>
+
+    <h3>5.1. CARÀCTER ACADÈMIC</h3>
+    <p>
+      Adabida es concep com un projecte amb vocació acadèmica i rigor historiogràfic, destinat a crear un fons documental de memòria oral accessible per a investigadors i per a qualsevol persona que vulgui preservar el seu llegat o el de la seva família.
+    </p>
+
+    <h3>5.2. TESTIMONIS NO VERIFICATS</h3>
+    
+    <div class="advertencia">
+      <p><strong>⚠️ ADVERTÈNCIA IMPORTANT:</strong> Els testimonis i continguts emmagatzemats a Adabida són records personals autèntics, però NO verificats per historiadors professionals.</p>
+      
+      <p>Adabida preserva la memòria tal com les persones la recorden i la comparteixen. Això significa que:</p>
+      <ul>
+        <li>Els testimonis reflecteixen percepcions i records personals</li>
+        <li>Pot haver-hi errors de dates, noms o esdeveniments</li>
+        <li>La memòria humana és subjectiva i pot canviar amb el temps</li>
+        <li>Adabida no verifica fets ni contrasta fonts</li>
+      </ul>
+    </div>
+
+    <h3>5.3. FONTS PRIMÀRIES, NO VERITATS ABSOLUTES</h3>
+    <p>
+      Els continguts d'Adabida han de ser tractats com a <strong>FONTS PRIMÀRIES</strong> per a la investigació històrica, no com a veritats històriques verificades. Qualsevol investigador, historiador o periodista que utilitzi aquests materials ha de:
+    </p>
+    <ul>
+      <li>Contrastar la informació amb altres fonts primàries i secundàries</li>
+      <li>Aplicar metodologia crítica</li>
+      <li>No donar per vàlids els testimonis sense verificació independent</li>
+      <li>Citar adequadament la font i el context</li>
+    </ul>
+
+    <h3>5.4. VALOR HISTÒRIC I HUMÀ</h3>
+    <p>
+      Tot i les limitacions anteriors, els testimonis personals tenen un valor històric i humà immens. Ofereixen perspectives personals sobre esdeveniments històrics, context emocional i humà, detalls de la vida quotidiana i veus que sovint queden excloses de la història oficial.
+    </p>
+
+    <!-- 6. SISTEMA DE VERIFICACIÓ -->
+    <h2>6. SISTEMA DE VERIFICACIÓ D'IDENTITAT</h2>
+
+    <h3>6.1. NATURALESA DEL SISTEMA</h3>
+    <p>
+      Adabida disposa d'un sistema de verificació d'identitat basat en la documentació aportada pels propis usuaris (DNI, NIE, passaport, partides de naixement, etc.).
+    </p>
+
+    <h3>6.2. INDICADOR VISUAL</h3>
+    <p>
+      Els perfils amb documentació verificada es marquen amb un indicador visual (p. ex. distintiu verd), però això NOMÉS indica que l'usuari ha aportat documents.
+    </p>
+
+    <h3>6.3. LIMITACIONS DEL SISTEMA</h3>
+    
+    <div class="advertencia">
+      <p><strong>⚠️ IMPORTANT:</strong> En cap cas Adabida pot validar l'autenticitat d'aquesta documentació. El sistema de verificació:</p>
+      <ul>
+        <li>És purament orientatiu dins del projecte</li>
+        <li>No té cap validesa científica</li>
+        <li>No té cap validesa legal</li>
+        <li>No garanteix la identitat real de l'usuari</li>
+        <li>No garanteix l'autenticitat dels documents aportats</li>
+      </ul>
+    </div>
+
+    <h3>6.4. RESPONSABILITAT DE L'USUARI</h3>
+    <p>
+      L'usuari que aporta documentació falsa o falsificada commet un delicte i assumeix tota la responsabilitat legal derivada.
+    </p>
+
+    <!-- 7. CONTINGUT GENERAT -->
+    <h2>7. CONTINGUT GENERAT PER USUARIS</h2>
+
+    <h3>7.1. CANALS DE GENERACIÓ DE CONTINGUT</h3>
+    <p>El contingut de l'arxiu Adabida és generat pels propis usuaris a través de tres canals principals:</p>
+    <ul>
+      <li><strong>PERFILS INDIVIDUALS:</strong> Espai personal amb biografia, dades genealògiques i documents personals</li>
+      <li><strong>ESPAIS FAMILIARS:</strong> Àrees col·laboratives per a famílies</li>
+      <li><strong>ORGANITZACIONS:</strong> Espais per a clubs, associacions i entitats</li>
+    </ul>
+
+    <h3>7.2. TIPUS DE CONTINGUT</h3>
+    <p>Els usuaris poden publicar:</p>
+    <ul>
+      <li>Entrades de text (memòries, testimonis, biografies)</li>
+      <li>Àudio (gravacions de veu, entrevistes)</li>
+      <li>Vídeo (testimonis en vídeo)</li>
+      <li>Fotografies i imatges</li>
+      <li>Documents digitals (PDFs, imatges de documents)</li>
+    </ul>
+
+    <h3>7.3. VISIBILITAT DEL CONTINGUT</h3>
+
+    <h4>7.3.1. ENTRADES I TESTIMONIS - SEMPRE PÚBLICS</h4>
+    
+    <div class="advertencia">
+      <p><strong>⚠️ IMPORTANT:</strong> Totes les entrades i testimonis publicats a Adabida són de caràcter PÚBLIC i UNIVERSAL. Apareixen associats al nom de l'usuari que els publica.</p>
+      <p>Si un usuari no desitja que una informació sigui pública, NO l'ha de publicar.</p>
+      <p>Les entrades són indexables per motors de cerca i accessibles per qualsevol persona a internet.</p>
+    </div>
+
+    <h4>7.3.2. PERFILS, ESPAIS FAMILIARS I ORGANITZACIONS - CONFIGURABLES</h4>
+    <p>Els usuaris poden configurar la visibilitat d'aquests espais com:</p>
+    <ul>
+      <li>Públics (accessibles per tothom)</li>
+      <li>Privats (només membres autoritzats)</li>
+      <li>Mixtos (algunes seccions públiques, altres privades)</li>
+    </ul>
+
+    <h3>7.4. PROPIETAT INTEL·LECTUAL DEL CONTINGUT</h3>
+
+    <h4>7.4.1. PROPIETAT DE L'USUARI</h4>
+    <div class="success-box">
+      <p><strong>✓ Els continguts que els usuaris publiquen són i seran sempre de la seva propietat.</strong> Adabida només actua com a custodi i plataforma de difusió.</p>
+    </div>
+
+    <h4>7.4.2. LLICÈNCIA D'ÚS CONCEDIDA A ADABIDA</h4>
+    <p>Amb la publicació de contingut, l'usuari concedeix a Adabida una llicència:</p>
+    <ul>
+      <li>No exclusiva (l'usuari pot publicar el mateix contingut en altres llocs)</li>
+      <li>Mundial</li>
+      <li>Gratuïta</li>
+      <li>Transferible</li>
+      <li>Sublicenciable</li>
+    </ul>
+
+    <p>Per emmagatzemar, reproduir i distribuir el contingut, mostrar-lo públicament a través de la Plataforma, crear còpies de seguretat i optimitzar-lo tècnicament.</p>
+
+    <h4>7.4.3. LLICÈNCIA CONCEDIDA A TERCERS</h4>
+    <p>El contingut públic d'Adabida pot ser utilitzat per tercers (investigadors, periodistes, estudiants) amb les següents condicions:</p>
+    <ul>
+      <li>Citació obligatòria de la font (nom de l'usuari i "Adabida - Arxiu de Memòria Oral")</li>
+      <li>Ús respectuós i digne del contingut</li>
+      <li>No alteració substancial del contingut sense indicar-ho</li>
+      <li>Compliment de les lleis de propietat intel·lectual aplicables</li>
+    </ul>
+
+    <!-- 8. RESPONSABILITAT SOBRE EL CONTINGUT -->
+    <h2>8. RESPONSABILITAT SOBRE EL CONTINGUT</h2>
+
+    <h3>8.1. RESPONSABILITAT DE L'USUARI</h3>
+    <p>
+      L'usuari és l'<strong>ÚNIC responsable</strong> del contingut que publica a Adabida. Amb la publicació de contingut, l'usuari garanteix que:
+    </p>
+    <ul>
+      <li>És el titular dels drets de propietat intel·lectual o disposa de les autoritzacions necessàries</li>
+      <li>El contingut no viola drets de tercers (honor, intimitat, imatge, propietat intel·lectual)</li>
+      <li>El contingut és verídic segons el seu millor coneixement</li>
+    </ul>
+
+    <p>El contingut NO ha de contenir:</p>
+    <ul>
+      <li>Informació difamatòria o calumniosa</li>
+      <li>Contingut que inciti a l'odi, la violència o la discriminació</li>
+      <li>Contingut pornogràfic o sexual explícit</li>
+      <li>Dades personals de tercers sense el seu consentiment</li>
+      <li>Informació que vulneri secrets professionals o d'estat</li>
+      <li>Amenaces, assetjament o intimidació</li>
+      <li>Informació falsa amb intenció de perjudicar tercers</li>
+    </ul>
+
+    <h3>8.2. EXONERACIÓ DE RESPONSABILITAT D'ADABIDA</h3>
+    <p>
+      Adabida actua com a plataforma d'allotjament de contingut generat per usuaris. En virtut de l'article 16 de la LSSI-CE, Adabida NO és responsable del contingut emmagatzemat sempre que no tingui coneixement efectiu de la il·licitud del contingut i, en cas de tenir-ne coneixement, actuï amb diligència per retirar-lo.
+    </p>
+
+    <h3>8.3. SISTEMA DE NOTIFICACIÓ DE CONTINGUT IL·LÍCIT</h3>
+    <p>
+      Qualsevol persona que consideri que hi ha contingut il·lícit a la Plataforma pot notificar-ho a través de: <strong>contacte@adabida.cat</strong>
+    </p>
+
+    <p>La notificació ha d'incloure:</p>
+    <ul>
+      <li>Identificació del contingut il·lícit (URL exacta)</li>
+      <li>Motius pels quals es considera il·lícit</li>
+      <li>Dades de contacte del notificant</li>
+      <li>Declaració de bona fe</li>
+    </ul>
+
+    <p>Adabida revisarà la notificació i, si escau, retirarà el contingut en un termini màxim de 48 hores des de la recepció.</p>
+
+    <h3>8.4. RESERVES D'ADABIDA</h3>
+    <p>Adabida es reserva el dret de:</p>
+    <ul>
+      <li>Retirar contingut que incompleixi aquestes Condicions d'Ús sense previ avís</li>
+      <li>Suspendre o cancel·lar comptes que publiquin contingut inadequat de manera reiterada</li>
+      <li>Comunicar contingut rellevant per a la investigació històrica a la comunitat científica</li>
+      <li>Col·laborar amb les autoritats judicials i policials en cas de requeriment legal</li>
+    </ul>
+
+    <!-- 9. TRACTAMENT DE DADES (RESUM) -->
+    <h2>9. TRACTAMENT DE DADES PERSONALS</h2>
+
+    <p>
+      Per a informació completa sobre el tractament de dades personals, consulteu la nostra <a href="{{ url_for('legal.politica_privadesa') }}" style="color: #14d8ce; text-decoration: underline;">Política de Privacitat</a>.
+    </p>
+
+    <div class="info-box">
+      <p><strong>Resum:</strong></p>
+      <ul>
+        <li>Responsable: Ilan Sánchez (contacte@adabida.cat)</li>
+        <li>Finalitat: Gestió del compte i prestació del servei d'arxiu</li>
+        <li>Base legal: Execució del contracte i consentiment</li>
+        <li>Drets: Accés, rectificació, supressió, portabilitat, oposició</li>
+      </ul>
+    </div>
+
+    <!-- 10. DRET A L'OBLIT -->
+    <h2>10. DRET A L'OBLIT I PORTABILITAT DE DADES</h2>
+
+    <h3>10.1. DRET A L'OBLIT DIGITAL</h3>
+    <p>
+      En qualsevol moment, l'usuari pot sol·licitar l'eliminació total del seu compte i totes les seves dades. És un dret fonamental que Adabida respecta absolutament.
+    </p>
+
+    <h3>10.2. PROCEDIMENT</h3>
+    <ol>
+      <li>Enviar sol·licitud a contacte@adabida.cat</li>
+      <li>Confirmar la identitat (per seguretat)</li>
+      <li>Període de reflexió de 30 dies (l'usuari pot cancel·lar la baixa)</li>
+      <li>Transcorreguts els 30 dies, eliminació definitiva de dades personals, documents privats i configuracions</li>
+    </ol>
+
+    <h3>10.3. CONTINGUT PÚBLIC</h3>
+    <div class="info-box">
+      <p><strong>OPCIÓ A:</strong> L'usuari pot sol·licitar que també s'elimini el contingut públic (entrades, testimonis).</p>
+      <p><strong>OPCIÓ B:</strong> L'usuari pot demanar que el contingut públic romangui a l'arxiu (pel seu valor històric), però amb dades personals anonimitzades.</p>
+    </div>
+
+    <h3>10.4. PORTABILITAT DE DADES</h3>
+    <p>
+      L'usuari pot sol·licitar una còpia de totes les seves dades en format descarregable (ZIP amb PDFs, imatges, vídeos, etc.) a: <strong>contacte@adabida.cat</strong>
+    </p>
+    <p>Termini de lliurament: 30 dies</p>
+
+    <!-- 11. SEGURETAT -->
+    <h2>11. SEGURETAT I PRIVACITAT</h2>
+
+    <h3>11.1. MESURES DE SEGURETAT</h3>
+    <p>
+      Adabida aplica mesures tècniques i organitzatives adequades per protegir les dades personals contra accés no autoritzat, pèrdua accidental o destrucció il·lícita.
+    </p>
+
+    <h3>11.2. CÒPIES DE SEGURETAT</h3>
+    <p>Es realitzen còpies de seguretat periòdiques del contingut per prevenir pèrdues de dades.</p>
+
+    <h3>11.3. RECOMANACIÓ ALS USUARIS</h3>
+    <div class="advertencia">
+      <p><strong>⚠️ Es recomana als usuaris:</strong></p>
+      <ul>
+        <li>Mantenir còpies de seguretat personals del contingut important</li>
+        <li>No utilitzar Adabida com a únic repositori de documents irrecuperables</li>
+        <li>Revisar periòdicament el contingut emmagatzemat</li>
+      </ul>
+    </div>
+
+    <!-- 12. PROPIETAT DE LA PLATAFORMA -->
+    <h2>12. PROPIETAT INTEL·LECTUAL DE LA PLATAFORMA</h2>
+
+    <h3>12.1. TITULARITAT</h3>
+    <p>
+      Tots els elements de la Plataforma Adabida (disseny, codi, logotips, marca, estructura, etc.) són propietat d'Ilan Sánchez o disposa de les llicències corresponents.
+    </p>
+
+    <h3>12.2. PROHIBICIONS</h3>
+    <p>Queda prohibit:</p>
+    <ul>
+      <li>Reproduir, copiar o distribuir elements de la Plataforma sense autorització</li>
+      <li>Modificar, descompilar o fer enginyeria inversa del codi</li>
+      <li>Utilitzar la marca "Adabida" sense permís exprés</li>
+    </ul>
+
+    <!-- 13. TECNOLOGIES LLIURES -->
+    <h2>13. TECNOLOGIES LLIURES I INDEPENDÈNCIA</h2>
+
+    <div class="success-box">
+      <h3 style="color: #4CAF50; margin-top: 0;">COMPROMÍS AMB EL PROGRAMARI LLIURE</h3>
+      <p>
+        Adabida utilitza tecnologies de codi obert (open source) i programari lliure sempre que sigui possible, en coherència amb els seus principis ètics de transparència i sobirania tecnològica.
+      </p>
+      
+      <h3 style="color: #4CAF50;">SERVIDORS INDEPENDENTS</h3>
+      <p>
+        Adabida no depèn de grans corporacions tecnològiques. Utilitza servidors independents per garantir privacitat i control real sobre les dades.
+      </p>
+    </div>
+
+    <!-- 14. MODEL DE FINANÇAMENT -->
+    <h2>14. MODEL DE FINANÇAMENT</h2>
+
+    <h3>14.1. SERVEI GRATUÏT</h3>
+    <div class="success-box">
+      <p><strong>✓ Adabida és i serà sempre 100% gratuït per als usuaris.</strong> Cap persona ha de quedar exclosa per motius econòmics.</p>
+    </div>
+
+    <h3>14.2. FINANÇAMENT</h3>
+    <p>El servei es finança exclusivament mitjançant aportacions voluntàries de la comunitat.</p>
+
+    <h3>14.3. COMPROMISOS PÚBLICS</h3>
+    <p>Adabida es compromet públicament a:</p>
+    <ul>
+      <li>Mai cobrar per l'accés</li>
+      <li>Mai vendre dades d'usuaris</li>
+      <li>Mai incloure publicitat</li>
+      <li>Publicar informe financer anual</li>
+      <li>Mantenir tecnologies lliures</li>
+    </ul>
+
+    <!-- 15. FASE DEMO -->
+    <h2>15. LIMITACIONS DEL SERVEI - FASE DEMO</h2>
+
+    <h3>15.1. ESTAT ACTUAL</h3>
+    <div class="advertencia">
+      <p><strong>⚠️ Adabida està actualment en FASE DEMO (desenvolupament).</strong> Això significa que:</p>
+      <ul>
+        <li>No es pot garantir la disponibilitat permanent del servei 24/7</li>
+        <li>Poden produir-se interrupcions temporals per manteniment o millores</li>
+        <li>Algunes funcionalitats poden canviar o evolucionar</li>
+        <li>L'arquitectura tècnica pot modificar-se</li>
+      </ul>
+    </div>
+
+    <h3>15.2. SENSE GARANTIES DE CONTINUÏTAT ETERNA</h3>
+    <p>
+      Adabida no pot garantir la seva existència indefinida en el temps. Tot i que el compromís és mantenir el servei el màxim de temps possible, factors externs (tècnics, econòmics, legals) podrien forçar la interrupció del servei.
+    </p>
+
+    <!-- 16. EXCLUSIÓ DE GARANTIES -->
+    <h2>16. EXCLUSIÓ DE GARANTIES I RESPONSABILITAT</h2>
+
+    <h3>16.1. SERVEI "TAL COM ÉS"</h3>
+    <p>El Servei es presta "tal com és" (as is), sense garanties de cap mena, explícites o implícites.</p>
+
+    <h3>16.2. NO GARANTIES</h3>
+    <p>Adabida no garanteix:</p>
+    <ul>
+      <li>La disponibilitat i continuïtat permanent del Servei</li>
+      <li>L'absència d'errors o funcionament ininterromput</li>
+      <li>La utilitat del Servei per a finalitats específiques</li>
+      <li>La veracitat, exactitud o actualitat del contingut generat per usuaris</li>
+    </ul>
+
+    <h3>16.3. LIMITACIÓ DE RESPONSABILITAT</h3>
+    <p>En la màxima mesura permesa per la llei, Adabida no serà responsable de:</p>
+    <ul>
+      <li>Danys directes o indirectes derivats de l'ús del Servei</li>
+      <li>Pèrdua de dades, beneficis o oportunitats</li>
+      <li>Contingut publicat per usuaris</li>
+      <li>Interrupció temporal del Servei</li>
+      <li>Errors o funcionaments incorrectes</li>
+    </ul>
+
+    <!-- 17. ENLLAÇOS A TERCERS -->
+    <h2>17. ENLLAÇOS A TERCERS</h2>
+    <p>
+      La Plataforma pot contenir enllaços a llocs web de tercers. Adabida no es fa responsable del contingut, polítiques de privacitat o pràctiques d'aquests llocs de tercers. L'usuari accedeix sota la seva pròpia responsabilitat.
+    </p>
+
+    <!-- 18. DURADA I TERMINACIÓ -->
+    <h2>18. DURADA I TERMINACIÓ</h2>
+
+    <h3>18.1. DURADA</h3>
+    <p>Aquestes Condicions d'Ús tenen durada indefinida i resten vigents mentre l'usuari accedeixi o utilitzi el Servei.</p>
+
+    <h3>18.2. TERMINACIÓ PER PART DE L'USUARI</h3>
+    <p>L'usuari pot cessar l'ús del Servei i eliminar el seu compte en qualsevol moment mitjançant l'exercici del dret a l'oblit.</p>
+
+    <h3>18.3. TERMINACIÓ PER PART D'ADABIDA</h3>
+    <p>Adabida pot suspendre o cancel·lar el compte d'un usuari si incompleix de manera greu o reiterada aquestes Condicions d'Ús, utilitza el Servei de manera fraudulenta o publica contingut que violi drets de tercers.</p>
+
+    <!-- 19. LLEI APLICABLE -->
+    <h2>19. LLEI APLICABLE I JURISDICCIÓ</h2>
+
+    <h3>19.1. LLEI APLICABLE</h3>
+    <p>Aquestes Condicions d'Ús es regeixen i interpreten de conformitat amb la legislació espanyola.</p>
+
+    <h3>19.2. JURISDICCIÓ</h3>
+    <p>
+      Per a la resolució de qualsevol controvèrsia que pugui sorgir en relació amb aquestes Condicions d'Ús, les parts se sotmeten expressament a la jurisdicció dels Jutjats i Tribunals de Barcelona, amb renúncia expressa a qualsevol altre fur que pogués correspondre.
+    </p>
+
+    <h3>19.3. USUARIS INTERNACIONALS</h3>
+    <p>
+      Els usuaris residents fora d'Espanya accepten expressament sotmetre's a la llei espanyola i a la jurisdicció dels tribunals de Barcelona per a qualsevol litigi derivat de l'ús del Servei.
+    </p>
+
+    <!-- 20. CONTACTE -->
+    <h2>20. CONTACTE</h2>
+
+    <div class="info-box">
+      <p>Per a qualsevol consulta, dubte o exercici de drets relacionats amb aquestes Condicions d'Ús:</p>
+      <p><strong>Correu electrònic:</strong> contacte@adabida.cat</p>
+      <p><strong>Adreça postal:</strong> Ilan Sánchez, Calella, 08370, Barcelona, Espanya</p>
+    </div>
+
+    <hr>
+
+    <!-- ACCEPTACIÓ -->
+    <div class="seccio-final">
+      <h2 style="color: #333; border: none; padding: 0; margin-bottom: 1rem;">ACCEPTACIÓ DE LES CONDICIONS D'ÚS</h2>
+      <p>
+        L'ús del Servei Adabida implica l'acceptació plena i sense reserves de totes les clàusules incloses en aquest document.
+      </p>
+      <p>
+        <strong>Si l'usuari no està d'acord amb alguna d'aquestes condicions, ha d'abstenir-se d'utilitzar el Servei.</strong>
+      </p>
+    </div>
+
+    <p class="ultima-actualitzacio" style="margin-top: 2rem;">
+      Data de la darrera actualització: 29 de novembre de 2025
+    </p>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="boto-tornar">← Tornar a l'inici</a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

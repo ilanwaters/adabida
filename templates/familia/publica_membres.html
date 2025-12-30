@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import "components/targeta_membre.html" as targeta %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/targetes_membres.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+  <h1>{{ _('Membres de') }} {{ familia.nom }}</h1>
+  
+  <div class="grid-membres">
+    {% for membre in membres %}
+      <div class="item-membre {% if loop.index > 12 %}oculta{% endif %}" data-index="{{ loop.index }}">
+        {{ targeta.targeta_membre(membre, mode='public') }}
+      </div>
+    {% endfor %}
+  </div>
+  
+  {% if membres|length > 12 %}
+    <button id="btn-veure-mes" class="btn_nav" onclick="veureMembresMes()">
+      {{ _('Veure més') }}
+    </button>
+  {% endif %}
+</div>
+
+<script>
+let membresVisibles = 12;
+
+function veureMembresMes() {
+  const membres = document.querySelectorAll('.item-membre.oculta');
+  const següents = Array.from(membres).slice(0, 12);
+  
+  següents.forEach(m => m.classList.remove('oculta'));
+  membresVisibles += següents.length;
+  
+  if (document.querySelectorAll('.item-membre.oculta').length === 0) {
+    document.getElementById('btn-veure-mes').style.display = 'none';
+  }
+}
+</script>
+{% endblock %}

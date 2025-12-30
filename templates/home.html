@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Home - Adabida') }}{% endblock %}
+
+{% block css %}
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="home-seccio">
+  
+  <!-- ÍNDEX LATERAL -->
+  <div class="index-lateral">
+    <h3>{{ _('Contffffffinguts') }}</h3>
+    <nav class="navegacio-index">
+      <ul>
+        <li><a href="#qui-som">{{ _('Quiwww som') }}</a></li>
+        <li><a href="#com-funciona">{{ _('Com funciona') }}</a></li>
+        <li><a href="#manifest-etic">{{ _('Manifest ètic') }}</a></li>
+        <li><a href="#narrativa-familiar-colectiva">{{ _('Narrativa familiar col·lectiva') }}</a></li>
+        <li><a href="#financament">{{ _('Finançament transparent') }}</a></li>
+        <li><a href="#advertencia">{{ _('Advertència important') }}</a></li>
+        <li><a href="#documentacio-legal">{{ _('Documentació legal') }}</a></li>
+        <li><a href="#contacte">{{ _('Contacte') }}</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- CONTINGUT PRINCIPAL -->
+  <div class="contingut-principal">
+    
+    <!-- SECCIÓ: QUI SOM -->
+    <section id="qui-som" class="seccio-home">
+      <h1>{{ _('Qui som') }}</h1>
+      <div class="text-seccio">
+        <p><strong>Adabida</strong> és un arxiu històric digital dedicat a preservar la memòria oral i el llegat personal de les persones.</p>
+        
+        <p>El nostre nom prové de la fusió de "Abadia" (espai de preservació del coneixement) i "Digital". Com les abadies medievals preservaven els manuscrits antics, nosaltres preservem les històries de vida de les persones en l'era digital.</p>
+        
+        <h2>{{ _('La nostra missió') }}</h2>
+        <p>Crear un espai segur, respectuós i accessible on tothom pugui:</p>
+        <ul>
+          <li>Preservar la seva història personal i familiar</li>
+          <li>Compartir testimonis i records</li>
+          <li>Construir un arxiu col·lectiu de memòria oral</li>
+          <li>Mantenir viu el llegat de les persones</li>
+        </ul>
+        
+        <h2>{{ _('Internet dels Elevats') }}</h2>
+        <p>Adabida forma part d'una visió més àmplia: <strong>l'Internet dels Elevats</strong>. Un espai digital on la tecnologia serveix per elevar la dignitat humana, no per explotar-la. On les persones són persones, no productes. On la memòria és sagrada, no mercaderia.</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: COM FUNCIONA -->
+    <section id="com-funciona" class="seccio-home">
+      <h1>{{ _('Com funciona') }}</h1>
+      <div class="text-seccio">
+        <p>Adabida ofereix diverses eines per preservar i compartir memòria:</p>
+        
+        <h2>{{ _('Testimonis multimèdia') }}</h2>
+        <p>Pots crear entrades amb text, àudio, vídeo i fotografies. Cada testimoni queda emmagatzemat de forma segura al teu espai personal.</p>
+        
+        <h2>{{ _('Perfil biogràfic') }}</h2>
+        <p>Construeix la teva biografia amb dades familiars, genealògiques i personals. Un registre complet de la teva història de vida.</p>
+        
+        <h2>{{ _('Galeria personal') }}</h2>
+        <p>Organitza fotografies i documents en àlbums temàtics o cronològics.</p>
+        
+        <h2>{{ _('Echo: Entrevistador IA') }}</h2>
+        <p>Una intel·ligència artificial conversacional que t'ajuda a recordar i estructurar les teves memòries mitjançant entrevistes guiades.</p>
+        
+        <h2>{{ _('Tallers terapèutics') }}</h2>
+        <p>Oferim tallers de reminiscència per a persones grans, col·lectius vulnerables i organitzacions sanitàries. La memòria oral com a eina terapèutica.</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: MANIFEST ÈTIC -->
+    <section id="manifest-etic" class="seccio-home">
+      <h1>{{ _('Manifest ètic') }}</h1>
+      <div class="text-seccio">
+        <p>Adabida es regeix per uns principis ètics que considerem innegociables:</p>
+        
+        <h2>{{ _('1. Zero dependències corporatives') }}</h2>
+        <p>No depenem de grans corporacions tecnològiques. Utilitzem tecnologies lliures i servidors independents.</p>
+        
+        <h2>{{ _('2. Les teves dades són teves') }}</h2>
+        <p>Mai vendrem, compartirem ni explotarem les teves dades. Tens dret total a l'oblit i a l'exportació.</p>
+        
+        <h2>{{ _('3. No som un producte') }}</h2>
+        <p>No hi ha publicitat. No hi ha seguiment. No hi ha algoritmes per manipular-te. Adabida existeix per servir a les persones, no per explotar-les.</p>
+        
+        <h2>{{ _('4. Tecnologies lliures') }}</h2>
+        <p>Tot el codi està basat en programari lliure. Creiem en la transparència i la sobirania tecnològica.</p>
+        
+        <h2>{{ _('5. Accessibilitat universal') }}</h2>
+        <p>Adabida és i serà sempre 100% gratuït. Cap persona ha de quedar exclosa per motius econòmics.</p>
+        
+        <h2>{{ _('6. Respecte i dignitat') }}</h2>
+        <p>Tractem cada història amb el respecte i la dignitat que mereix. Els records no són mercaderia.</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: FINANÇAMENT -->
+    <section id="financament" class="seccio-home">
+      <h1>{{ _('Finançament transparent') }}</h1>
+      <div class="text-seccio">
+        <p>Adabida segueix el un model 100% gratuït, finançat per aportacions voluntàries de la comunitat.</p>
+        
+        <h2>{{ _('Per què aportacions voluntàries?') }}</h2>
+        <ul>
+          <li><strong>Independència:</strong> No depenem de corporacions ni inversors</li>
+          <li><strong>Privacitat:</strong> Les teves dades no són el nostre producte</li>
+          <li><strong>Ètica:</strong> Els records no s'han de monetitzar</li>
+          <li><strong>Comunitat:</strong> El projecte és de tots i per a tots</li>
+        </ul>
+        
+        <h2>{{ _('Costos anuals estimats') }}</h2>
+        <table class="taula-costos">
+          <tr>
+            <td>Servidor i hosting</td>
+            <td>500-800€</td>
+          </tr>
+          <tr>
+            <td>Domini i SSL</td>
+            <td>50-100€</td>
+          </tr>
+          <tr>
+            <td>Còpies de seguretat</td>
+            <td>100-200€</td>
+          </tr>
+          <tr>
+            <td>IA entrevistes (futur)</td>
+            <td>200-400€</td>
+          </tr>
+          <tr class="total">
+            <td><strong>TOTAL anual</strong></td>
+            <td><strong>850-1.500€</strong></td>
+          </tr>
+        </table>
+        
+        <h2>{{ _('Compromisos públics') }}</h2>
+        <ul>
+          <li>✅ Mai cobrarem per l'accés</li>
+          <li>✅ Mai vendrem dades</li>
+          <li>✅ Mai hi haurà publicitat</li>
+          <li>✅ Publicarem informe financer anual</li>
+          <li>✅ Mantindrem tecnologies lliures</li>
+        </ul>
+        
+        <p class="text-destacat">
+  <a href="{{ url_for('aportacions.nova_aportacio') }}" class="boto_nav">
+    {{ _('Fes una aportació') }}
+  </a>
+</p>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: ADVERTÈNCIA -->
+    <section id="advertencia" class="seccio-home">
+      <h1>{{ _('Advertència important') }}</h1>
+      <div class="text-seccio advertencia-box">
+        <p><strong>⚠️ Els testimonis emmagatzemats a Adabida són records personals autèntics, però NO verificats per historiadors professionals.</strong></p>
+        
+        <h2>{{ _('Què vol dir això?') }}</h2>
+        <p>Adabida preserva la memòria tal com les persones la recorden i la comparteixen. Això significa que:</p>
+        <ul>
+          <li>Els testimonis reflecteixen percepcions i records personals</li>
+          <li>Pot haver-hi errors de dates, noms o esdeveniments</li>
+          <li>La memòria humana és subjectiva i pot canviar amb el temps</li>
+          <li>No fem verificació de fets ni contrast de fonts</li>
+        </ul>
+        
+        <h2>{{ _('Responsabilitat de l\'usuari') }}</h2>
+        <p>Si ets investigador, historiador o periodista, has de:</p>
+        <ul>
+          <li>Contrastar la informació amb altres fonts</li>
+          <li>Aplicar metodologia crítica</li>
+          <li>No donar per vàlids els testimonis sense verificació</li>
+          <li>Citar adequadament la font i el context</li>
+        </ul>
+        
+        <h2>{{ _('El valor dels testimonis') }}</h2>
+        <p>Tot i això, els testimonis personals tenen un <strong>valor històric i humà immens</strong>. Ofereixen:</p>
+        <ul>
+          <li>Perspectives personals sobre esdeveniments històrics</li>
+          <li>Context emocional i humà</li>
+          <li>Detalls de la vida quotidiana</li>
+          <li>Veus que sovint queden excloses de la història oficial</li>
+        </ul>
+        
+        <p><em>Adabida és un arxiu de memòria oral, no un arxiu històric verificat. Valorem la memòria com a patrimoni humà, mantenint sempre l'esperit crític necessari.</em></p>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: DOCUMENTACIÓ LEGAL -->
+    <section id="documentacio-legal" class="seccio-home">
+      <h1>{{ _('Documentació legal') }}</h1>
+      <div class="text-seccio">
+        <h2>{{ _('Avís legal i RGPD') }}</h2>
+        <p>Consulta el nostre <a href="{{ url_for('legal.avis_legal') }}">avís legal complet</a> per conèixer els teus drets i les nostres obligacions legals.</p>
+        
+        <h2>{{ _('Dret a l\'oblit') }}</h2>
+        <p>En qualsevol moment pots sol·licitar l'eliminació total del teu compte i totes les teves dades. És un dret fonamental que respectem absolutament.</p>
+        
+        <h2>{{ _('Propietat intel·lectual') }}</h2>
+        <p>Els continguts que puges són i seran sempre de la teva propietat. Adabida només actua com a custodi.</p>
+        
+        <h2>{{ _('Limitacions de responsabilitat') }}</h2>
+        <p>Adabida està actualment en fase DEMO. Això significa que:</p>
+        <ul>
+          <li>No podem garantir la disponibilitat permanent del servei</li>
+          <li>Recomanem fer còpies de seguretat dels teus continguts</li>
+          <li>El servei pot canviar o evolucionar</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECCIÓ: CONTACTE -->
+    <section id="contacte" class="seccio-home">
+      <h1>{{ _('Contacte') }}</h1>
+      <div class="text-seccio">
+        <p>Per qualsevol consulta, suggeriment o dubte, pots contactar amb nosaltres:</p>
+        
+        <div class="info-contacte">
+          <p><strong>Email:</strong> <a href="mailto:contacte@adabida.cat">contacte@adabida.cat</a></p>
+          <p><strong>Ubicació:</strong> Barcelona, Catalunya</p>
+          <p><strong>Responsable:</strong> Ilan Sánchez, historiador</p>
+        </div>
+        
+        <p>Estem oberts a col·laboracions amb:</p>
+        <ul>
+          <li>Organitzacions sanitàries i residències</li>
+          <li>Centres de recerca i universitats</li>
+          <li>Associacions culturals i memorialistes</li>
+          <li>Persones interessades en preservar memòria oral</li>
+        </ul>
+        
+        <p class="text-destacat">Gràcies per formar part d'Adabida. Junts preservem la memòria col·lectiva amb dignitat.</p>
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+{% endblock %}

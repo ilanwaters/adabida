@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Nova entrada personal') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nova_entrada_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tinymce-custom.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+  <div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
+    <a href="/pagina_personal" class="boto_nav"> {{ _('Espai personal') }}</a>
+  </h1>
+</div>
+    <main>
+      
+  <form id="formulari-entrada" method="post"
+
+          action="{% if entrada %}{{ url_for('nova_entrada.editar_entrada_personal', entrada_id=entrada.id) }}{% else %}{{ url_for('nova_entrada.nova_entrada_personal') }}{% endif %}"
+          enctype="multipart/form-data">
+          
+     
+    <!-- SUBSTITUIR des de <label for="titol"> fins <label for="categoria"> amb això: -->
+
+<label for="titol">{{ _('Títol') }}</label>
+<input name="titol" id="titol" class="campo-largo" required value="{{ entrada.titol if entrada else '' }}">
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+  <!-- TEMA -->
+  <div>
+    <label for="tema">{{ _('Tema') }}</label>
+    <input name="tema" id="tema" class="campo-largo" value="{{ tema_preomplert if tema_preomplert else (entrada.tema if entrada else '') }}">
+  </div>
+  
+  <!-- CATEGORIA -->
+ <div>
+  <label for="categoria">{{ _('Categoria') }}</label>
+  <select name="categoria" id="selector-categoria" class="campo-largo" onchange="toggleNovaCategoriaEntrada()">
+    {% if categoria_preomplerta %}
+      <option value="{{ categoria_preomplerta }}" selected>{{ categoria_preomplerta }}</option>
+    {% endif %}
+    <option value="">{{ _('Selecciona categoria') }}</option>
+    <!-- Les categories es carregaran via JS -->
+    <option value="nova"> {{ _('Nova categoria') }}</option>
+  </select>
+  
+  <!-- Camp manual per nova categoria -->
+  <input type="text" 
+         id="categoria-manual" 
+         name="categoria_manual" 
+         class="campo-largo" 
+         placeholder="{{ _('Escriu el nom de la categoria') }}" 
+         style="display: none; margin-top: 10px;">
+</div>
+</div>
+       <!-- BLOC PLEGABLE: Informació bàsica -->
+<div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Tema') }}
+  </h3>
+  <div class="contingut-plegable">
+    <h2>{% if entrada %}Editar entrada{% else %}{% endif %}</h2>
+
+
+    <label for="any">{{ _('Any/s') }}</label>
+    <input type="text" name="any" id="any" value="{{ entrada.any_text if entrada else '' }}">
+
+    <div class="camp mini">
+  <label for="pais">{{ _('País') }}</label>
+  <select name="pais" id="pais" class="campo-largo">
+    <option value="">Selecciona un país</option>
+  </select>
+</div>
+
+<div class="bloque-formulario">
+  <label for="regio">{{ _('Província') }}</label>
+  <select name="regio" id="regio" class="campo-largo" disabled>
+    <option value="">Selecciona primer el país</option>
+  </select>
+</div>
+
+<div class="bloque-formulario">
+  <label for="municipi">{{ _('Municipi o localitat') }}</label>
+  <select name="municipi" id="municipi" class="campo-largo" disabled>
+    <option value="">Selecciona primer la regió</option>
+  </select>
+</div>
+
+    <small class="text-ajuda">
+      {{ _("Pots modificar aquests valors si l'acció passa en un lloc diferent del teu país de residència.") }}
+    </small>
+
+    <label for="contingut">{{ _('Contingut') }}</label>
+    <textarea name="contingut" id="contingut" rows="20">{{ entrada.contingut if entrada else '' }}</textarea>
+  </div>
+</div>
+
+  <!-- Bloc: GRAVACIÓ DE VÍDEO -->
+  <div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Enregistra vídeo') }}
+  </h3>
+  <div class="contingut-plegable">
+    <div class="botons-gravacio">
+      <button type="button" id="botoIniciaVideo" class="boto-multimedia">{{ _('Grava vídeo') }}</button>
+      <button type="button" id="botoAturaVideo" class="boto-multimedia">⏹ {{ _('Atura') }}</button>
+    </div>
+    <video id="previsualitzacio-video" class="ocult" autoplay muted></video>
+    <div id="videos-gravats"></div>
+  </div>
+</div>
+
+  <!-- BLOC PLEGABLE: Gravació d'àudio -->
+<div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Enregistrar audio') }}
+  </h3>
+  <div class="contingut-plegable">
+    <div class="botons-gravacio">
+      <button type="button" id="botoGravaAudio" class="boto-multimedia">{{ _('Enregistra àudio') }}</button>
+      <button type="button" id="botoAturaAudio" class="boto-multimedia">⏹ {{ _('Atura') }}</button>
+    </div>
+    <div id="onda-gravacio" class="onda-oculta">
+      <span class="barra"></span>
+      <span class="barra"></span>
+      <span class="barra"></span>
+      <span class="barra"></span>
+      <span class="barra"></span>
+    </div>
+    <div id="llista-audios" style="margin-top: 10px;"></div>
+  </div>
+</div>
+
+  <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
+<div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Adjunta arxiu') }}
+  </h3>
+  <div class="contingut-plegable">
+    <div class="input-file-custom">
+      <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
+      <input type="file" id="puja-arxius" name="arxius" multiple>
+    </div>
+    <div id="zona-fitxers" class="zona-fitxers"></div>
+    <div id="previsualitzacio-arxius" class="galeria"></div>
+  
+
+    <label for="titol_imatge">{{ _("Nom de l'arxiu") }}</label>
+    <input type="text" name="titol_imatge" id="titol_imatge" value="{{ entrada.titol_imatge if entrada else '' }}">
+
+    <label for="any_imatge">{{ _('Any/s') }}</label>
+    <input type="text" name="any_imatge" id="any_imatge" value="{{ entrada.any_imatge if entrada else '' }}">
+
+    <label for="pais_imatge">{{ _('País') }}</label>
+    <input type="text" name="pais_imatge" id="pais_imatge">
+
+    <div class="bloque-formulario">
+      <label for="regio_imatge">{{ _('Regió / província') }}</label>
+      <input type="text" name="regio_imatge" id="regio_imatge">
+    </div>
+
+    <div class="bloque-formulario">
+      <label for="municipi_imatge">{{ _('Municipi o localitat') }}</label>
+      <input type="text" name="municipi_imatge" id="municipi_imatge">
+    </div>
+
+    <label for="descripcio_imatge">{{ _('Descripció, tipus de document') }}</label>
+    <textarea name="descripcio_imatge" id="descripcio_imatge" rows="4">{{ entrada.descripcio_imatge if entrada else '' }}</textarea>
+
+    <label for="referencia_ubicacio">{{ _('Ubicació del document (opcional)') }}</label>
+    <input type="text" name="referencia_ubicacio" id="referencia_ubicacio" value="{{ entrada.referencia if entrada else '' }}">
+  </div>
+</div>
+
+</div>
+
+
+  <!-- BLOC PLEGABLE: Converses i diàlegs -->
+<div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Converses i diàlegs') }}
+  </h3>
+  <div class="contingut-plegable">
+    
+    <!-- PARTICIPANTS -->
+    <div class="seccio-conversa">
+      <h4>{{ _('Participants') }}</h4>
+      <div id="participants-container-integrat">
+      </div>
+      <button type="button" id="btn-afegir-participant-integrat" class="boto_multimedia">
+        {{ _('Afegir participant') }}
+      </button>
+    </div>
+
+    <!-- DADES CONVERSA -->
+    <div class="seccio-conversa">
+      <h4>{{ _('Lloc i data') }}</h4>
+      
+      <div class="fila-camps-conversa">
+        <div class="camp-conversa">
+          <label for="data_conversa">{{ _('Data conversa') }}:</label>
+          <input type="date" id="data_conversa" name="data_conversa">
+        </div>
+        <div class="camp-conversa">
+          <label for="durada_minuts">{{ _('Durada (min)') }}:</label>
+          <input type="number" id="durada_minuts" name="durada_minuts" min="1" placeholder="45">
+        </div>
+      </div>
+
+      <div class="fila-camps-conversa">
+        <div class="camp-conversa">
+          <label for="lloc_municipi">{{ _('Municipi') }}:</label>
+          <input type="text" id="lloc_municipi" name="lloc_municipi" placeholder="Barcelona">
+        </div>
+        <div class="camp-conversa">
+          <label for="lloc_regio">{{ _('Regió') }}:</label>
+          <input type="text" id="lloc_regio" name="lloc_regio" placeholder="Catalunya">
+        </div>
+        <div class="camp-conversa">
+          <label for="lloc_pais">{{ _('País') }}:</label>
+          <input type="text" id="lloc_pais" name="lloc_pais" placeholder="Espanya">
+        </div>
+      </div>
+
+      <div class="camp-conversa-complet">
+        <label for="observacions">{{ _('Observacions generals') }}:</label>
+        <textarea id="observacions" name="observacions_generals" rows="3" 
+                  placeholder="{{ _('Context, temes tractats, circumstàncies...') }}"></textarea>
+      </div>
+    </div>
+
+    <!-- ENREGISTRAR --> 
+    <div class="seccio-conversa">
+      <h4>{{ _('Enregistrar') }}</h4>
+     <div class="botons-gravacio">
+        <button type="button" id="botoGravaAudioConversa" class="boto-multimedia">{{ _('Grava àudio') }}</button>
+        <button type="button" id="botoAturaAudioConversa" class="boto-multimedia">{{ _('Atura') }}</button>
+      </div>
+      <div id="onda-gravacio-conversa" class="onda-oculta">
+        <span class="barra"></span>
+        <span class="barra"></span>
+        <span class="barra"></span>
+        <span class="barra"></span>
+        <span class="barra"></span>
+      </div>
+      <div id="llista-audios-conversa" style="margin-top: 10px;"></div>
+      
+      <div class="botons-gravacio">
+        <button type="button" id="botoIniciaVideoConversa" class="boto-multimedia">{{ _('Grava vídeo') }}</button>
+        <button type="button" id="botoAturaVideoConversa" class="boto-multimedia">{{ _('Atura') }}</button>
+      </div>
+      <video id="previsualitzacio-video-conversa" class="ocult" autoplay muted></video>
+      <div id="videos-gravats-conversa"></div>  
+      <div class="separador-conversa">{{ _('o') }}</div>
+      
+      <!-- Pujar arxiu -->
+      <div class="pujar-arxiu-conversa">
+        <input type="file" id="arxiu_conversa" name="arxiu_conversa" 
+               accept="audio/*,video/*,.webm,.mp4,.mp3,.wav,.ogg,.m4a">
+        <label for="arxiu_conversa" class="etiqueta-arxiu-conversa">
+           {{ _('Seleccionar arxiu') }}
+        </label>
+        <div id="info-arxiu-conversa" class="info-arxiu-conversa"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+      {% if mode == "editar" and entrada.arxius_adjuntats %}
+        <h2>{{ entrada.arxius_adjuntats|length }} {{ 'arxiu' if entrada.arxius_adjuntats|length == 1 else 'arxius' }}</h2>
+        <div class="galeria-arxius">
+         {% for fitxer in entrada.arxius_adjuntats %}
+  <label class="caixa-arxiu">
+    <input type="checkbox" name="arxius_a_eliminar" value="{{ fitxer.nom_fitxer }}">
+    
+  {% if fitxer.tipus in ["jpg", "jpeg", "png", "webp"] %}
+  <img src="{{ url_for('serveis_media.serveix_fitxer',
+                       usuari=usuari.nom_login,
+                       entrada_id=entrada.id,
+                       nom_fitxer=fitxer.nom_fitxer) }}"
+       alt="imatge" class="miniatura">
+
+{% elif fitxer.tipus == "webm" %}
+ {% if fitxer.tipus_media == "audio" %}
+    <img src="{{ url_for('static', filename='icons/audio_webm.png') }}" alt="àudio" class="icona-arxiu">
+    <p>Mostrant àudio</p>
+  {% elif fitxer.tipus_media == "video" %}
+    <img src="{{ url_for('static', filename='icons/video_webm.png') }}" alt="vídeo" class="icona-arxiu">
+    <p>Mostrant vídeo</p>
+  {% else %}
+    <img src="{{ url_for('static', filename='icons/sense_imatge.png') }}" alt="desconegut" class="icona-arxiu">
+    <p>Mostrant desconegut - valor: "{{ fitxer.tipus_media }}"</p>
+  {% endif %}
+
+{% else %}
+  <img src="{{ url_for('static', filename='icons/' + fitxer.tipus + '.png') }}" alt="genèric" class="icona-arxiu">
+{% endif %}
+
+  </label>
+{% endfor %}
+
+        </div>
+      </div>
+
+        <button type="submit" name="accio" value="eliminar_arxius" class="boto-eliminar-seleccionats">
+          {{ _('Eliminar seleccionats') }}
+        </button>
+      {% endif %}
+       </div>
+
+      
+{% if usuari_organitzacions or usuari_families %}
+<div class="compartir-amb">
+    <label class="titol-seccio">{{ _('Compartir aquesta entrada amb:') }}</label>
+    
+    <div class="opcions-compartir">
+        {% if usuari_organitzacions %}
+        <fieldset class="grup-opcions">
+            <legend>{{ _('Organitzacions') }}</legend>
+            {% for org in usuari_organitzacions %}
+            <label class="checkbox-etica">
+                <input type="checkbox" name="compartir_org[]" value="{{ org.id }}" 
+                       data-nom="{{ org.nom }}" class="checkbox-compartir">
+                <span class="checkmark"></span>
+                {{ org.nom }}
+            </label>
+            {% endfor %}
+        </fieldset>
+        {% endif %}
+        
+        {% if usuari_families %}
+        <fieldset class="grup-opcions">
+            <legend>{{ _('Famílies') }}</legend>
+            {% for fam in usuari_families %}
+            <label class="checkbox-etica">
+                <input type="checkbox" name="compartir_fam[]" value="{{ fam.id }}" 
+                       data-nom="{{ fam.nom }}" class="checkbox-compartir">
+                <span class="checkmark"></span>
+                {{ fam.nom }}
+            </label>
+            {% endfor %}
+        </fieldset>
+        {% endif %}
+    </div>
+    
+    <p class="info-visibilitat">
+        <small>{{ _('Si no selecciones res, l\'entrada serà visible només al teu perfil personal') }}</small>
+    </p>
+</div>
+{% endif %}
+
+
+<div class="botons-final" style="text-align: right; margin-top: 2rem;">
+        <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
+          {% if entrada %}{{ _('Desar canvis') }}{% else %}{{ _('Crear entrada') }}{% endif %}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+    
+    window.traduccions = {
+        seleccionaPais: "{{ _('Selecciona un país') }}",
+        seleccionaRegio: "{{ _('Selecciona província') }}",
+        seleccionaMunicipi: "{{ _('Selecciona o escriu el teu municipi') }}",
+        carregant: "{{ _('Carregant...') }}",
+        errorCarregant: "{{ _('Error carregant') }}",
+        seleccionaPrimerRegio: "{{ _('Selecciona primer la regió') }}",
+        seleccionaPrimerPais: "{{ _('Selecciona primer el país') }}"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/nova_entrada_personal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nova_entrada.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ubicacions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tinymce/tinymce.min.js') }}"></script>
+<script>
+tinymce.init({
+    selector: '#contingut',
+    height: 500,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
+        'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help',
+    content_css: '{{ url_for("static", filename="css/tinymce-custom.css") }}'
+});
+</script>
+
+{% endblock %}

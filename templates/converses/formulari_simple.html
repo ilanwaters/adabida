@@ -1,0 +1,156 @@
+<h2>Nova Conversa</h2>
+
+<form id="form-conversa-simple" method="POST" action="{{ url_for('converses.nova_conversa') }}" enctype="multipart/form-data">
+  
+  <!-- PARTICIPANTS -->
+  <div class="bloc-form">
+    <h3>Participants</h3>
+    <div id="participants-simple">
+      <!-- Participants dinàmics -->
+    </div>
+    <button type="button" id="btn-afegir-simple">+ Afegir participant</button>
+  </div>
+
+  <!-- DATA I LLOC -->
+  <div class="bloc-form">
+    <h3>Data i lloc</h3>
+    <label>Data conversa:</label>
+    <input type="date" name="data_conversa" required>
+    
+    <label>Lloc:</label>
+    <input type="text" name="lloc_municipi" placeholder="Barcelona">
+    <input type="text" name="lloc_regio" placeholder="Catalunya">
+    
+    <label>Durada (minuts):</label>
+    <input type="number" name="durada_minuts" placeholder="45">
+    
+    <label>Observacions:</label>
+    <textarea name="observacions_generals" rows="3" placeholder="Context de la conversa..."></textarea>
+  </div>
+
+  <!-- ARXIU -->
+  <div class="bloc-form">
+    <h3>Arxiu</h3>
+    <button type="button" id="btn-audio">Gravar àudio</button>
+    <button type="button" id="btn-video">Gravar vídeo</button>
+    <input type="file" name="arxiu" accept="audio/*,video/*">
+  </div>
+
+  <!-- ORGANITZACIÓ -->
+  <div class="bloc-form">
+    <h3>Compartir</h3>
+    <select name="organitzacio_id">
+      <option value="">Només personal</option>
+      {% for org in usuari_organitzacions %}
+        <option value="{{ org.id }}">{{ org.nom }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit">Guardar conversa</button>
+</form>
+
+<style>
+.bloc-form {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.bloc-form h3 {
+  margin: 0 0 10px 0;
+}
+
+.bloc-form label {
+  display: block;
+  margin: 10px 0 5px 0;
+  font-weight: bold;
+}
+
+.bloc-form input, 
+.bloc-form textarea, 
+.bloc-form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.participant-simple {
+  border: 1px solid #eee;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 3px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  background: #4CAF50;
+  color: white;
+  font-size: 16px;
+}
+
+#btn-afegir-simple {
+  background: #2196F3;
+  color: white;
+}
+
+#btn-audio, #btn-video {
+  background: #FF9800;
+  color: white;
+}
+</style>
+
+<script>
+let numParticipant = 0;
+
+function afegirParticipant() {
+  const container = document.getElementById('participants-simple');
+  const html = `
+    <div class="participant-simple" data-num="${numParticipant}">
+      <label>Nom:</label>
+      <input type="text" name="participant_nom_${numParticipant}" required>
+      
+      <label>Data naixement:</label>
+      <input type="date" name="participant_data_naixement_${numParticipant}">
+      
+      <label>Lloc naixement:</label>
+      <input type="text" name="participant_municipi_${numParticipant}" placeholder="Municipi">
+      
+      <label>Observacions:</label>
+      <textarea name="participant_observacions_${numParticipant}" rows="2"></textarea>
+      
+      <button type="button" onclick="eliminarParticipant(${numParticipant})">Eliminar</button>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', html);
+  numParticipant++;
+}
+
+function eliminarParticipant(num) {
+  document.querySelector(`[data-num="${num}"]`).remove();
+}
+
+document.getElementById('btn-afegir-simple').addEventListener('click', afegirParticipant);
+
+// Afegir primer participant automàticament
+afegirParticipant();
+
+// TODO: Implementar gravació àudio/vídeo
+document.getElementById('btn-audio').addEventListener('click', function() {
+  alert('Gravació àudio - TODO');
+});
+
+document.getElementById('btn-video').addEventListener('click', function() {
+  alert('Gravació vídeo - TODO');
+});
+</script>

@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Qui som') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils.formularis.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('organitzacions.llistat') }}">{{ _('Organitzacions') }}</a> › 
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}">{{ organitzacio.nom }}</a> › 
+      <span>{{ _('Qui som') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-building"></i> {{ organitzacio.nom }}</h1>
+      <p class="subtitol">{{ _('Informació completa de l\'organització') }}</p>
+    </div>
+
+    <!-- Contingut principal -->
+    <div class="contingut-seccio">
+      
+      <!-- Informació bàsica -->
+      <div class="bloc-info">
+        <div class="targeta">
+          <h3><i class="fas fa-info-circle"></i> {{ _('Informació') }}</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <strong>{{ _('Tipus:') }}</strong>
+              <span>{{ organitzacio.tipus|title }}</span>
+            </div>
+            <div class="info-item">
+              <strong>{{ _('Ubicació:') }}</strong>
+              <span>{{ organitzacio.municipi }}, {{ organitzacio.regio }}</span>
+            </div>
+            <div class="info-item">
+              <strong>{{ _('Creada:') }}</strong>
+              <span>{{ organitzacio.data_creacio.strftime('%B %Y') }}</span>
+            </div>
+            {% if organitzacio.web %}
+            <div class="info-item">
+              <strong>{{ _('Web:') }}</strong>
+              <a href="{{ organitzacio.web }}" target="_blank" rel="noopener">
+                {{ organitzacio.web }}
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripció -->
+      {% if organitzacio.descripcio %}
+      <div class="bloc-descripcio">
+        <div class="targeta">
+          <h3><i class="fas fa-file-text"></i> {{ _('Descripció') }}</h3>
+          <div class="descripcio-text">
+            {{ organitzacio.descripcio }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Estadístiques -->
+      <div class="bloc-estadistiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-bar"></i> {{ _('Estadístiques') }}</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.membres_count }}</div>
+              <div class="stat-label">{{ _('Membres') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.entrades_count }}</div>
+              <div class="stat-label">{{ _('Entrades') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.entrades_mes_actual }}</div>
+              <div class="stat-label">{{ _('Aquest mes') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.dies_activa }}</div>
+              <div class="stat-label">{{ _('Dies activa') }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline / Cronologia -->
+      <div class="bloc-timeline">
+        <div class="targeta">
+          <h3><i class="fas fa-timeline"></i> {{ _('Cronologia') }}</h3>
+          
+          <div class="timeline">
+            <!-- Creació organització -->
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Fundació') }}</h4>
+                <p class="timeline-data">{{ organitzacio.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('L\'organització es va crear i va començar la seva activitat a Adabida.') }}</p>
+              </div>
+            </div>
+
+            <!-- Primer membre -->
+            {% if primer_membre %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primer membre') }}</h4>
+                <p class="timeline-data">{{ primer_membre.data_adhesio.strftime('%B %Y') }}</p>
+                <p>{{ primer_membre.usuari.nom }} {{ _('es va unir com a primer membre.') }}</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Primera entrada -->
+            {% if primera_entrada %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primera entrada compartida') }}</h4>
+                <p class="timeline-data">{{ primera_entrada.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('Es va compartir la primera entrada:') }} "{{ primera_entrada.titol }}"</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Fites importantes -->
+            {% for fita in fites_importants %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ fita.titol }}</h4>
+                <p class="timeline-data">{{ fita.data.strftime('%B %Y') }}</p>
+                <p>{{ fita.descripcio }}</p>
+              </div>
+            </div>
+            {% endfor %}
+
+            <!-- Estat actual -->
+            <div class="timeline-item timeline-actual">
+              <div class="timeline-marker">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Avui') }}</h4>
+                <p>{{ _('L\'organització continua activa amb') }} {{ estadistiques.membres_count }} {{ _('membres i') }} {{ estadistiques.entrades_count }} {{ _('entrades.') }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadístiques històriques / Evolució -->
+      <div class="bloc-stats-historiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-line"></i> {{ _('Evolució') }}</h3>
+          
+          <div class="stats-historiques-grid">
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Creixement de membres') }}</div>
+              <div class="stat-graf">
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.nous_membres / max_nous_membres * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.nous_membres }} nous membres">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Activitat mensual') }}</div>
+              <div class="stat-graf">
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.noves_entrades / max_noves_entrades * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.noves_entrades }} noves entrades">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activitat recent -->
+      {% if activitat_recent %}
+      <div class="bloc-activitat">
+        <div class="targeta">
+          <h3><i class="fas fa-clock"></i> {{ _('Activitat recent') }}</h3>
+          <div class="llista-activitat">
+            {% for item in activitat_recent %}
+            <div class="item-activitat">
+              <div class="icona-activitat">
+                {% if item.tipus == 'entrada' %}
+                  <i class="fas fa-file-plus"></i>
+                {% elif item.tipus == 'membre' %}
+                  <i class="fas fa-user-plus"></i>
+                {% endif %}
+              </div>
+              <div class="contingut-activitat">
+                <p class="descripcio-activitat">{{ item.descripcio }}</p>
+                <span class="data-activitat">{{ item.data.strftime('%d/%m/%Y %H:%M') }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+      
+      {% if es_admin %}
+      <a href="{{ url_for('organitzacions_admin.admin', id=organitzacio.id) }}"
+         class="boto boto-primari">
+        <i class="fas fa-cog"></i> {{ _('Administrar') }}
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+{% endblock %}

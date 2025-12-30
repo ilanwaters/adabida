@@ -1,0 +1,414 @@
+/* ========================================
+   BLOG CSS - ADABIDA
+   Estil inspirat en Guerra Eterna
+======================================== */
+
+/* ========================================
+   LAYOUT PRINCIPAL
+======================================== */
+.blog-seccio {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  gap: 3rem;
+}
+
+.columna-entrades {
+  flex: 2;
+  width: 100%;
+  margin: 0;
+}
+
+.columna-lateral {
+  max-width: 300px;
+  margin: 3rem auto 0;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+/* ========================================
+   BARRA LATERAL
+======================================== */
+.columna-lateral h3 {
+  font-size: 1rem;
+  color: #495057;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.columna-lateral ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.columna-lateral li {
+  margin-bottom: 0.5rem;
+}
+
+.columna-lateral a {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.columna-lateral a:hover {
+  color: #333;
+}
+
+.columna-lateral form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.columna-lateral input[type="text"] {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+.columna-lateral button {
+  padding: 0.5rem 1rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ========================================
+   ENTRADES DEL BLOG
+======================================== */
+.entrada-blog {
+  margin-bottom: 4rem;
+  padding-bottom: 3rem;
+}
+
+.entrada-blog:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.entrada-blog hr {
+  display: none; /* Eliminem la línia HR ja que usem border-bottom */
+}
+
+.titol-entrada {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #222;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.titol-entrada a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titol-entrada a:hover {
+  color: #007bff;
+}
+
+.data-entrada {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.contingut-entrada {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.7;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.contingut-entrada p {
+  margin-bottom: 1.5rem;
+}
+
+.contingut-entrada p:last-child {
+  margin-bottom: 0;
+}
+
+.contingut-entrada h1, 
+.contingut-entrada h2, 
+.contingut-entrada h3 {
+  color: #222;
+  margin: 2rem 0 1rem 0;
+  font-weight: 400;
+}
+
+.contingut-entrada h1 {
+  font-size: 1.6rem;
+}
+
+.contingut-entrada h2 {
+  font-size: 1.4rem;
+}
+
+.contingut-entrada h3 {
+  font-size: 1.2rem;
+}
+
+.contingut-entrada blockquote {
+  margin: 2rem 0;
+  padding-left: 2rem;
+  border-left: 3px solid #ddd;
+  font-style: italic;
+  color: #555;
+}
+
+.contingut-entrada ul, 
+.contingut-entrada ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.contingut-entrada li {
+  margin-bottom: 0.5rem;
+}
+
+.firma-entrada {
+  font-style: italic;
+  color: #666;
+  text-align: right;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+/* ========================================
+   FUNCIONALITATS BLOG
+======================================== */
+.controls-blog {
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.llegir-mes {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.llegir-mes a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.llegir-mes a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   PAGINACIÓ
+======================================== */
+.paginacio {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.btn-paginacio {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
+  border-radius: 3px;
+}
+
+.btn-paginacio:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-paginacio.actiu {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.info-paginacio {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+/* ========================================
+   ENTRADA COMPLETA
+======================================== */
+.entrada-completa-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.navegacio-retorn {
+  margin-bottom: 30px;
+}
+
+.btn-tornar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: all 0.2s;
+}
+
+.btn-tornar:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.entrada-completa {
+  background: white;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.titol-entrada-gran {
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 15px 0;
+  line-height: 1.2;
+}
+
+.meta-entrada {
+  display: flex;
+  gap: 15px;
+  color: #666;
+  font-size: 0.95em;
+  margin-bottom: 30px;
+}
+
+.autor-entrada {
+  font-style: italic;
+}
+
+.contingut-entrada-complet {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #333;
+}
+
+.contingut-entrada-complet p {
+  margin-bottom: 20px;
+}
+
+.contingut-entrada-complet h2,
+.contingut-entrada-complet h3 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* ========================================
+   NAVEGACIÓ I CAPÇALERES
+======================================== */
+.capçalera-autor,
+.capçalera-resultats {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.capçalera-autor h1,
+.capçalera-resultats h1 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* ========================================
+   RESULTATS CERCA
+======================================== */
+.no-resultats {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.no-resultats p {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.no-resultats a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.no-resultats a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   ENLLAÇOS GLOBALS
+======================================== */
+.enllac-autor {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.enllac-autor:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+  .blog-seccio {
+    padding: 2rem 1rem;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .columna-lateral {
+    margin-top: 0;
+    padding: 1rem;
+    max-width: none;
+  }
+  
+  .titol-entrada {
+    font-size: 1.6rem;
+  }
+  
+  .titol-entrada-gran {
+    font-size: 2em;
+  }
+  
+  .contingut-entrada {
+    font-size: 1rem;
+  }
+  
+  .entrada-completa-container {
+    padding: 15px;
+  }
+  
+  .entrada-completa {
+    padding: 20px;
+  }
+}

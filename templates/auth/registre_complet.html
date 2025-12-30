@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre Completat - Adabida</title>
+</head>
+<body>
+<div class="container-confirmacio">
+    <div class="box-confirmacio">
+        <div class="icona-exit">
+            ✅
+        </div>
+        
+        <h1>Registre completat!</h1>
+        
+        <div class="missatge-principal">
+            <p>Hem enviat un email de verificació a:</p>
+            <p class="email-destinatari"><strong>{{ email }}</strong></p>
+        </div>
+        
+        <div class="instruccions">
+            <h3>Següents passos:</h3>
+            <ol>
+                <li>Revisa la teva safata d'entrada</li>
+                <li>Busca un email de <strong>noreply@adabida.cat</strong></li>
+                <li>Clica l'enllaç de verificació</li>
+                <li>Torna aquí i inicia sessió</li>
+            </ol>
+        </div>
+        
+        <div class="avís-spam">
+            <p>⚠️ Si no trobes l'email, revisa la carpeta de SPAM o correu brossa.</p>
+            <p><strong>Si l'email ha anat a SPAM, si us plau marca'l com "No és spam"</strong> per ajudar-nos a millorar.</p>
+        </div>
+        
+        <div class="botons-accio">
+            <a href="{{ url_for('login.login') }}" class="btn-primary">
+                Anar al login
+            </a>
+            <a href="{{ url_for('auth.reenviar_verificacio') }}" class="btn-secondary">
+                No m'ha arribat l'email
+            </a>
+        </div>
+        
+        <div class="nota-final">
+            <p class="text-petit">L'enllaç de verificació és vàlid durant 24 hores.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Tot el CSS que ja tens */
+.container-confirmacio {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.box-confirmacio {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.icona-exit {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.box-confirmacio h1 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.missatge-principal {
+    margin-bottom: 2rem;
+}
+
+.missatge-principal p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.email-destinatari {
+    font-size: 1.2rem;
+    color: #14d8ce;
+    margin-top: 1rem;
+}
+
+.instruccions {
+    text-align: left;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin: 2rem 0;
+}
+
+.instruccions h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.instruccions ol {
+    padding-left: 1.5rem;
+    line-height: 1.8;
+}
+
+.instruccions li {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.avís-spam {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 2rem 0;
+}
+
+.avís-spam p {
+    color: #856404;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.botons-accio {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0 1rem 0;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: #14d8ce;
+    color: white;
+    border: 2px solid #14d8ce;
+}
+
+.btn-primary:hover {
+    background: #12c0b7;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: white;
+    color: #14d8ce;
+    border: 2px solid #14d8ce;
+}
+
+.btn-secondary:hover {
+    background: #f0f0f0;
+}
+
+.nota-final {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e5e5;
+}
+
+.text-petit {
+    font-size: 0.9rem;
+    color: #777;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .container-confirmacio {
+        margin: 2rem auto;
+        padding: 1rem;
+    }
+    
+    .box-confirmacio {
+        padding: 2rem 1rem;
+    }
+    
+    .botons-accio {
+        flex-direction: column;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
+}
+</style>
+
+</body>
+</html>

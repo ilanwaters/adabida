@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titol %}Resultats per "{{ consulta }}" - {{ _('Blog') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div class="blog-seccio">
+  <div class="columna-entrades">
+    
+    <!-- Capçalera amb navegació -->
+    <div class="capçalera-resultats">
+      <a href="{{ url_for('blog.blog') }}" class="boto_nav">Tornar al blog</a>
+      <h1>{{ consulta }}</h1> 
+    </div>
+
+    <!-- Entrades trobades -->
+    {% if entrades %}
+      {% for entrada in entrades %}
+        <div class="entrada-blog">
+          <h2 class="titol-entrada">
+            <a href="{{ url_for('blog.entrada_completa', entrada_id=entrada.id) }}" target="_blank">
+              {{ entrada.titol }}
+            </a>
+          </h2>
+          <p class="data-entrada">{{ entrada.data_creacio.strftime('%d-%m-%Y') }}</p>
+          
+          <div class="contingut-entrada">
+            {% if entrada.contingut|length > 300 %}
+              {{ entrada.contingut[:300] | safe }}...
+              <div class="llegir-mes">
+                <a href="{{ url_for('blog.entrada_completa', entrada_id=entrada.id) }}" target="_blank">
+                  {{ _('Llegir més...') }}
+                </a>
+              </div>
+            {% else %}
+              {{ entrada.contingut | safe }}
+            {% endif %}
+          </div>
+          
+          {% if entrada.firma %}
+            <p class="firma-entrada">— 
+              <a href="{{ url_for('blog.entrades_per_firma', firma=entrada.firma) }}" class="enllac-autor">
+                {{ entrada.firma }}
+              </a>
+            </p>
+          {% endif %}
+          <hr>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-resultats">
+        <p>{{ _('No s\'han trobat entrades amb aquesta paraula clau.') }}</p>
+        <p>{{ _('Proveu amb altres termes de cerca o') }} 
+           <a href="{{ url_for('blog.blog') }}">{{ _('exploreu totes les entrades') }}</a>.
+        </p>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <div class="columna-lateral">
+    <h3>{{ _('Nova cerca') }}</h3>
+    <form method="GET" action="{{ url_for('blog.cercar_blog') }}">
+      <input type="text" name="q" placeholder="{{ _('Paraula clau...') }}" value="{{ consulta }}">
+      <button type="submit">{{ _('Cerca') }}</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ organitzacio.nom }} - {{ _('Membres') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/membres.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('organitzacions.llistat') }}">{{ _('Organitzacions') }}</a> › 
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}">{{ organitzacio.nom }}</a> › 
+      <span>{{ _('Membres') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      <h1><i class="fas fa-users"></i> {{ _('Membres de') }} {{ organitzacio.nom }}</h1>
+      <p class="subtitol">{{ _('Persones que formen part d\'aquesta organització') }}</p>
+    </div>
+
+    <!-- Estadístiques membres -->
+    <div class="stats-membres">
+      <div class="targeta">
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-numero">{{ membres|length }}</div>
+            <div class="stat-label">{{ _('Total membres') }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">{{ membres_admins|length }}</div>
+            <div class="stat-label">{{ _('Administradors') }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">{{ membres_actius_mes }}</div>
+            <div class="stat-label">{{ _('Actius aquest mes') }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">{{ dies_promig_membre|round(1) }}</div>
+            <div class="stat-label">{{ _('Dies de mitjana') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contingut membres -->
+    <div class="contingut-seccio">
+      {% if membres %}
+        
+        <!-- Controls -->
+        <div class="controls-membres">
+          <div class="targeta">
+            <div class="controls-row">
+              <div class="camp-cerca">
+                <input type="text" id="cerca-membres" placeholder="{{ _('Cerca membres per nom...') }}">
+                <i class="fas fa-search"></i>
+              </div>
+              
+              <div class="filtres-group">
+                <select id="filtre-rol">
+                  <option value="">{{ _('Tots els rols') }}</option>
+                  <option value="admin">{{ _('Administradors') }}</option>
+                  <option value="membre">{{ _('Membres') }}</option>
+                </select>
+                
+                <select id="ordenar-per">
+                  <option value="nom">{{ _('Ordenar per nom') }}</option>
+                  <option value="data_adhesio">{{ _('Per data d\'adhesió') }}</option>
+                  <option value="activitat">{{ _('Per activitat') }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de membres -->
+        <div id="grid-membres" class="grid-membres">
+          {% for membre in membres %}
+          <div class="targeta-membre" 
+               data-nom="{{ membre.usuari.nom|lower }} {{ membre.usuari.cognoms|lower }}"
+               data-rol="{{ membre.rol }}"
+               data-data="{{ membre.data_adhesio.timestamp() }}">
+            
+            <!-- Avatar -->
+            <div class="membre-avatar">
+              <div class="avatar-circle">
+                <span class="inicials">{{ membre.usuari.nom[0] }}{{ membre.usuari.cognoms[0] if membre.usuari.cognoms else '' }}</span>
+              </div>
+              {% if membre.rol == 'admin' %}
+              <div class="badge-admin" title="{{ _('Administrador') }}">
+                <i class="fas fa-crown"></i>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Informació -->
+            <div class="membre-info">
+              <h3 class="membre-nom">{{ membre.usuari.nom }} {{ membre.usuari.cognoms }}</h3>
+              
+              <div class="membre-meta">
+                <span class="rol {{ membre.rol }}">
+                  {% if membre.rol == 'admin' %}
+                    <i class="fas fa-user-shield"></i> {{ _('Administrador') }}
+                  {% else %}
+                    <i class="fas fa-user"></i> {{ _('Membre') }}
+                  {% endif %}
+                </span>
+              </div>
+
+              <div class="membre-dates">
+                <div class="data-item">
+                  <i class="fas fa-calendar-plus"></i>
+                  <span>{{ _('Membre des de') }} {{ membre.data_adhesio.strftime('%d/%m/%Y') }}</span>
+                </div>
+                
+                {% if membre.ultima_activitat %}
+                <div class="data-item">
+                  <i class="fas fa-clock"></i>
+                  <span>{{ _('Últim accés:') }} {{ moment(membre.ultima_activitat).fromNow() }}</span>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Estadístiques del membre -->
+              <div class="membre-stats">
+                <div class="stat-petit">
+                  <span class="numero">{{ membre.entrades_compartides }}</span>
+                  <span class="label">{{ _('entrades') }}</span>
+                </div>
+                <div class="stat-petit">
+                  <span class="numero">{{ membre.dies_membre }}</span>
+                  <span class="label">{{ _('dies') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accions -->
+            <div class="membre-accions">
+              {% if membre.usuari.perfil_public %}
+              <button onclick="veurePerfil({{ membre.usuari.id }})" 
+                      class="boto boto-petit boto-secundari" 
+                      title="{{ _('Veure perfil') }}">
+                <i class="fas fa-eye"></i>
+              </button>
+              {% endif %}
+              
+              {% if es_admin and membre.usuari.id != current_user.id %}
+              <button onclick="gestorMembre({{ membre.id }})" 
+                      class="boto boto-petit boto-outline" 
+                      title="{{ _('Gestionar') }}">
+                <i class="fas fa-cog"></i>
+              </button>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Sense resultats -->
+        <div id="sense-resultats-membres" class="missatge-buit" style="display: none;">
+          <i class="fas fa-user-slash"></i>
+          <h3>{{ _('No s\'han trobat membres') }}</h3>
+          <p>{{ _('Prova a canviar els filtres de cerca') }}</p>
+        </div>
+
+      {% else %}
+        <!-- Estat buit -->
+        <div class="missatge-buit">
+          <i class="fas fa-users"></i>
+          <h3>{{ _('Encara no hi ha membres') }}</h3>
+          <p>{{ _('Aquesta organització encara no té membres registrats.') }}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('organitzacions.publica', slug=organitzacio.slug) }}" 
+         class="boto boto-secundari">
+        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
+      </a>
+      
+      {% if es_admin %}
+      <a href="{{ url_for('organitzacions_admin.admin', id=organitzacio.id) }}#membres" 
+         class="boto boto-primari">
+        <i class="fas fa-users-cog"></i> {{ _('Gestionar membres') }}
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<!-- Modal perfil membre -->
+<div id="modal-perfil" class="modal">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalPerfil()">&times;</span>
+    <div id="contingut-modal-perfil">
+      <!-- Contingut carregat dinàmicament -->
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/seccio_membres.js') }}"></script>
+{% endblock %}

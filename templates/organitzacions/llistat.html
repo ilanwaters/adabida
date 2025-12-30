@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Organitzacions') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/repositori.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/llistat_organitzacions.css') }}">
+{% endblock %}
+
+{% block contingut %}
+  <h1>{{ _('Directori d\'organitzacions') }}</h1>
+
+<form method="get" action="{{ url_for('organitzacions.llistat') }}" class="formulari-cerca">
+
+  <!-- Cerca principal -->
+  <div class="cerca-principal">
+    <input type="text" name="nom" placeholder="{{ _('Nom de l\'organització') }}" value="{{ request.args.get('nom', '') }}">
+  </div>
+
+  <!-- CAMPS EXTRES -->
+  <div id="camps-extres" style="display: none;">
+
+    <!-- Línia filtres -->
+    <div class="fila-camps">
+      <select name="tipus">
+        <option value="">{{ _('Tots els tipus') }}</option>
+        <option value="hospital" {% if request.args.get('tipus') == 'hospital' %}selected{% endif %}>
+          {{ _('Hospital') }}
+        </option>
+        <option value="residencia" {% if request.args.get('tipus') == 'residencia' %}selected{% endif %}>
+          {{ _('Residència') }}
+        </option>
+        <option value="escola" {% if request.args.get('tipus') == 'escola' %}selected{% endif %}>
+          {{ _('Escola') }}
+        </option>
+        <option value="associacio" {% if request.args.get('tipus') == 'associacio' %}selected{% endif %}>
+          {{ _('Associació') }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Ubicació -->
+    <div class="fila-camps">
+      <input type="text" name="pais" placeholder="{{ _('País') }}" value="{{ request.args.get('pais', '') }}">
+      <input type="text" name="regio" placeholder="{{ _('Regió') }}" value="{{ request.args.get('regio', '') }}">
+      <input type="text" name="municipi" placeholder="{{ _('Municipi') }}" value="{{ request.args.get('municipi', '') }}">
+    </div>
+
+  </div>
+  
+  <div class="linia-final-cerca">
+    <span id="toggle-cerca" class="boto-textual">{{ _('Ampliar la cerca') }}</span>
+    <button type="submit">{{ _('Cerca') }}</button>
+  </div>
+
+</form>
+
+  {% if cerca_activa %}
+    <h3>{{ _('Resultats de la cerca') }} ({{ organitzacions|length }})</h3>
+  {% endif %}
+
+  {% if organitzacions %}
+    <div class="grid-organitzacions" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+      {% for org in organitzacions %}
+        <div class="targeta-org" style="border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <div class="capçalera-org">
+            <h3 style="margin: 0 0 0.5rem 0; color: #333;">{{ org.nom }}</h3>
+            <span class="tipus-org" style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+              {{ _(org.tipus.title()) }}
+            </span>
+          </div>
+          
+          <div class="info-org" style="margin: 1rem 0;">
+            <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">
+              📍 {{ org.municipi }}, {{ org.regio }}, {{ org.pais }}
+            </p>
+            <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">
+              👥 {{ org.nombre_membres }} {{ _('membres') }}
+            </p>
+            {% if org.descripcio %}
+              <p style="margin: 0.75rem 0; color: #555; font-size: 0.9rem;">
+                {{ org.descripcio[:120] }}{% if org.descripcio|length > 120 %}...{% endif %}
+              </p>
+            {% endif %}
+          </div>
+         <div class="accions-org" style="display: flex; gap: 0.5rem; align-items: center;">
+            <a href="{{ url_for('organitzacions.publica', slug=org.url_publica) }}" 
+               class="boto boto-secundari" target="_blank">
+              {{ _('Veure pàgina') }}
+            </a>
+            
+            <!-- Botons segons estat de l'usuari -->
+            {% if org.estat_boto == 'ja_membre' %}
+              <span style="color: #28a745; font-size: 0.9rem;">✓ {{ _('Ja ets membre') }}</span>
+              
+            {% elif org.estat_boto == 'pendent' %}
+              <button class="boto boto-desactivat" disabled style="background: #6c757d; cursor: not-allowed;">
+                {{ _('Sol·licitud enviada') }}
+              </button>
+              
+            {% elif org.estat_boto == 'rebutjada' %}
+            <button onclick="contactarOrganitzacio({{ org.id }}, '{{ org.nom }}')"                        
+        class="boto boto-rebutjada">                 
+    {{ _('Sol·licitud rebutjada - Contactar') }}               
+</button>
+              
+            {% elif org.estat_boto == 'sol_licitar' %}
+              <button onclick="solicitarAdhesio({{ org.id }})" class="boto boto-primari">
+                {{ _('Sol·licitar adhesió') }}
+              </button>
+              
+            {% elif org.estat_boto == 'no_loguejat' %}
+              <span style="color: #666; font-size: 0.8rem;">{{ _('Inicia sessió per sol·licitar adhesió') }}</span>
+              
+            {% else %}
+              <!-- Estat desconegut - fallback -->
+              <span style="color: #666; font-size: 0.8rem;">{{ _('No disponible') }}</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="text-align: center; color: #666; margin-top: 3rem;">
+      {% if cerca_activa %}
+        {{ _('No s\'han trobat organitzacions amb aquests criteris.') }}
+      {% else %}
+        {{ _('Encara no hi ha organitzacions registrades.') }}
+      {% endif %}
+    </p>
+  {% endif %}
+  <!-- Modal sol·licitud adhesió -->
+<div id="modal-solicitud" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="boto-tancar" onclick="tancarModalSolicitud()">&times;</span>
+    <h2 id="modal-nom-org">{{ _('Sol·licitar adhesió') }}</h2>
+    <form id="form-solicitud">
+      <div class="camp-formulari">
+        <label for="missatge-solicitud">{{ _('Motiu de la sol·licitud (opcional):') }}</label>
+        <textarea id="missatge-solicitud" 
+                  placeholder="{{ _('Explica breument per què vols formar part d\'aquesta organització...') }}"
+                  rows="4" style="width: 100%; resize: vertical; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+      </div>
+      <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" onclick="tancarModalSolicitud()" class="boto boto-secundari">
+          {{ _('Cancel·lar') }}
+        </button>
+        <button type="button" onclick="enviarSolicitud()" class="boto boto-primari">
+          {{ _('Enviar sol·licitud') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% set receptor_preseleccionat = org_contactar.nom if org_contactar else none %}
+{% set assumpte_preseleccionat = "Consulta sobre sol·licitud rebutjada" if org_contactar else none %}
+{% set contingut_preseleccionat = "Benvolguts,\n\nHe rebut notificació que la meva sol·licitud d'adhesió ha estat rebutjada. M'agradaria conèixer els motius.\n\nGràcies." if org_contactar else none %}
+
+{% include 'components/modal_nou_missatge.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('toggle-cerca');
+    const camps = document.getElementById('camps-extres');
+    let mostrat = false;
+
+    toggle.addEventListener('click', function () {
+      mostrat = !mostrat;
+      camps.style.display = mostrat ? 'block' : 'none';
+      toggle.textContent = mostrat
+        ? "{{ _('Reduir la cerca') }}"
+        : "{{ _('Ampliar la cerca') }}";
+    });
+  });
+
+  // Funció per sol·licitar adhesió (implementar després)
+  function solicitarAdhesio(orgId) {
+    alert('Funcionalitat de sol·licitud per implementar amb orgId: ' + orgId);
+  }
+</script>
+<script>let orgIdActual = null;
+
+function solicitarAdhesio(orgId) {
+  orgIdActual = orgId;
+  
+  // Buscar nom de l'organització per mostrar-lo a la modal
+  const targeta = event.target.closest('.targeta-org');
+  const nomOrg = targeta.querySelector('h3').textContent;
+  
+  document.getElementById('modal-nom-org').textContent = `{{ _('Sol·licitar adhesió a') }} ${nomOrg}`;
+  document.getElementById('modal-solicitud').style.display = 'flex';
+  
+  // Focus al textarea
+  setTimeout(() => {
+    document.getElementById('missatge-solicitud').focus();
+  }, 100);
+}
+
+function tancarModalSolicitud() {
+  document.getElementById('modal-solicitud').style.display = 'none';
+  document.getElementById('missatge-solicitud').value = '';
+  orgIdActual = null;
+}
+
+function enviarSolicitud() {
+  const missatge = document.getElementById('missatge-solicitud').value.trim();
+  
+  fetch(`{{ url_for('organitzacions.solicitar') }}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      organitzacio_id: orgIdActual,
+      missatge: missatge
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Sol·licitud enviada correctament!") }}');
+      tancarModalSolicitud();
+      location.reload(); // Refrescar per actualitzar estat
+    } else {
+      alert('{{ _("Error") }}: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+}</script>
+<script src="{{ url_for('static', filename='js/organitzacions/llista_organitzacions.js') }}"></script>
+{% endblock %}

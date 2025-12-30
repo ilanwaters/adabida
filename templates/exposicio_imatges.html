@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% set mostra_boto_exposicions = True %}
+
+{% block titol_pagina %}
+  {{ titol_exposicio }}
+{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/exposicio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+
+<div class="capcalera-expo">
+  <h1 class="titol-expo">{{ titol_exposicio }}</h1>
+  <div class="selector-vista">
+    <button class="boto-textual" id="boto-miniatures" onclick="canviaVista('miniatures')" style="display: none;">
+      {{ _('Miniatures') }}
+    </button>
+    <button class="boto-textual" id="boto-gran" onclick="canviaVista('gran')">
+      {{ _('Vista gran') }}
+    </button>
+  </div>
+</div>
+
+    
+
+<div id="vista-miniatures" class="grid-galeria visible">
+  {% for img in imatges %}
+    <div class="targeta-imatge">
+      <img
+      
+  src="{{ img.url }}"
+  alt="Imatge exposició"
+  class="imatge-galeria"
+ {% if img.entrada_id and img.usuari_login %}
+  onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')"
+{% endif %}>
+
+    </div>
+  {% endfor %}
+</div>
+
+<div id="vista-gran" class="vista-gran ocult">
+  {% for img in imatges %}
+    <div class="imatge-gran">
+      <img
+        src="{{ img.url }}"
+        alt="Imatge exposició"
+        class="imatge-galeria-gran"
+        {% if img.entrada_id and img.usuari_login %}
+          onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')"
+        {% endif %}
+      >
+      <p class="llegenda">
+        {% if img.titol_entrada %}
+          <a href="javascript:void(0)" onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')" class="enllac-info">
+            {{ img.titol_entrada }}
+          </a>
+          —
+         <a href="{{ url_for('perfil_public.perfil_public', usuari_login=img.usuari_login) }}" class="enllac-info" target="_blank">
+
+            {{ img.autor_nom }}
+          </a>
+          {% if img.data_creacio %}
+            ({{ img.data_creacio }})
+          {% endif %}
+        {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+</div>
+
+
+
+
+
+ {% include "components/modal_entrada.html" %}
+
+  <div id="lightbox-overlay" class="ocult">
+  <div class="lightbox-content">
+    <button class="boto" onclick="tancaLightbox()">✖</button>
+    <img id="lightbox-img" src="" alt="Imatge gran">
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts%}
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
+<script>
+  function obreLightbox(src) {
+    console.log("👉 Obrint lightbox amb:", src);
+    const overlay = document.getElementById("lightbox-overlay");
+    const img = document.getElementById("lightbox-img");
+    img.src = src;
+    overlay.classList.remove("ocult");
+  }
+
+  function tancaLightbox() {
+    console.log("👋 Tancant lightbox");
+    const overlay = document.getElementById("lightbox-overlay");
+    const img = document.getElementById("lightbox-img");
+    overlay.classList.add("ocult");
+    img.src = "";
+  }
+
+  window.obreLightbox = obreLightbox;
+  window.tancaLightbox = tancaLightbox;
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const hash = window.location.hash;
+    console.log("➡️ Hash detectat:", hash);
+
+    if (hash === "#galeria-exposicions") {
+      console.log("🎯 Obrir pestanya Galeria i subpestanya Exposicions");
+
+      if (typeof obreSeccio === "function") {
+        obreSeccio("galeria");
+      } else {
+        console.warn("❌ Funció obreSeccio no trobada");
+      }
+      setTimeout(() => {
+        const botoSub = document.querySelector('[data-subpestanya="exposicions"]');
+        if (botoSub) {
+          console.log("✅ Subpestanya trobada, fent clic");
+          botoSub.click();
+        } else {
+          console.warn("❌ Botó de subpestanya exposicions no trobat");
+        }
+      }, 300); 
+    }
+  });
+</script>
+
+<script>
+function canviaVista(vista) {
+  const mini = document.getElementById("vista-miniatures");
+  const gran = document.getElementById("vista-gran");
+  const botoMiniatures = document.getElementById("boto-miniatures");
+  const botoGran = document.getElementById("boto-gran");
+
+  if (vista === "miniatures") {
+    mini.classList.remove("ocult");
+    mini.classList.add("visible");
+    gran.classList.remove("visible");
+    gran.classList.add("ocult");
+
+    botoMiniatures.style.display = "none";
+    botoGran.style.display = "inline-block";
+  } else {
+    gran.classList.remove("ocult");
+    gran.classList.add("visible");
+    mini.classList.remove("visible");
+    mini.classList.add("ocult");
+
+    botoGran.style.display = "none";
+    botoMiniatures.style.display = "inline-block";
+  }
+}
+
+</script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ familia.nom }} - {{ _('Qui som') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estils.formularis.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+  <div class="contenidor">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('familia.les_meves') }}">{{ _('Les meves famílies') }}</a> › 
+     <a href="{{ url_for('familia.veure', url=familia.url) }}">{{ familia.nom }}</a> › 
+      <span>{{ _('Qui som') }}</span>
+    </nav>
+
+    <!-- Capçalera -->
+    <div class="capsalera-seccio">
+      {% if familia.heraldica_fitxer %}
+        <img src="{{ url_for('static', filename='heraldica/' + familia.heraldica_fitxer) }}" 
+             alt="{{ _('Escut de') }} {{ familia.nom }}" 
+             style="max-height: 80px; margin-bottom: 1rem; border-radius: 8px;">
+      {% endif %}
+      <h1><i class="fas fa-users"></i> {{ familia.nom }}</h1>
+      {% if familia.motiu %}
+        <p class="subtitol">"{{ familia.motiu }}"</p>
+      {% else %}
+        <p class="subtitol">{{ _('Informació completa de la família') }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Contingut principal -->
+    <div class="contingut-seccio">
+      
+      <!-- Informació bàsica -->
+      <div class="bloc-info">
+        <div class="targeta">
+          <h3><i class="fas fa-info-circle"></i> {{ _('Informació') }}</h3>
+          <div class="info-grid">
+            {% if familia.periode_referencia %}
+            <div class="info-item">
+              <strong>{{ _('Període de referència:') }}</strong>
+              <span>{{ familia.periode_referencia }}</span>
+            </div>
+            {% endif %}
+            <div class="info-item">
+              <strong>{{ _('Creada:') }}</strong>
+              <span>{{ familia.data_creacio.strftime('%B %Y') }}</span>
+            </div>
+            <div class="info-item">
+              <strong>{{ _('Ubicacions d\'origen:') }}</strong>
+              <span>
+                {% if familia.ubicacions_origen %}
+                  {% for ub in familia.ubicacions_origen[:2] %}
+                    {{ ub.municipi }}, {{ ub.regio }}{% if not loop.last %} • {% endif %}
+                  {% endfor %}
+                  {% if familia.ubicacions_origen|length > 2 %}
+                    <span style="color: #666;"> (+{{ familia.ubicacions_origen|length - 2 }} més)</span>
+                  {% endif %}
+                {% else %}
+                  {{ _('No especificat') }}
+                {% endif %}
+              </span>
+            </div>
+            {% if familia.ubicacions_actuals %}
+            <div class="info-item">
+              <strong>{{ _('Ubicacions actuals:') }}</strong>
+              <span>
+                {% for ub in familia.ubicacions_actuals[:2] %}
+                  {{ ub.municipi }}{% if ub.regio %}, {{ ub.regio }}{% endif %}{% if not loop.last %} • {% endif %}
+                {% endfor %}
+                {% if familia.ubicacions_actuals|length > 2 %}
+                  <span style="color: #666;"> (+{{ familia.ubicacions_actuals|length - 2 }} més)</span>
+                {% endif %}
+              </span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripció -->
+      {% if familia.descripcio %}
+      <div class="bloc-descripcio">
+        <div class="targeta">
+          <h3><i class="fas fa-file-text"></i> {{ _('Descripció') }}</h3>
+          <div class="descripcio-text">
+            {{ familia.descripcio }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Estadístiques -->
+      <div class="bloc-estadistiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-bar"></i> {{ _('Estadístiques') }}</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.membres_count }}</div>
+              <div class="stat-label">{{ _('Membres') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.records_count }}</div>
+              <div class="stat-label">{{ _('Records') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.records_mes_actual }}</div>
+              <div class="stat-label">{{ _('Aquest mes') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-numero">{{ estadistiques.dies_activa }}</div>
+              <div class="stat-label">{{ _('Dies activa') }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline / Cronologia -->
+      <div class="bloc-timeline">
+        <div class="targeta">
+          <h3><i class="fas fa-timeline"></i> {{ _('Cronologia') }}</h3>
+          
+          <div class="timeline">
+            <!-- Creació família -->
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Fundació') }}</h4>
+                <p class="timeline-data">{{ familia.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('La família es va crear i va començar la seva activitat a Adabida.') }}</p>
+              </div>
+            </div>
+
+            <!-- Primer membre -->
+            {% if primer_membre %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primer membre') }}</h4>
+                <p class="timeline-data">{{ primer_membre.data_adhesio.strftime('%B %Y') }}</p>
+                <p>{{ primer_membre.nom or primer_membre.usuari.nom }} {{ _('es va afegir com a primer membre.') }}</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Primer record -->
+            {% if primer_record %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Primer record compartit') }}</h4>
+                <p class="timeline-data">{{ primer_record.data_creacio.strftime('%B %Y') }}</p>
+                <p>{{ _('Es va compartir el primer record:') }} "{{ primer_record.titol }}"</p>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Fites importantes -->
+            {% for fita in fites_importants %}
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ fita.titol }}</h4>
+                <p class="timeline-data">{{ fita.data.strftime('%B %Y') }}</p>
+                <p>{{ fita.descripcio }}</p>
+              </div>
+            </div>
+            {% endfor %}
+
+            <!-- Estat actual -->
+            <div class="timeline-item timeline-actual">
+              <div class="timeline-marker">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div class="timeline-content">
+                <h4>{{ _('Avui') }}</h4>
+                <p>{{ _('La família continua activa amb') }} {{ estadistiques.membres_count }} {{ _('membres i') }} {{ estadistiques.records_count }} {{ _('records.') }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadístiques històriques / Evolució -->
+      <div class="bloc-stats-historiques">
+        <div class="targeta">
+          <h3><i class="fas fa-chart-line"></i> {{ _('Evolució') }}</h3>
+          
+          <div class="stats-historiques-grid">
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Creixement de membres') }}</div>
+              <div class="stat-graf">
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.nous_membres / max_nous_membres * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.nous_membres }} nous membres">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-historica">
+              <div class="stat-titol">{{ _('Activitat mensual') }}</div>
+              <div class="stat-graf">
+                <div class="graf-barres">
+                  {% for mes in ultims_6_mesos %}
+                  <div class="barra" style="height: {{ (mes.nous_records / max_nous_records * 100)|round }}%"
+                       title="{{ mes.nom }}: {{ mes.nous_records }} nous records">
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activitat recent -->
+      {% if activitat_recent %}
+      <div class="bloc-activitat">
+        <div class="targeta">
+          <h3><i class="fas fa-clock"></i> {{ _('Activitat recent') }}</h3>
+          <div class="llista-activitat">
+            {% for item in activitat_recent %}
+            <div class="item-activitat">
+              <div class="icona-activitat">
+                {% if item.tipus == 'record' %}
+                  <i class="fas fa-file-plus"></i>
+                {% elif item.tipus == 'membre' %}
+                  <i class="fas fa-user-plus"></i>
+                {% endif %}
+              </div>
+              <div class="contingut-activitat">
+                <p class="descripcio-activitat">{{ item.descripcio }}</p>
+                <span class="data-activitat">{{ item.data.strftime('%d/%m/%Y %H:%M') }}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Navegació -->
+    <div class="navegacio-seccio">
+      <a href="{{ url_for('familia.veure', url=familia.url) }}"
+         class="boto_nav">
+        {{ _('Tornar') }}
+      </a>
+      
+      {% if es_admin %}
+      <a href="{{ url_for('administrar.index', familia_id=familia.id) }}"
+         class="boto_nav">
+       {{ _('Administrar') }}
+      </a>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+{% endblock %}

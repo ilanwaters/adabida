@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Aportacions Voluntàries') }}{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/aportacions.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aportacions_inici.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="aportacions-container">
+    
+    <h1>{{ _('Aportacions Voluntàries') }}</h1>
+    <p class="subtitol">{{ _('Un projecte independent i ètic, finançat per la comunitat') }}</p>
+
+    <div class="destacat">
+      <p><strong>{{ _('Adabida és i serà sempre 100% gratuït per a tothom.') }}</strong></p>
+      <p>{{ _('No hi ha subscripcions. No hi ha funcionalitats de pagament. No hi ha publicitat. No venem les teves dades.') }}</p>
+    </div>
+
+    <h2>{{ _('1. Per què aportacions voluntàries?') }}</h2>
+    
+    <p>{{ _('Adabida no és només un projecte tecnològic, és un projecte amb valors. Hem escollit el model d\'aportacions voluntàries per raons ètiques fonamentals:') }}</p>
+
+    <ul>
+      <li><strong>{{ _('Independència:') }}</strong> {{ _('No dependre de grans corporacions tecnològiques ni inversors') }}</li>
+      <li><strong>{{ _('Privacitat:') }}</strong> {{ _('Les teves dades MAI seran el producte. Mai les vendrem ni les monetitzarem') }}</li>
+      <li><strong>{{ _('Accessibilitat universal:') }}</strong> {{ _('Qualsevol persona ha de poder preservar la seva memòria, independentment dels seus recursos econòmics') }}</li>
+      <li><strong>{{ _('Dignitat:') }}</strong> {{ _('Els records i testimonis de les persones no són una mercaderia') }}</li>
+      <li><strong>{{ _('Comunitat:') }}</strong> {{ _('El projecte és de tots i per a tots, no d\'una empresa amb ànim de lucre') }}</li>
+    </ul>
+
+    <p>{{ _('Inspirats en projectes com Wikipedia, creiem que el coneixement i la memòria col·lectiva han de ser lliures i accessibles. Però això té un cost.') }}</p>
+
+    <h2>{{ _('2. Transparència financera') }}</h2>
+
+    <p>{{ _('Ens comprometem a la transparència total. Cada euro que aportes es destina a mantenir i millorar Adabida:') }}</p>
+
+    <table class="taula-costos">
+      <thead>
+        <tr>
+          <th>{{ _('Concepte') }}</th>
+          <th>{{ _('Cost estimat/any') }}</th>
+          <th>{{ _('Descripció') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ _('Servidor i hosting') }}</td>
+          <td>500-800€</td>
+          <td>{{ _('Allotjament de la base de dades, fitxers multimèdia i aplicació web') }}</td>
+        </tr>
+        <tr>
+          <td>{{ _('Domini i certificats SSL') }}</td>
+          <td>50-100€</td>
+          <td>{{ _('Manteniment del domini adabida.cat i seguretat HTTPS') }}</td>
+        </tr>
+        <tr>
+          <td>{{ _('Còpies de seguretat') }}</td>
+          <td>100-200€</td>
+          <td>{{ _('Sistemes de backup per garantir que les dades no es perdin mai') }}</td>
+        </tr>
+        <tr>
+          <td>{{ _('Desenvolupament i manteniment') }}</td>
+          <td>{{ _('Variable') }}</td>
+          <td>{{ _('Millores de la plataforma, correccions d\'errors, noves funcionalitats') }}</td>
+        </tr>
+        <tr>
+          <td>{{ _('IA per entrevistes (futur)') }}</td>
+          <td>200-400€</td>
+          <td>{{ _('Quan integrem la intel·ligència artificial per a les entrevistes orals') }}</td>
+        </tr>
+        <tr class="total">
+          <td colspan="2"><strong>{{ _('TOTAL ESTIMAT ANUAL') }}</strong></td>
+          <td><strong>850-1.500€</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="nota">{{ _('* Aquests són costos estimats per a la fase inicial del projecte. A mesura que creixi la comunitat, els costos augmentaran proporcionalment.') }}</p>
+
+    <h2>{{ _('3. Els nostres compromisos') }}</h2>
+    
+    <ul>
+      <li>{{ _('Mai cobrar per l\'accés: Adabida serà sempre gratuït per a tothom') }}</li>
+      <li>{{ _('Mai vendre dades: Les teves dades personals i els teus testimonis mai es vendran ni es monetitzaran') }}</li>
+      <li>{{ _('Mai publicitat: No hi haurà mai anuncis ni tracking de tercers') }}</li>
+      <li>{{ _('Transparència financera: Publicarem anualment un informe de despeses i ingressos') }}</li>
+      <li>{{ _('Tecnologies lliures: Compromís amb el programari lliure i la sobirania digital') }}</li>
+      <li>{{ _('Les teves dades són teves: Pots eliminar tot el teu contingut quan vulguis') }}</li>
+    </ul>
+
+    <h2>{{ _('4. Com fer una aportació') }}</h2>
+
+    <p>{{ _('No hi ha import mínim. Qualsevol aportació, per petita que sigui, ajuda a mantenir el projecte viu.') }}</p>
+
+    <div class="metodes">
+      <h3>{{ _('Mètodes de pagament') }}</h3>
+      
+      <p><strong>Bizum:</strong> [NÚMERO PENDENT]</p>
+      <p><strong>{{ _('Transferència bancària:') }}</strong> IBAN [PENDENT]</p>
+      <p><strong>{{ _('Targeta de crèdit:') }}</strong> {{ _('PayPal o targeta (disponible properament)') }}</p>
+      
+      <p class="nota">{{ _('Estem en fase de desenvolupament. Els mètodes de pagament s\'activaran quan el projecte surti de la versió DEMO.') }}</p>
+    </div>
+
+    <h2>{{ _('5. Altres maneres d\'ajudar') }}</h2>
+
+    <p>{{ _('Si no pots fer una aportació econòmica, hi ha moltes altres maneres de col·laborar amb Adabida:') }}</p>
+
+    <ul>
+      <li>{{ _('Difusió: Explica el projecte a persones que puguin estar interessades') }}</li>
+      <li>{{ _('Traduccions: Ajuda\'ns a traduir la plataforma a més idiomes') }}</li>
+      <li>{{ _('Disseny: Millora la interfície i l\'experiència d\'usuari') }}</li>
+      <li>{{ _('Desenvolupament: Col·labora amb el codi (tecnologies lliures)') }}</li>
+      <li>{{ _('Testimonis: Comparteix la teva història i enriqueix l\'arxiu') }}</li>
+      <li>{{ _('Contactes: Connecta\'ns amb hospitals, residències o associacions') }}</li>
+    </ul>
+
+    <h2>{{ _('6. Preguntes freqüents') }}</h2>
+
+    <h3>{{ _('Qui gestiona les aportacions?') }}</h3>
+    <p>{{ _('En aquesta fase DEMO, el projecte està gestionat per Ilan Sánchez, historiador i desenvolupador. Quan el projecte creixi, es constituirà com a associació cultural sense ànim de lucre amb junta directiva i transparència total.') }}</p>
+
+    <h3>{{ _('Puc triar en què es gasta la meva aportació?') }}</h3>
+    <p>{{ _('Les aportacions es destinen al manteniment general del projecte. Si tens preferències específiques (p. ex. desenvolupar la IA, millorar la traducció a un idioma), pots indicar-ho en el missatge de la transferència.') }}</p>
+
+    <h3>{{ _('Tinc algun avantatge si faig una aportació?') }}</h3>
+    <p><strong>{{ _('No.') }}</strong> {{ _('I això és intencionat. Adabida no té funcionalitats premium ni avantatges de pagament. Tothom té accés al mateix, independentment de la seva aportació. Això garanteix la igualtat i l\'ètica del projecte.') }}</p>
+
+    <h3>{{ _('Com puc saber que les aportacions s\'usen bé?') }}</h3>
+    <p>{{ _('Publicarem un informe anual de transparència financera amb tots els ingressos i despeses detallades. A més, pots contactar-nos en qualsevol moment per demanar informació.') }}</p>
+
+    <div class="tancament">
+      <p>{{ _('Gràcies per creure en un projecte diferent.') }}</p>
+      <p>{{ _('Adabida és una aposta per la memòria, la dignitat i la tecnologia ètica. Cada aportació, per petita que sigui, ens ajuda a mantenir viu aquest somni: un arxiu històric lliure, gratuït i respectuós amb les persones.') }}</p>
+      <p><strong>{{ _('Els teus records són part de la història. Gràcies per ajudar-nos a preservar-los.') }}</strong></p>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

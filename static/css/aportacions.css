@@ -1,0 +1,142 @@
+.aportacions-container {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2rem;
+  }
+
+  .aportacions-container h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .aportacions-container .subtitol {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .aportacions-container h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+  }
+
+  .aportacions-container h3 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #444;
+  }
+
+  .aportacions-container p {
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1.5rem;
+  }
+
+  .aportacions-container ul {
+    line-height: 1.8;
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+  }
+
+  .aportacions-container li {
+    margin-bottom: 1rem;
+    color: #444;
+  }
+
+  .aportacions-container .destacat {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-left: 3px solid #333;
+  }
+
+  .aportacions-container .destacat p {
+    margin-bottom: 0.5rem;
+  }
+
+  .aportacions-container .taula-costos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+  }
+
+  .aportacions-container .taula-costos th {
+    background: #f5f5f5;
+    padding: 0.8rem;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .aportacions-container .taula-costos td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .aportacions-container .taula-costos .total {
+    background: #f9f9f9;
+    font-weight: bold;
+  }
+
+  .aportacions-container .metodes {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #fafafa;
+    border: 1px solid #ddd;
+  }
+
+  .aportacions-container .metodes h3 {
+    margin-top: 0;
+  }
+
+  .aportacions-container .metodes p {
+    margin-bottom: 0.8rem;
+  }
+
+  .aportacions-container .nota {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+
+  .aportacions-container .tancament {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+  }
+
+  .aportacions-container a {
+    color: #14d8ce;
+    text-decoration: underline;
+  }
+
+  .aportacions-container a:hover {
+    color: #0e9f94;
+  }
+
+  @media (max-width: 768px) {
+    .aportacions-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+
+    .aportacions-container h1 {
+      font-size: 1.6rem;
+    }
+
+    .aportacions-container .taula-costos {
+      font-size: 0.85rem;
+    }
+  }

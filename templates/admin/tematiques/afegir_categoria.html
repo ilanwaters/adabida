@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block titol %}Afegir Categoria - {{ pais.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tematiques.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-admin">
+  <a href="{{ url_for('admin_tematiques.llistar_categories', pais_id=pais.id) }}" class="nav-back">← Tornar a categories</a>
+  
+  <h1>Afegir Categoria a {{ pais.nom }}</h1>
+  <h2>Crea una categoria per agrupar temes relacionats</h2>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  
+  <form method="POST">
+    <div class="form-group">
+      <label for="nom">Nom de la categoria *</label>
+      <input type="text" 
+             id="nom" 
+             name="nom" 
+             placeholder="Exemple: Conflictes armats, Societat, Política..." 
+             required>
+    </div>
+    
+    <div class="form-group">
+      <label for="ordre">Ordre (opcional)</label>
+      <input type="number" 
+             id="ordre" 
+             name="ordre" 
+             value="0"
+             min="0"
+             placeholder="0">
+      <small style="color: #666; font-size: 0.9em;">Determina l'ordre de visualització (menor = primer)</small>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-success">✓ Crear Categoria</button>
+      <a href="{{ url_for('admin_tematiques.llistar_categories', pais_id=pais.id) }}" class="btn btn-secondary">Cancel·lar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
