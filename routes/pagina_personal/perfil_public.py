@@ -21,18 +21,9 @@ def perfil_public(usuari_login):
                 .order_by(Entrada.data_creacio.desc())
                 .all())
 
-    # Miniatures
+    # Afegim usuari_login a cada entrada (miniatura ja es calcula sola, en quarantena - no tocar)
     for e in entrades:
         e.usuari_login = usuari.nom_login
-        if getattr(e, "nom_fitxer", None):
-            e.miniatura = url_for(
-                "serveis_media.serveix_fitxer",
-                usuari=usuari.nom_login,
-                entrada_id=str(e.id),
-                nom_fitxer=e.nom_fitxer
-            )
-        else:
-            e.miniatura = "/static/icons/default.png"
 
     return render_template(
         "pagina_personal/perfil_public.html",

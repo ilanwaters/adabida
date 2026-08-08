@@ -5,6 +5,7 @@ from models import Entrada, Usuari, Pais, Regio, Municipi, Conversa
 from sqlalchemy import or_, and_
 from utils import generar_miniatura_entrada
 import re
+from datetime import datetime
 
 repositori_bp = Blueprint("repositori", __name__)
 
@@ -196,7 +197,16 @@ def consulta_repositori():
 
     # Barrejar entrades + converses
     entrades = entrades + converses
-    entrades.sort(key=lambda x: x.get("data_ordenacio", datetime.min), reverse=True)
+    from datetime import date
+
+    def normalitza_data(d):
+        if isinstance(d, datetime):
+            return d
+        elif isinstance(d, date):
+            return datetime.combine(d, datetime.min.time())
+        return datetime.min
+
+    entrades.sort(key=lambda x: normalitza_data(x.get("data_ordenacio")), reverse=True)
 
     return render_template(
         "repositori.html",

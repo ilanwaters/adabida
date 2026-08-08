@@ -322,10 +322,18 @@ def gestionar_seccio_arbre(familia, es_admin):
 
 def gestionar_seccio_records(familia, es_admin):
     """Secció RECORDS - Entrades compartides"""
-    # TODO: Implementar
+    from models import EntradaFamilia
+
+    entrades = db.session.query(Entrada).join(
+        EntradaFamilia, EntradaFamilia.entrada_id == Entrada.id
+    ).filter(
+        EntradaFamilia.espai_familiar_id == familia.id
+    ).order_by(Entrada.data_creacio.desc()).all()
+
     return render_template('familia/seccio_records.html',
                          familia=familia,
-                         es_admin=es_admin)
+                         es_admin=es_admin,
+                         entrades=entrades)
 
 # Nova funció per afegir a familia.py
 # Aquesta substitueix gestionar_seccio_home
