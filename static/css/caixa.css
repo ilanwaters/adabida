@@ -54,3 +54,37 @@
 }
 
 
+/* ========== RESPONSIVE CAIXA ENTRADA ========== */
+
+@media (max-width: 968px) {
+    .caixa-entrada {
+        flex-direction: column;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .imatge-lateral {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .imatge-lateral img,
+    .miniatura {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .contingut-lateral {
+        width: 100% !important;
+        padding: 15px !important;
+    }
+    
+    .caixa-entrada .miniatura img {
+        width: 100% !important;
+        height: auto !important;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+}

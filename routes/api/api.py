@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, render_template, url_for
 from models import db, Entrada, Usuari, EntradaGuardada
-
+from models.tematiques import Tema, CategoriaTema
 
 api_bp = Blueprint("api", __name__)
 
@@ -52,3 +52,82 @@ def obtenir_entrada(usuari_login, entrada_id):
         ]
     })
 
+
+@api_bp.route("/api/tema/crear-multiple", methods=['POST'])
+def crear_tema_multiple():
+    from flask import request
+    
+    data = request.json
+    nom_tema = data.get('nom')
+    categories_ids = data.get('categories', [])
+    
+    if not nom_tema:
+        return jsonify({'success': False, 'error': 'Nom obligatori'}), 400
+    
+    if not categories_ids:
+        return jsonify({'success': False, 'error': 'Tria almenys una categoria'}), 400
+    
+    try:
+        # Crear tema
+        tema = Tema(nom=nom_tema, ordre=0)
+        db.session.add(tema)
+        db.session.flush()  # Per obtenir tema.id
+
+        print(f"DEBUG: Rebut categories_ids: {categories_ids}")
+        
+        # Obtenir categories i vincular
+        categories = CategoriaTema.query.filter(CategoriaTema.id.in_(categories_ids)).all()
+        categories_ids = list(set(categories_ids))  
+        
+        if len(categories) != len(categories_ids):
+            return jsonify({'success': False, 'error': 'Alguna categoria no existeix'}), 400
+        
+        # Vincular amb ORM
+        tema.categories = categories
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'tema_id': tema.id,
+            'nom': tema.nom
+        })
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creant tema: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+@api_bp.route("/api/categoria/crear", methods=['POST'])
+def crear_categoria():
+    from flask import request
+    from models.ubicacions import Pais
+    
+    data = request.json
+    nom = data.get('nom')
+    pais_codi = data.get('pais_codi', 'ES')
+    
+    if not nom:
+        return jsonify({'success': False, 'error': 'Nom obligatori'}), 400
+    
+    # Obtenir país
+    pais = Pais.query.filter_by(codi_iso=pais_codi).first()
+    if not pais:
+        pais = Pais.query.first()  # Fallback al primer país
+    
+    if not pais:
+        return jsonify({'success': False, 'error': 'No hi ha països disponibles'}), 400
+    
+    # Crear categoria
+    categoria = CategoriaTema(
+        pais_id=pais.id,
+        nom=nom,
+        ordre=0
+    )
+    db.session.add(categoria)
+    db.session.commit()
+    db.session.refresh(categoria)
+    
+    return jsonify({
+        'success': True,
+        'id': categoria.id,
+        'nom': categoria.nom
+    })

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-20 21:08+0100\n"
+"POT-Creation-Date: 2026-01-07 00:48+0100\n"
 "PO-Revision-Date: 2025-12-20 21:09+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -17,12 +17,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.17.0\n"
 
-#: routes/_familia.py:13 routes/_familia.py:28 routes/_familia.py:57
-#: routes/_familia.py:81 routes/_familia.py:119 routes/familia.py:13
-#: routes/familia.py:28 routes/familia.py:57 routes/familia.py:81
-#: routes/familia.py:119 routes/pagina_personal/pagina_personal.py:59
+#: routes/#familia.py:13 routes/#familia.py:29 routes/#familia.py:53
+#: routes/#familia.py:91 routes/_familia.py:13 routes/_familia.py:28
+#: routes/_familia.py:57 routes/_familia.py:81 routes/_familia.py:119
+#: routes/pagina_personal/pagina_personal.py:59
 #: routes/pagina_personal/pagina_personal.py:231
 #: routes/pagina_personal/pagina_personal.py:307
 #: routes/pagina_personal/pagina_personal.py:329 routes/usuari_admin.py:29
@@ -33,10 +33,9 @@ msgstr ""
 msgid "Sessió no vàlida"
 msgstr ""
 
+#: routes/#familia.py:18 routes/#familia.py:34 routes/#familia.py:58
 #: routes/_familia.py:18 routes/_familia.py:33 routes/_familia.py:62
-#: routes/_familia.py:86 routes/familia.py:18 routes/familia.py:33
-#: routes/familia.py:62 routes/familia.py:86
-#: routes/pagina_personal/pagina_personal.py:64
+#: routes/_familia.py:86 routes/pagina_personal/pagina_personal.py:64
 #: routes/pagina_personal/pagina_personal.py:182
 #: routes/pagina_personal/pagina_personal.py:236
 #: routes/pagina_personal/pagina_personal.py:312
@@ -44,33 +43,33 @@ msgstr ""
 msgid "Usuari inexistent"
 msgstr ""
 
-#: routes/_familia.py:92 routes/familia.py:92
+#: routes/#familia.py:64 routes/_familia.py:92
 msgid "Cal tenir un perfil biogràfic per afegir contactes"
 msgstr ""
 
-#: routes/_familia.py:109 routes/familia.py:109
+#: routes/#familia.py:81 routes/_familia.py:109
 msgid "Contacte familiar afegit correctament"
 msgstr ""
 
-#: routes/_familia.py:126 routes/familia.py:126
+#: routes/#familia.py:98 routes/_familia.py:126
 msgid "No tens permisos per editar aquest contacte"
 msgstr ""
 
-#: routes/_familia.py:137 routes/familia.py:137
+#: routes/#familia.py:109 routes/_familia.py:137
 msgid "Contacte actualitzat correctament"
 msgstr ""
 
-#: routes/login.py:19
+#: routes/login.py:18
 msgid "Credencials incorrectes"
 msgstr ""
 
-#: routes/login.py:27
+#: routes/login.py:23
 msgid ""
 "⚠️ Si us plau, verifica el teu email abans de fer login. Revisa la teva "
 "safata d'entrada."
 msgstr ""
 
-#: routes/login.py:53
+#: routes/login.py:49
 msgid "Sessió tancada correctament."
 msgstr ""
 
@@ -167,105 +166,105 @@ msgstr ""
 msgid "Aquest perfil no té fitxa biogràfica"
 msgstr ""
 
-#: templates/aportacions.html:3 templates/aportacions.html:156
+#: templates/aportacions.html:3 templates/aportacions.html:14
 msgid "Aportacions Voluntàries"
 msgstr ""
 
-#: templates/aportacions.html:157
+#: templates/aportacions.html:15
 msgid "Un projecte independent i ètic, finançat per la comunitat"
 msgstr ""
 
-#: templates/aportacions.html:160
+#: templates/aportacions.html:18
 #, python-format
 msgid "Adabida és i serà sempre 100% gratuït per a tothom."
 msgstr ""
 
-#: templates/aportacions.html:161
+#: templates/aportacions.html:19 templates/nova_aportacio_inici.html:18
 msgid ""
 "No hi ha subscripcions. No hi ha funcionalitats de pagament. No hi ha "
 "publicitat. No venem les teves dades."
 msgstr ""
 
-#: templates/aportacions.html:164
+#: templates/aportacions.html:22
 msgid "1. Per què aportacions voluntàries?"
 msgstr ""
 
-#: templates/aportacions.html:166
+#: templates/aportacions.html:24 templates/nova_aportacio_inici.html:23
 msgid ""
 "Adabida no és només un projecte tecnològic, és un projecte amb valors. "
 "Hem escollit el model d'aportacions voluntàries per raons ètiques "
 "fonamentals:"
 msgstr ""
 
-#: templates/aportacions.html:169
+#: templates/aportacions.html:27 templates/nova_aportacio_inici.html:26
 msgid "Independència:"
 msgstr ""
 
-#: templates/aportacions.html:169
+#: templates/aportacions.html:27 templates/nova_aportacio_inici.html:26
 msgid "No dependre de grans corporacions tecnològiques ni inversors"
 msgstr ""
 
-#: templates/aportacions.html:170
+#: templates/aportacions.html:28 templates/nova_aportacio_inici.html:27
 msgid "Privacitat:"
 msgstr ""
 
-#: templates/aportacions.html:170
+#: templates/aportacions.html:28 templates/nova_aportacio_inici.html:27
 msgid "Les teves dades MAI seran el producte. Mai les vendrem ni les monetitzarem"
 msgstr ""
 
-#: templates/aportacions.html:171
+#: templates/aportacions.html:29 templates/nova_aportacio_inici.html:28
 msgid "Accessibilitat universal:"
 msgstr ""
 
-#: templates/aportacions.html:171
+#: templates/aportacions.html:29 templates/nova_aportacio_inici.html:28
 msgid ""
 "Qualsevol persona ha de poder preservar la seva memòria, independentment "
 "dels seus recursos econòmics"
 msgstr ""
 
-#: templates/aportacions.html:172
+#: templates/aportacions.html:30 templates/nova_aportacio_inici.html:29
 msgid "Dignitat:"
 msgstr ""
 
-#: templates/aportacions.html:172
+#: templates/aportacions.html:30 templates/nova_aportacio_inici.html:29
 msgid "Els records i testimonis de les persones no són una mercaderia"
 msgstr ""
 
-#: templates/aportacions.html:173
+#: templates/aportacions.html:31 templates/nova_aportacio_inici.html:30
 msgid "Comunitat:"
 msgstr ""
 
-#: templates/aportacions.html:173
+#: templates/aportacions.html:31 templates/nova_aportacio_inici.html:30
 msgid "El projecte és de tots i per a tots, no d'una empresa amb ànim de lucre"
 msgstr ""
 
-#: templates/aportacions.html:176
+#: templates/aportacions.html:34
 msgid ""
 "Inspirats en projectes com Wikipedia, creiem que el coneixement i la "
 "memòria col·lectiva han de ser lliures i accessibles. Però això té un "
 "cost."
 msgstr ""
 
-#: templates/aportacions.html:178
+#: templates/aportacions.html:36
 msgid "2. Transparència financera"
 msgstr ""
 
-#: templates/aportacions.html:180
+#: templates/aportacions.html:38
 msgid ""
 "Ens comprometem a la transparència total. Cada euro que aportes es "
 "destina a mantenir i millorar Adabida:"
 msgstr ""
 
-#: templates/aportacions.html:185
+#: templates/aportacions.html:43
 msgid "Concepte"
 msgstr ""
 
-#: templates/aportacions.html:186
+#: templates/aportacions.html:44
 msgid "Cost estimat/any"
 msgstr ""
 
-#: templates/admin/nova_exposicio.html:15 templates/aportacions.html:187
-#: templates/familia/administrar_espai.html:54
+#: templates/admin/nova_exposicio.html:15 templates/aportacions.html:45
+#: templates/familia/administrar_espai.html:58
 #: templates/familia/familia_home.html:79
 #: templates/familia/familia_qui_som.html:89
 #: templates/organitzacions/organitzacio_admin.html:60
@@ -276,169 +275,169 @@ msgstr ""
 msgid "Descripció"
 msgstr ""
 
-#: templates/aportacions.html:192
+#: templates/aportacions.html:50
 msgid "Servidor i hosting"
 msgstr ""
 
-#: templates/aportacions.html:194
+#: templates/aportacions.html:52
 msgid "Allotjament de la base de dades, fitxers multimèdia i aplicació web"
 msgstr ""
 
-#: templates/aportacions.html:197
+#: templates/aportacions.html:55
 msgid "Domini i certificats SSL"
 msgstr ""
 
-#: templates/aportacions.html:199
+#: templates/aportacions.html:57
 msgid "Manteniment del domini adabida.cat i seguretat HTTPS"
 msgstr ""
 
-#: templates/aportacions.html:202
+#: templates/aportacions.html:60
 msgid "Còpies de seguretat"
 msgstr ""
 
-#: templates/aportacions.html:204
+#: templates/aportacions.html:62
 msgid "Sistemes de backup per garantir que les dades no es perdin mai"
 msgstr ""
 
-#: templates/aportacions.html:207
+#: templates/aportacions.html:65
 msgid "Desenvolupament i manteniment"
 msgstr ""
 
-#: templates/aportacions.html:208
+#: templates/aportacions.html:66
 msgid "Variable"
 msgstr ""
 
-#: templates/aportacions.html:209
+#: templates/aportacions.html:67
 msgid "Millores de la plataforma, correccions d'errors, noves funcionalitats"
 msgstr ""
 
-#: templates/aportacions.html:212
+#: templates/aportacions.html:70
 msgid "IA per entrevistes (futur)"
 msgstr ""
 
-#: templates/aportacions.html:214
+#: templates/aportacions.html:72
 msgid "Quan integrem la intel·ligència artificial per a les entrevistes orals"
 msgstr ""
 
-#: templates/aportacions.html:217
+#: templates/aportacions.html:75
 msgid "TOTAL ESTIMAT ANUAL"
 msgstr ""
 
-#: templates/aportacions.html:223
+#: templates/aportacions.html:81
 msgid ""
 "* Aquests són costos estimats per a la fase inicial del projecte. A "
 "mesura que creixi la comunitat, els costos augmentaran proporcionalment."
 msgstr ""
 
-#: templates/aportacions.html:225
+#: templates/aportacions.html:83
 msgid "3. Els nostres compromisos"
 msgstr ""
 
-#: templates/aportacions.html:228
+#: templates/aportacions.html:86
 msgid "Mai cobrar per l'accés: Adabida serà sempre gratuït per a tothom"
 msgstr ""
 
-#: templates/aportacions.html:229
+#: templates/aportacions.html:87
 msgid ""
 "Mai vendre dades: Les teves dades personals i els teus testimonis mai es "
 "vendran ni es monetitzaran"
 msgstr ""
 
-#: templates/aportacions.html:230
+#: templates/aportacions.html:88
 msgid "Mai publicitat: No hi haurà mai anuncis ni tracking de tercers"
 msgstr ""
 
-#: templates/aportacions.html:231
+#: templates/aportacions.html:89
 msgid ""
 "Transparència financera: Publicarem anualment un informe de despeses i "
 "ingressos"
 msgstr ""
 
-#: templates/aportacions.html:232
+#: templates/aportacions.html:90
 msgid ""
 "Tecnologies lliures: Compromís amb el programari lliure i la sobirania "
 "digital"
 msgstr ""
 
-#: templates/aportacions.html:233
+#: templates/aportacions.html:91
 msgid "Les teves dades són teves: Pots eliminar tot el teu contingut quan vulguis"
 msgstr ""
 
-#: templates/aportacions.html:236
+#: templates/aportacions.html:94
 msgid "4. Com fer una aportació"
 msgstr ""
 
-#: templates/aportacions.html:238
+#: templates/aportacions.html:96
 msgid ""
 "No hi ha import mínim. Qualsevol aportació, per petita que sigui, ajuda a"
 " mantenir el projecte viu."
 msgstr ""
 
-#: templates/aportacions.html:241
+#: templates/aportacions.html:99
 msgid "Mètodes de pagament"
 msgstr ""
 
-#: templates/aportacions.html:244
+#: templates/aportacions.html:102
 msgid "Transferència bancària:"
 msgstr ""
 
-#: templates/aportacions.html:245
+#: templates/aportacions.html:103
 msgid "Targeta de crèdit:"
 msgstr ""
 
-#: templates/aportacions.html:245
+#: templates/aportacions.html:103
 msgid "PayPal o targeta (disponible properament)"
 msgstr ""
 
-#: templates/aportacions.html:247
+#: templates/aportacions.html:105
 msgid ""
 "Estem en fase de desenvolupament. Els mètodes de pagament s'activaran "
 "quan el projecte surti de la versió DEMO."
 msgstr ""
 
-#: templates/aportacions.html:250
+#: templates/aportacions.html:108
 msgid "5. Altres maneres d'ajudar"
 msgstr ""
 
-#: templates/aportacions.html:252
+#: templates/aportacions.html:110
 msgid ""
 "Si no pots fer una aportació econòmica, hi ha moltes altres maneres de "
 "col·laborar amb Adabida:"
 msgstr ""
 
-#: templates/aportacions.html:255
+#: templates/aportacions.html:113
 msgid "Difusió: Explica el projecte a persones que puguin estar interessades"
 msgstr ""
 
-#: templates/aportacions.html:256
+#: templates/aportacions.html:114
 msgid "Traduccions: Ajuda'ns a traduir la plataforma a més idiomes"
 msgstr ""
 
-#: templates/aportacions.html:257
+#: templates/aportacions.html:115
 msgid "Disseny: Millora la interfície i l'experiència d'usuari"
 msgstr ""
 
-#: templates/aportacions.html:258
+#: templates/aportacions.html:116
 msgid "Desenvolupament: Col·labora amb el codi (tecnologies lliures)"
 msgstr ""
 
-#: templates/aportacions.html:259
+#: templates/aportacions.html:117
 msgid "Testimonis: Comparteix la teva història i enriqueix l'arxiu"
 msgstr ""
 
-#: templates/aportacions.html:260
+#: templates/aportacions.html:118
 msgid "Contactes: Connecta'ns amb hospitals, residències o associacions"
 msgstr ""
 
-#: templates/aportacions.html:263
+#: templates/aportacions.html:121
 msgid "6. Preguntes freqüents"
 msgstr ""
 
-#: templates/aportacions.html:265
+#: templates/aportacions.html:123
 msgid "Qui gestiona les aportacions?"
 msgstr ""
 
-#: templates/aportacions.html:266
+#: templates/aportacions.html:124
 msgid ""
 "En aquesta fase DEMO, el projecte està gestionat per Ilan Sánchez, "
 "historiador i desenvolupador. Quan el projecte creixi, es constituirà com"
@@ -446,11 +445,11 @@ msgid ""
 "transparència total."
 msgstr ""
 
-#: templates/aportacions.html:268
+#: templates/aportacions.html:126
 msgid "Puc triar en què es gasta la meva aportació?"
 msgstr ""
 
-#: templates/aportacions.html:269
+#: templates/aportacions.html:127
 msgid ""
 "Les aportacions es destinen al manteniment general del projecte. Si tens "
 "preferències específiques (p. ex. desenvolupar la IA, millorar la "
@@ -458,37 +457,37 @@ msgid ""
 "transferència."
 msgstr ""
 
-#: templates/aportacions.html:271
+#: templates/aportacions.html:129
 msgid "Tinc algun avantatge si faig una aportació?"
 msgstr ""
 
-#: templates/aportacions.html:272
+#: templates/aportacions.html:130
 msgid "No."
 msgstr ""
 
-#: templates/aportacions.html:272
+#: templates/aportacions.html:130
 msgid ""
 "I això és intencionat. Adabida no té funcionalitats premium ni avantatges"
 " de pagament. Tothom té accés al mateix, independentment de la seva "
 "aportació. Això garanteix la igualtat i l'ètica del projecte."
 msgstr ""
 
-#: templates/aportacions.html:274
+#: templates/aportacions.html:132
 msgid "Com puc saber que les aportacions s'usen bé?"
 msgstr ""
 
-#: templates/aportacions.html:275
+#: templates/aportacions.html:133
 msgid ""
 "Publicarem un informe anual de transparència financera amb tots els "
 "ingressos i despeses detallades. A més, pots contactar-nos en qualsevol "
 "moment per demanar informació."
 msgstr ""
 
-#: templates/aportacions.html:278
+#: templates/aportacions.html:136
 msgid "Gràcies per creure en un projecte diferent."
 msgstr ""
 
-#: templates/aportacions.html:279
+#: templates/aportacions.html:137
 msgid ""
 "Adabida és una aposta per la memòria, la dignitat i la tecnologia ètica. "
 "Cada aportació, per petita que sigui, ens ajuda a mantenir viu aquest "
@@ -496,39 +495,154 @@ msgid ""
 msgstr ""
 
 #: templates/abadia_principal/manifest_etic.html:81
-#: templates/aportacions.html:280
+#: templates/aportacions.html:138
 msgid ""
 "Els teus records són part de la història. Gràcies per ajudar-nos a "
 "preservar-los."
 msgstr ""
 
-#: templates/base.html:71 templates/pagina_personal/missatgeria.html:27
+#: templates/base.html:44 templates/pagina_personal/missatgeria.html:27
 msgid "Missatges"
 msgstr ""
 
-#: templates/base.html:82
+#: templates/base.html:53
 msgid "Compartir"
 msgstr ""
 
-#: templates/admin/admin.html:26 templates/admin/admin_blog.html:25
-#: templates/admin/admin_expo.html:38 templates/base.html:97
-#: templates/blog/blog.html:109 templates/components/modal_entrada.html:24
+#: templates/admin/admin_blog.html:25 templates/admin/admin_expo.html:38
+#: templates/base.html:69 templates/blog/blog.html:109
+#: templates/components/modal_entrada.html:24
 #: templates/components/modal_entrada_editar.html:23
 #: templates/ia_entrevista.html:37
 msgid "Arxiu"
 msgstr ""
 
-#: templates/base.html:102 templates/ia_entrevista.html:38
+#: templates/base.html:73 templates/ia_entrevista.html:38
 #: templates/questionari.html:23
 msgid "Tancar sessió"
 msgstr ""
 
-#: templates/base.html:108
+#: templates/base.html:77 templates/inici.html:325
+msgid "Iniciar sessió"
+msgstr ""
+
+#: templates/base.html:83
 msgid "Torna a la Sala d'exposicions"
 msgstr ""
 
-#: templates/base.html:174 templates/base.html:184
-msgid "Enllaç copiat al portapapers!"
+#: templates/base.html:124 templates/base.html:125 templates/inici.html:281
+#: templates/inici.html:282 templates/repositori.html:107
+#: templates/repositori.html:108
+msgid "Usuari"
+msgstr ""
+
+#: templates/base.html:128 templates/base.html:130 templates/inici.html:286
+#: templates/inici.html:288 templates/registre_individual.html:50
+#: templates/repositori.html:112 templates/repositori.html:114
+msgid "Contrasenya"
+msgstr ""
+
+#: templates/base.html:138 templates/inici.html:299
+#: templates/repositori.html:125
+msgid "Entrar"
+msgstr ""
+
+#: templates/base.html:142 templates/inici.html:304
+#: templates/repositori.html:130
+msgid "Crear un compte nou"
+msgstr ""
+
+#: templates/base.html:145 templates/inici.html:307
+#: templates/repositori.html:133
+msgid "He oblidat la contrasenya"
+msgstr ""
+
+#: templates/base.html:152 templates/repositori.html:139
+msgid "Accés a un projecte acadèmic i científic"
+msgstr ""
+
+#: templates/base.html:153 templates/repositori.html:141
+msgid ""
+"Estàs a punt d'accedir a un espai destinat a la recollida de testimonis "
+"personals amb finalitats d'investigació històrica, educativa i social. El"
+" Projecte Adabida forma part d'un arxiu de memòria oral amb vocació "
+"científica i pública."
+msgstr ""
+
+#: templates/base.html:154 templates/inici.html:341
+#: templates/repositori.html:144
+msgid ""
+"El registre és voluntari. Molts dels camps del formulari no són "
+"obligatoris, però omplir-los amb detall millora significativament el "
+"valor documental del teu testimoni."
+msgstr ""
+
+#: templates/base.html:155 templates/repositori.html:147
+msgid ""
+"Pots gestionar o suprimir les teves dades en qualsevol moment. La "
+"informació aportada es tracta amb criteris ètics, transparència i "
+"respecte absolut a la persona."
+msgstr ""
+
+#: templates/base.html:156 templates/repositori.html:149
+msgid "Acceptar i continuar"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:3
+msgid "Confirmació d'aportació"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:12
+msgid "Gràcies per la teva aportació!"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:15
+msgid "Escaneja amb el teu banc"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:17
+msgid ""
+"Escaneja aquest codi QR amb l'aplicació del teu banc per emplenar "
+"automàticament les dades"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:21
+msgid "O manualment"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:24
+msgid "IBAN:"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:29
+#: templates/confirmacio_aportacio.html:42
+msgid "Concepte:"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:36
+msgid "Aportació recurrent"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:37
+msgid "Has seleccionat una aportació"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:38
+msgid ""
+"Per automatitzar-la, programa una transferència periòdica des de la teva "
+"entitat bancària amb aquestes dades:"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:41
+msgid "Import:"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:48
+msgid "Si tens algun dubte, contacta amb nosaltres a"
+msgstr ""
+
+#: templates/confirmacio_aportacio.html:52 templates/pagament_exit.html:35
+msgid "Tornar a l'inici"
 msgstr ""
 
 #: templates/exposicio_imatges.html:19
@@ -540,7 +654,8 @@ msgid "Vista gran"
 msgstr ""
 
 #: templates/admin/admin_galeria.html:4
-#: templates/familia/familia_distribuidor.html:3 templates/galeria.html:3
+#: templates/familia/familia_distribuidor.html:3
+#: templates/familia/familia_publica.html:3 templates/galeria.html:3
 #: templates/inici.html:3 templates/organitzacions/crear.html:3
 #: templates/organitzacions/organitzacio_admin.html:3
 #: templates/organitzacions/organitzacions.html:3
@@ -563,144 +678,142 @@ msgstr ""
 msgid "Home - Adabida"
 msgstr ""
 
-#: templates/home.html:19
+#: templates/home.html:21
 msgid "Continguts"
 msgstr ""
 
-#: templates/home.html:22
-msgid "Quiwww som"
-msgstr ""
-
-#: templates/home.html:23 templates/home.html:61
-msgid "Com funciona"
-msgstr ""
-
-#: templates/home.html:24 templates/home.html:84
-msgid "Manifest ètic"
-msgstr ""
-
-#: templates/home.html:25
-msgid "Narrativa familiar col·lectiva"
-msgstr ""
-
-#: templates/home.html:26 templates/home.html:110
-msgid "Finançament transparent"
-msgstr ""
-
-#: templates/home.html:27 templates/home.html:165
-msgid "Advertència important"
-msgstr ""
-
-#: templates/home.html:28 templates/home.html:202
-msgid "Documentació legal"
-msgstr ""
-
-#: templates/home.html:29 templates/home.html:225
-msgid "Contacte"
-msgstr ""
-
-#: templates/familia/familia_distribuidor.html:63
+#: templates/familia/familia_distribuidor.html:62
 #: templates/familia/familia_qui_som.html:3
-#: templates/familia/familia_qui_som.html:17 templates/home.html:39
-#: templates/organitzacions/organitzacio_qui_som.html:3
+#: templates/familia/familia_qui_som.html:17 templates/home.html:24
+#: templates/home.html:41 templates/organitzacions/organitzacio_qui_som.html:3
 #: templates/organitzacions/organitzacio_qui_som.html:17
 #: templates/organitzacions/organitzacions.html:57
 msgid "Qui som"
 msgstr ""
 
-#: templates/home.html:45
+#: templates/home.html:25 templates/home.html:63
+msgid "Com funciona"
+msgstr ""
+
+#: templates/home.html:26 templates/home.html:86
+msgid "Manifest ètic"
+msgstr ""
+
+#: templates/home.html:27
+msgid "Narrativa familiar col·lectiva"
+msgstr ""
+
+#: templates/home.html:28 templates/home.html:112
+msgid "Finançament transparent"
+msgstr ""
+
+#: templates/home.html:29 templates/home.html:167
+msgid "Advertència important"
+msgstr ""
+
+#: templates/home.html:30 templates/home.html:204
+msgid "Documentació legal"
+msgstr ""
+
+#: templates/home.html:31 templates/home.html:227
+msgid "Contacte"
+msgstr ""
+
+#: templates/home.html:47
 msgid "La nostra missió"
 msgstr ""
 
-#: templates/home.html:54
+#: templates/home.html:56
 msgid "Internet dels Elevats"
 msgstr ""
 
-#: templates/home.html:65
+#: templates/home.html:67
 msgid "Testimonis multimèdia"
 msgstr ""
 
-#: templates/home.html:68
+#: templates/home.html:70
 msgid "Perfil biogràfic"
 msgstr ""
 
-#: templates/home.html:71
+#: templates/home.html:73
 msgid "Galeria personal"
 msgstr ""
 
-#: templates/home.html:74
+#: templates/home.html:76
 msgid "Echo: Entrevistador IA"
 msgstr ""
 
-#: templates/home.html:77
+#: templates/home.html:79
 msgid "Tallers terapèutics"
 msgstr ""
 
-#: templates/home.html:88
+#: templates/home.html:90
 msgid "1. Zero dependències corporatives"
 msgstr ""
 
-#: templates/home.html:91
+#: templates/home.html:93
 msgid "2. Les teves dades són teves"
 msgstr ""
 
-#: templates/home.html:94
+#: templates/home.html:96
 msgid "3. No som un producte"
 msgstr ""
 
-#: templates/home.html:97
+#: templates/home.html:99
 msgid "4. Tecnologies lliures"
 msgstr ""
 
-#: templates/home.html:100
+#: templates/home.html:102
 msgid "5. Accessibilitat universal"
 msgstr ""
 
-#: templates/home.html:103
+#: templates/home.html:105
 msgid "6. Respecte i dignitat"
 msgstr ""
 
-#: templates/home.html:114
+#: templates/home.html:116 templates/nova_aportacio_inici.html:21
 msgid "Per què aportacions voluntàries?"
 msgstr ""
 
-#: templates/home.html:122
+#: templates/home.html:124
 msgid "Costos anuals estimats"
 msgstr ""
 
-#: templates/home.html:146
+#: templates/home.html:148
 msgid "Compromisos públics"
 msgstr ""
 
-#: templates/home.html:157
-msgid "Com col·laborar"
+#: templates/admin/nova_aportacio.html:3 templates/home.html:159
+#: templates/home/home_ca.html:250 templates/inici.html:141
+#: templates/nova_aportacio_inici.html:3 templates/nova_aportacio_inici.html:39
+msgid "Fes una aportació"
 msgstr ""
 
-#: templates/home.html:169
+#: templates/home.html:171
 msgid "Què vol dir això?"
 msgstr ""
 
-#: templates/home.html:178
+#: templates/home.html:180
 msgid "Responsabilitat de l'usuari"
 msgstr ""
 
-#: templates/home.html:187
+#: templates/home.html:189
 msgid "El valor dels testimonis"
 msgstr ""
 
-#: templates/home.html:204
+#: templates/home.html:206
 msgid "Avís legal i RGPD"
 msgstr ""
 
-#: templates/home.html:207
+#: templates/home.html:209
 msgid "Dret a l'oblit"
 msgstr ""
 
-#: templates/home.html:210
+#: templates/home.html:212
 msgid "Propietat intel·lectual"
 msgstr ""
 
-#: templates/home.html:213
+#: templates/home.html:215
 msgid "Limitacions de responsabilitat"
 msgstr ""
 
@@ -713,7 +826,8 @@ msgstr ""
 msgid "Entra"
 msgstr ""
 
-#: templates/ia_entrevista.html:51
+#: templates/familia/afegir_membre.html:157
+#: templates/familia/editar_membre.html:129 templates/ia_entrevista.html:51
 #: templates/pagina_personal/biografia_seccio_form.html:15
 #: templates/pagina_personal/biografia_seccions.html:16
 #: templates/pagina_personal/pagina_personal.html:30
@@ -750,7 +864,7 @@ msgstr ""
 msgid "Afegir tema nou..."
 msgstr ""
 
-#: templates/ia_entrevista.html:93 templates/inici.html:142
+#: templates/ia_entrevista.html:93 templates/inici.html:435
 msgid "Afegir"
 msgstr ""
 
@@ -772,35 +886,30 @@ msgid ""
 "història. Comparteix-la!"
 msgstr ""
 
-#: templates/inici.html:23
-msgid "Navegació"
-msgstr ""
-
-#: templates/inici.html:27
+#: templates/inici.html:26
 msgid "Adabida Principal"
 msgstr ""
 
 #: templates/familia/familia.html:15
-#: templates/familia/les_meves_families.html:17 templates/inici.html:32
-#: templates/inici.html:34 templates/organitzacions.html:15
+#: templates/familia/les_meves_families.html:17 templates/inici.html:31
+#: templates/inici.html:33 templates/organitzacions.html:15
 #: templates/organitzacions/les_meves.html:18
 #: templates/pagina_personal/entrades.html:15
 #: templates/pagina_personal/missatgeria.html:16
 #: templates/pagina_personal/nova_entrada.html:17
-#: templates/pagina_personal/perfil.html:20
+#: templates/pagina_personal/perfil.html:19
 msgid "Espai personal"
 msgstr ""
 
 #: templates/familia/familia.html:3
-#: templates/familia/familia_distribuidor.html:129 templates/inici.html:41
+#: templates/familia/familia_distribuidor.html:128 templates/inici.html:40
 #: templates/pagina_personal/pagina_personal.html:80
-#: templates/pagina_personal/perfil.html:217
+#: templates/pagina_personal/perfil.html:216
 #: templates/pagina_personal/perfil_public.html:216
 msgid "Família"
 msgstr ""
 
 #: templates/familia/familia.html:27 templates/inici.html:46
-#: templates/inici.html:51
 msgid "Crear espai familiar"
 msgstr ""
 
@@ -808,15 +917,19 @@ msgstr ""
 msgid "Els meus espais"
 msgstr ""
 
-#: templates/inici.html:48 templates/inici.html:52
-msgid "Arbre genealògic"
+#: templates/inici.html:51
+msgid "Crea un espai familiar per documentar la història del teu entorn proper."
 msgstr ""
 
-#: templates/inici.html:49 templates/inici.html:53
-msgid "Documents familiars"
+#: templates/inici.html:54
+msgid "Arbres genealògics, biografies familiars i documents històrics."
 msgstr ""
 
-#: templates/inici.html:61 templates/organitzacions.html:3
+#: templates/inici.html:57 templates/inici.html:85
+msgid "Crear perfil personal"
+msgstr ""
+
+#: templates/inici.html:67 templates/organitzacions.html:3
 #: templates/organitzacions/llistat.html:3
 #: templates/organitzacions/organitzacio_qui_som.html:15
 #: templates/organitzacions/seccio_entrades.html:15
@@ -830,132 +943,137 @@ msgstr ""
 msgid "Organitzacions"
 msgstr ""
 
-#: templates/inici.html:66 templates/organitzacions.html:38
+#: templates/inici.html:73 templates/organitzacions.html:38
 #: templates/organitzacions/les_meves.html:3
 #: templates/pagina_personal/les_meves_organitzacions.html:3
 #: templates/pagina_personal/les_meves_organitzacions.html:16
 msgid "Les meves organitzacions"
 msgstr ""
 
-#: templates/inici.html:67 templates/inici.html:70
-#: templates/organitzacions.html:28 templates/organitzacions/les_meves.html:61
-#: templates/usuari_admin.html:144
+#: templates/inici.html:74 templates/organitzacions.html:28
+#: templates/organitzacions/les_meves.html:61 templates/usuari_admin.html:144
 msgid "Crear organització"
 msgstr ""
 
-#: templates/inici.html:68 templates/inici.html:71
+#: templates/inici.html:75
 msgid "Història corporativa"
 msgstr ""
 
-#: templates/inici.html:72 templates/organitzacions/les_meves.html:103
-#: templates/pagina_personal/les_meves_organitzacions.html:106
-msgid "Explorar organitzacions"
+#: templates/inici.html:79
+msgid ""
+"Crea un espai d’organització per documentar la seva trajectòria i memòria"
+" col·lectiva."
 msgstr ""
 
-#: templates/inici.html:80
+#: templates/inici.html:82
+msgid "Història corporativa, testimonis, documents i relats institucionals."
+msgstr ""
+
+#: templates/inici.html:96
 msgid "Arxiu de cultura popular"
 msgstr ""
 
-#: templates/inici.html:85 templates/inici.html:89
+#: templates/inici.html:104
 msgid "Contes i cançons populars"
 msgstr ""
 
-#: templates/inici.html:86 templates/inici.html:90
+#: templates/inici.html:109
 msgid "Receptes de cuina"
 msgstr ""
 
-#: templates/inici.html:87 templates/inici.html:91
+#: templates/inici.html:114
 msgid "Refranys i dites"
 msgstr ""
 
-#: templates/inici.html:97
+#: templates/inici.html:120
+msgid ""
+"Un espai per preservar i compartir la cultura popular i la memòria "
+"col·lectiva."
+msgstr ""
+
+#: templates/inici.html:123
+msgid ""
+"Contes, cançons, receptes, refranys i altres sabers transmesos de "
+"generació en generació."
+msgstr ""
+
+#: templates/inici.html:126
+msgid "Crear perfil personal per participar"
+msgstr ""
+
+#: templates/inici.html:135
 msgid "Galeria i exposicions"
 msgstr ""
 
 #: templates/blog/blog.html:3 templates/blog/entrada_completa.html:3
-#: templates/blog/resultats_cerca_blog.html:3 templates/inici.html:100
+#: templates/blog/resultats_cerca_blog.html:3 templates/inici.html:138
 msgid "Blog"
 msgstr ""
 
-#: templates/inici.html:111
-msgid "Explica'ns sobre..."
+#: templates/inici.html:152
+msgid "Tria un tema i comença a explicar la teva experiència"
 msgstr ""
 
-#: templates/inici.html:116
+#: templates/inici.html:154
+msgid ""
+"Pots escriure, enregistrar àudio o vídeo, fer entrevistes, adjuntar "
+"documents."
+msgstr ""
+
+#: templates/inici.html:166
 msgid "Tria un país"
 msgstr ""
 
-#: templates/inici.html:118
+#: templates/familia/afegir_membre.html:212 templates/inici.html:168
+#: templates/inici.html:178
+msgid "Selecciona"
+msgstr ""
+
+#: templates/inici.html:169
 msgid "Temes globals"
 msgstr ""
 
-#: templates/inici.html:125
+#: templates/inici.html:176
+msgid "o tria una categoria"
+msgstr ""
+
+#: templates/inici.html:186
 msgid "Carregant temes..."
 msgstr ""
 
-#: templates/inici.html:132
-msgid "Afegir país nou"
-msgstr ""
-
-#: templates/inici.html:136
-msgid "Nom del país..."
-msgstr ""
-
-#: templates/components/modal_nou_missatge.html:32
-#: templates/components/modal_seleccionar_entrada.html:34
-#: templates/familia/administrar_espai.html:437
-#: templates/familia/crear_espai_familiar.html:171
-#: templates/familia/familia_distribuidor.html:230
-#: templates/familia/familia_distribuidor.html:238
-#: templates/familia/gestionar_relacions.html:234
-#: templates/familia/historia_familia_form.html:179 templates/inici.html:141
-#: templates/inici.html:349 templates/organitzacions/crear.html:158
-#: templates/organitzacions/historia_organitzacio_form.html:178
-#: templates/organitzacions/llistat.html:147
-#: templates/organitzacions/organitzacio_admin.html:267
-#: templates/organitzacions/organitzacions.html:183
-#: templates/organitzacions/organitzacions.html:242
-#: templates/organitzacions/organitzacions.html:250
-#: templates/pagina_personal/biografia_seccio_form.html:85
-#: templates/pagina_personal/missatgeria.html:125
-#: templates/pagina_personal/perfil.html:344
-#: templates/pagina_personal/perfil.html:351
-#: templates/pagina_personal/personal_biografia.html:61
-#: templates/usuari_admin.html:574
-msgid "Cancel·lar"
-msgstr ""
-
-#: templates/inici.html:151
+#: templates/inici.html:195
 msgid "Últims testimonis compartits"
 msgstr ""
 
-#: templates/inici.html:152
+#: templates/inici.html:196
 msgid "Actualitzar"
 msgstr ""
 
-#: templates/inici.html:164
+#: templates/inici.html:208
 msgid "Encara no hi ha entrades disponibles"
 msgstr ""
 
-#: templates/inici.html:181 templates/inici.html:377
+#: templates/familia/publica_membres.html:23 templates/inici.html:225
+#: templates/inici.html:449
 msgid "Veure més"
 msgstr ""
 
-#: templates/inici.html:189
+#: templates/inici.html:233
 msgid "Explora Temes"
 msgstr ""
 
-#: templates/inici.html:195
+#: templates/inici.html:239
 msgid "TEMA"
 msgstr ""
 
-#: templates/inici.html:196
+#: templates/inici.html:240
 msgid "PAÍS"
 msgstr ""
 
 #: templates/familia/familia_home.html:144
-#: templates/familia/familia_qui_som.html:263 templates/inici.html:211
-#: templates/inici.html:218
+#: templates/familia/familia_membres.html:105
+#: templates/familia/familia_qui_som.html:263 templates/inici.html:255
+#: templates/inici.html:262
 #: templates/organitzacions/organitzacio_qui_som.html:237
 #: templates/organitzacions/seccio_entrades.html:153
 #: templates/organitzacions/seccio_historia.html:145
@@ -966,137 +1084,209 @@ msgstr ""
 msgid "Tornar"
 msgstr ""
 
-#: templates/inici.html:237 templates/inici.html:238
-#: templates/repositori.html:107 templates/repositori.html:108
-msgid "Usuari"
-msgstr ""
-
-#: templates/inici.html:242 templates/inici.html:244
-#: templates/registre_individual.html:63 templates/repositori.html:112
-#: templates/repositori.html:114
-msgid "Contrasenya"
-msgstr ""
-
-#: templates/inici.html:255 templates/repositori.html:125
-msgid "Entrar"
-msgstr ""
-
-#: templates/inici.html:260 templates/repositori.html:130
-msgid "Crear un compte nou"
-msgstr ""
-
-#: templates/inici.html:263 templates/repositori.html:133
-msgid "He oblidat la contrasenya"
-msgstr ""
-
-#: templates/inici.html:272
+#: templates/inici.html:316
 msgid "No tens perfil?"
 msgstr ""
 
-#: templates/inici.html:274
+#: templates/inici.html:318
 msgid ""
 "Per preservar i documentar adequadament i amb rigor el teu testimoni a "
 "l'arxiu històric, necessitem que obris un perfil."
 msgstr ""
 
-#: templates/inici.html:278
+#: templates/inici.html:322
 msgid "Crear perfil"
 msgstr ""
 
-#: templates/inici.html:281
-msgid "Iniciar sessió"
+#: templates/inici.html:335
+msgid "Accés a un projecte de memòria i recerca"
 msgstr ""
 
-#: templates/inici.html:291 templates/repositori.html:139
-msgid "Accés a un projecte acadèmic i científic"
-msgstr ""
-
-#: templates/inici.html:293 templates/repositori.html:141
+#: templates/inici.html:337
 msgid ""
-"Estàs a punt d'accedir a un espai destinat a la recollida de testimonis "
-"personals amb finalitats d'investigació històrica, educativa i social. El"
-" Projecte Abadia forma part d'un arxiu de memòria oral amb vocació "
-"científica i pública."
+"Estàs a punt d'accedir a un espai per recollir testimonis personals amb "
+"finalitats històriques, educatives i socials. El Projecte Adabida forma "
+"part d’un arxiu de memòria oral amb vocació pública i científica."
 msgstr ""
 
-#: templates/inici.html:296 templates/repositori.html:144
+#: templates/inici.html:344
 msgid ""
-"El registre és voluntari. Molts dels camps del formulari no són "
-"obligatoris, però omplir-los amb detall millora significativament el "
-"valor documental del teu testimoni."
+"Pots gestionar o suprimir les teves dades en qualsevol moment des del teu"
+" perfil. La informació aportada es tracta amb criteris ètics, "
+"transparència i respecte absolut a la persona."
 msgstr ""
 
-#: templates/inici.html:299 templates/repositori.html:147
-msgid ""
-"Pots gestionar o suprimir les teves dades en qualsevol moment. La "
-"informació aportada es tracta amb criteris ètics, transparència i "
-"respecte absolut a la persona."
+#: templates/inici.html:346
+msgid "Acceptar i crear perfil"
 msgstr ""
 
-#: templates/inici.html:301 templates/repositori.html:149
-msgid "Acceptar i continuar"
-msgstr ""
-
-#: templates/inici.html:309
+#: templates/inici.html:354
 msgid "Crear un tema nou"
 msgstr ""
 
-#: templates/inici.html:310
+#: templates/inici.html:355
 msgid ""
 "Proposa un tema per a la teva entrada. Pots triar una categoria existent "
 "o crear-ne una de nova."
 msgstr ""
 
-#: templates/inici.html:314
+#: templates/inici.html:359
 msgid "Nom del tema"
 msgstr ""
 
-#: templates/inici.html:318
+#: templates/inici.html:363
 msgid "Exemple: La meva immigració a Barcelona"
 msgstr ""
 
-#: templates/inici.html:325 templates/pagina_personal/nova_entrada.html:42
-msgid "Categoria"
+#: templates/inici.html:369
+msgid "Categories"
 msgstr ""
 
-#: templates/inici.html:327
-msgid "-- Selecciona una categoria --"
+#: templates/inici.html:375
+msgid "Crear categoria nova"
 msgstr ""
 
-#: templates/inici.html:328
-msgid " Crear nova categoria"
-msgstr ""
-
-#: templates/inici.html:334
+#: templates/inici.html:381 templates/inici.html:388
 msgid "Nom de la categoria nova"
 msgstr ""
 
-#: templates/inici.html:338
+#: templates/inici.html:382 templates/inici.html:392
 msgid "Exemple: Immigració"
 msgstr ""
 
-#: templates/inici.html:346
+#: templates/admin/nova_aportacio.html:76 templates/inici.html:400
+#: templates/nova_aportacio_inici.html:99
 msgid "Continuar"
 msgstr ""
 
-#: templates/inici.html:376
+#: templates/components/modal_nou_missatge.html:32
+#: templates/components/modal_seleccionar_entrada.html:34
+#: templates/familia/administrar_espai.html:441
+#: templates/familia/administrar_espai.html:473
+#: templates/familia/afegir_membre.html:253
+#: templates/familia/crear_espai_familiar.html:175
+#: templates/familia/editar_membre.html:218
+#: templates/familia/familia_distribuidor.html:229
+#: templates/familia/familia_distribuidor.html:237
+#: templates/familia/gestionar_relacions.html:301
+#: templates/familia/historia_familia_form.html:179 templates/inici.html:403
+#: templates/inici.html:434 templates/organitzacions/crear.html:158
+#: templates/organitzacions/historia_organitzacio_form.html:178
+#: templates/organitzacions/llistat.html:147
+#: templates/organitzacions/organitzacio_admin.html:267
+#: templates/organitzacions/organitzacions.html:183
+#: templates/organitzacions/organitzacions.html:242
+#: templates/organitzacions/organitzacions.html:250
+#: templates/pagina_personal/biografia_seccio_form.html:85
+#: templates/pagina_personal/missatgeria.html:125
+#: templates/pagina_personal/perfil.html:343
+#: templates/pagina_personal/perfil.html:350
+#: templates/pagina_personal/personal_biografia.html:61
+#: templates/usuari_admin.html:574
+msgid "Cancel·lar"
+msgstr ""
+
+#: templates/inici.html:425
+msgid "Afegir país nou"
+msgstr ""
+
+#: templates/inici.html:429
+msgid "Nom del país..."
+msgstr ""
+
+#: templates/inici.html:448
 msgid "Veure menys"
 msgstr ""
 
-#: templates/inici.html:378
+#: templates/inici.html:450
 msgid "Menys temes"
 msgstr ""
 
-#: templates/inici.html:379
+#: templates/inici.html:451
 msgid "Més temes"
 msgstr ""
 
-#: templates/inici.html:380
+#: templates/inici.html:452
 msgid "No s'han pogut carregar més entrades"
 msgstr ""
 
-#: templates/inici.html:381
+#: templates/inici.html:453
 msgid "Error al carregar entrades"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:15
+#, python-format
+msgid "Adabida és i serà sempre 100% gratuït per a tothom"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:46
+msgid "Única"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:23
+#: templates/nova_aportacio_inici.html:49
+msgid "Mensual"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:26
+#: templates/nova_aportacio_inici.html:52
+msgid "Anual"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:78
+msgid "Altra quantitat"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:86
+msgid "-- Selecciona mètode --"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:87
+msgid "Transferència"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:89
+msgid "Targeta"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:101
+msgid "Pagament segur"
+msgstr ""
+
+#: templates/nova_aportacio_inici.html:130
+msgid "Si us plau, selecciona una quantitat"
+msgstr ""
+
+#: templates/pagament_exit.html:3
+msgid "Pagament confirmat"
+msgstr ""
+
+#: templates/pagament_exit.html:11
+msgid "Pagament confirmat!"
+msgstr ""
+
+#: templates/pagament_exit.html:18
+msgid "Gràcies per la teva aportació a Adabida!"
+msgstr ""
+
+#: templates/pagament_exit.html:22
+msgid "Què passa ara?"
+msgstr ""
+
+#: templates/pagament_exit.html:24
+msgid "Rebràs un email de confirmació de Stripe"
+msgstr ""
+
+#: templates/pagament_exit.html:25
+msgid "El càrrec apareixerà com \"ADABIDA DONACIO\" al teu extracte"
+msgstr ""
+
+#: templates/pagament_exit.html:26
+msgid "La teva aportació ens ajuda a mantenir Adabida gratuït per a tothom"
+msgstr ""
+
+#: templates/pagament_exit.html:31
+msgid "Gràcies per confiar en el nostre projecte"
 msgstr ""
 
 #: templates/questionari.html:5 templates/questionari.html:32
@@ -1183,269 +1373,266 @@ msgstr ""
 msgid "Desar qüestionari"
 msgstr ""
 
-#: templates/registre_individual.html:5
-msgid "Registre de nou perfil"
+#: templates/registre_individual.html:4
+msgid "Registre individual"
 msgstr ""
 
-#: templates/registre_individual.html:30
-msgid "Crear nou perfil"
+#: templates/registre_individual.html:16
+msgid "Aquest perfil et permetrà crear i gestionar entrades personals a l’arxiu."
 msgstr ""
 
 #: templates/admin/admin_umberto.html:52
+#: templates/familia/afegir_membre.html:49
+#: templates/familia/editar_membre.html:23
 #: templates/pagina_personal/participants_conversa.html:11
-#: templates/registre_individual.html:35 templates/registre_individual.html:104
-#: templates/registre_individual.html:159 templates/usuari_admin.html:20
+#: templates/registre_individual.html:21 templates/registre_individual.html:91
+#: templates/registre_individual.html:146 templates/usuari_admin.html:20
 #: templates/usuari_admin.html:436 templates/usuari_admin.html:500
 msgid "Nom"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:53
+#: templates/familia/editar_membre.html:27
 #: templates/pagina_personal/participants_conversa.html:15
-#: templates/registre_individual.html:36 templates/registre_individual.html:108
-#: templates/registre_individual.html:163 templates/usuari_admin.html:24
+#: templates/registre_individual.html:22 templates/registre_individual.html:95
+#: templates/registre_individual.html:150 templates/usuari_admin.html:24
 #: templates/usuari_admin.html:440 templates/usuari_admin.html:504
 msgid "Primer cognom"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:57
+#: templates/familia/editar_membre.html:31
 #: templates/pagina_personal/participants_conversa.html:19
-#: templates/registre_individual.html:37 templates/registre_individual.html:112
-#: templates/registre_individual.html:167 templates/usuari_admin.html:28
+#: templates/registre_individual.html:23 templates/registre_individual.html:99
+#: templates/registre_individual.html:154 templates/usuari_admin.html:28
 #: templates/usuari_admin.html:444 templates/usuari_admin.html:508
 msgid "Segon cognom"
 msgstr ""
 
-#: templates/registre_individual.html:41 templates/registre_individual.html:119
-#: templates/registre_individual.html:174 templates/usuari_admin.html:35
+#: templates/familia/afegir_membre.html:85
+#: templates/familia/editar_membre.html:56
+#: templates/registre_individual.html:27 templates/registre_individual.html:106
+#: templates/registre_individual.html:161 templates/usuari_admin.html:35
 #: templates/usuari_admin.html:451 templates/usuari_admin.html:515
 msgid "Data de naixement"
 msgstr ""
 
-#: templates/registre_individual.html:42 templates/usuari_admin.html:47
+#: templates/registre_individual.html:28 templates/usuari_admin.html:47
 msgid "País de naixement"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:276
 #: templates/familia/crear_espai_familiar.html:65
-#: templates/familia/crear_espai_familiar.html:104
-#: templates/familia/crear_espai_familiar.html:356
-#: templates/familia/crear_espai_familiar.html:397
+#: templates/familia/crear_espai_familiar.html:107
+#: templates/familia/crear_espai_familiar.html:360
+#: templates/familia/crear_espai_familiar.html:401
 #: templates/organitzacions/crear.html:68
 #: templates/pagina_personal/nova_entrada.html:382
-#: templates/registre_individual.html:42 templates/registre_individual.html:49
-#: templates/registre_individual.html:124
-#: templates/registre_individual.html:143
-#: templates/registre_individual.html:179
-#: templates/registre_individual.html:198
-#: templates/registre_individual.html:423
+#: templates/registre_individual.html:28 templates/registre_individual.html:36
+#: templates/registre_individual.html:111
+#: templates/registre_individual.html:130
+#: templates/registre_individual.html:166
+#: templates/registre_individual.html:185
 msgid "Carregant..."
 msgstr ""
 
-#: templates/registre_individual.html:43 templates/registre_individual.html:127
-#: templates/registre_individual.html:146
-#: templates/registre_individual.html:182
-#: templates/registre_individual.html:201 templates/usuari_admin.html:43
+#: templates/registre_individual.html:29 templates/registre_individual.html:114
+#: templates/registre_individual.html:133
+#: templates/registre_individual.html:169
+#: templates/registre_individual.html:188 templates/usuari_admin.html:43
 #: templates/usuari_admin.html:415 templates/usuari_admin.html:459
 #: templates/usuari_admin.html:478 templates/usuari_admin.html:523
 #: templates/usuari_admin.html:542
 msgid "Regió o estat"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:279
 #: templates/familia/crear_espai_familiar.html:71
-#: templates/familia/crear_espai_familiar.html:110
-#: templates/familia/crear_espai_familiar.html:362
-#: templates/familia/crear_espai_familiar.html:403
+#: templates/familia/crear_espai_familiar.html:113
+#: templates/familia/crear_espai_familiar.html:366
+#: templates/familia/crear_espai_familiar.html:407
 #: templates/organitzacions/crear.html:74
 #: templates/pagina_personal/nova_entrada.html:385
-#: templates/registre_individual.html:43 templates/registre_individual.html:50
-#: templates/registre_individual.html:128
-#: templates/registre_individual.html:147
-#: templates/registre_individual.html:183
-#: templates/registre_individual.html:202
-#: templates/registre_individual.html:426
+#: templates/registre_individual.html:29 templates/registre_individual.html:37
+#: templates/registre_individual.html:115
+#: templates/registre_individual.html:134
+#: templates/registre_individual.html:170
+#: templates/registre_individual.html:189
 msgid "Selecciona primer el país"
 msgstr ""
 
-#: templates/registre_individual.html:44
+#: templates/registre_individual.html:30
 msgid "Poble o ciutat de naixement"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:278
 #: templates/familia/crear_espai_familiar.html:77
-#: templates/familia/crear_espai_familiar.html:116
-#: templates/familia/crear_espai_familiar.html:368
-#: templates/familia/crear_espai_familiar.html:409
+#: templates/familia/crear_espai_familiar.html:119
+#: templates/familia/crear_espai_familiar.html:372
+#: templates/familia/crear_espai_familiar.html:413
 #: templates/organitzacions/crear.html:80
 #: templates/pagina_personal/nova_entrada.html:384
-#: templates/registre_individual.html:44 templates/registre_individual.html:132
-#: templates/registre_individual.html:151
-#: templates/registre_individual.html:187
-#: templates/registre_individual.html:206
-#: templates/registre_individual.html:425
+#: templates/registre_individual.html:30 templates/registre_individual.html:119
+#: templates/registre_individual.html:138
+#: templates/registre_individual.html:174
+#: templates/registre_individual.html:193
 msgid "Selecciona primer la regió"
 msgstr ""
 
-#: templates/registre_individual.html:48 templates/usuari_admin.html:74
+#: templates/registre_individual.html:34 templates/usuari_admin.html:74
 msgid "Idioma principal"
 msgstr ""
 
-#: templates/registre_individual.html:49 templates/usuari_admin.html:78
+#: templates/registre_individual.html:35
+msgid "Idioma habitual de les entrades."
+msgstr ""
+
+#: templates/registre_individual.html:36 templates/usuari_admin.html:78
 msgid "País de residència"
 msgstr ""
 
-#: templates/registre_individual.html:50
+#: templates/registre_individual.html:37
 msgid "Regió de residència"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:418
-#: templates/registre_individual.html:51 templates/usuari_admin.html:70
+#: templates/familia/administrar_espai.html:422
+#: templates/registre_individual.html:38 templates/usuari_admin.html:70
 msgid "Correu electrònic"
 msgstr ""
 
-#: templates/registre_individual.html:55 templates/usuari_admin.html:54
+#: templates/registre_individual.html:42 templates/usuari_admin.html:54
 msgid "Nom d'usuari"
 msgstr ""
 
-#: templates/auth/reset_password.html:108 templates/registre_individual.html:71
+#: templates/registre_individual.html:42
+msgid "Nom visible dins del projecte. Pots fer servir un pseudònim."
+msgstr ""
+
+#: templates/auth/reset_password.html:108 templates/registre_individual.html:58
 msgid "Confirmar contrasenya"
 msgstr ""
 
-#: templates/registre_individual.html:81
+#: templates/registre_individual.html:68
 msgid "Informació addicional"
 msgstr ""
 
-#: templates/registre_individual.html:83
+#: templates/registre_individual.html:70
 msgid "Informació opcional però important"
 msgstr ""
 
-#: templates/registre_individual.html:85
+#: templates/registre_individual.html:72
 msgid "Per què la demanem?"
 msgstr ""
 
-#: templates/registre_individual.html:92
+#: templates/registre_individual.html:79
 msgid "Per què et demanem aquesta informació?"
 msgstr ""
 
-#: templates/registre_individual.html:93
+#: templates/registre_individual.html:80
 msgid ""
 "Aquesta informació és molt important per poder verificar els testimonis, "
 "establir connexions familiars i garantir la coherència del projecte."
 msgstr ""
 
-#: templates/registre_individual.html:94
+#: templates/registre_individual.html:81
 msgid ""
 "Aquest arxiu pretén ser un espai seriós de memòria, conservació i "
 "investigació. No comerciem amb les dades dels usuaris."
 msgstr ""
 
-#: templates/registre_individual.html:95
+#: templates/registre_individual.html:82
 msgid ""
 "Les dades aportades pertanyen als usuaris i només s'utilitzen amb "
 "finalitats científiques i acadèmiques."
 msgstr ""
 
-#: templates/registre_individual.html:100
+#: templates/registre_individual.html:87
 msgid "Informació del pare"
 msgstr ""
 
-#: templates/admin/admin_expo.html:67
+#: templates/admin/admin_expo.html:67 templates/familia/afegir_membre.html:89
+#: templates/familia/afegir_membre.html:133
+#: templates/familia/afegir_membre.html:175
 #: templates/familia/crear_espai_familiar.html:63
-#: templates/familia/crear_espai_familiar.html:102
-#: templates/familia/crear_espai_familiar.html:354
-#: templates/familia/crear_espai_familiar.html:395
+#: templates/familia/crear_espai_familiar.html:105
+#: templates/familia/crear_espai_familiar.html:358
+#: templates/familia/crear_espai_familiar.html:399
+#: templates/familia/editar_membre.html:61
+#: templates/familia/editar_membre.html:105
+#: templates/familia/editar_membre.html:148
 #: templates/organitzacions/crear.html:66
 #: templates/organitzacions/llistat.html:45
 #: templates/pagina_personal/nova_entrada.html:74
 #: templates/pagina_personal/nova_entrada.html:159
 #: templates/pagina_personal/nova_entrada.html:225
 #: templates/pagina_personal/participants_conversa.html:41
-#: templates/registre_individual.html:123
-#: templates/registre_individual.html:142
-#: templates/registre_individual.html:178
-#: templates/registre_individual.html:197 templates/repositori.html:38
+#: templates/registre_individual.html:110
+#: templates/registre_individual.html:129
+#: templates/registre_individual.html:165
+#: templates/registre_individual.html:184 templates/repositori.html:38
 #: templates/usuari_admin.html:331 templates/usuari_admin.html:419
 #: templates/usuari_admin.html:463 templates/usuari_admin.html:482
 #: templates/usuari_admin.html:527 templates/usuari_admin.html:546
 msgid "País"
 msgstr ""
 
-#: templates/registre_individual.html:131
-#: templates/registre_individual.html:186 templates/usuari_admin.html:39
+#: templates/registre_individual.html:118
+#: templates/registre_individual.html:173 templates/usuari_admin.html:39
 #: templates/usuari_admin.html:455 templates/usuari_admin.html:519
 msgid "Municipi de naixement"
 msgstr ""
 
-#: templates/registre_individual.html:138
-#: templates/registre_individual.html:193 templates/usuari_admin.html:470
+#: templates/familia/afegir_membre.html:171
+#: templates/familia/editar_membre.html:144
+#: templates/registre_individual.html:125
+#: templates/registre_individual.html:180 templates/usuari_admin.html:470
 #: templates/usuari_admin.html:534
 msgid "Data de defunció"
 msgstr ""
 
-#: templates/registre_individual.html:150
-#: templates/registre_individual.html:205 templates/usuari_admin.html:474
+#: templates/registre_individual.html:137
+#: templates/registre_individual.html:192 templates/usuari_admin.html:474
 #: templates/usuari_admin.html:538
 msgid "Municipi de defunció"
 msgstr ""
 
-#: templates/registre_individual.html:155
+#: templates/registre_individual.html:142
 msgid "Informació de la mare"
 msgstr ""
 
-#: templates/registre_individual.html:211
+#: templates/familia/afegir_membre.html:200
+#: templates/registre_individual.html:199
 msgid "Documents acreditatius (opcional)"
 msgstr ""
 
-#: templates/registre_individual.html:214
+#: templates/registre_individual.html:205
 msgid "Pots aportar escaneigs o fotografies..."
 msgstr ""
 
-#: templates/registre_individual.html:222
+#: templates/registre_individual.html:213
 msgid "Selecciona documents"
 msgstr ""
 
-#: templates/registre_individual.html:228
+#: templates/registre_individual.html:220
 msgid ""
 "Els documents adjuntats en aquesta secció no són públics ni visibles. La "
 "seva funció és ajudar a acreditar el perfil de l'usuari. Per fer públics "
 "els documents s'han d'adjuntar a una entrada personal a l'arxiu."
 msgstr ""
 
-#: templates/registre_individual.html:242
+#: templates/registre_individual.html:238
 msgid "Declaro que tinc més de 18 anys"
 msgstr ""
 
-#: templates/registre_individual.html:245
+#: templates/registre_individual.html:241
 msgid "Registrar"
 msgstr ""
 
-#: templates/registre_individual.html:249
+#: templates/registre_individual.html:246
 msgid ""
 "Aquest projecte no comercialitza amb les dades dels usuaris o les "
 "usuàries. És un arxiu ètic i comunitari. Darrere d'aquest web hi ha "
 "persones i un projecte acadèmic, no hi ha algoritmes ni ànim de lucre."
-msgstr ""
-
-#: templates/registre_individual.html:254
-msgid "Estàs segur que vols eliminar aquest document?"
-msgstr ""
-
-#: templates/registre_individual.html:364
-msgid "Has de tenir més de 18 anys per registrar-te"
-msgstr ""
-
-#: templates/pagina_personal/nova_entrada.html:379
-#: templates/registre_individual.html:420
-msgid "Selecciona un país"
-msgstr ""
-
-#: templates/registre_individual.html:421
-msgid "Selecciona província/regió"
-msgstr ""
-
-#: templates/pagina_personal/nova_entrada.html:381
-#: templates/registre_individual.html:422
-msgid "Selecciona o escriu el teu municipi"
-msgstr ""
-
-#: templates/pagina_personal/nova_entrada.html:383
-#: templates/registre_individual.html:424
-msgid "Error carregant"
 msgstr ""
 
 #: templates/repositori.html:13
@@ -1645,7 +1832,7 @@ msgstr ""
 msgid "Gestiona les teves organitzacions col·laboradores"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:107
+#: templates/pagina_personal/perfil.html:106
 #: templates/pagina_personal/perfil_public.html:110
 #: templates/usuari_admin.html:152
 msgid "Experiència professional"
@@ -1705,11 +1892,11 @@ msgstr ""
 msgid "Any fi"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:118 templates/usuari_admin.html:223
+#: templates/pagina_personal/perfil.html:117 templates/usuari_admin.html:223
 msgid "Actualment"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:160
+#: templates/pagina_personal/perfil.html:159
 #: templates/pagina_personal/perfil_public.html:192
 #: templates/usuari_admin.html:240
 msgid "Obra"
@@ -1768,7 +1955,7 @@ msgstr ""
 msgid "Ciutat"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:134
+#: templates/pagina_personal/perfil.html:133
 #: templates/pagina_personal/perfil_public.html:169
 #: templates/usuari_admin.html:359
 msgid "Càrrecs públics"
@@ -1786,6 +1973,12 @@ msgstr ""
 msgid "Afegir càrrec públic"
 msgstr ""
 
+#: templates/familia/afegir_membre.html:101
+#: templates/familia/afegir_membre.html:145
+#: templates/familia/afegir_membre.html:187
+#: templates/familia/editar_membre.html:73
+#: templates/familia/editar_membre.html:117
+#: templates/familia/editar_membre.html:160
 #: templates/organitzacions/llistat.html:47
 #: templates/pagina_personal/nova_entrada.html:217
 #: templates/pagina_personal/participants_conversa.html:33
@@ -1794,7 +1987,7 @@ msgid "Municipi"
 msgstr ""
 
 #: templates/familia/gestionar_relacions.html:38
-#: templates/pagina_personal/perfil.html:224
+#: templates/pagina_personal/perfil.html:223
 #: templates/pagina_personal/perfil_public.html:220
 #: templates/usuari_admin.html:430
 msgid "Pare"
@@ -1805,7 +1998,7 @@ msgid "Desar canvis del pare"
 msgstr ""
 
 #: templates/familia/gestionar_relacions.html:56
-#: templates/pagina_personal/perfil.html:244
+#: templates/pagina_personal/perfil.html:243
 #: templates/pagina_personal/perfil_public.html:226
 #: templates/usuari_admin.html:494
 msgid "Mare"
@@ -1924,7 +2117,7 @@ msgid "Una internet com una fortalesa silenciosa enmig del soroll global."
 msgstr ""
 
 #: templates/abadia_principal/manifest_etic.html:70
-msgid "Aquesta és la trinxera on es construeix l'Abadia."
+msgid "Aquesta és la trinxera on es construeix Adabida."
 msgstr ""
 
 #: templates/abadia_principal/manifest_etic.html:72
@@ -1944,7 +2137,7 @@ msgstr ""
 msgid ""
 "Això és possible només gràcies a les aportacions voluntàries de persones "
 "que creuen en una internet diferent. Si creus en aquesta visió, si vols "
-"que l'Abadia perduri,"
+"que Adabida perduri,"
 msgstr ""
 
 #: templates/abadia_principal/manifest_etic.html:77
@@ -1961,25 +2154,46 @@ msgstr ""
 msgid "Adabida"
 msgstr ""
 
-#: templates/admin/admin.html:27
-msgid "Sortir"
+#: templates/admin/admin.html:3 templates/admin/admin.html:47
+msgid "Panell d'administració"
 msgstr ""
 
-#: templates/admin/admin.html:49
-msgid "Gestió de la galeria d’imatges"
+#: templates/admin/admin.html:48 templates/familia/familia_membres.html:16
+#: templates/pagina_personal/pagina_personal.html:17
+msgid "Inici"
 msgstr ""
 
 #: templates/admin/admin.html:54
+msgid "Gestió de la galeria d'imatges"
+msgstr ""
+
+#: templates/admin/admin.html:55
+msgid "Afegir entrada al blog"
+msgstr ""
+
+#: templates/admin/admin.html:56
 msgid "Gestionar exposicions"
 msgstr ""
 
-#: templates/admin/admin.html:57 templates/admin/admin_dades.html:3
+#: templates/admin/admin.html:58
+msgid "Gestió del blog"
+msgstr ""
+
+#: templates/admin/admin.html:59 templates/admin/admin_dades.html:3
 #: templates/admin/admin_dades.html:13
 msgid "Explorador de dades"
 msgstr ""
 
-#: templates/admin/admin.html:58
+#: templates/admin/admin.html:60
 msgid "Gestió de països i temes"
+msgstr ""
+
+#: templates/admin/admin.html:61
+msgid "Traduccions temes"
+msgstr ""
+
+#: templates/admin/admin.html:62
+msgid "Gestió d'aportacions"
 msgstr ""
 
 #: templates/admin/admin_dades.html:11 templates/admin/admin_galeria.html:14
@@ -2086,6 +2300,46 @@ msgstr ""
 
 #: templates/admin/control_expo.html:23
 msgid "Eliminar exposició"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:13
+msgid "Fes una aportació a Adabida"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:20
+msgid "Aportació única"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:52
+msgid "O indica una altra quantitat:"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:53
+msgid "Quantitat en euros"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:60
+msgid "Mètode de pagament:"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:62
+msgid "-- Selecciona un mètode --"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:63
+msgid "Transferència bancària"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:66
+msgid "Targeta de crèdit/dèbit"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:78
+msgid "Pagament segur i encriptat"
+msgstr ""
+
+#: templates/admin/nova_aportacio.html:103
+msgid "Si us plau, selecciona o indica una quantitat"
 msgstr ""
 
 #: templates/admin/nova_exposicio.html:2
@@ -2466,8 +2720,11 @@ msgid "Eliminar de guardades"
 msgstr ""
 
 #: templates/components/modal_entrada_editar.html:33
-#: templates/familia/administrar_espai.html:223
+#: templates/components/targeta_membre.html:111
+#: templates/familia/administrar_espai.html:228
+#: templates/familia/editar_membre.html:3
 #: templates/familia/historia_familia.html:56
+#: templates/familia/matrimoni_detall.html:20
 #: templates/familia/veure_espai.html:189
 #: templates/organitzacions/historia_organitzacio.html:56
 #: templates/pagina_personal/biografia_seccions.html:56
@@ -2551,9 +2808,28 @@ msgstr ""
 msgid "Inserir enllaç"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:3
-#: templates/familia/familia_distribuidor.html:38
+#: templates/components/targeta_membre.html:55
+#: templates/familia/administrar_espai.html:205
+msgid "Usuari Adabida"
+msgstr ""
+
+#: templates/components/targeta_membre.html:82
+#: templates/components/targeta_membre.html:91
+msgid "Nascut/da a"
+msgstr ""
+
+#: templates/components/targeta_membre.html:117
+msgid "Públic"
+msgstr ""
+
+#: templates/components/targeta_membre.html:117
+msgid "Privat"
+msgstr ""
+
+#: templates/familia/administrar_espai.html:4
+#: templates/familia/familia_distribuidor.html:37
 #: templates/familia/familia_home.html:150
+#: templates/familia/familia_membres.html:111
 #: templates/familia/familia_qui_som.html:269
 #: templates/familia/les_meves_families.html:59
 #: templates/organitzacions/les_meves.html:49
@@ -2564,264 +2840,263 @@ msgstr ""
 msgid "Administrar"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:16
+#: templates/familia/administrar_espai.html:18
 msgid "Tornar a"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:23
+#: templates/familia/administrar_espai.html:25
 msgid "Administrar Espai Familiar"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:31
-msgid "Zona d'administració"
-msgstr ""
-
-#: templates/familia/administrar_espai.html:32
-msgid ""
-"Només els administradors poden veure i modificar aquesta pàgina. Els "
-"canvis afecten tots els membres de l'espai familiar."
-msgstr ""
-
-#: templates/familia/administrar_espai.html:38
+#: templates/familia/administrar_espai.html:39
 msgid "Informació Bàsica de l'Espai"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:43
+#: templates/familia/administrar_espai.html:40
+msgid ""
+"⚠️ Zona d'administració. Només els administradors poden veure i modificar"
+" aquesta pàgina. Els canvis afecten tots els membres de l'espai familiar."
+msgstr ""
+
+#: templates/familia/administrar_espai.html:47
 #: templates/familia/crear_espai_familiar.html:29
 msgid "Nom de la família"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:48
+#: templates/familia/administrar_espai.html:52
 msgid "Motiu"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:61
-#: templates/familia/crear_espai_familiar.html:139
+#: templates/familia/administrar_espai.html:65
+#: templates/familia/crear_espai_familiar.html:143
 #: templates/familia/veure_espai.html:65
 msgid "Període de referència"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:66
+#: templates/familia/administrar_espai.html:70
 msgid "Data de creació"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:71
+#: templates/familia/administrar_espai.html:75
 msgid "Heràldica"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:73
+#: templates/familia/administrar_espai.html:77
 msgid "Escut"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:82
+#: templates/familia/administrar_espai.html:85
 msgid "Editar Informació"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:85
+#: templates/familia/administrar_espai.html:88
 msgid "Canviar Heràldica"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:96
+#: templates/familia/administrar_espai.html:91
+msgid "Veure espai públic"
+msgstr ""
+
+#: templates/familia/administrar_espai.html:102
 #: templates/familia/veure_espai.html:77
 msgid "Llocs d'Origen"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:119
+#: templates/familia/administrar_espai.html:125
 msgid "No hi ha llocs d'origen definits"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:123
+#: templates/familia/administrar_espai.html:129
 msgid "Afegir Lloc d'Origen"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:130
+#: templates/familia/administrar_espai.html:136
 #: templates/familia/veure_espai.html:98
 msgid "Ubicacions Actuals"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:143
+#: templates/familia/administrar_espai.html:149
 msgid "Auto"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:158
+#: templates/familia/administrar_espai.html:164
 msgid "No hi ha ubicacions actuals"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:162
+#: templates/familia/administrar_espai.html:168
 msgid "Afegir Ubicació Actual"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:166
+#: templates/familia/administrar_espai.html:172
 msgid "Recalcular Automàticament"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:175
+#: templates/familia/administrar_espai.html:181
 msgid "Gestió de Membres"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:190
+#: templates/familia/administrar_espai.html:195
 msgid "Sense nom"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:195
+#: templates/familia/administrar_espai.html:200
 msgid "Admin"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:195
-#: templates/familia/administrar_espai.html:431
+#: templates/familia/administrar_espai.html:200
+#: templates/familia/administrar_espai.html:435
 #: templates/familia/veure_espai.html:169
 #: templates/organitzacions/seccio_membres.html:109
 msgid "Membre"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:200
-msgid "Usuari Adabida"
-msgstr ""
-
-#: templates/familia/administrar_espai.html:210
+#: templates/familia/administrar_espai.html:215
 msgid "Fer Admin"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:216
+#: templates/familia/administrar_espai.html:221
 msgid "Revocar Admin"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:237
+#: templates/familia/administrar_espai.html:242
 msgid "No hi ha membres"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:242
+#: templates/familia/administrar_espai.html:247
+#: templates/familia/afegir_membre.html:3
+#: templates/familia/afegir_membre.html:255
 #: templates/familia/veure_espai.html:38
 msgid "Afegir Membre"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:245
-msgid "Invitar per Email"
+#: templates/familia/administrar_espai.html:250
+msgid "Convidar per Email"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:253
+#: templates/familia/administrar_espai.html:258
 msgid "Resum de Relacions Familiars"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:260
+#: templates/familia/administrar_espai.html:265
 msgid "Relacions Parent"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:265
+#: templates/familia/administrar_espai.html:270
 #: templates/familia/gestionar_relacions.html:78
-#: templates/familia/gestionar_relacions.html:176
+#: templates/familia/gestionar_relacions.html:209
 msgid "Matrimonis"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:270
+#: templates/familia/administrar_espai.html:275
 msgid "Sense Pares"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:275
+#: templates/familia/administrar_espai.html:280
+#: templates/familia/familia_membres.html:41
 msgid "Generacions"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:281
+#: templates/familia/administrar_espai.html:286
 msgid "Possibles inconsistències detectades"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:292
+#: templates/familia/administrar_espai.html:297
 msgid "Validar Relacions"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:299
+#: templates/familia/administrar_espai.html:304
 msgid "Continguts Compartits"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:304
+#: templates/familia/administrar_espai.html:309
 msgid "Records publicats"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:308
+#: templates/familia/administrar_espai.html:313
 msgid "Documents totals"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:312
+#: templates/familia/administrar_espai.html:317
 msgid "Espai utilitzat"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:318
+#: templates/familia/administrar_espai.html:323
 msgid "Últims 5 records"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:336
+#: templates/familia/administrar_espai.html:341
 msgid "Configuració Avançada"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:343
+#: templates/familia/administrar_espai.html:348
 msgid "Espai visible globalment (per arbres genealògics interconnectats)"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:345
+#: templates/familia/administrar_espai.html:350
 msgid "Si està desactivat, altres famílies veuran \"---oo---\" en les connexions"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:351
+#: templates/familia/administrar_espai.html:356
 msgid "Notificacions actives per nous continguts"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:358
+#: templates/familia/administrar_espai.html:363
 msgid "Permetre que membres (no admins) editin informació"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:365
+#: templates/familia/administrar_espai.html:369
 msgid "Desar Configuració"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:368
+#: templates/familia/administrar_espai.html:372
 msgid "Exportar Espai (PDF)"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:371
+#: templates/familia/administrar_espai.html:375
 msgid "Backup Complet"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:379
+#: templates/familia/administrar_espai.html:383
 msgid "Zona de Perill"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:383
+#: templates/familia/administrar_espai.html:387
 msgid "Atenció"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:383
+#: templates/familia/administrar_espai.html:387
 msgid "Les accions següents són irreversibles i poden causar pèrdua de dades."
 msgstr ""
 
-#: templates/familia/administrar_espai.html:390
+#: templates/familia/administrar_espai.html:394
 msgid "Arxivar Espai"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:396
+#: templates/familia/administrar_espai.html:400
 msgid "Eliminar Espai Familiar"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:401
+#: templates/familia/administrar_espai.html:405
 msgid "Abans d'eliminar, es recomana fer un backup complet de totes les dades."
 msgstr ""
 
-#: templates/familia/administrar_espai.html:411
+#: templates/familia/administrar_espai.html:415
 msgid "Invitar Membre per Email"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:423
+#: templates/familia/administrar_espai.html:427
 msgid "Missatge personal (opcional)"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:425
+#: templates/familia/administrar_espai.html:429
 msgid "Escriu un missatge per acompanyar la invitació..."
 msgstr ""
 
-#: templates/familia/administrar_espai.html:429
+#: templates/familia/administrar_espai.html:433
 msgid "Rol inicial"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:432
+#: templates/familia/administrar_espai.html:436
 #: templates/familia/les_meves_families.html:33
 #: templates/familia/veure_espai.html:169
 #: templates/organitzacions/organitzacio_admin.html:99
@@ -2830,13 +3105,282 @@ msgstr ""
 msgid "Administrador"
 msgstr ""
 
-#: templates/familia/administrar_espai.html:438
+#: templates/familia/administrar_espai.html:442
 msgid "Enviar Invitació"
+msgstr ""
+
+#: templates/familia/administrar_espai.html:452
+msgid "Canviar foto del membre"
+msgstr ""
+
+#: templates/familia/administrar_espai.html:461
+#: templates/familia/familia_distribuidor.html:199
+#: templates/organitzacions/organitzacions.html:212
+#: templates/pagina_personal/perfil.html:313
+msgid "Pujar des de l'ordinador"
+msgstr ""
+
+#: templates/familia/administrar_espai.html:477
+#: templates/pagina_personal/perfil.html:354
+msgid "Guardar foto"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:13
+msgid "Afegir Membre a"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:26
+msgid "Membre de la família existent (opcional)"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:28
+msgid ""
+"Si aquesta persona ja és membre de la família, selecciona-la aquí. Si no,"
+" omple el formulari per crear-la."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:32
+msgid "Buscar membre per nom"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:33
+#: templates/familia/afegir_membre.html:71
+#: templates/familia/editar_membre.html:43
+msgid "Escriu per buscar..."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:37
+msgid "Membre seleccionat:"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:46
+#: templates/familia/editar_membre.html:20
+msgid "Dades Bàsiques"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:64
+#: templates/familia/editar_membre.html:36
+msgid "Vincular amb Usuari d'Adabida (opcional)"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:66
+#: templates/familia/editar_membre.html:38
+msgid ""
+"Si aquesta persona ja té compte a Adabida, pots vincular-la aquí. Tindrà "
+"accés automàtic a l'espai familiar."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:70
+#: templates/familia/editar_membre.html:42
+msgid "Buscar usuari per nom o email"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:75
+#: templates/familia/editar_membre.html:47
+msgid "Usuari seleccionat:"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:82
+#: templates/familia/editar_membre.html:53
+msgid "Naixement"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:91
+#: templates/familia/afegir_membre.html:135
+#: templates/familia/afegir_membre.html:177
+#: templates/familia/editar_membre.html:63
+#: templates/familia/editar_membre.html:107
+#: templates/familia/editar_membre.html:150
+msgid "Selecciona país"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:95
+#: templates/familia/afegir_membre.html:139
+#: templates/familia/afegir_membre.html:181
+#: templates/familia/editar_membre.html:67
+#: templates/familia/editar_membre.html:111
+#: templates/familia/editar_membre.html:154
+#: templates/organitzacions/llistat.html:46
+#: templates/pagina_personal/nova_entrada.html:221
+#: templates/pagina_personal/participants_conversa.html:37
+msgid "Regió"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:97
+#: templates/familia/afegir_membre.html:141
+#: templates/familia/afegir_membre.html:183
+#: templates/familia/editar_membre.html:69
+#: templates/familia/editar_membre.html:113
+#: templates/familia/editar_membre.html:156
+msgid "Primer selecciona país"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:106
+#: templates/familia/afegir_membre.html:150
+#: templates/familia/afegir_membre.html:192
+#: templates/familia/editar_membre.html:78
+#: templates/familia/editar_membre.html:122
+#: templates/familia/editar_membre.html:165
+msgid "Escriu o selecciona"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:113
+#: templates/familia/editar_membre.html:85
+msgid "Gènere"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:118
+#: templates/familia/editar_membre.html:90
+#: templates/familia/familia_qui_som.html:64
+#: templates/familia/gestionar_relacions.html:49
+#: templates/familia/gestionar_relacions.html:67
+msgid "No especificat"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:119
+#: templates/familia/editar_membre.html:91
+msgid "Masculí"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:120
+msgid "Femeni"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:123
+#: templates/familia/editar_membre.html:95
+msgid "Necessari per establir relacions familiars correctes"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:129
+#: templates/familia/editar_membre.html:101
+msgid "Ubicació Actual"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:130
+#: templates/familia/editar_membre.html:102
+msgid "On viu actualment (si està viu)"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:159
+#: templates/familia/editar_membre.html:131
+msgid "Biografia o notes sobre aquesta persona"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:161
+#: templates/familia/editar_membre.html:133
+msgid ""
+"Escriu aquí informació sobre aquesta persona: la seva vida, anècdotes, "
+"professió, etc."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:162
+#: templates/familia/editar_membre.html:134
+msgid "Aquesta biografia serà visible per tots els membres de la família"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:166
+#: templates/familia/editar_membre.html:139
+msgid "Dades de defunció (si escau)"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:202
+msgid ""
+"Pots pujar documents com DNI, partida de naixement, certificats, "
+"fotografies, etc. Pots decidir si són visibles per tothom o només per "
+"administradors."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:210
+msgid "Tipus de document"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:213
+#: templates/familia/editar_membre.html:184
+msgid "DNI/Passaport"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:214
+#: templates/familia/editar_membre.html:185
+msgid "Partida de Naixement"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:215
+#: templates/familia/editar_membre.html:186
+msgid "Partida de Defunció"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:216
+#: templates/familia/editar_membre.html:187
+msgid "Certificat"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:217
+#: templates/familia/editar_membre.html:188
+msgid "Fotografia"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:218
+msgid "Altre Document"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:222
+msgid "Fitxer"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:227
+msgid "Visibilitat"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:229
+#: templates/familia/editar_membre.html:197
+msgid "Visible per tota la família"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:230
+msgid "Només administradors"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:235
+msgid "Descripció del document (opcional)"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:236
+msgid "Ex: DNI renovat el 2020"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:244
+msgid "Afegir Un Altre Document"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:259
+msgid ""
+"Les dades d'aquest membre quedaran registrades a l'espai familiar i seran"
+" visibles per tots els membres de la família, excepte els documents "
+"marcats com a \"Només administradors\"."
+msgstr ""
+
+#: templates/familia/afegir_membre.html:273
+#: templates/pagina_personal/nova_entrada.html:379
+msgid "Selecciona un país"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:274
+msgid "Selecciona província/regió"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:275
+#: templates/pagina_personal/nova_entrada.html:381
+msgid "Selecciona o escriu el teu municipi"
+msgstr ""
+
+#: templates/familia/afegir_membre.html:277
+#: templates/pagina_personal/nova_entrada.html:383
+msgid "Error carregant"
 msgstr ""
 
 #: templates/familia/crear_espai_familiar.html:3
 #: templates/familia/crear_espai_familiar.html:18
-#: templates/familia/crear_espai_familiar.html:174
+#: templates/familia/crear_espai_familiar.html:178
 msgid "Crear Espai Familiar"
 msgstr ""
 
@@ -2860,8 +3404,8 @@ msgstr ""
 
 #: templates/familia/crear_espai_familiar.html:38
 #: templates/familia/crear_espai_familiar.html:47
-#: templates/familia/crear_espai_familiar.html:143
-#: templates/familia/crear_espai_familiar.html:157
+#: templates/familia/crear_espai_familiar.html:147
+#: templates/familia/crear_espai_familiar.html:161
 #: templates/organitzacions/crear.html:133
 #: templates/organitzacions/crear.html:139
 #: templates/organitzacions/crear.html:147
@@ -2891,14 +3435,14 @@ msgid "Llocs d'origen de la família"
 msgstr ""
 
 #: templates/familia/crear_espai_familiar.html:69
-#: templates/familia/crear_espai_familiar.html:108
-#: templates/familia/crear_espai_familiar.html:360
-#: templates/familia/crear_espai_familiar.html:401
+#: templates/familia/crear_espai_familiar.html:111
+#: templates/familia/crear_espai_familiar.html:364
+#: templates/familia/crear_espai_familiar.html:405
 msgid "Regió/Província"
 msgstr ""
 
 #: templates/familia/crear_espai_familiar.html:75
-#: templates/familia/crear_espai_familiar.html:366
+#: templates/familia/crear_espai_familiar.html:370
 msgid "Municipi/Localitat"
 msgstr ""
 
@@ -2908,59 +3452,116 @@ msgstr ""
 
 #: templates/familia/crear_espai_familiar.html:89
 msgid ""
-"📍 Els llocs on la família va tenir el seu origen o d'on prové "
-"tradicionalment"
+"Explica d'on ve la teva família històricament o indica ls llocs on la "
+"família va tenir el seu origen o d'on prové tradicionalment"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:95
+#: templates/familia/crear_espai_familiar.html:98
 msgid "Ubicacions actuals (provisional)"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:114
-#: templates/familia/crear_espai_familiar.html:407
+#: templates/familia/crear_espai_familiar.html:117
+#: templates/familia/crear_espai_familiar.html:411
 #: templates/organitzacions/crear.html:78
 msgid "Municipi/Ciutat"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:129
+#: templates/familia/crear_espai_familiar.html:132
 msgid "Afegir altra ubicació actual"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:133
+#: templates/familia/crear_espai_familiar.html:134
 msgid ""
-"ℹ️ Indica on viuen actualment els membres de la família. Aquestes "
+" Indica on viuen actualment els membres de la família. Aquestes "
 "ubicacions són provisionals i s'actualitzaran automàticament quan "
-"afegeixis membres amb les seves ubicacions."
+"afegeixis membres amb les seves ubicacions"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:143
+#: templates/familia/crear_espai_familiar.html:147
 msgid "Any o període"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:145
+#: templates/familia/crear_espai_familiar.html:149
 msgid "Des de 1920, s.XIX, s.XX-XXI..."
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:146
+#: templates/familia/crear_espai_familiar.html:150
 msgid ""
 "El període més antic documentat o des de quan es té constància de la "
 "família"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:153
+#: templates/familia/crear_espai_familiar.html:157
 msgid "Heràldica familiar"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:157
+#: templates/familia/crear_espai_familiar.html:161
 msgid "Escut o emblema familiar"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:159
+#: templates/familia/crear_espai_familiar.html:163
 msgid "Si la teva família té un escut heràldic o emblema, pots pujar-lo aquí"
 msgstr ""
 
-#: templates/familia/crear_espai_familiar.html:164
+#: templates/familia/crear_espai_familiar.html:168
 msgid "🛡️ Formats acceptats: JPG, PNG, GIF. Mida màxima: 5MB"
+msgstr ""
+
+#: templates/familia/editar_membre.html:12
+msgid "Editar Membre"
+msgstr ""
+
+#: templates/familia/editar_membre.html:92
+msgid "Femení"
+msgstr ""
+
+#: templates/familia/editar_membre.html:177
+msgid "Documents Actuals"
+msgstr ""
+
+#: templates/familia/editar_membre.html:189
+msgid "Document"
+msgstr ""
+
+#: templates/familia/editar_membre.html:197
+msgid "Només admins"
+msgstr ""
+
+#: templates/familia/editar_membre.html:202
+#: templates/familia/les_meves_families.html:55
+#: templates/familia/les_meves_families.html:103
+#: templates/familia/veure_espai.html:184
+#: templates/organitzacions/seccio_imatges.html:101
+#: templates/organitzacions/seccio_imatges.html:142
+msgid "Veure"
+msgstr ""
+
+#: templates/familia/editar_membre.html:208
+msgid ""
+"Per afegir nous documents o eliminar existents, contacta amb un "
+"administrador."
+msgstr ""
+
+#: templates/familia/editar_membre.html:220
+msgid "Guardar Canvis"
+msgstr ""
+
+#: templates/familia/editar_membre.html:224
+msgid ""
+"Els canvis es guardaran immediatament i seran visibles per tots els "
+"membres de la família."
+msgstr ""
+
+#: templates/familia/editar_membre.html:231
+msgid "Zona Perillosa"
+msgstr ""
+
+#: templates/familia/editar_membre.html:232
+msgid "Eliminar aquest membre és una acció permanent i irreversible."
+msgstr ""
+
+#: templates/familia/editar_membre.html:234
+msgid "Eliminar Membre"
 msgstr ""
 
 #: templates/familia/familia.html:38 templates/familia/familia_qui_som.html:15
@@ -2969,7 +3570,9 @@ msgid "Les meves famílies"
 msgstr ""
 
 #: templates/familia/familia_distribuidor.html:21
+#: templates/familia/familia_publica.html:19
 #: templates/familia/familia_qui_som.html:24
+#: templates/familia/publica_historia.html:16
 #: templates/familia/veure_espai.html:25
 msgid "Escut de"
 msgstr ""
@@ -2983,12 +3586,12 @@ msgstr ""
 msgid "membres"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:49
-#: templates/familia/familia_distribuidor.html:71
-#: templates/familia/familia_distribuidor.html:93
-#: templates/familia/familia_distribuidor.html:114
-#: templates/familia/familia_distribuidor.html:136
-#: templates/familia/familia_distribuidor.html:158
+#: templates/familia/familia_distribuidor.html:48
+#: templates/familia/familia_distribuidor.html:70
+#: templates/familia/familia_distribuidor.html:92
+#: templates/familia/familia_distribuidor.html:113
+#: templates/familia/familia_distribuidor.html:135
+#: templates/familia/familia_distribuidor.html:157
 #: templates/organitzacions/organitzacions.html:43
 #: templates/organitzacions/organitzacions.html:65
 #: templates/organitzacions/organitzacions.html:87
@@ -2997,32 +3600,38 @@ msgstr ""
 msgid "Canviar imatge"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:64
+#: templates/familia/familia_distribuidor.html:63
 #: templates/organitzacions/organitzacions.html:58
 msgid "Informació completa"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:85
+#: templates/familia/familia_distribuidor.html:84
+#: templates/familia/familia_publica.html:61
 msgid "Arbre Genealògic"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:86
+#: templates/familia/familia_distribuidor.html:85
 msgid "Relacions familiars"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:107
+#: templates/familia/familia_distribuidor.html:106
+#: templates/familia/familia_publica.html:44
 #: templates/familia/historia_familia.html:3
 #: templates/familia/historia_familia.html:15
 #: templates/familia/historia_familia.html:18
 msgid "Història de la família"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:108
+#: templates/familia/familia_distribuidor.html:107
 msgid "Memòria col·lectiva"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:128
+#: templates/familia/familia_distribuidor.html:127
 #: templates/familia/familia_home.html:94
+#: templates/familia/familia_membres.html:3
+#: templates/familia/familia_membres.html:18
+#: templates/familia/familia_membres.html:64
+#: templates/familia/familia_publica.html:78
 #: templates/familia/familia_qui_som.html:104
 #: templates/organitzacions/organitzacio_qui_som.html:78
 #: templates/organitzacions/organitzacions.html:123
@@ -3033,70 +3642,65 @@ msgstr ""
 msgid "Membres"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:150
+#: templates/familia/familia_distribuidor.html:149
 #: templates/familia/familia_home.html:98
 #: templates/familia/familia_qui_som.html:108
 #: templates/familia/veure_espai.html:217
 msgid "Records"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:151
+#: templates/familia/familia_distribuidor.html:150
 msgid "Memòries compartides"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:172
+#: templates/familia/familia_distribuidor.html:171
+#: templates/familia/familia_publica.html:95
 msgid "Documents"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:173
+#: templates/familia/familia_distribuidor.html:172
 msgid "Arxiu familiar"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:187
+#: templates/familia/familia_distribuidor.html:186
 #: templates/organitzacions/organitzacions.html:199
 msgid "Canviar imatge del card"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:193
+#: templates/familia/familia_distribuidor.html:192
 #: templates/organitzacions/organitzacions.html:205
 msgid "Selecciona una opció:"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:200
-#: templates/organitzacions/organitzacions.html:212
-#: templates/pagina_personal/perfil.html:314
-msgid "Pujar des de l'ordinador"
-msgstr ""
-
-#: templates/familia/familia_distribuidor.html:210
+#: templates/familia/familia_distribuidor.html:209
 #: templates/organitzacions/organitzacions.html:222
-#: templates/pagina_personal/perfil.html:324
+#: templates/pagina_personal/perfil.html:323
 msgid "Fer foto amb la càmera"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:226
+#: templates/familia/familia_distribuidor.html:225
 #: templates/organitzacions/organitzacions.html:238
-#: templates/pagina_personal/perfil.html:340
+#: templates/pagina_personal/perfil.html:339
 msgid "Capturar"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:242
+#: templates/familia/familia_distribuidor.html:241
 #: templates/organitzacions/organitzacions.html:254
 msgid "Guardar imatge"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:292
+#: templates/familia/familia_distribuidor.html:291
 #: templates/organitzacions/organitzacions.html:347
-#: templates/pagina_personal/perfil.html:435
+#: templates/pagina_personal/perfil.html:434
 msgid "No s'ha pogut accedir a la càmera"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:342
+#: templates/familia/familia_distribuidor.html:341
 #: templates/organitzacions/organitzacions.html:397
 msgid "Imatge guardada correctament"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:345
+#: templates/familia/familia_distribuidor.html:344
 #: templates/organitzacions/llistat.html:230
 #: templates/organitzacions/organitzacio_admin.html:379
 #: templates/organitzacions/organitzacio_admin.html:415
@@ -3105,18 +3709,18 @@ msgstr ""
 #: templates/organitzacions/organitzacio_admin.html:499
 #: templates/organitzacions/organitzacions.html:297
 #: templates/organitzacions/organitzacions.html:400
-#: templates/pagina_personal/perfil.html:488
+#: templates/pagina_personal/perfil.html:487
 msgid "Error"
 msgstr ""
 
-#: templates/familia/familia_distribuidor.html:350
+#: templates/familia/familia_distribuidor.html:349
 #: templates/organitzacions/llistat.html:235
 #: templates/organitzacions/organitzacio_admin.html:363
 #: templates/organitzacions/organitzacio_admin.html:421
 #: templates/organitzacions/organitzacio_admin.html:448
 #: templates/organitzacions/organitzacions.html:302
 #: templates/organitzacions/organitzacions.html:405
-#: templates/pagina_personal/perfil.html:493
+#: templates/pagina_personal/perfil.html:492
 #: templates/pagina_personal/personal_biografia.html:161
 msgid "Error de connexió"
 msgstr ""
@@ -3190,6 +3794,77 @@ msgstr ""
 msgid "Activitat recent"
 msgstr ""
 
+#: templates/familia/familia_membres.html:23
+#: templates/familia/publica_membres.html:11
+#: templates/organitzacions/seccio_membres.html:22
+msgid "Membres de"
+msgstr ""
+
+#: templates/familia/familia_membres.html:24
+msgid "Persones que formen part d'aquesta família"
+msgstr ""
+
+#: templates/familia/familia_membres.html:33
+#: templates/organitzacions/seccio_membres.html:32
+msgid "Total membres"
+msgstr ""
+
+#: templates/familia/familia_membres.html:37
+#: templates/familia/familia_membres.html:63
+#: templates/organitzacions/seccio_membres.html:36
+#: templates/organitzacions/seccio_membres.html:66
+msgid "Administradors"
+msgstr ""
+
+#: templates/familia/familia_membres.html:56
+#: templates/organitzacions/seccio_membres.html:59
+msgid "Cerca membres per nom..."
+msgstr ""
+
+#: templates/familia/familia_membres.html:62
+#: templates/organitzacions/seccio_membres.html:65
+msgid "Tots els rols"
+msgstr ""
+
+#: templates/familia/familia_membres.html:68
+#: templates/organitzacions/seccio_membres.html:71
+msgid "Ordenar per nom"
+msgstr ""
+
+#: templates/familia/familia_membres.html:69
+#: templates/organitzacions/seccio_membres.html:72
+msgid "Per data d'adhesió"
+msgstr ""
+
+#: templates/familia/familia_membres.html:70
+msgid "Per edat"
+msgstr ""
+
+#: templates/familia/familia_membres.html:94
+#: templates/organitzacions/seccio_membres.html:174
+msgid "Encara no hi ha membres"
+msgstr ""
+
+#: templates/familia/familia_membres.html:95
+msgid "Aquesta família encara no té membres registrats."
+msgstr ""
+
+#: templates/familia/familia_publica.html:45
+msgid "La nostra història"
+msgstr ""
+
+#: templates/familia/familia_publica.html:62
+msgid "Les nostres arrels"
+msgstr ""
+
+#: templates/familia/familia_publica.html:79
+msgid "La nostra família"
+msgstr ""
+
+#: templates/familia/familia_publica.html:96
+msgid "Arxiu històric"
+msgstr ""
+
 #: templates/familia/familia_qui_som.html:31
 msgid "Informació completa de la família"
 msgstr ""
@@ -3200,12 +3875,6 @@ msgstr ""
 
 #: templates/familia/familia_qui_som.html:54
 msgid "Ubicacions d'origen:"
-msgstr ""
-
-#: templates/familia/familia_qui_som.html:64
-#: templates/familia/gestionar_relacions.html:49
-#: templates/familia/gestionar_relacions.html:67
-msgid "No especificat"
 msgstr ""
 
 #: templates/familia/familia_qui_som.html:70
@@ -3293,7 +3962,7 @@ msgid "Gestió de Relacions Familiars"
 msgstr ""
 
 #: templates/familia/gestionar_relacions.html:35
-#: templates/familia/gestionar_relacions.html:173
+#: templates/familia/gestionar_relacions.html:206
 msgid "Pares"
 msgstr ""
 
@@ -3313,126 +3982,126 @@ msgstr ""
 msgid "Afegir Mare"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:90
-msgid "Casament"
-msgstr ""
-
-#: templates/familia/gestionar_relacions.html:93
-msgid "Fi"
-msgstr ""
-
-#: templates/familia/gestionar_relacions.html:104
+#: templates/familia/gestionar_relacions.html:137
 msgid "No hi ha matrimonis registrats"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:107
-#: templates/familia/gestionar_relacions.html:187
-#: templates/familia/gestionar_relacions.html:235
+#: templates/familia/gestionar_relacions.html:141
+#: templates/familia/gestionar_relacions.html:219
+#: templates/familia/gestionar_relacions.html:302
 msgid "Afegir Matrimoni"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:114
+#: templates/familia/gestionar_relacions.html:147
 msgid "Germans/es"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:131
+#: templates/familia/gestionar_relacions.html:164
 msgid "No hi ha germans registrats"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:135
+#: templates/familia/gestionar_relacions.html:168
 msgid "Afegir Germà/na"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:142
+#: templates/familia/gestionar_relacions.html:175
 msgid "Fills/es"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:159
+#: templates/familia/gestionar_relacions.html:192
 msgid "No hi ha fills registrats"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:163
+#: templates/familia/gestionar_relacions.html:196
 msgid "Afegir Fill/a"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:171
+#: templates/familia/gestionar_relacions.html:204
 msgid "Com funciona el sistema de relacions?"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:173
+#: templates/familia/gestionar_relacions.html:206
 msgid "Pots afegir el pare i la mare d'aquesta persona"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:174
+#: templates/familia/gestionar_relacions.html:207
 msgid "Germans"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:174
+#: templates/familia/gestionar_relacions.html:207
 msgid ""
 "Es calculen automàticament! Si dues persones comparteixen el mateix pare "
 "o la mateixa mare, són germans"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:175
+#: templates/familia/gestionar_relacions.html:208
 msgid "Fills"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:175
+#: templates/familia/gestionar_relacions.html:208
 msgid "Afegeix fills/es especificant que aquesta persona és el seu pare o mare"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:176
+#: templates/familia/gestionar_relacions.html:209
 msgid ""
 "Pots registrar múltiples matrimonis amb dates i estat "
 "(actiu/divorciat/vidu)"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:193
+#: templates/familia/gestionar_relacions.html:226
 msgid "Cònjuge"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:195
+#: templates/familia/gestionar_relacions.html:228
 msgid "Selecciona un membre"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:205
-msgid "Selecciona el cònjuge d'aquest matrimoni"
+#: templates/familia/gestionar_relacions.html:241
+msgid "El cònjuge no està a la llista?"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:208
+#: templates/familia/gestionar_relacions.html:245
 msgid "Afegir nou membre"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:213
+#: templates/familia/gestionar_relacions.html:251
 msgid "Data de casament"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:215
-msgid "Opcional - Deixa en blanc si no es coneix"
-msgstr ""
-
-#: templates/familia/gestionar_relacions.html:219
+#: templates/familia/gestionar_relacions.html:256
 msgid "Data de fi del matrimoni"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:221
-msgid "Només si el matrimoni ha acabat (divorci o defunció)"
-msgstr ""
-
-#: templates/familia/gestionar_relacions.html:225
+#: templates/familia/gestionar_relacions.html:261
 msgid "Estat"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:227
+#: templates/familia/gestionar_relacions.html:263
 msgid "Actiu"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:228
+#: templates/familia/gestionar_relacions.html:264
 msgid "Divorciat"
 msgstr ""
 
-#: templates/familia/gestionar_relacions.html:229
+#: templates/familia/gestionar_relacions.html:265
 msgid "Vidu/Vídua"
+msgstr ""
+
+#: templates/familia/gestionar_relacions.html:271
+msgid "Fills d'aquest matrimoni"
+msgstr ""
+
+#: templates/familia/gestionar_relacions.html:273
+msgid "Marca els fills que pertanyen a aquest matrimoni"
+msgstr ""
+
+#: templates/familia/gestionar_relacions.html:277
+msgid "Fills de"
+msgstr ""
+
+#: templates/familia/gestionar_relacions.html:290
+msgid "Sense fills"
 msgstr ""
 
 #: templates/familia/historia_familia.html:20
@@ -3535,6 +4204,7 @@ msgid "Nova secció"
 msgstr ""
 
 #: templates/familia/historia_familia_form.html:126
+#: templates/familia/publica_historia.html:3
 #: templates/organitzacions/organitzacions.html:79
 #: templates/organitzacions/seccio_historia.html:3
 #: templates/organitzacions/seccio_historia.html:16
@@ -3610,14 +4280,6 @@ msgstr ""
 msgid "Espais familiars que administro"
 msgstr ""
 
-#: templates/familia/les_meves_families.html:55
-#: templates/familia/les_meves_families.html:103
-#: templates/familia/veure_espai.html:184
-#: templates/organitzacions/seccio_imatges.html:101
-#: templates/organitzacions/seccio_imatges.html:142
-msgid "Veure"
-msgstr ""
-
 #: templates/familia/les_meves_families.html:67
 msgid "Encara no administres cap espai familiar"
 msgstr ""
@@ -3632,6 +4294,27 @@ msgstr ""
 
 #: templates/familia/les_meves_families.html:111
 msgid "Encara no pertanys a cap espai familiar com a membre"
+msgstr ""
+
+#: templates/familia/publica_historia.html:19
+#: templates/organitzacions/seccio_historia.html:21
+msgid "Història de"
+msgstr ""
+
+#: templates/familia/publica_historia.html:28
+msgid "Orígens"
+msgstr ""
+
+#: templates/familia/publica_historia.html:42
+msgid "Última actualització:"
+msgstr ""
+
+#: templates/familia/publica_historia.html:52
+msgid "La història d'aquesta família encara s'està escrivint..."
+msgstr ""
+
+#: templates/familia/publica_historia.html:59
+msgid "Tornar al perfil familiar"
 msgstr ""
 
 #: templates/familia/veure_espai.html:17
@@ -3714,6 +4397,10 @@ msgstr ""
 
 #: templates/familia/veure_espai.html:248
 msgid "Properament"
+msgstr ""
+
+#: templates/home/home_ca.html:113
+msgid "Més informació sobre aportacions voluntàries"
 msgstr ""
 
 #: templates/organitzacions/crear.html:18
@@ -3958,6 +4645,11 @@ msgstr ""
 msgid "Encara no pertanys a cap organització com a membre"
 msgstr ""
 
+#: templates/organitzacions/les_meves.html:103
+#: templates/pagina_personal/les_meves_organitzacions.html:106
+msgid "Explorar organitzacions"
+msgstr ""
+
 #: templates/organitzacions/llistat.html:12
 msgid "Directori d'organitzacions"
 msgstr ""
@@ -3975,12 +4667,6 @@ msgstr ""
 #: templates/organitzacions/llistat.html:35
 #: templates/organitzacions/organitzacio_admin.html:49
 msgid "Escola"
-msgstr ""
-
-#: templates/organitzacions/llistat.html:46
-#: templates/pagina_personal/nova_entrada.html:221
-#: templates/pagina_personal/participants_conversa.html:37
-msgid "Regió"
 msgstr ""
 
 #: templates/organitzacions/llistat.html:60
@@ -4393,10 +5079,6 @@ msgstr ""
 msgid "Crear primera entrada"
 msgstr ""
 
-#: templates/organitzacions/seccio_historia.html:21
-msgid "Història de"
-msgstr ""
-
 #: templates/organitzacions/seccio_historia.html:22
 msgid "Cronologia i evolució de l'organització"
 msgstr ""
@@ -4471,21 +5153,8 @@ msgstr ""
 msgid "Compartir primera imatge"
 msgstr ""
 
-#: templates/organitzacions/seccio_membres.html:22
-msgid "Membres de"
-msgstr ""
-
 #: templates/organitzacions/seccio_membres.html:23
 msgid "Persones que formen part d'aquesta organització"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:32
-msgid "Total membres"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:36
-#: templates/organitzacions/seccio_membres.html:66
-msgid "Administradors"
 msgstr ""
 
 #: templates/organitzacions/seccio_membres.html:40
@@ -4494,22 +5163,6 @@ msgstr ""
 
 #: templates/organitzacions/seccio_membres.html:44
 msgid "Dies de mitjana"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:59
-msgid "Cerca membres per nom..."
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:65
-msgid "Tots els rols"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:71
-msgid "Ordenar per nom"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:72
-msgid "Per data d'adhesió"
 msgstr ""
 
 #: templates/organitzacions/seccio_membres.html:73
@@ -4534,10 +5187,6 @@ msgstr ""
 
 #: templates/organitzacions/seccio_membres.html:166
 msgid "No s'han trobat membres"
-msgstr ""
-
-#: templates/organitzacions/seccio_membres.html:174
-msgid "Encara no hi ha membres"
 msgstr ""
 
 #: templates/organitzacions/seccio_membres.html:175
@@ -4741,7 +5390,7 @@ msgstr ""
 
 #: templates/pagina_personal/entrades.html:3
 #: templates/pagina_personal/pagina_personal.html:40
-#: templates/pagina_personal/perfil.html:271
+#: templates/pagina_personal/perfil.html:270
 msgid "Les meves entrades"
 msgstr ""
 
@@ -4776,6 +5425,10 @@ msgstr ""
 
 #: templates/pagina_personal/missatgeria.html:77
 msgid "No has enviat cap missatge"
+msgstr ""
+
+#: templates/pagina_personal/nova_entrada.html:42
+msgid "Categoria"
 msgstr ""
 
 #: templates/pagina_personal/nova_entrada.html:47
@@ -4930,10 +5583,6 @@ msgstr ""
 msgid "Pàgina personal"
 msgstr ""
 
-#: templates/pagina_personal/pagina_personal.html:17
-msgid "Inici"
-msgstr ""
-
 #: templates/pagina_personal/pagina_personal.html:50
 msgid "Nova entrada"
 msgstr ""
@@ -4958,74 +5607,70 @@ msgstr ""
 msgid "Testimoni directe..."
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:45
+#: templates/pagina_personal/perfil.html:44
 msgid "Verificat"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:49
+#: templates/pagina_personal/perfil.html:48
 msgid "Canviar bandera"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:67
+#: templates/pagina_personal/perfil.html:66
 msgid "Entrades:"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:69
+#: templates/pagina_personal/perfil.html:68
 msgid "Missatges:"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:69
+#: templates/pagina_personal/perfil.html:68
 msgid "Actius"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:74
+#: templates/pagina_personal/perfil.html:73
 msgid "Veure perfil públic"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:79
+#: templates/pagina_personal/perfil.html:78
 msgid "Editar perfil"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:94
+#: templates/pagina_personal/perfil.html:93
 msgid "Canviar foto"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:187
+#: templates/pagina_personal/perfil.html:186
 #: templates/pagina_personal/perfil_public.html:143
 msgid "Formació acadèmica"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:231
-#: templates/pagina_personal/perfil.html:251
+#: templates/pagina_personal/perfil.html:230
+#: templates/pagina_personal/perfil.html:250
 #: templates/pagina_personal/perfil_public.html:50
 msgid "Naixement:"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:240
+#: templates/pagina_personal/perfil.html:239
 msgid "Sense dades del pare"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:260
+#: templates/pagina_personal/perfil.html:259
 msgid "Sense dades de la mare"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:305
+#: templates/pagina_personal/perfil.html:304
 msgid "Canviar foto de perfil"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:355
-msgid "Guardar foto"
-msgstr ""
-
-#: templates/pagina_personal/perfil.html:365
+#: templates/pagina_personal/perfil.html:364
 msgid "Tria la teva bandera"
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:370
+#: templates/pagina_personal/perfil.html:369
 msgid "Cerca país..."
 msgstr ""
 
-#: templates/pagina_personal/perfil.html:485
+#: templates/pagina_personal/perfil.html:484
 msgid "Foto guardada correctament"
 msgstr ""
 
@@ -5134,15 +5779,18 @@ msgid "Selecciona una entrada"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/_termui_impl.py:613
+#, python-brace-format
 msgid "{editor}: Editing failed"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/_termui_impl.py:617
+#, python-brace-format
 msgid "{editor}: Editing failed: {e}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/core.py:1114
 #: venv/lib/python3.12/site-packages/click/core.py:1151
+#, python-brace-format
 msgid "{text} {deprecated_message}"
 msgstr ""
 
@@ -5150,14 +5798,16 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/core.py:1247
+#: venv/lib/python3.12/site-packages/click/core.py:1245
+#, python-brace-format
 msgid "Got unexpected extra argument ({args})"
 msgid_plural "Got unexpected extra arguments ({args})"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: venv/lib/python3.12/site-packages/click/core.py:1263
+#: venv/lib/python3.12/site-packages/click/core.py:1264
+#, python-brace-format
 msgid "DeprecationWarning: The command {name!r} is deprecated.{extra_message}"
 msgstr ""
 
@@ -5174,6 +5824,7 @@ msgid "Missing command."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/core.py:1931
+#, python-brace-format
 msgid "No such command {name!r}."
 msgstr ""
 
@@ -5181,24 +5832,28 @@ msgstr ""
 msgid "Value must be an iterable."
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/core.py:2380
+#: venv/lib/python3.12/site-packages/click/core.py:2378
+#, python-brace-format
 msgid "Takes {nargs} values but 1 was given."
 msgid_plural "Takes {nargs} values but {len} were given."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: venv/lib/python3.12/site-packages/click/core.py:2566
+#: venv/lib/python3.12/site-packages/click/core.py:2567
+#, python-brace-format
 msgid ""
 "DeprecationWarning: The {param_type} {name!r} is "
 "deprecated.{extra_message}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/core.py:3015
+#, python-brace-format
 msgid "env var: {var}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/core.py:3018
+#, python-brace-format
 msgid "default: {default}"
 msgstr ""
 
@@ -5225,18 +5880,22 @@ msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:50
 #: venv/lib/python3.12/site-packages/click/exceptions.py:89
+#, python-brace-format
 msgid "Error: {message}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:81
+#, python-brace-format
 msgid "Try '{command} {option}' for help."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:130
+#, python-brace-format
 msgid "Invalid value: {message}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:132
+#, python-brace-format
 msgid "Invalid value for {param_hint}: {message}"
 msgstr ""
 
@@ -5253,18 +5912,22 @@ msgid "Missing parameter"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:196
+#, python-brace-format
 msgid "Missing {param_type}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:203
+#, python-brace-format
 msgid "Missing parameter: {param_name}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:223
+#, python-brace-format
 msgid "No such option: {name}"
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/exceptions.py:237
+#: venv/lib/python3.12/site-packages/click/exceptions.py:235
+#, python-brace-format
 msgid "Did you mean {possibility}?"
 msgid_plural "(Possible options: {possibilities})"
 msgstr[0] ""
@@ -5276,6 +5939,7 @@ msgid "unknown error"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/exceptions.py:289
+#, python-brace-format
 msgid "Could not open file {filename!r}: {message}"
 msgstr ""
 
@@ -5284,21 +5948,24 @@ msgid "Usage:"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/parser.py:199
+#, python-brace-format
 msgid "Argument {name!r} takes {nargs} values."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/parser.py:381
+#, python-brace-format
 msgid "Option {name!r} does not take a value."
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/parser.py:443
+#: venv/lib/python3.12/site-packages/click/parser.py:444
+#, python-brace-format
 msgid "Option {name!r} requires an argument."
 msgid_plural "Option {name!r} requires {nargs} arguments."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: venv/lib/python3.12/site-packages/click/shell_completion.py:331
+#: venv/lib/python3.12/site-packages/click/shell_completion.py:332
 msgid "Shell completion is not supported for Bash versions older than 4.4."
 msgstr ""
 
@@ -5315,6 +5982,7 @@ msgid "Error: The value you entered was invalid."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/termui.py:183
+#, python-brace-format
 msgid "Error: {e.message}"
 msgstr ""
 
@@ -5331,19 +5999,22 @@ msgid "Press any key to continue..."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:332
+#, python-brace-format
 msgid ""
 "Choose from:\n"
 "\t{choices}"
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/types.py:371
+#: venv/lib/python3.12/site-packages/click/types.py:369
+#, python-brace-format
 msgid "{value!r} is not {choice}."
 msgid_plural "{value!r} is not one of {choices}."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: venv/lib/python3.12/site-packages/click/types.py:462
+#: venv/lib/python3.12/site-packages/click/types.py:460
+#, python-brace-format
 msgid "{value!r} does not match the format {format}."
 msgid_plural "{value!r} does not match the formats {formats}."
 msgstr[0] ""
@@ -5351,18 +6022,22 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:482
+#, python-brace-format
 msgid "{value!r} is not a valid {number_type}."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:538
+#, python-brace-format
 msgid "{value} is not in the range {range}."
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/types.py:718
+#: venv/lib/python3.12/site-packages/click/types.py:719
+#, python-brace-format
 msgid "{value!r} is not a valid boolean. Recognized values: {states}"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:747
+#, python-brace-format
 msgid "{value!r} is not a valid UUID."
 msgstr ""
 
@@ -5379,30 +6054,37 @@ msgid "path"
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:988
+#, python-brace-format
 msgid "{name} {filename!r} does not exist."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:997
+#, python-brace-format
 msgid "{name} {filename!r} is a file."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:1005
+#, python-brace-format
 msgid "{name} {filename!r} is a directory."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:1014
+#, python-brace-format
 msgid "{name} {filename!r} is not readable."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:1023
+#, python-brace-format
 msgid "{name} {filename!r} is not writable."
 msgstr ""
 
 #: venv/lib/python3.12/site-packages/click/types.py:1032
+#, python-brace-format
 msgid "{name} {filename!r} is not executable."
 msgstr ""
 
-#: venv/lib/python3.12/site-packages/click/types.py:1098
+#: venv/lib/python3.12/site-packages/click/types.py:1099
+#, python-brace-format
 msgid "{len_type} values are required, but {len_value} was given."
 msgid_plural "{len_type} values are required, but {len_value} were given."
 msgstr[0] ""
@@ -5412,4 +6094,235 @@ msgstr[2] ""
 #: venv/lib/python3.12/site-packages/pycountry/tests/test_general.py:184
 msgid "Germany"
 msgstr ""
+
+msgid "Escriu el nom del país"
+msgstr "Введите название страны"
+
+msgid "Error creant país"
+msgstr "Ошибка при создании страны"
+
+msgid "Error de connexió"
+msgstr "Ошибка соединения"
+
+msgid "creat correctament!"
+msgstr "успешно создано!"
+
+msgid "Error al crear el país"
+msgstr "Ошибка при создании страны"
+
+msgid "El nom del tema és obligatori"
+msgstr "Название темы обязательно"
+
+msgid "Has de triar almenys una categoria o crear-ne una de nova"
+msgstr "Вы должны выбрать хотя бы одну категорию или создать новую"
+
+msgid "Error creant categoria:"
+msgstr "Ошибка при создании категории:"
+
+msgid "Error creant tema:"
+msgstr "Ошибка при создании темы:"
+
+msgid "Error desconegut"
+msgstr "Неизвестная ошибка"
+
+msgid "Error de connexió. Torna-ho a provar."
+msgstr "Ошибка соединения. Попробуйте еще раз."
+
+msgid "-- Selecciona --"
+msgstr "-- Выберите --"
+
+msgid "Temes globals"
+msgstr "Глобальные темы"
+
+msgid "+ Afegir país..."
+msgstr "+ Добавить страну..."
+
+msgid "▼ Més"
+msgstr "▼ Больше"
+
+msgid "▲ Menys"
+msgstr "▲ Меньше"
+
+msgid "Guardant..."
+msgstr "Сохранение..."
+
+msgid "Encara no tenim temes per aquest país. Pots afegir el teu testimoni lliurement:"
+msgstr "У нас еще нет тем для этой страны. Вы можете свободно добавить свое свидетельство:"
+
+msgid "Pots crear nous temes i categories aquí."
+msgstr "Вы можете создавать новые темы и категории здесь."
+
+msgid "No hi ha categories disponibles"
+msgstr "Нет доступных категорий"
+
+msgid "Veure menys"
+msgstr "Показать меньше"
+
+msgid "Veure més"
+msgstr "Показать больше"
+
+msgid "No s'han pogut carregar més entrades"
+msgstr "Не удалось загрузить больше записей"
+
+msgid "Error al carregar entrades"
+msgstr "Ошибка при загрузке записей"
+
+msgid "Cookies"
+msgstr "Файлы cookie"
+
+msgid "Utilitzem només cookies essencials per al funcionament del lloc (sessió i idioma). No fem seguiment ni publicitat."
+msgstr "Мы используем только необходимые файлы cookie для работы сайта (сессия и язык). Никакого отслеживания или рекламы."
+
+msgid "Més informació"
+msgstr "Подробнее"
+
+msgid "Entesos"
+msgstr "Понятно"
+
+#: templates/projecte/index.html
+msgid "El Projecte Adabida"
+msgstr "Проект Adabida"
+
+#: templates/projecte/index.html
+msgid "Projecte d'arxiu de memòria oral que preserva testimonis personals amb rigor acadèmic i impacte terapèutic, a través d'una metodologia estructurada d'entrevista i una plataforma digital ètica i oberta."
+msgstr "Проект архива устной памяти, сохраняющий личные свидетельства с академической строгостью и терапевтическим эффектом посредством структурированной методологии интервью и этичной, открытой цифровой платформы."
+
+#: templates/projecte/index.html
+msgid "Comença ara"
+msgstr "Начать сейчас"
+
+#: templates/projecte/index.html
+msgid "Descobreix la metodologia"
+msgstr "Ознакомиться с методологией"
+
+#: templates/projecte/index.html
+msgid "Què és Adabida?"
+msgstr "Что такое Adabida?"
+
+#: templates/projecte/index.html
+msgid "Adabida és més que una plataforma digital: és un <strong>arxiu històric viu</strong> que dóna veu i dignitat a la memòria personal de les persones. Combinant rigor acadèmic amb valor terapèutic, creem un espai on els testimonis personals es preserven amb la mateixa serietat que els grans arxius històrics."
+msgstr "Adabida — это больше, чем цифровая платформа: это <strong>живой исторический архив</strong>, придающий голос и достоинство личной памяти людей. Сочетая академическую строгость с терапевтической ценностью, мы создаём пространство, в котором личные свидетельства сохраняются с той же серьёзностью, что и крупные исторические архивы."
+
+#: templates/projecte/index.html
+msgid "A través d'una metodologia d'entrevista validada i una plataforma tecnològica ètica, cada persona pot documentar la seva vida, les seves vivències i el seu llegat de manera estructurada, respectuosa i permanent."
+msgstr "С помощью валидированной методологии интервью и этичной технологической платформы каждый человек может документировать свою жизнь, опыт и наследие в структурированной, уважительной и долговременной форме."
+
+#: templates/projecte/index.html
+msgid "Els tres pilars d'Adabida"
+msgstr "Три основы Adabida"
+
+#: templates/projecte/index.html
+msgid "Plataforma Digital"
+msgstr "Цифровая платформа"
+
+#: templates/projecte/index.html
+msgid "Arxiu permanent de testimonis orals amb eines per crear, organitzar i preservar memòria personal i col·lectiva. Open source, privacitat garantida, tecnologia ètica."
+msgstr "Постоянный архив устных свидетельств с инструментами для создания, организации и сохранения личной и коллективной памяти. Открытый исходный код, гарантированная конфиденциальность, этичные технологии."
+
+#: templates/projecte/index.html
+msgid "Metodologia Validada"
+msgstr "Валидированная методология"
+
+#: templates/projecte/index.html
+msgid "Sistema estructurat d'entrevista amb 6 perfils d'entrevistador i 4 eixos terapèutics. Rigor historiogràfic combinat amb impacte emocional positiu per a l'entrevistat."
+msgstr "Структурированная система интервью с шестью профилями интервьюера и четырьмя терапевтическими направлениями. Историографическая строгость в сочетании с положительным эмоциональным воздействием на респондента."
+
+#: templates/projecte/index.html
+msgid "Tallers Formatius"
+msgstr "Образовательные мастер-классы"
+
+#: templates/projecte/index.html
+msgid "Formació pràctica per a entrevistadors que volen aplicar la metodologia Adabida. Generem comunitat, validem el mètode i creem contingut de qualitat."
+msgstr "Практическое обучение для интервьюеров, желающих применять методологию Adabida. Мы формируем сообщество, валидируем метод и создаём качественный контент."
+
+#: templates/projecte/index.html
+msgid "Per a qui és Adabida?"
+msgstr "Для кого предназначен Adabida?"
+
+#: templates/projecte/index.html
+msgid "<strong>Per a persones</strong> que volen documentar la seva vida amb dignitat i rigor, preservant el seu llegat per a futures generacions."
+msgstr "<strong>Для частных лиц</strong>, которые хотят документировать свою жизнь с достоинством и научной строгостью, сохраняя своё наследие для будущих поколений."
+
+#: templates/projecte/index.html
+msgid "<strong>Per a famílies</strong> que volen recollir les històries dels seus avantpassats abans que es perdin per sempre."
+msgstr "<strong>Для семей</strong>, которые хотят сохранить истории своих предков, прежде чем они будут утрачены навсегда."
+
+#: templates/projecte/index.html
+msgid "<strong>Per a organitzacions</strong> que treballen amb col·lectius específics (veterans, exiliats, supervivents, comunitats locals) i necessiten eines per preservar testimonis."
+msgstr "<strong>Для организаций</strong>, работающих с определёнными группами (ветераны, изгнанники, выжившие, местные сообщества) и нуждающихся в инструментах для сохранения свидетельств."
+
+#: templates/projecte/index.html
+msgid "<strong>Per a investigadors</strong> que busquen fonts primàries de qualitat per a la seva recerca històrica, sociològica o antropològica."
+msgstr "<strong>Для исследователей</strong>, ищущих качественные первичные источники для исторических, социологических или антропологических исследований."
+
+#: templates/projecte/index.html
+msgid "La teva vida forma part de la història"
+msgstr "Ваша жизнь — часть истории"
+
+#: templates/projecte/index.html
+msgid "Preserva-la amb dignitat. Comença avui."
+msgstr "Сохраните её с достоинством. Начните сегодня."
+
+#: templates/projecte/index.html
+msgid "Crear compte gratuït"
+msgstr "Создать бесплатный аккаунт"
+
+#: templates/projecte/index.html
+msgid "Informació sobre tallers"
+msgstr "Информация о мастер-классах"
+
+#: templates/projecte/contacte.html
+msgid "Contacte"
+msgstr "Контакты"
+
+msgid "Tens preguntes sobre el projecte? Vols organitzar un taller? Estem aquí per ajudar-te."
+msgstr "У вас есть вопросы о проекте? Хотите организовать мастер-класс? Мы здесь, чтобы помочь вам."
+
+msgid "Per a organitzacions"
+msgstr "Для организаций"
+
+msgid "Vols organitzar un taller Adabida a la teva entitat, associació o col·lectiu?"
+msgstr "Хотите организовать мастер-класс Adabida в вашей организации, ассоциации или коллективе?"
+
+msgid "Sol·licitud taller Adabida"
+msgstr "Запрос на проведение мастер-класса Adabida"
+
+msgid "Contactar per tallers"
+msgstr "Связаться по вопросам мастер-классов"
+
+msgid "Consultes generals"
+msgstr "Общие запросы"
+
+msgid "Tens dubtes sobre com funciona Adabida o vols més informació sobre el projecte?"
+msgstr "У вас есть вопросы о том, как работает Adabida, или вы хотите получить дополнительную информацию о проекте?"
+
+msgid "Consulta general"
+msgstr "Общий запрос"
+
+msgid "Enviar consulta"
+msgstr "Отправить запрос"
+
+msgid "Col·laboracions"
+msgstr "Сотрудничество"
+
+msgid "Ets investigador, periodista o professional i vols col·laborar amb Adabida?"
+msgstr "Вы исследователь, журналист или специалист и хотите сотрудничать с Adabida?"
+
+msgid "Proposta col·laboració"
+msgstr "Предложение о сотрудничестве"
+
+msgid "Proposar col·laboració"
+msgstr "Предложить сотрудничество"
+
+msgid "Informació de contacte"
+msgstr "Контактная информация"
+
+msgid "Email general:"
+msgstr "Общий адрес электронной почты:"
+
+msgid "Tallers:"
+msgstr "Мастер-классы:"
+
+msgid "Normalment responem en un termini de 48 hores."
+msgstr "Обычно мы отвечаем в течение 48 часов."
 

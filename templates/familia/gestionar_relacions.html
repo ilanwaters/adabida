@@ -72,42 +72,75 @@
             {% endif %}
         </div>
 
-        <!-- Matrimonis -->
-        <div class="card-visualitzacio">
-            <div class="card-header-custom card-header-danger">
-             {{ _('Matrimonis') }} ({{ matrimonis|length }})
-            </div>
-            
-            {% if matrimonis %}
-                {% for matrimoni in matrimonis %}
-                    {% set conjuge = matrimoni.membre_2 if matrimoni.membre_1_id == membre.id else matrimoni.membre_1 %}
-                    <div class="alerta-{% if matrimoni.estat == 'actiu' %}success{% elif matrimoni.estat == 'divorciat' %}warning{% else %}info{% endif %}" style="margin-bottom: 1rem;">
-                        <a href="{{ url_for('membres.veure', membre_id=conjuge.id) }}">
-                            <strong>{{ conjuge.nom }} {{ conjuge.primer_cognom }}</strong>
-                        </a>
-                        <br>
-                        {% if matrimoni.data_casament %}
-                            <span class="text-petit">🗓 {{ _('Casament') }}: {{ matrimoni.data_casament.strftime('%d/%m/%Y') }}</span><br>
-                        {% endif %}
-                        {% if matrimoni.data_fi %}
-                            <span class="text-petit">{{ _('Fi') }}: {{ matrimoni.data_fi.strftime('%d/%m/%Y') }}</span><br>
-                        {% endif %}
-                        <span class="badge-custom 
-                            {% if matrimoni.estat == 'actiu' %}badge-actiu
-                            {% elif matrimoni.estat == 'divorciat' %}badge-provisional
-                            {% else %}badge-membre{% endif %}">
-                            {{ _(matrimoni.estat|capitalize) }}
-                        </span>
+     <!-- Matrimonis -->
+<div class="card-visualitzacio">
+    <div class="card-header-custom card-header-danger">
+        {{ _('Matrimonis') }} ({{ matrimonis|length }})
+    </div>
+    
+    {% if matrimonis %}
+        <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+            {% for matrimoni in matrimonis %}
+                {% set conjuge = matrimoni.membre_2 if matrimoni.membre_1_id == membre.id else matrimoni.membre_1 %}
+                {% set fills_count = matrimoni.fills|length %}
+                
+                <a href="{{ url_for('membres.veure_matrimoni', matrimoni_id=matrimoni.id) }}" 
+                   style="text-decoration: none; color: inherit;">
+                    <div class="matrimoni-card">
+                        <div class="matrimoni-fotos">
+                            <div class="conjugue-mini-foto">
+                                {% if membre.foto %}
+                                <img src="{{ url_for('static', filename='fotos_membres/' + membre.foto) }}" alt="{{ membre.nom }}">
+                                {% else %}
+                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Sense foto">
+                                {% endif %}
+                            </div>
+                            <div class="heart-mini">♥</div>
+                            <div class="conjugue-mini-foto">
+                                {% if conjuge.foto %}
+                                <img src="{{ url_for('static', filename='fotos_membres/' + conjuge.foto) }}" alt="{{ conjuge.nom }}">
+                                {% else %}
+                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Sense foto">
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="matrimoni-noms">
+                            {{ membre.nom }} ♥ {{ conjuge.nom }} {{ conjuge.primer_cognom }}
+                        </div>
+                        
+                        <div class="matrimoni-info-mini">
+                            {% if matrimoni.data_casament %}
+                                {{ matrimoni.data_casament.year }}
+                            {% endif %}
+                            {% if matrimoni.data_fi %}
+                                - {{ matrimoni.data_fi.year }}
+                            {% endif %}
+                            
+                            <span class="estat-badge-mini estat-{{ matrimoni.estat }}">
+                                {{ _(matrimoni.estat|capitalize) }}
+                            </span>
+                        </div>
+                        
+                        <div class="matrimoni-fills-mini">
+                            {% if fills_count > 0 %}
+                                👨‍👩‍👧‍👦 {{ fills_count }} fill{% if fills_count != 1 %}s{% endif %}
+                            {% else %}
+                                Sense fills assignats
+                            {% endif %}
+                        </div>
                     </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted-custom">{{ _('No hi ha matrimonis registrats') }}</p>
-            {% endif %}
-            <button class="btn-custom btn-outline-custom" onclick="obrirModalMatrimoni()">
-                {{ _('Afegir Matrimoni') }}
-            </button>
+                </a>
+            {% endfor %}
         </div>
-
+    {% else %}
+        <p class="text-muted-custom">{{ _('No hi ha matrimonis registrats') }}</p>
+    {% endif %}
+    
+    <button class="btn-custom btn-outline-custom" onclick="obrirModalMatrimoni()" style="margin-top: 1rem;">
+        {{ _('Afegir Matrimoni') }}
+    </button>
+</div>
         <!-- Germans -->
         <div class="card-visualitzacio">
             <div class="card-header-custom card-header-success">
@@ -179,46 +212,49 @@
 
 </div>
 
-
 <!-- MODAL AFEGIR MATRIMONI -->
 <div id="modalMatrimoni" class="modal-overlay" onclick="tancarModalSiFora(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <h3> {{ _('Afegir Matrimoni') }}</h3>
+            <h3>{{ _('Afegir Matrimoni') }}</h3>
             <button type="button" class="btn-tancar" onclick="tancarModalMatrimoni()">&times;</button>
         </div>
         
         <form method="POST" action="{{ url_for('membres.afegir_matrimoni', membre_id=membre.id) }}">
+        
             <div class="form-group">
-                <label for="conjuge_id">{{ _('Cònjuge') }} <span style="color: red;">*</span></label>
-                <select id="conjuge_id" name="conjuge_id" required>
-                    <option value="">-- {{ _('Selecciona un membre') }} --</option>
-                    {% for m in tots_membres %}
-                        {% if m.id != membre.id %}
-                        <option value="{{ m.id }}">
-                            {{ m.nom }} {{ m.primer_cognom }} 
-                            {% if m.data_naixement %}({{ m.data_naixement.strftime('%Y') }}){% endif %}
-                        </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-                <small>{{ _('Selecciona el cònjuge d\'aquest matrimoni') }}</small>
-                <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}" 
-                   style="display: inline-block; margin-top: 0.5rem; color: #1a4b75; text-decoration: underline; font-size: 0.9rem;">
-                    {{ _('Afegir nou membre') }}
-                </a>
-            </div>
+    <label for="conjuge_id">{{ _('Cònjuge') }} <span style="color: red;">*</span></label>
+    <select id="conjuge_id" name="conjuge_id" required onchange="mostrarFills()">
+        <option value="">-- {{ _('Selecciona un membre') }} --</option>
+        {% for m in tots_membres %}
+            {% if m.id != membre.id %}
+            <option value="{{ m.id }}" 
+                    data-fills='{{ (m.fills_com_pare + m.fills_com_mare)|map(attribute="id")|list|tojson }}'>
+                {{ m.nom }} {{ m.primer_cognom }} 
+                {% if m.data_naixement %}({{ m.data_naixement.strftime('%Y') }}){% endif %}
+            </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    
+    <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+        {{ _('El cònjuge no està a la llista?') }} 
+        <a href="{{ url_for('membres.afegir', familia_id=familia.id) }}" 
+           target="_blank"
+           style="color: #667eea; text-decoration: underline;">
+            {{ _('Afegir nou membre') }} ↗
+        </a>
+    </p>
+</div>
             
             <div class="form-group">
                 <label for="data_casament">{{ _('Data de casament') }}</label>
                 <input type="date" id="data_casament" name="data_casament">
-                <small>{{ _('Opcional - Deixa en blanc si no es coneix') }}</small>
             </div>
             
             <div class="form-group">
                 <label for="data_fi">{{ _('Data de fi del matrimoni') }}</label>
                 <input type="date" id="data_fi" name="data_fi">
-                <small>{{ _('Només si el matrimoni ha acabat (divorci o defunció)') }}</small>
             </div>
             
             <div class="form-group">
@@ -229,6 +265,37 @@
                     <option value="vidu">{{ _('Vidu/Vídua') }}</option>
                 </select>
             </div>
+
+            <!-- SECCIÓ FILLS -->
+            <div id="seccio-fills" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                <h4 style="margin-bottom: 1rem; color: #667eea;">{{ _('Fills d\'aquest matrimoni') }}</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+                    {{ _('Marca els fills que pertanyen a aquest matrimoni') }}
+                </p>
+                
+                <div id="fills-membres" style="margin-bottom: 1rem;">
+                    <strong>{{ _('Fills de') }} {{ membre.nom }}:</strong>
+                    {% set fills_membre = membre.fills_com_pare + membre.fills_com_mare %}
+                    {% if fills_membre %}
+                        {% for fill in fills_membre %}
+<label class="checkbox" style="display: block; padding: 0.5rem; margin: 0.3rem 0; background: white; border-radius: 4px;">
+    <input type="checkbox" name="fills[]" value="{{ fill.id }}"
+           data-pare="{{ fill.pare_id }}" data-mare="{{ fill.mare_id }}">
+    <span class="checkmark"></span>
+    {{ fill.nom }} {{ fill.primer_cognom }}
+    {% if fill.data_naixement %}({{ fill.data_naixement.year }}){% endif %}
+</label>
+{% endfor %}
+                    {% else %}
+                        <p style="color: #999; font-style: italic;">{{ _('Sense fills') }}</p>
+                    {% endif %}
+                </div>
+
+                <div id="fills-conjuge" style="display: none;">
+                    <strong id="nom-conjuge"></strong>
+                    <div id="llista-fills-conjuge"></div>
+                </div>
+            </div>
             
             <div class="btn-group-modal">
                 <button type="button" class="btn-cancel-modal" onclick="tancarModalMatrimoni()">{{ _('Cancel·lar') }}</button>
@@ -237,34 +304,15 @@
         </form>
     </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
 <script>
-function obrirModalMatrimoni() {
-    document.getElementById('modalMatrimoni').classList.add('actiu');
-    document.body.style.overflow = 'hidden'; // Evita scroll del fons
-}
-
-function tancarModalMatrimoni() {
-    document.getElementById('modalMatrimoni').classList.remove('actiu');
-    document.body.style.overflow = 'auto';
-}
-
-function tancarModalSiFora(event) {
-    if (event.target.id === 'modalMatrimoni') {
-        tancarModalMatrimoni();
-    }
-}
-
-// Tancar amb tecla ESC
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        tancarModalMatrimoni();
-    }
-});
+// Variables globals des de Jinja
+window.membreId = {{ membre.id }};
+window.fillsMembre = {{ (membre.fills_com_pare + membre.fills_com_mare)|map(attribute='id')|list|tojson }};
 </script>
+<script src="{{ url_for('static', filename='js/gestionar_relacions.js') }}"></script>
 {% endblock %}
 
 

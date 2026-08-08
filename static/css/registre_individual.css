@@ -1,4 +1,5 @@
-form button[type="submit"] {
+form button[type="submit"]:hover {
+  background-color: #2fa866;
   margin-top: 20px;
   padding: 8px 16px;
   background-color: #3c7;
@@ -125,8 +126,8 @@ form button[type="submit"] {
 .contrasenya-container input {
   width: 100%;
   padding-right: 2.2em; /* espai per l’ull */
+  flex: 1;
 }
-
 .icona-ull {
   position: absolute;
   right: 10px;
@@ -142,23 +143,6 @@ form button[type="submit"] {
 
 .fila-doble .camp-formulari {
   flex: 1 1 25%;
-}
-.contrasenya-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.contrasenya-container input {
-  flex: 1;
-  padding-right: 0.5rem; /* espai per l'icona */
-}
-
-.icona-ull {
-  position: absolute;
-  right: 0.8rem;
-  cursor: pointer;
-  user-select: none;
 }
 
 .boto-textual {
@@ -260,3 +244,46 @@ form button[type="submit"] {
   text-decoration: underline;
 }
 
+@media (max-width: 768px) {
+
+  .fila-formulari {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .fila-final {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .fila-final button {
+    width: 100%;
+  }
+
+
+  .modal-content {
+    width: 90%;
+    max-width: 420px;
+  }
+}
+
+.centrado {
+    text-align: center;
+    max-width: 900px;
+    margin: 2.5rem auto 1.5rem auto;
+}
+
+#bloc-documents {
+    display: none;
+}
+
+#bloc-addicional .fila-formulari {
+  margin-bottom: 1.75rem;
+}
+
+#bloc-addicional h3 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('El Projecte Adabida') }}{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/projecte.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <!-- Hero Section -->
+  <section class="projecte-hero">
+    <h1>PROJECTE ADABIDA</h1>
+    
+  
+  </section>
+
+  <!-- Contingut Principal -->
+  <div class="projecte-content">
+    
+    <!-- Què és Adabida -->
+    <section class="projecte-section">
+      <h2>{{ _("Què és Adabida?") }}</h2>
+      <p>
+        {{ _('El projecte Adabida pretén construir un') }}
+<a href="{{ url_for('repositori.consulta_repositori') }}">{{ _('arxiu històric de memòria oral') }}.</a>
+{{ _('Les persones que vulguin que els seus records es conservin en aquest arxiu, poden registrar-los elles mateixes mitjançant la') }}
+<a href="{{ url_for('inici.inici_pagina') }}">{{ _('plataforma web Adabida') }}.</a>
+      </p>
+      <p>
+        {{ _("Adabida és un projecte independent construït amb tecnologia ètica i oberta. Per tant, totes les dades introduïdes són propietat exclusiva de l'usuari, qui tindrà sempre el control total sobre qui pot accedir a elles. El codi és obert, no s’hi insereix publicitat ni es fa cap mena de seguiment de l’activitat de l’usuari (tracking) per part de tercers, i l’arxiu es manté amb aportacions voluntàries de la comunitat.") }}
+      <p>
+  {{ _("El projecte Adabida respon a dues finalitats: una acadèmica i una social. Per una banda, preservar testimonis històrics de valor acadèmic com a fonts primàries directes que puguin ser accessibles a qualsevol persona del planeta. Per l'altra, dignificar el llegat i donar sentit a la vida de moltes persones que, tot i formar part de la història, acostumen a no ser escoltades tot i la importància potencial del seu record i de la seva experiència.") }}
+</p>
+    </section>
+
+    <!-- Tallers -->
+   <section class="projecte-section">
+  <h2>{{ _("Tallers Adabida") }}</h2>
+  <p>{{ _("Adabida creix gràcies als testimonis d'aquelles persones que decideixen preservar la seva memòria. Per garantir una recollida de dades de qualitat, Adabida ha dissenyat") }} 
+  <a href="{{ url_for('projecte.tallers') }}">{{ _("tallers") }}</a>
+  {{ _("dirigits a institucions i organitzacions en contacte amb gent gran o amb grups de persones que han viscut experiències que haurien de ser registrades i conservades (refugiats, migrants, víctimes de conflictes). En aquests tallers es forma a persones sense experiència en la recollida de dades destinades a convertir-se en fonts primàries per la investigació en el camp de les ciències socials, a realitzar entrevistes que compleixin els paràmetres acadèmics i que, alhora, preservin la dignitat de les persones entrevistades, especialment quan formen part de grups vulnerables.") }}</p>
+</section>
+
+    <!-- Per a qui és -->
+    <section class="projecte-section">
+      <h2>{{ _("A qui va dirigit Adabida?") }}</h2>
+      <p>{{ _("<strong>Per a persones</strong> que volen documentar la seva vida amb dignitat i rigor, preservant el seu llegat per a futures generacions.") | safe }}</p>
+      <p>{{ _("<strong>Per a famílies</strong> que volen recollir les històries dels seus avantpassats abans que es perdin per sempre.") | safe }}</p>
+      <p>{{ _("<strong>Per a organitzacions</strong> que treballen amb col·lectius específics (veterans, exiliats, supervivents, comunitats locals) i necessiten eines per preservar testimonis.") | safe }}</p>
+      <p>{{ _("<strong>Per a investigadors</strong> que busquen fonts primàries de qualitat per a la seva recerca històrica, sociològica o antropològica.") | safe }}</p>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="projecte-section" style="text-align: center; background: #f8f9fa; padding: 3rem; border-radius: 8px;">
+      <h2>{{ _("La teva vida forma part de la història") }}</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">{{ _("Preserva-la amb dignitat. Comença avui.") }}</p>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('registre_individual.registre_individual') }}" class="boto_nav" style="padding: 1rem 2.5rem; background: #14d8ce; color: white; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          {{ _('Crear compte gratuït') }}
+        </a>
+        <a href="{{ url_for('projecte.tallers') }}" class="boto_nav" style="padding: 1rem 2.5rem; background: white; color: #2c3e50; border: 2px solid #2c3e50; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          {{ _('Informació sobre tallers') }}
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+{% endblock %}

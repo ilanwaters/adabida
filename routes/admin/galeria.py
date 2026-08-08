@@ -45,7 +45,7 @@ def mostrar_anys():
             if os.path.isdir(ruta):
                 carpetes.append(nom)
 
-    return render_template("admin_galeria.html", carpetes=carpetes, ruta="")
+    return render_template("admin/admin_galeria.html", carpetes=carpetes, ruta="")
 
 @admin_galeria_bp.route("/gestio_imatges", defaults={"subpath": ""})
 @admin_galeria_bp.route("/gestio_imatges/<path:subpath>")
@@ -110,7 +110,7 @@ def navegar_carpetes(subpath):
     print("📂 subpath rebut:", subpath)
 
 
-    return render_template("admin_galeria.html", carpetes=carpetes, imatges=imatges, ruta=subpath, amaga_nav=True )
+    return render_template("admin/admin_galeria.html", carpetes=carpetes, imatges=imatges, ruta=subpath, amaga_nav=True )
 
 # 🔹 Marcar com enviada a galeria
 @admin_galeria_bp.route("/admin/afegir_a_galeria", methods=["POST"])

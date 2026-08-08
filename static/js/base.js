@@ -65,3 +65,22 @@ function toggleMenu() {
     menu.style.zIndex = '1000';
   }
 }
+
+function obrirLoginGlobal() {
+  document.getElementById('submenu-login-global').style.display = 'block';
+}
+
+function togglePasswordGlobal() {
+  const input = document.getElementById('contrasenya-global');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function mostraDisclaimerGlobal() {
+  document.getElementById('submenu-login-global').style.display = 'none';
+  document.getElementById('disclaimer-modal-global').style.display = 'flex';
+}
+
+function acceptarDisclaimerGlobal() {
+  document.getElementById('disclaimer-modal-global').style.display = 'none';
+  window.location.href = '/registre_individual';
+}

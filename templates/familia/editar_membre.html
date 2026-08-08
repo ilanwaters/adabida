@@ -13,6 +13,7 @@
     <p class="text-muted">{{ familia.nom }}</p>
 </div>
 
+
 <form id="formulari-membre" method="POST" enctype="multipart/form-data">
     
     <!-- DADES BÀSIQUES -->
@@ -80,52 +81,21 @@
         </div>
     </div>
 
-    <!-- DEFUNCIÓ -->
-    <h3>{{ _('Defunció') }} ({{ _('si escau') }})</h3>
-    <div class="fila-formulari">
-        <div>
-            <label for="data_defuncio">{{ _('Data de defunció') }}</label>
-            <input type="date" id="data_defuncio" name="data_defuncio" 
-                   value="{{ membre.data_defuncio.strftime('%Y-%m-%d') if membre.data_defuncio else '' }}">
-        </div>
-        <div>
-            <label for="pais_defuncio">{{ _('País') }}</label>
-            <select id="pais_defuncio" name="pais_defuncio" onchange="carregarRegions('defuncio')">
-                <option value="">-- {{ _('Selecciona país') }} --</option>
-            </select>
-        </div>
-        <div>
-            <label for="regio_defuncio">{{ _('Regió') }}</label>
-            <select id="regio_defuncio" name="regio_defuncio" onchange="carregarMunicipis('defuncio')" disabled>
-                <option value="">-- {{ _('Primer selecciona país') }} --</option>
-            </select>
-        </div>
-        <div>
-            <label for="municipi_defuncio">{{ _('Municipi') }}</label>
-            <input type="text" 
-                   id="municipi_defuncio" 
-                   name="municipi_defuncio"
-                   list="municipis_defuncio_list"
-                   placeholder="{{ _('Escriu o selecciona') }}"
-                   disabled>
-            <datalist id="municipis_defuncio_list"></datalist>
-        </div>
-    </div>
 
-    <h3>{{ _('Gènere') }}</h3>
-    <div class="fila-formulari">
-        <div>
-            <label for="genere"></label>
-            <select id="genere" name="genere" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 6px;">
-                <option value="">-- {{ _('No especificat') }} --</option>
-                <option value="home" {% if membre.genere == 'home' %}selected{% endif %}>Home</option>
-                <option value="dona" {% if membre.genere == 'dona' %}selected{% endif %}>Dona</option>
-            </select>
-            <small style="color: #666; font-size: 0.85em; display: block; margin-top: 4px;">
-                {{ _('Necessari per establir relacions familiars correctes') }}
-            </small>
-        </div>
+  <h3>{{ _('Gènere') }}</h3>
+<div class="fila-formulari">
+    <div>
+        <label for="genere"></label>
+        <select id="genere" name="genere" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 6px;">
+            <option value="">-- {{ _('No especificat') }} --</option>
+            <option value="M" {% if membre.genere == 'M' %}selected{% endif %}>{{ _('Masculí') }}</option>
+            <option value="F" {% if membre.genere == 'F' %}selected{% endif %}>{{ _('Femení') }}</option>
+        </select>
+        <small style="color: #666; font-size: 0.85em; display: block; margin-top: 4px;">
+            {{ _('Necessari per establir relacions familiars correctes') }}
+        </small>
     </div>
+</div>
 
     <!-- UBICACIÓ ACTUAL -->
     <h3>{{ _('Ubicació Actual') }}</h3>
@@ -163,6 +133,42 @@
                   placeholder="{{ _('Escriu aquí informació sobre aquesta persona: la seva vida, anècdotes, professió, etc.') }}">{{ membre.biografia or '' }}</textarea>
         <small style="color: #666; font-size: 0.85em;">{{ _('Aquesta biografia serà visible per tots els membres de la família') }}</small>
     </div>
+    
+    <details class="bloc-defuncio">
+    <summary>
+        <h3>{{ _('Dades de defunció (si escau)') }}</h3>
+    </summary>
+
+    <div class="fila-formulari" style="margin-top: 1rem;">
+        <div>
+            <label for="data_defuncio">{{ _('Data de defunció') }}</label>
+            <input type="date" id="data_defuncio" name="data_defuncio">
+        </div>
+        <div>
+            <label for="pais_defuncio">{{ _('País') }}</label>
+            <select id="pais_defuncio" name="pais_defuncio" onchange="carregarRegions('defuncio')">
+                <option value="">-- {{ _('Selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="regio_defuncio">{{ _('Regió') }}</label>
+            <select id="regio_defuncio" name="regio_defuncio" onchange="carregarMunicipis('defuncio')" disabled>
+                <option value="">-- {{ _('Primer selecciona país') }} --</option>
+            </select>
+        </div>
+        <div>
+            <label for="municipi_defuncio">{{ _('Municipi') }}</label>
+            <input type="text"
+                   id="municipi_defuncio"
+                   name="municipi_defuncio"
+                   list="municipis_defuncio_list"
+                   placeholder="{{ _('Escriu o selecciona') }}"
+                   disabled>
+            <datalist id="municipis_defuncio_list"></datalist>
+        </div>
+    </div>
+</details>
+
 
     <hr>
 
@@ -235,6 +241,9 @@
 <script src="{{ url_for('static', filename='js/ubicacions_formulari.js') }}"></script>
 <script src="{{ url_for('static', filename='js/editar_membre.js') }}"></script>
 <script>
+window.URL_ELIMINAR_MEMBRE = "{{ url_for('membres.eliminar', membre_id=membre.id) }}";
+</script>
+<script>
 // Esperar que carreguin els països i després preseleccionar
 window.addEventListener('load', async function() {
     await new Promise(resolve => setTimeout(resolve, 500)); // Esperar 0.5s
@@ -250,7 +259,7 @@ window.addEventListener('load', async function() {
         await carregarMunicipis('naixement');
         await new Promise(resolve => setTimeout(resolve, 300));
         {% if membre.municipi_naixement %}
-        document.getElementById('municipi_naixement').value = "{{ membre.municipi_naixement }}";
+        document.getElementById('municipi_naixement').value = "{{ membre.nom_municipi_naixement }}";  // ← NOM
         {% endif %}
         {% endif %}
     }
@@ -266,8 +275,8 @@ window.addEventListener('load', async function() {
         document.getElementById('regio_defuncio').value = "{{ membre.regio_defuncio }}";
         await carregarMunicipis('defuncio');
         await new Promise(resolve => setTimeout(resolve, 300));
-        {% if membre.municipi_defuncio %}
-        document.getElementById('municipi_defuncio').value = "{{ membre.nom_municipi_defuncio }}";
+        {% if membre.municipi_defuncio %}  // ✅ defuncio
+        document.getElementById('municipi_defuncio').value = "{{ membre.nom_municipi_defuncio }}";  // ✅
         {% endif %}
         {% endif %}
     }
@@ -284,7 +293,7 @@ window.addEventListener('load', async function() {
         await carregarMunicipis('actual');
         await new Promise(resolve => setTimeout(resolve, 300));
         {% if membre.municipi_actual %}
-        document.getElementById('municipi_actual').value = "{{ membre.municipi_actual }}";
+        document.getElementById('municipi_actual').value = "{{ membre.nom_municipi_actual }}";  // ✅ nom_
         {% endif %}
         {% endif %}
     }

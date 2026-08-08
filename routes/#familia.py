@@ -20,34 +20,6 @@ def familia_inici():
 
     return render_template('familia/familia_inici.html', usuari=usuari)
 
-@familia_bp.route("/familia/arbre")
-def arbre_genealogic():
-    """Visualització de l'arbre genealògic"""
-    usuari_id = session.get("usuari_id")
-    if not usuari_id:
-        flash(_("Sessió no vàlida"))
-        return redirect(url_for("login.login"))
-
-    usuari = Usuari.query.get(usuari_id)
-    if not usuari:
-        flash(_("Usuari inexistent"))
-        return redirect(url_for("login.login"))
-
-    # Carregar dades familiars del perfil
-    perfil = PerfilBiografic.query.filter_by(usuari_id=usuari.id).first()
-    
-    # Carregar contactes marcats com a família
-    contactes_familia = []
-    if perfil:
-        contactes_familia = Contacte.query.filter_by(
-            perfil_id=perfil.id,
-            tipus='familia'
-        ).all()
-
-    return render_template('familia/arbre_genealogic.html', 
-                          usuari=usuari, 
-                          perfil=perfil,
-                          contactes_familia=contactes_familia)
 
 @familia_bp.route("/familia/contactes")
 def contactes_familia():

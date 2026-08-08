@@ -3,148 +3,7 @@
 {% block titol %}Avís Legal - Adabida{% endblock %}
 
 {% block css %}
-<style>
-  .document-legal {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  }
-
-  .document-legal h1 {
-    color: #14d8ce;
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 3px solid #14d8ce;
-    padding-bottom: 1rem;
-    text-align: center;
-  }
-
-  .document-legal .ultima-actualitzacio {
-    color: #666;
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
-    text-align: center;
-    font-style: italic;
-  }
-
-  .document-legal h2 {
-    color: #333;
-    font-size: 1.4rem;
-    margin-top: 2.5rem;
-    margin-bottom: 1.2rem;
-    padding-left: 0.8rem;
-    border-left: 4px solid #14d8ce;
-    font-weight: 600;
-  }
-
-  .document-legal h3 {
-    color: #555;
-    font-size: 1.15rem;
-    margin-top: 1.8rem;
-    margin-bottom: 0.8rem;
-    font-weight: 600;
-  }
-
-  .document-legal p {
-    line-height: 1.8;
-    color: #444;
-    margin-bottom: 1rem;
-    text-align: justify;
-  }
-
-  .document-legal ul, .document-legal ol {
-    margin: 1rem 0;
-    padding-left: 2.5rem;
-  }
-
-  .document-legal li {
-    line-height: 1.8;
-    color: #444;
-    margin-bottom: 0.6rem;
-  }
-
-  .document-legal .info-box {
-    background: #e7f3ff;
-    border-left: 4px solid #2196F3;
-    padding: 1.2rem;
-    margin: 1.5rem 0;
-    border-radius: 4px;
-  }
-
-  .document-legal .info-box p {
-    margin: 0.3rem 0;
-  }
-
-  .document-legal .advertencia {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 1.2rem;
-    margin: 1.5rem 0;
-    border-radius: 4px;
-  }
-
-  .document-legal strong {
-    color: #222;
-    font-weight: 600;
-  }
-
-  .document-legal hr {
-    border: none;
-    border-top: 2px solid #e0e0e0;
-    margin: 2.5rem 0;
-  }
-
-  .document-legal .separator-line {
-    text-align: center;
-    font-size: 1.5rem;
-    color: #ccc;
-    margin: 2rem 0;
-  }
-
-  .document-legal .seccio-final {
-    background: #f5f5f5;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 2rem;
-    text-align: center;
-  }
-
-  .boto-tornar {
-    display: inline-block;
-    background: #14d8ce;
-    color: white;
-    padding: 0.8rem 1.8rem;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-top: 2rem;
-    transition: background 0.3s;
-    font-weight: 500;
-  }
-
-  .boto-tornar:hover {
-    background: #0e9f94;
-    color: white;
-  }
-
-  @media (max-width: 768px) {
-    .document-legal {
-      padding: 1.2rem;
-      margin: 1rem;
-    }
-
-    .document-legal h1 {
-      font-size: 1.6rem;
-    }
-
-    .document-legal h2 {
-      font-size: 1.2rem;
-    }
-  }
-</style>
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -165,10 +24,9 @@
 
     <div class="info-box">
       <p><strong>TITULAR DEL WEB:</strong></p>
-      <p>Nom i cognoms: Ilan Sánchez</p>
       <p>NIF/DNI: [Dada disponible a sol·licitud]</p>
-      <p>Domicili: Calella, 08370, Barcelona, Espanya</p>
-      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Domicili: Calella, Barcelona, Espanya</p>
+      <p>Correu electrònic: admin@adabida.cat</p>
       <p>Lloc web: www.adabida.cat</p>
     </div>
 
@@ -314,7 +172,7 @@
 
     <h3>5.4. DENÚNCIA D'INFRACCIONS</h3>
     <p>
-      Si qualsevol persona considera que al Lloc Web s'ha vulnerat algun dret de propietat intel·lectual o industrial, pot notificar-ho a: <strong>contacte@adabida.cat</strong>
+      Si qualsevol persona considera que al Lloc Web s'ha vulnerat algun dret de propietat intel·lectual o industrial, pot notificar-ho a: <strong>admin@adabida.cat</strong>
     </p>
     <p>La notificació ha d'incloure:</p>
     <ul>
@@ -345,7 +203,7 @@
       <li>No declari ni doni a entendre que el titular d'Adabida ha autoritzat l'enllaç o que supervisa o assumeix de qualsevol forma els serveis ofererts o posats a disposició del lloc web des del qual s'estableix l'enllaç</li>
     </ul>
     <p>
-      Si qualsevol persona desitja establir un enllaç amb un marc (frame) o similar que inclogui contingut d'Adabida, ha de sol·licitar autorització prèvia a: <strong>contacte@adabida.cat</strong>
+      Si qualsevol persona desitja establir un enllaç amb un marc (frame) o similar que inclogui contingut d'Adabida, ha de sol·licitar autorització prèvia a: <strong>admin@adabida.cat</strong>
     </p>
 
     <!-- 7. PROTECCIÓ DE DADES PERSONALS -->
@@ -393,8 +251,8 @@
     
     <div class="info-box">
       <p><strong>TITULAR DEL LLOC WEB:</strong></p>
-      <p>Nom: Ilan Sánchez</p>
-      <p>Correu electrònic: contacte@adabida.cat</p>
+      <p>Nom: Projecte Adabida</p>
+      <p>Correu electrònic: admin@adabida.cat</p>
       <p>Adreça postal: Calella, 08370, Barcelona, Espanya</p>
     </div>
 

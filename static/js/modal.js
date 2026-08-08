@@ -171,8 +171,9 @@ if (data.ja_guardada) {
     });
 }
 
-
-
+function tancaModalEntrada() {
+  document.getElementById("modal-entrada").style.display = "none";
+}
 function guardaEntradaFavorita() {
   const entradaId = window.entradaIdActual;
 

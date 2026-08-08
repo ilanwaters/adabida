@@ -1,0 +1,46 @@
+<div id="modal-conversa" class="modal" style="display: none;">
+    <div class="modal-content">
+        
+        <div class="modal-imatge">
+            <!-- Futur: aquí aniria imatge o vídeo -->
+        </div>
+
+        <div class="modal-text">
+            <h2 id="modal-conversa-titol">—</h2>
+            
+            <div class="modal-dades">
+                <p><strong>Tema:</strong> <span id="modal-conversa-tema">—</span></p>
+                <p><strong>Entrevistat:</strong> <span id="modal-conversa-participant">—</span></p>
+                <p><strong>Data:</strong> <span id="modal-conversa-data">—</span></p>
+                <p><strong>Lloc:</strong> <span id="modal-conversa-lloc">—</span></p>
+                <p><strong>Durada:</strong> <span id="modal-conversa-durada">—</span> min</p>
+                
+                <h3>Testimoni</h3>
+                <div id="modal-conversa-contingut" class="contingut-formatat">—</div>
+                
+                <div id="modal-conversa-metodologia" style="margin-top: 2rem; display: none;">
+                    <h3>Metodologia Adabida</h3>
+                    <p><strong>Notes preparació:</strong> <span id="modal-conversa-notes-prep">—</span></p>
+                    <p><strong>Notes camp:</strong> <span id="modal-conversa-notes-camp">—</span></p>
+                    <p><strong>Observacions post:</strong> <span id="modal-conversa-obs-post">—</span></p>
+                </div>
+            </div>
+            
+            <p><strong>Entrevistador:</strong> <span id="modal-conversa-autor">—</span></p>
+            
+           <div class="modal-botons">
+                <button id="boto-guardar-conversa" class="boto_nav" onclick="guardaConversaFavorita()" style="display: none;">
+                    Guardar
+                </button>
+                <button id="boto-eliminar-guardada-conversa" class="boto_nav" onclick="eliminaConversaGuardada()" style="display: none;">
+                    Eliminar de guardades
+                </button>
+                <button id="boto-editar-conversa" class="boto_nav" style="display: none;">
+                    Editar
+                </button>
+                <button class="boto_nav" onclick="tancaModalConversa()">Tancar</button>
+            </div>
+        </div>
+        
+    </div>
+</div>

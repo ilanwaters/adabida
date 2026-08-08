@@ -118,3 +118,92 @@
     .btn-cancel-modal:hover {
         background-color: #d0d0d0;
     }
+
+    .matrimoni-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.matrimoni-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    border-color: #667eea;
+}
+
+.matrimoni-fotos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.conjugue-mini-foto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #667eea;
+}
+
+.conjugue-mini-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.heart-mini {
+    font-size: 1.2rem;
+    color: #ff4757;
+}
+
+.matrimoni-noms {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.matrimoni-info-mini {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.estat-badge-mini {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 0.3rem;
+}
+
+.estat-actiu {
+    background: #d4edda;
+    color: #155724;
+}
+
+.estat-divorciat {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.estat-vidu {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.matrimoni-fills-mini {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #667eea;
+    padding-top: 0.5rem;
+    border-top: 1px solid #f0f0f0;
+}

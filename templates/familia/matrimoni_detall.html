@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "components/targeta_membre.html" as targeta %}
+
+{% block title %}Matrimoni{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/familia.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/organitzacio_seccio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/targetes_membres.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/matrimoni_detall.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main class="contingut-principal">
+   <div class="contenidor">
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    <a href="{{ url_for('familia.veure', url=familia.url) }}">{{ familia.nom }}</a>
+    <a href="{{ url_for('membres.editar_matrimoni', matrimoni_id=matrimoni.id) }}" class="boto_nav">{{ _('Editar') }}</a>
+  </h1>
+</div>
+
+
+  <h1 style="text-align: center; margin: 2rem 0;">
+    {{ matrimoni.membre_1.nom }} - {{ matrimoni.membre_2.nom }}
+  </h1>
+
+  <div class="contingut-seccio">
+    <h2>Cònjuges</h2>
+    <div class="grid-membres">
+      {% for m in [matrimoni.membre_1, matrimoni.membre_2] %}
+        {{ targeta.targeta_membre(m, mode='public') }}
+      {% endfor %}
+    </div>
+
+    <h2>Fills ({{ fills|length }})</h2>
+    <div class="grid-membres">
+      {% for fill in fills %}
+        {{ targeta.targeta_membre(fill, mode='public') }}
+      {% endfor %}
+    </div>
+  </div>
+   </div>
+</main>
+{% endblock %}

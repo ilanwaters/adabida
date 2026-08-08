@@ -31,6 +31,21 @@ class Config:
     MAIL_DEFAULT_SENDER = ('Adabida', 'noreply@adabida.cat')
     BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
     TOKEN_EXPIRATION_HOURS = int(os.getenv('TOKEN_EXPIRATION_HOURS', 24))
-
+    
+    # ===== IDIOMES DISPONIBLES =====
+    IDIOMES_DISPONIBLES = ['ca', 'es', 'en', 'ru', 'uk', 'de', 'fr', 'eu']
+    
+    # Noms humans per cada idioma (per mostrar al formulari)
+    IDIOMES_NOMS = {
+        'ca': 'Català',
+        'es': 'Español',
+        'en': 'English',
+        'ru': 'Русский',
+        'uk': 'Українська',
+        'de': 'Deutsch',
+        'fr': 'Français',
+        'eu': 'Euskara'
+    }
+    
     RTL_LANGS = {"he", "ar"}
 

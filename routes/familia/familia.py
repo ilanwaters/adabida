@@ -67,14 +67,18 @@ def crear():
         municipis_actual = request.form.getlist('municipi_actual[]')
         
         ubicacions_actuals = []
-        for i in range(len(paisos_actual)):
-            if municipis_actual[i]:
-                ubicacions_actuals.append({
-                    'pais': obtenir_nom_pais(paisos_actual[i]) if paisos_actual[i] else '',
-                    'regio': obtenir_nom_regio(regions_actual[i]) if regions_actual[i] else '',
-                    'municipi': obtenir_nom_municipi(municipis_actual[i]),
-                    'ordre': i + 1
-                })
+        if paisos_actual and regions_actual and municipis_actual:
+            for i in range(min(len(paisos_actual), len(regions_actual), len(municipis_actual))):
+                if municipis_actual[i]:
+                    ubicacions_actuals.append({
+                        'pais': obtenir_nom_pais(paisos_actual[i]) if paisos_actual[i] else '',
+                        'regio': obtenir_nom_regio(regions_actual[i]) if regions_actual[i] else '',
+                        'municipi': obtenir_nom_municipi(municipis_actual[i]),
+                        'ordre': i + 1
+                    })
+
+
+        
         
         # Gestionar heràldica (fitxer)
         heraldica_fitxer = None
@@ -175,7 +179,7 @@ def crear():
         db.session.commit()
         
         flash(f'Espai familiar "{nom}" creat correctament!', 'success')
-        return redirect(url_for('familia.seccio', url=espai.url, seccio='home'))
+        return redirect(url_for('familia.veure', url=espai.url))
         
     except Exception as e:
         db.session.rollback()
@@ -562,6 +566,7 @@ def les_meves():
     ).all()
     
     return render_template('familia/les_meves_families.html', 
+                         usuari=current_user,
                          families_admin=families_admin,
                          families_membre=families_membre)
 

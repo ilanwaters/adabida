@@ -38,7 +38,7 @@
       <div class="aportacio-card">
         <h3>{{ _('Fes una aportació') }}</h3>
 
-        <form method="POST" id="formAportacio">
+        <form method="POST" action="{{ url_for('aportacions.processa_aportacio') }}" id="formAportacio">
           
           <!-- Periodicitat -->
           <div class="periodicitat">
@@ -85,8 +85,7 @@
             <select name="metode_pagament" id="metode" required>
               <option value="">{{ _('-- Selecciona mètode --') }}</option>
               <option value="Transferència">{{ _('Transferència') }}</option>
-              <option value="Bizum">Bizum</option>
-              <option value="PayPal">PayPal</option>
+
               <option value="Targeta">{{ _('Targeta') }}</option>
             </select>
           </div>

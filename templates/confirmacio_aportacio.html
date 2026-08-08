@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Confirmació d\'aportació') }}{% endblock %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/confirmacio_aportacio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="confirmacio-container">
+  <h1>✅ {{ _('Gràcies per la teva aportació!') }}</h1>
+  
+  <div class="qr-container">
+    <h2> {{ _('Escaneja amb el teu banc') }}</h2>
+    <img src="data:image/png;base64,{{ qr_image }}" alt="QR SEPA" class="qr-code">
+    <p class="qr-nota">{{ _('Escaneja aquest codi QR amb l\'aplicació del teu banc per emplenar automàticament les dades') }}</p>
+  </div>
+
+  <div class="dades-bancaries">
+    <h2>💳 {{ _('O manualment') }}</h2>
+    
+    <div class="dada-item">
+      <span class="dada-label">{{ _('IBAN:') }}</span>
+      <span class="dada-valor"></span>
+    </div>
+
+    <div class="dada-item">
+      <span class="dada-label">{{ _('Concepte:') }}</span>
+      <span class="dada-valor">Aportació #{{ aportacio.id }}</span>
+    </div>
+  </div>
+
+  {% if aportacio.notes and 'mensual' in aportacio.notes.lower() or 'anual' in aportacio.notes.lower() %}
+  <div class="instruccions">
+    <h3>🔁 {{ _('Aportació recurrent') }}</h3>
+    <p>{{ _('Has seleccionat una aportació') }} <strong>{{ aportacio.notes.split(': ')[1] if ': ' in aportacio.notes else '' }}</strong>.</p>
+    <p>{{ _('Per automatitzar-la, programa una transferència periòdica des de la teva entitat bancària amb aquestes dades:') }}</p>
+    <ul>
+  
+      <li>{{ _('Import:') }} <strong>{{ aportacio.quantitat }}€</strong></li>
+      <li>{{ _('Concepte:') }} <strong>Aportació Adabida</strong></li>
+    </ul>
+  </div>
+  {% endif %}
+
+  <p class="nota-final">
+    {{ _('Si tens algun dubte, contacta amb nosaltres a') }} <strong>info@adabida.cat</strong>
+  </p>
+
+  <div style="text-align: center;">
+    <a href="{{ url_for('inici.inici_pagina') }}" class="boto_nav">{{ _('Tornar a l\'inici') }}</a>
+  </div>
+</div>
+{% endblock %}

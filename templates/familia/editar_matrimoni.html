@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Matrimoni - {{ familia.nom }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gestionar_relacions.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+    <div class="nav-tornar">
+        <a href="{{ url_for('membres.veure_matrimoni', matrimoni_id=matrimoni.id) }}">
+            ← Tornar al matrimoni
+        </a>
+    </div>
+
+    <div class="capçalera-pagina">
+        <h1>Editar Matrimoni</h1>
+        <h2>{{ matrimoni.membre_1.nom }} ⚭ {{ matrimoni.membre_2.nom }}</h2>
+    </div>
+
+    <div class="separador"></div>
+
+    <form method="POST" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-visualitzacio">
+            <h3>Dades del matrimoni</h3>
+            
+            <div class="form-group">
+                <label for="data_casament">Data de casament</label>
+                <input type="date" id="data_casament" name="data_casament" 
+                       value="{{ matrimoni.data_casament.strftime('%Y-%m-%d') if matrimoni.data_casament else '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="data_fi">Data de fi del matrimoni</label>
+                <input type="date" id="data_fi" name="data_fi"
+                       value="{{ matrimoni.data_fi.strftime('%Y-%m-%d') if matrimoni.data_fi else '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="estat">Estat <span style="color: red;">*</span></label>
+                <select id="estat" name="estat" required>
+                    <option value="actiu" {% if matrimoni.estat == 'actiu' %}selected{% endif %}>Actiu</option>
+                    <option value="divorciat" {% if matrimoni.estat == 'divorciat' %}selected{% endif %}>Divorciat</option>
+                    <option value="vidu" {% if matrimoni.estat == 'vidu' %}selected{% endif %}>Vidu/Vídua</option>
+                </select>
+            </div>
+        </div>
+
+       <div class="card-visualitzacio" style="margin-top: 1.5rem;">
+    <h3>Fills d'aquest matrimoni</h3>
+    <p style="color: #666; margin-bottom: 1rem;">Marca els fills que pertanyen a aquest matrimoni</p>
+    
+    <div id="llista-fills-checkboxes" style="max-height: 250px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+        {% if tots_fills %}
+            {% for fill in tots_fills %}
+<label class="checkbox" style="display: block; padding: 0.75rem; margin: 0.5rem 0; background: #f8f9fa; border-radius: 6px;">
+    <input type="checkbox" name="fills[]" value="{{ fill.id }}"
+           {% if fill in fills_actuals %}checked{% endif %}>
+    <span class="checkmark"></span>
+    {{ fill.nom }} {{ fill.primer_cognom }}
+    {% if fill.data_naixement %}({{ fill.data_naixement.year }}){% endif %}
+</label>
+{% endfor %}
+        {% else %}
+            <p style="color: #999; font-style: italic;">No hi ha fills dels dos cònjuges</p>
+        {% endif %}
+    </div>
+</div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+            <a href="{{ url_for('membres.veure_matrimoni', matrimoni_id=matrimoni.id) }}" 
+               class="btn-custom btn-cancel-modal">Cancel·lar</a>
+            <button type="submit" class="btn-custom btn-submit-modal">Guardar Canvis</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const form = document.querySelector('form');
+form.addEventListener('click', function(e) {
+    e.stopPropagation();
+}, true);
+</script>
+{% endblock %}

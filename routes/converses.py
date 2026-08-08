@@ -1,5 +1,3 @@
-# BLUEPRINT CONVERSES I DIÀLEGS
-# Fitxer: routes/converses.py
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
@@ -46,7 +44,7 @@ def nova_conversa():
             lloc_municipi=request.form.get('lloc_municipi', '').strip(),
             lloc_regio=request.form.get('lloc_regio', '').strip(), 
             lloc_pais=request.form.get('lloc_pais', '').strip(),
-            durada_minuts=int(request.form.get('durada_minuts', 0)) or None,
+            durada_minuts=int(request.form.get('durada_minuts') or 0) or None,
             observacions_generals=request.form.get('observacions_generals', '').strip()
         )
         
@@ -147,7 +145,8 @@ def editar_conversa(id):
         conversa.lloc_municipi = request.form.get('lloc_municipi', '').strip()
         conversa.lloc_regio = request.form.get('lloc_regio', '').strip()
         conversa.lloc_pais = request.form.get('lloc_pais', '').strip()
-        conversa.durada_minuts = int(request.form.get('durada_minuts', 0)) or None
+        durada = request.form.get('durada_minuts', '').strip()
+        conversa.durada_minuts = int(durada) if durada else None
         conversa.observacions_generals = request.form.get('observacions_generals', '').strip()
         
         # Data
@@ -300,7 +299,7 @@ def nova_conversa_ajax():
             lloc_municipi=request.form.get('lloc_municipi', '').strip(),
             lloc_regio=request.form.get('lloc_regio', '').strip(), 
             lloc_pais=request.form.get('lloc_pais', '').strip(),
-            durada_minuts=int(request.form.get('durada_minuts', 0)) or None,
+            durada_minuts=int(request.form.get('durada_minuts') or 0) or None,
             observacions_generals=request.form.get('observacions_generals', '').strip()
         )
         
@@ -389,3 +388,221 @@ def _processar_participants_ajax(form_data):
         i += 1
     
     return participants
+
+@converses_bp.route('/nova_adabida', methods=['GET', 'POST'])
+@login_required
+def nova_conversa_adabida():
+    """Crear nova conversa amb metodologia Adabida"""
+    
+    if request.method == 'GET':
+        # Obtenir organitzacions de l'usuari
+        organitzacions = []
+        membres = MembreOrganitzacio.query.filter_by(usuari_id=current_user.id).all()
+        for membre in membres:
+            organitzacions.append(membre.organitzacio)
+        
+        return render_template('converses/nova_conversa_adabida.html', 
+                             organitzacions=organitzacions)
+    
+    # POST - Processar formulari
+    try:
+        from genera_identificadors import extreu_dades_identificador
+        from utils.paisos import normalitza_pais
+        from models import ArxiuAdjunt, Entrada
+        import shutil
+        
+        # 1. CREAR ENTRADA
+        entrada = Entrada(
+            usuari_id=current_user.id,
+            titol=request.form.get('titol', '').strip(),
+            tema=request.form.get('tema', '').strip(),
+            contingut=request.form.get('contingut', '').strip(),
+            pais=request.form.get('lloc_pais', '').strip(),
+            regio=request.form.get('lloc_regio', '').strip(),
+            municipi=request.form.get('lloc_municipi', '').strip(),
+            any_text=request.form.get('data_conversa', '').split('-')[0] if request.form.get('data_conversa') else '',
+            visible_publicament=bool(request.form.get('visible_publicament')),
+            es_publica=True
+        )
+        
+        db.session.add(entrada)
+        db.session.flush()
+        
+        # 2. CREAR CONVERSA vinculada
+        conversa = Conversa(
+            usuari_id=current_user.id,
+            entrada_id=entrada.id,
+            tipus_conversa='entrevista_adabida',
+            titol=request.form.get('titol', '').strip(),
+            tema=request.form.get('tema', '').strip(),
+            contingut=request.form.get('contingut', '').strip(),
+            consentiment_informat=bool(request.form.get('consentiment_informat')),
+            notes_preparacio=request.form.get('notes_preparacio', '').strip(),
+            notes_camp=request.form.get('notes_camp', '').strip(),
+            observacions_post=request.form.get('observacions_post', '').strip(),
+            lloc_municipi=request.form.get('lloc_municipi', '').strip(),
+            lloc_regio=request.form.get('lloc_regio', '').strip(),
+            lloc_pais=request.form.get('lloc_pais', '').strip(),
+            durada_minuts=int(request.form.get('durada_minuts') or 0) or None,
+            observacions_generals=request.form.get('observacions_generals', '').strip(),
+            visible_publicament=bool(request.form.get('visible_publicament')),
+            notes_metodologiques_publiques=bool(request.form.get('notes_metodologiques_publiques'))
+        )
+        
+        data_str = request.form.get('data_conversa')
+        if data_str:
+            conversa.data_conversa = datetime.strptime(data_str, '%Y-%m-%d').date()
+        
+        organitzacio_id = request.form.get('organitzacio_id')
+        if organitzacio_id and organitzacio_id != '':
+            conversa.organitzacio_id = int(organitzacio_id)
+        
+        db.session.add(conversa)
+        db.session.flush()
+        
+        # 3. PARTICIPANT
+        nom_entrevistat = request.form.get('entrevistat_nom', '').strip()
+        if nom_entrevistat:
+            participant = ConversaParticipant(
+                conversa_id=conversa.id,
+                nom=nom_entrevistat,
+                primer_cognom=request.form.get('entrevistat_cognom1', '').strip(),
+                segon_cognom=request.form.get('entrevistat_cognom2', '').strip(),
+                lloc_municipi=request.form.get('entrevistat_municipi', '').strip(),
+                lloc_regio=request.form.get('entrevistat_regio', '').strip(),
+                lloc_pais=request.form.get('entrevistat_pais', '').strip(),
+                ordre=1
+            )
+            
+            data_naix = request.form.get('entrevistat_data_naixement')
+            if data_naix:
+                try:
+                    participant.data_naixement = datetime.strptime(data_naix, '%Y-%m-%d').date()
+                except ValueError:
+                    pass
+            
+            db.session.add(participant)
+        
+        # 4. PROCESSAR ARXIUS
+        _, any_str, mes_str = extreu_dades_identificador(current_user.identificador_abadia)
+        pais = normalitza_pais(current_user.pais_residencia)
+        
+        carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, 
+                                      current_user.nom_login, "entrades", str(entrada.id))
+        os.makedirs(carpeta_final, exist_ok=True)
+        os.makedirs(os.path.join(carpeta_final, "mini"), exist_ok=True)
+        
+        audios = request.form.getlist("audios_conversa[]")
+        videos = request.form.getlist("videos_conversa[]")
+        
+        for nom_fitxer in audios + videos:
+            carpeta_temp = os.path.join("umberto", "media", "temp", pais, any_str, mes_str, current_user.nom_login)
+            ruta_origen = os.path.join(carpeta_temp, nom_fitxer)
+            ruta_desti = os.path.join(carpeta_final, nom_fitxer)
+            
+            if os.path.exists(ruta_origen):
+                shutil.move(ruta_origen, ruta_desti)
+                
+                tipus_media = 'video' if nom_fitxer in videos else 'audio'
+                nou_arxiu = ArxiuAdjunt(
+                    entrada_id=entrada.id,
+                    nom_fitxer=nom_fitxer,
+                    tipus='webm',
+                    tipus_media=tipus_media
+                )
+                db.session.add(nou_arxiu)
+        
+        db.session.commit()
+        flash('Conversa Adabida creada correctament!', 'success')
+        return redirect(url_for('repositori.repositori'))
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error creant conversa Adabida: {e}")
+        flash('Error creant la conversa. Torna-ho a provar.', 'error')
+        return redirect(url_for('converses.nova_conversa_adabida'))
+
+@converses_bp.route('/<int:id>/editar_adabida', methods=['GET', 'POST'])
+@login_required
+def editar_conversa_adabida(id):
+    """Editar conversa Adabida existent"""
+    conversa = Conversa.query.get_or_404(id)
+    
+    if conversa.usuari_id != current_user.id:
+        flash('No tens permisos per editar aquesta conversa.', 'error')
+        return redirect(url_for('converses.llistat'))
+    
+    if request.method == 'GET':
+        organitzacions = []
+        membres = MembreOrganitzacio.query.filter_by(usuari_id=current_user.id).all()
+        for membre in membres:
+            organitzacions.append(membre.organitzacio)
+        
+        return render_template('converses/editar_conversa_adabida.html', 
+                             conversa=conversa, organitzacions=organitzacions)
+    
+    # POST - Actualitzar
+    try:
+        conversa.titol = request.form.get('titol', '').strip()
+        conversa.tema = request.form.get('tema', '').strip()
+        conversa.contingut = request.form.get('contingut', '').strip()
+        conversa.consentiment_informat = bool(request.form.get('consentiment_informat'))
+        conversa.notes_preparacio = request.form.get('notes_preparacio', '').strip()
+        conversa.notes_camp = request.form.get('notes_camp', '').strip()
+        conversa.observacions_post = request.form.get('observacions_post', '').strip()
+        conversa.lloc_municipi = request.form.get('lloc_municipi', '').strip()
+        conversa.lloc_regio = request.form.get('lloc_regio', '').strip()
+        conversa.lloc_pais = request.form.get('lloc_pais', '').strip()
+        durada = request.form.get('durada_minuts', '').strip()
+        conversa.durada_minuts = int(durada) if durada else None
+        conversa.visible_publicament = bool(request.form.get('visible_publicament'))
+        conversa.notes_metodologiques_publiques = bool(request.form.get('notes_metodologiques_publiques'))
+
+        data_str = request.form.get('data_conversa')
+        if data_str:
+            conversa.data_conversa = datetime.strptime(data_str, '%Y-%m-%d').date()
+        
+        organitzacio_id = request.form.get('organitzacio_id')
+        conversa.organitzacio_id = int(organitzacio_id) if organitzacio_id else None
+        
+        conversa.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+        flash('Conversa Adabida actualitzada correctament!', 'success')
+        return redirect(url_for('pagina_personal.pagina_personal'))
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error actualitzant conversa Adabida: {e}")
+        flash('Error actualitzant la conversa.', 'error')
+        return redirect(url_for('converses.editar_conversa_adabida', id=id))
+    
+@converses_bp.route('/api/conversa/<int:id>')
+def api_conversa(id):
+    """Retorna dades conversa en JSON per modal"""
+    conversa = Conversa.query.get_or_404(id)
+    
+    # Obtenir primer participant
+    participant = ConversaParticipant.query.filter_by(conversa_id=id).first()
+    
+    # Preparar dades
+    data = {
+        'id': conversa.id,
+        'titol': conversa.titol or f"Entrevista a {participant.nom if participant else 'desconegut'}",
+        'tema': conversa.tema,
+        'contingut': conversa.contingut,
+        'data_conversa': conversa.data_conversa.strftime('%d/%m/%Y') if conversa.data_conversa else '',
+        'durada_minuts': conversa.durada_minuts,
+        'lloc': f"{conversa.lloc_municipi}, {conversa.lloc_regio}, {conversa.lloc_pais}".strip(', '),
+        'participant_nom': participant.nom if participant else '',
+        'usuari_id': conversa.usuari_id,
+        'usuari_nom': conversa.usuari.nom if conversa.usuari else '',
+        'usuari_login': conversa.usuari.nom_login if conversa.usuari else '',
+        'notes_preparacio': conversa.notes_preparacio,
+        'notes_camp': conversa.notes_camp,
+        'observacions_post': conversa.observacions_post,
+        'visible_publicament': conversa.visible_publicament,
+        'notes_metodologiques_publiques': conversa.notes_metodologiques_publiques
+    }
+    
+    return jsonify(data)

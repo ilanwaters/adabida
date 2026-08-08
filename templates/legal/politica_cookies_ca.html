@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block titol %}Política de Cookies - Adabida{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="document-legal">
+    
+    <h1>POLÍTICA DE COOKIES</h1>
+    <p class="ultima-actualitzacio">Última actualització: 10 de gener de 2026</p>
+
+    <hr>
+
+    <!-- 1. QUÈ SÓN LES COOKIES -->
+    <h2>1. QUÈ SÓN LES COOKIES</h2>
+    
+    <p>
+      Les cookies són fitxers que es descarreguen al teu ordinador, telèfon intel·ligent o tauleta quan accedeixes a determinades pàgines web. Les cookies permeten que una pàgina web, entre altres coses, emmagatzemi i recuperi informació sobre els hàbits de navegació d'un usuari o del seu equip i, depenent de la informació que continguin i de la forma en què utilitzis el teu equip, poden utilitzar-se per reconèixer l'usuari.
+    </p>
+
+    <!-- 2. POLÍTICA D'ADABIDA -->
+    <h2>2. POLÍTICA DE COOKIES D'ADABIDA</h2>
+
+    <div class="success-box">
+      <p><strong>✅ Bona notícia: Adabida només utilitza cookies estrictament necessàries</strong></p>
+      <p>
+        NO utilitzem cookies de seguiment, publicitàries, analítiques ni de tercers. 
+        Només fem servir les cookies mínimes imprescindibles perquè el lloc web funcioni correctament.
+      </p>
+    </div>
+
+    <h3>2.1. COOKIES QUE UTILITZEM</h3>
+    <p>Adabida utilitza NOMÉS les següents cookies tècniques essencials:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Finalitat</th>
+          <th>Durada</th>
+          <th>Tipus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>session</strong></td>
+          <td>Identificar la sessió de l'usuari registrat. Imprescindible per mantenir-te identificat mentre navegues.</td>
+          <td>Fins que tanquis el navegador o es tanqui la sessió</td>
+          <td>Essencial</td>
+        </tr>
+        <tr>
+          <td><strong>idioma</strong></td>
+          <td>Recordar l'idioma seleccionat per l'usuari per mostrar el contingut en el seu idioma preferit.</td>
+          <td>1 any</td>
+          <td>Funcional</td>
+        </tr>
+        <tr>
+          <td><strong>csrf_token</strong></td>
+          <td>Protecció contra atacs de falsificació de peticions entre llocs (CSRF). Seguretat del lloc web.</td>
+          <td>Fins que tanquis el navegador</td>
+          <td>Essencial</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2.2. QUÈ NO FEM</h3>
+    <p>Adabida NO utilitza:</p>
+    <ul>
+      <li>❌ Google Analytics ni altres eines d'anàlisi de tercers</li>
+      <li>❌ Cookies publicitàries</li>
+      <li>❌ Cookies de xarxes socials (Facebook, Twitter, etc.)</li>
+      <li>❌ Cookies de seguiment del comportament de navegació</li>
+      <li>❌ Cookies de personalització de publicitat</li>
+    </ul>
+
+    <!-- 3. BASE LEGAL -->
+    <h2>3. BASE LEGAL</h2>
+    
+    <p>
+      Les cookies tècniques estrictament necessàries estan exceptuades de l'obligació de sol·licitar consentiment segons l'article 22.2 de la Llei 34/2002 de Serveis de la Societat de la Informació i Comerç Electrònic (LSSI-CE).
+    </p>
+
+    <div class="info-box">
+      <p><strong>Normativa aplicable:</strong></p>
+      <p>✓ Reglament (UE) 2016/679 de Protecció de Dades (RGPD)</p>
+      <p>✓ Llei Orgànica 3/2018 de Protecció de Dades (LOPDGDD)</p>
+      <p>✓ Llei 34/2002 de Serveis de la Societat de la Informació (LSSI-CE)</p>
+    </div>
+
+    <p>
+      Segons la normativa vigent, les cookies essencials per a la prestació del servei sol·licitat per l'usuari NO requereixen consentiment previ. Només es requereix informar sobre el seu ús, com fem en aquesta Política de Cookies.
+    </p>
+
+    <!-- 4. COM GESTIONAR LES COOKIES -->
+    <h2>4. COM GESTIONAR LES COOKIES</h2>
+
+    <h3>4.1. CONFIGURACIÓ DEL NAVEGADOR</h3>
+    <p>
+      Tot i que no és recomanable (ja que el lloc web deixaria de funcionar correctament), pots desactivar les cookies des de la configuració del teu navegador:
+    </p>
+
+    <ul>
+      <li><strong>Google Chrome:</strong> Configuració → Privadesa i seguretat → Cookies i altres dades de llocs</li>
+      <li><strong>Mozilla Firefox:</strong> Opcions → Privadesa i seguretat → Cookies i dades del lloc</li>
+      <li><strong>Safari:</strong> Preferències → Privadesa → Gestionar dades de llocs web</li>
+      <li><strong>Microsoft Edge:</strong> Configuració → Cookies i permisos de llocs → Gestionar i eliminar cookies i dades de llocs</li>
+    </ul>
+
+    <div class="advertencia">
+      <p><strong>⚠️ Important:</strong></p>
+      <p>
+        Si desactives les cookies essencials, NO podràs utilitzar Adabida correctament:
+      </p>
+      <ul>
+        <li>No podràs iniciar sessió</li>
+        <li>No es recordarà el teu idioma preferit</li>
+        <li>Algunes funcionalitats de seguretat no funcionaran</li>
+      </ul>
+    </div>
+
+    <h3>4.2. ELIMINAR COOKIES</h3>
+    <p>
+      Pots eliminar les cookies ja emmagatzemades al teu dispositiu a través de la configuració del teu navegador. El procés varia segons el navegador, però generalment trobaràs aquesta opció a:
+    </p>
+    <p>
+      <strong>Configuració → Privadesa → Dades de navegació → Eliminar cookies</strong>
+    </p>
+
+    <!-- 5. ACTUALITZACIONS -->
+    <h2>5. ACTUALITZACIONS D'AQUESTA POLÍTICA</h2>
+    
+    <p>
+      Adabida es reserva el dret de modificar aquesta Política de Cookies per adaptar-la a novetats legislatives, jurisprudencials o per a la interpretació de l'Agència Espanyola de Protecció de Dades.
+    </p>
+    <p>
+      Quan es produeixin canvis significatius en aquesta Política de Cookies, s'indicarà a la pàgina principal del lloc web.
+    </p>
+    <p>
+      <strong>Data de la darrera actualització:</strong> 10 de gener de 2026
+    </p>
+
+    <!-- 6. MÉS INFORMACIÓ -->
+    <h2>6. MÉS INFORMACIÓ</h2>
+    
+    <p>Si tens dubtes sobre aquesta Política de Cookies, pots consultar:</p>
+    <ul>
+      <li><a href="{{ url_for('legal.avis_legal') }}" style="color: #14d8ce; text-decoration: underline;">Avís Legal d'Adabida</a></li>
+      <li><a href="{{ url_for('legal.politica_privadesa') }}" style="color: #14d8ce; text-decoration: underline;">Política de Privacitat d'Adabida</a></li>
+      <li>Contacte: <strong>admin@adabida.cat</strong></li>
+    </ul>
+
+    <hr>
+
+    <!-- RESUM FINAL -->
+    <div class="seccio-final">
+      <h2 style="color: #333; border: none; padding: 0; margin-bottom: 1rem;">RESUM</h2>
+      <p>
+        <strong>Adabida només utilitza cookies estrictament necessàries per al funcionament del lloc web.</strong>
+      </p>
+      <p>
+        No fem seguiment del teu comportament, no compartim les teves dades amb tercers, i no utilitzem publicitat.
+      </p>
+      <p>
+        El nostre compromís és amb la teva privacitat i la preservació de la memòria oral, no amb els beneficis comercials.
+      </p>
+    </div>
+
+    <p class="ultima-actualitzacio" style="margin-top: 2rem;">
+      Data de la darrera actualització: 10 de gener de 2026
+    </p>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="boto-tornar">← Tornar a l'inici</a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

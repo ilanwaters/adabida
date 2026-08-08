@@ -178,13 +178,30 @@ class Conversa(db.Model):
     usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=False)
     
     # Dades de la conversa
+    lloc_institucio = db.Column(db.String(200))
     lloc_municipi = db.Column(db.String(100))
     lloc_regio = db.Column(db.String(100))
     lloc_pais = db.Column(db.String(100))
     data_conversa = db.Column(db.Date)
     durada_minuts = db.Column(db.Integer)
     observacions_generals = db.Column(db.Text)
-    
+    # Tipus conversa
+    tipus_conversa = db.Column(db.String(50), default='lliure')
+
+# Contingut testimoni (per entrevistes Adabida)
+    titol = db.Column(db.String(255))
+    tema = db.Column(db.String(255))
+    contingut = db.Column(db.Text)
+
+# Protocol Entrevista Adabida
+    consentiment_informat = db.Column(db.Boolean, default=False)
+    notes_preparacio = db.Column(db.Text)
+    notes_camp = db.Column(db.Text)
+    observacions_post = db.Column(db.Text)
+
+# Visibilitat
+    visible_publicament = db.Column(db.Boolean, default=False)
+    notes_metodologiques_publiques = db.Column(db.Boolean, default=False)
     # Arxiu multimèdia (mateixa lògica que entrades)
     arxiu_nom = db.Column(db.String(255))
     arxiu_tipus = db.Column(db.String(50))  # 'audio', 'video'
@@ -192,7 +209,8 @@ class Conversa(db.Model):
     
     # Organització (opcional - per compartir)
     organitzacio_id = db.Column(db.Integer, db.ForeignKey('organitzacions.id'), nullable=True)    
-    
+    # Vinculació amb entrada (si és entrevista Adabida)
+    entrada_id = db.Column(db.Integer, db.ForeignKey('entrades.id'), nullable=True)
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 

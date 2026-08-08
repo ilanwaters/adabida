@@ -358,7 +358,7 @@ def solicitar():
 @login_required
 def hub():
     """Hub central d'organitzacions"""
-    return render_template('organitzacions.html')
+    return render_template('organitzacions.html', usuari=current_user)
 
 @organitzacions_bp.route('/les-meves')
 @login_required

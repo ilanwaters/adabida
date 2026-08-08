@@ -22,8 +22,13 @@
 <section class="arxiu-entrades">
   {% if entrades %}
   <div class="llista-entrades">
-      {% for entrada in entrades %}
-        {% include "components/caixa_entrada.html" %}
+     {% for entrada in entrades %}
+        {% if entrada.tipus == 'conversa' %}
+          {% set conversa = entrada %}
+          {% include "components/caixa_conversa.html" %}
+        {% else %}
+          {% include "components/caixa_entrada.html" %}
+        {% endif %}
       {% endfor %}
     </div>
     {% else %}

@@ -78,10 +78,15 @@
 {% endif %}
 
   {% if cerca %}
-    <!-- CANVI IMPORTANT: Ara usem grid-entrades en lloc de grid-caixes -->
+  
     <div class="grid-entrades">
-      {% for entrada in entrades %}
-        {% include "components/caixa_entrada.html" %}
+        {% for entrada in entrades %}
+        {% if entrada.tipus == 'conversa' %}
+          {% set conversa = entrada %}
+          {% include "components/caixa_conversa.html" %}
+        {% else %}
+          {% include "components/caixa_entrada.html" %}
+        {% endif %}
       {% endfor %}
     </div>
 
@@ -138,7 +143,7 @@
   <div class="modal-content">
     <h2>{{ _("Accés a un projecte acadèmic i científic") }}</h2>
     <p>
-      {{ _("Estàs a punt d'accedir a un espai destinat a la recollida de testimonis personals amb finalitats d'investigació històrica, educativa i social. El Projecte Abadia forma part d'un arxiu de memòria oral amb vocació científica i pública.") }}
+      {{ _("Estàs a punt d'accedir a un espai destinat a la recollida de testimonis personals amb finalitats d'investigació històrica, educativa i social. El Projecte Adabida forma part d'un arxiu de memòria oral amb vocació científica i pública.") }}
     </p>
     <p>
       {{ _('El registre és voluntari. Molts dels camps del formulari no són obligatoris, però omplir-los amb detall millora significativament el valor documental del teu testimoni.') }}

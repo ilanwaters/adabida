@@ -28,64 +28,89 @@ def afegir(familia_id):
         return redirect(url_for('familia.veure', url=familia.url))
     
     # Detectar si ve des de gestió de relacions
-    relacio = request.args.get('relacio')  # 'pare', 'mare', 'fill', 'germa'
+    relacio = request.args.get('relacio')
     membre_relacionat_id = request.args.get('membre_id')
     
     if request.method == 'GET':
+        # Carregar tots els membres de la família per al selector
+        tots_membres_obj = MembreFamilia.query.filter_by(espai_familiar_id=familia_id).all()
+        
+        # Convertir a diccionaris per JSON
+        tots_membres = [{
+            'id': m.id,
+            'nom': m.nom,
+            'primer_cognom': m.primer_cognom,
+            'data_naixement': m.data_naixement.isoformat() if m.data_naixement else None
+        } for m in tots_membres_obj]
+        
         return render_template('familia/afegir_membre.html', 
                              familia=familia,
                              relacio=relacio,
-                             membre_relacionat_id=membre_relacionat_id)
+                             membre_relacionat_id=membre_relacionat_id,
+                             tots_membres=tots_membres)
     
     # POST - Processar formulari
     try:
         from datetime import datetime as dt
         
-        # Dades bàsiques
-        nom = request.form.get('nom', '').strip()
-        primer_cognom = request.form.get('primer_cognom', '').strip()
-        segon_cognom = request.form.get('segon_cognom', '').strip() or None
+        # COMPROVAR SI S'HA SELECCIONAT MEMBRE EXISTENT
+        membre_existent_id = request.form.get('membre_existent_id')
         
-        if not nom or not primer_cognom:
-            flash('El nom i primer cognom són obligatoris', 'error')
-            return redirect(url_for('membres.afegir', familia_id=familia_id))
-        
-        # Dates
-        data_naixement = request.form.get('data_naixement')
-        data_defuncio = request.form.get('data_defuncio')
-        
-        # Convertir dates a objectes Date si existeixen
-        data_naixement = dt.strptime(data_naixement, '%Y-%m-%d').date() if data_naixement else None
-        data_defuncio = dt.strptime(data_defuncio, '%Y-%m-%d').date() if data_defuncio else None
-        
-        # Crear membre
-        nou_membre = MembreFamilia(
-            espai_familiar_id=familia_id,
-            nom=nom,
-            primer_cognom=primer_cognom,
-            segon_cognom=segon_cognom,
-            data_naixement=data_naixement,
-            municipi_naixement=request.form.get('municipi_naixement', '').strip() or None,
-            regio_naixement=request.form.get('regio_naixement', '').strip() or None,
-            pais_naixement=request.form.get('pais_naixement', '').strip() or None,
-            data_defuncio=data_defuncio,
-            municipi_defuncio=request.form.get('municipi_defuncio', '').strip() or None,
-            regio_defuncio=request.form.get('regio_defuncio', '').strip() or None,
-            pais_defuncio=request.form.get('pais_defuncio', '').strip() or None,
-            municipi_actual=request.form.get('municipi_actual', '').strip() or None,
-            regio_actual=request.form.get('regio_actual', '').strip() or None,
-            pais_actual=request.form.get('pais_actual', '').strip() or None,
-            biografia=request.form.get('biografia', '').strip() or None,
-            rol='membre'
-        )
-        
-        # Vincular amb usuari si s'ha seleccionat
-        usuari_id = request.form.get('usuari_id')
-        if usuari_id and usuari_id.strip():
-            nou_membre.usuari_id = int(usuari_id)
+        if membre_existent_id and membre_existent_id.strip():
+            # USAR MEMBRE EXISTENT
+            nou_membre = MembreFamilia.query.get(int(membre_existent_id))
+            
+            if not nou_membre or nou_membre.espai_familiar_id != familia_id:
+                flash('Membre no vàlid', 'error')
+                return redirect(url_for('membres.afegir', familia_id=familia_id))
+            
+        else:
+            # CREAR NOU MEMBRE
+            nom = request.form.get('nom', '').strip()
+            primer_cognom = request.form.get('primer_cognom', '').strip()
+            segon_cognom = request.form.get('segon_cognom', '').strip() or None
+            genere = request.form.get('genere', '').strip()
+            
+            if not nom or not primer_cognom or not genere:
+                flash('El nom, cognom i gènere són obligatoris', 'error')
+                return redirect(url_for('membres.afegir', familia_id=familia_id))
+            
+            # Dates
+            data_naixement = request.form.get('data_naixement')
+            data_defuncio = request.form.get('data_defuncio')
+            
+            data_naixement = dt.strptime(data_naixement, '%Y-%m-%d').date() if data_naixement else None
+            data_defuncio = dt.strptime(data_defuncio, '%Y-%m-%d').date() if data_defuncio else None
+            
+            # Crear membre
+            nou_membre = MembreFamilia(
+                espai_familiar_id=familia_id,
+                nom=nom,
+                primer_cognom=primer_cognom,
+                segon_cognom=segon_cognom,
+                genere=genere,
+                data_naixement=data_naixement,
+                municipi_naixement=request.form.get('municipi_naixement', '').strip() or None,
+                regio_naixement=request.form.get('regio_naixement', '').strip() or None,
+                pais_naixement=request.form.get('pais_naixement', '').strip() or None,
+                data_defuncio=data_defuncio,
+                municipi_defuncio=request.form.get('municipi_defuncio', '').strip() or None,
+                regio_defuncio=request.form.get('regio_defuncio', '').strip() or None,
+                pais_defuncio=request.form.get('pais_defuncio', '').strip() or None,
+                municipi_actual=request.form.get('municipi_actual', '').strip() or None,
+                regio_actual=request.form.get('regio_actual', '').strip() or None,
+                pais_actual=request.form.get('pais_actual', '').strip() or None,
+                biografia=request.form.get('biografia', '').strip() or None,
+                rol='membre'
+            )
+            
+            # Vincular amb usuari si s'ha seleccionat
+            usuari_id = request.form.get('usuari_id')
+            if usuari_id and usuari_id.strip():
+                nou_membre.usuari_id = int(usuari_id)
 
-        db.session.add(nou_membre)
-        db.session.flush()  # Per obtenir l'ID del membre
+            db.session.add(nou_membre)
+            db.session.flush()
         
         # ESTABLIR RELACIÓ AUTOMÀTICAMENT
         relacio_param = request.form.get('relacio_hidden')
@@ -95,90 +120,62 @@ def afegir(familia_id):
             membre_relacionat = MembreFamilia.query.get(int(membre_relacionat_id_param))
             
             if relacio_param == 'pare':
-                # El nou membre és el pare del membre relacionat
                 membre_relacionat.pare_id = nou_membre.id
-                flash(f'{nom} {primer_cognom} afegit com a pare de {membre_relacionat.nom}!', 'success')
+                flash(f'{nou_membre.nom} afegit com a pare!', 'success')
                 
             elif relacio_param == 'mare':
-                # El nou membre és la mare del membre relacionat
                 membre_relacionat.mare_id = nou_membre.id
-                flash(f'{nom} {primer_cognom} afegida com a mare de {membre_relacionat.nom}!', 'success')
+                flash(f'{nou_membre.nom} afegida com a mare!', 'success')
                 
             elif relacio_param == 'fill':
-                # El nou membre és fill del membre relacionat
-                nou_membre.pare_id = membre_relacionat.id if membre_relacionat.nom else None  # Assignar segons gènere
-                flash(f'{nom} {primer_cognom} afegit/da com a fill/a de {membre_relacionat.nom}!', 'success')
-                
+                if membre_relacionat.genere == 'home':
+                    nou_membre.pare_id = membre_relacionat.id
+                elif membre_relacionat.genere == 'dona':
+                    nou_membre.mare_id = membre_relacionat.id
+                flash(f'{nou_membre.nom} afegit/da com a fill/a!', 'success')
+                 
             elif relacio_param == 'germa':
-                # El nou membre és germà del membre relacionat (mateix pare i/o mare)
                 nou_membre.pare_id = membre_relacionat.pare_id
                 nou_membre.mare_id = membre_relacionat.mare_id
-                flash(f'{nom} {primer_cognom} afegit/da com a germà/na de {membre_relacionat.nom}!', 'success')
+                flash(f'{nou_membre.nom} afegit/da com a germà/na!', 'success')
         
-        # Processar documents
-        fitxers = request.files.getlist('document[]')
-        tipus_documents = request.form.getlist('tipus_document[]')
-        visibilitats = request.form.getlist('visibilitat_document[]')
-        descripcions = request.form.getlist('descripcio_document[]')
-        
-        for i, fitxer in enumerate(fitxers):
-            if fitxer and fitxer.filename != '' and allowed_file(fitxer.filename):
-                # Guardar fitxer
-                filename = secure_filename(fitxer.filename)
-                ext = filename.rsplit('.', 1)[1].lower()
-                
-                # Crear carpeta si no existeix
-                carpeta_documents = f'static/documents_membres/{familia_id}'
-                os.makedirs(carpeta_documents, exist_ok=True)
-                
-                # Nom únic
-                nom_fitxer = f"membre_{nou_membre.id}_doc_{i+1}.{ext}"
-                ruta_fitxer = os.path.join(carpeta_documents, nom_fitxer)
-                fitxer.save(ruta_fitxer)
-                
-                # Guardar a BD
-                document = DocumentMembreFamilia(
-                    membre_familia_id=nou_membre.id,
-                    tipus_document=tipus_documents[i] if i < len(tipus_documents) else None,
-                    nom_fitxer=nom_fitxer,
-                    descripcio=descripcions[i] if i < len(descripcions) else None,
-                    visibilitat=visibilitats[i] if i < len(visibilitats) else 'familia',
-                    pujat_per_id=current_user.id
-                )
-                db.session.add(document)
+        # Processar documents (només si és membre nou)
+        if not membre_existent_id:
+            fitxers = request.files.getlist('document[]')
+            tipus_documents = request.form.getlist('tipus_document[]')
+            visibilitats = request.form.getlist('visibilitat_document[]')
+            descripcions = request.form.getlist('descripcio_document[]')
+            
+            for i, fitxer in enumerate(fitxers):
+                if fitxer and fitxer.filename != '' and allowed_file(fitxer.filename):
+                    filename = secure_filename(fitxer.filename)
+                    ext = filename.rsplit('.', 1)[1].lower()
+                    
+                    carpeta_documents = f'static/documents_membres/{familia_id}'
+                    os.makedirs(carpeta_documents, exist_ok=True)
+                    
+                    nom_fitxer = f"membre_{nou_membre.id}_doc_{i+1}.{ext}"
+                    ruta_fitxer = os.path.join(carpeta_documents, nom_fitxer)
+                    fitxer.save(ruta_fitxer)
+                    
+                    document = DocumentMembreFamilia(
+                        membre_familia_id=nou_membre.id,
+                        tipus_document=tipus_documents[i] if i < len(tipus_documents) else None,
+                        nom_fitxer=nom_fitxer,
+                        descripcio=descripcions[i] if i < len(descripcions) else None,
+                        visibilitat=visibilitats[i] if i < len(visibilitats) else 'familia',
+                        pujat_per_id=current_user.id
+                    )
+                    db.session.add(document)
         
         db.session.commit()
-
-        # Enviar notificació si s'ha vinculat un usuari
-        usuari_id_vinculat = request.form.get('usuari_id')
-        if usuari_id_vinculat and usuari_id_vinculat.strip():
-            import json
-            from models import Missatge
-            
-            # Guardar dades en JSON per traduir després
-            dades = {
-                'familia_nom': familia.nom,
-                'familia_url': familia.url,
-                'membre_id': nou_membre.id
-            }
-            
-            missatge = Missatge(
-                emissor_id=current_user.id,
-                receptor_id=int(usuari_id_vinculat),
-                tipus_missatge='vinculacio_familia',
-                dades_json=json.dumps(dades),
-                assumpte='[PENDENT TRADUCCIO]',
-                contingut='[PENDENT TRADUCCIO]'
-            )
-            db.session.add(missatge)
-            db.session.commit()
         
         # Redirigir segons context
         if membre_relacionat_id_param:
             return redirect(url_for('membres.gestionar_relacions', membre_id=int(membre_relacionat_id_param)))
         else:
-            flash(f'Membre {nom} {primer_cognom} afegit correctament!', 'success')
-            return redirect(url_for('familia.veure', familia_id=familia_id))
+            flash(f'Membre afegit correctament!', 'success')
+            return redirect(url_for('familia.seccio', url=familia.url, seccio='membres'))
         
     except Exception as e:
         db.session.rollback()
@@ -262,7 +259,7 @@ def editar(membre_id):
     
     if not es_admin:
         flash('Només els administradors poden editar membres', 'error')
-        return redirect(url_for('familia.veure', familia_id=familia.id))
+        return redirect(url_for('familia.veure', url=familia.url))
     
     if request.method == 'GET':
         return render_template('familia/editar_membre.html', membre=membre, familia=familia)
@@ -272,92 +269,72 @@ def editar(membre_id):
         from datetime import datetime as dt
         from models import Pais, Regio, Municipi
         
-        # Actualitzar dades
-        membre.nom = request.form.get('nom', '').strip()
-        membre.primer_cognom = request.form.get('primer_cognom', '').strip()
-        membre.segon_cognom = request.form.get('segon_cognom', '').strip() or None
-        membre.genere = request.form.get('genere', '').strip() or None
+        # 1. OBTENIR VALORS
+        nom = request.form.get('nom', '').strip()
+        primer_cognom = request.form.get('primer_cognom', '').strip()
+        segon_cognom = request.form.get('segon_cognom', '').strip() or None
+        genere = request.form.get('genere', '').strip() or None
         
-        # Dates
-        data_naixement = request.form.get('data_naixement')
-        data_defuncio = request.form.get('data_defuncio')
+        # 2. VALIDAR
+        if not nom or not primer_cognom or not genere:
+            flash('El nom, cognom i gènere són obligatoris', 'error')
+            return render_template('familia/editar_membre.html', membre=membre, familia=familia)
         
-        membre.data_naixement = dt.strptime(data_naixement, '%Y-%m-%d').date() if data_naixement else None
-        membre.data_defuncio = dt.strptime(data_defuncio, '%Y-%m-%d').date() if data_defuncio else None
+        # 3. ACTUALITZAR DADES BÀSIQUES
+        membre.nom = nom
+        membre.primer_cognom = primer_cognom
+        membre.segon_cognom = segon_cognom
+        membre.genere = genere
         
-        # FUNCIÓ AUXILIAR: Convertir nom a ID o mantenir ID
+        # 4. DATES (amb comprovació)
+        data_naix = request.form.get('data_naixement', '').strip()
+        data_def = request.form.get('data_defuncio', '').strip()
+        
+        membre.data_naixement = dt.strptime(data_naix, '%Y-%m-%d').date() if data_naix else None
+        membre.data_defuncio = dt.strptime(data_def, '%Y-%m-%d').date() if data_def else None
+        
+        # 5. FUNCIÓ AUXILIAR UBICACIONS
         def obtenir_id(valor, model):
-            """Retorna ID si és número, busca per nom si és text"""
-            if not valor:
+            if not valor or not valor.strip():
                 return None
-            
-            # Si ja és un número, retornar-lo
             if str(valor).isdigit():
                 return int(valor)
-            
-            # Buscar per nom
             obj = model.query.filter_by(nom=valor).first()
-            return obj.id if obj else valor  # Si no es troba, guardar text
+            return obj.id if obj else valor
         
-        # NAIXEMENT
+        # 6. UBICACIONS
         membre.pais_naixement = obtenir_id(request.form.get('pais_naixement'), Pais)
         membre.regio_naixement = obtenir_id(request.form.get('regio_naixement'), Regio)
         membre.municipi_naixement = obtenir_id(request.form.get('municipi_naixement'), Municipi)
         
-        # DEFUNCIÓ
         membre.pais_defuncio = obtenir_id(request.form.get('pais_defuncio'), Pais)
         membre.regio_defuncio = obtenir_id(request.form.get('regio_defuncio'), Regio)
         membre.municipi_defuncio = obtenir_id(request.form.get('municipi_defuncio'), Municipi)
         
-        # ACTUAL
         membre.pais_actual = obtenir_id(request.form.get('pais_actual'), Pais)
         membre.regio_actual = obtenir_id(request.form.get('regio_actual'), Regio)
         membre.municipi_actual = obtenir_id(request.form.get('municipi_actual'), Municipi)
         
-        # Biografia
+        # 7. BIOGRAFIA
         membre.biografia = request.form.get('biografia', '').strip() or None
         
-        usuari_id = request.form.get('usuari_id')
-        if usuari_id and usuari_id.strip():
-            membre.usuari_id = int(usuari_id)
-        else:
-            membre.usuari_id = None
+        # 8. USUARI VINCULAT
+        usuari_id = request.form.get('usuari_id', '').strip()
+        membre.usuari_id = int(usuari_id) if usuari_id else None
         
+        # 9. COMMIT
         db.session.commit()
-   
-        # Enviar notificació si s'ha vinculat un usuari
-        usuari_id_vinculat = request.form.get('usuari_id')
-        if usuari_id_vinculat and usuari_id_vinculat.strip():
-            import json
-            from models import Missatge
-            
-            dades = {
-                'familia_nom': familia.nom,
-                'familia_url': familia.url,
-                'membre_id': membre.id
-            }
-            
-            missatge = Missatge(
-                emissor_id=current_user.id,
-                receptor_id=int(usuari_id_vinculat),
-                tipus_missatge='vinculacio_familia',
-                dades_json=json.dumps(dades),
-                assumpte='[PENDENT TRADUCCIO]',
-                contingut='[PENDENT TRADUCCIO]'
-            )
-            db.session.add(missatge)
-            db.session.commit()
         
         flash(f'Membre {membre.nom} {membre.primer_cognom} actualitzat!', 'success')
-        return redirect(url_for('familia.seccio', url=familia.url, seccio='membres'))
+        return redirect(url_for('membres.veure', membre_id=membre.id))
         
     except Exception as e:
         db.session.rollback()
-        print(f"Error editant membre: {e}")
+        print(f"❌ ERROR editant membre: {e}")
         import traceback
         traceback.print_exc()
-        flash('Error editant el membre', 'error')
-        return redirect(url_for('membres.editar', membre_id=membre_id))
+        flash(f'Error editant el membre: {str(e)}', 'error')
+        return render_template('familia/editar_membre.html', membre=membre, familia=familia)
         
 @membres_bp.route('/<int:membre_id>/relacions', methods=['GET'])
 @login_required
@@ -456,6 +433,7 @@ def afegir_matrimoni(membre_id):
             return redirect(url_for('membres.gestionar_relacions', membre_id=membre_id))
         
         # Crear matrimoni
+        # Crear matrimoni
         nou_matrimoni = Matrimoni(
             espai_familiar_id=familia.id,
             membre_1_id=membre_id,
@@ -466,11 +444,21 @@ def afegir_matrimoni(membre_id):
         )
         
         db.session.add(nou_matrimoni)
+        db.session.flush()  # Obtenir ID matrimoni
+        
+        # Processar fills seleccionats
+        fills_seleccionats = request.form.getlist('fills[]')
+        if fills_seleccionats:
+            for fill_id in fills_seleccionats:
+                fill = MembreFamilia.query.get(int(fill_id))
+                if fill:
+                    fill.matrimoni_id = nou_matrimoni.id
+        
         db.session.commit()
         
         conjuge = MembreFamilia.query.get(conjuge_id)
         flash(f'Matrimoni amb {conjuge.nom} {conjuge.primer_cognom} afegit correctament!', 'success')
-        return redirect(url_for('membres.gestionar_relacions', membre_id=membre_id))
+        return redirect(url_for('membres.veure_matrimoni', matrimoni_id=nou_matrimoni.id))
         
     except Exception as e:
         db.session.rollback()
@@ -542,3 +530,101 @@ def eliminar(membre_id):
         traceback.print_exc()
         flash('Error eliminant el membre. Torna-ho a provar.', 'error')
         return redirect(url_for('membres.editar', membre_id=membre_id))
+
+@membres_bp.route('/matrimoni/<int:matrimoni_id>')
+@login_required
+def veure_matrimoni(matrimoni_id):
+    """Pàgina detall matrimoni amb cònjuges i fills"""
+    matrimoni = Matrimoni.query.get_or_404(matrimoni_id)
+    familia = matrimoni.espai_familiar
+    
+    # Verificar accés
+    es_membre = MembreFamilia.query.filter_by(
+        usuari_id=current_user.id,
+        espai_familiar_id=familia.id
+    ).first()
+    
+    if not es_membre:
+        flash('No tens accés a aquesta família', 'error')
+        return redirect(url_for('home.index'))
+    
+    # Obtenir fills d'aquest matrimoni
+    fills = MembreFamilia.query.filter_by(matrimoni_id=matrimoni_id).all()
+    
+    return render_template('familia/matrimoni_detall.html',
+                         matrimoni=matrimoni,
+                         familia=familia,
+                         fills=fills,
+                         es_admin=(es_membre.rol == 'administrador'))
+
+@membres_bp.route('/matrimoni/<int:matrimoni_id>/editar', methods=['GET', 'POST'])
+@login_required
+def editar_matrimoni(matrimoni_id):
+    """Editar matrimoni"""
+    matrimoni = Matrimoni.query.get_or_404(matrimoni_id)
+    familia = matrimoni.espai_familiar
+    
+    # Verificar admin
+    es_admin = MembreFamilia.query.filter_by(
+        usuari_id=current_user.id,
+        espai_familiar_id=familia.id,
+        rol='administrador'
+    ).first()
+    
+    if not es_admin:
+        flash('Només els administradors poden editar matrimonis', 'error')
+        return redirect(url_for('membres.veure_matrimoni', matrimoni_id=matrimoni_id))
+    
+    if request.method == 'GET':
+        # Obtenir tots els fills possibles (dels dos cònjuges)
+        fills_membre1 = list(matrimoni.membre_1.fills_com_pare if hasattr(matrimoni.membre_1, 'fills_com_pare') else [])
+        fills_membre1.extend([f for f in (matrimoni.membre_1.fills_com_mare if hasattr(matrimoni.membre_1, 'fills_com_mare') else []) if f not in fills_membre1])
+        
+        fills_membre2 = list(matrimoni.membre_2.fills_com_pare if hasattr(matrimoni.membre_2, 'fills_com_pare') else [])
+        fills_membre2.extend([f for f in (matrimoni.membre_2.fills_com_mare if hasattr(matrimoni.membre_2, 'fills_com_mare') else []) if f not in fills_membre2])
+        
+        tots_fills = fills_membre1 + [f for f in fills_membre2 if f not in fills_membre1]
+        fills_actuals = MembreFamilia.query.filter_by(matrimoni_id=matrimoni_id).all()
+        
+        return render_template('familia/editar_matrimoni.html',
+                             matrimoni=matrimoni,
+                             familia=familia,
+                             tots_fills=tots_fills,
+                             fills_actuals=fills_actuals)
+    
+    # POST
+    try:
+        from datetime import datetime as dt
+        
+        data_casament = request.form.get('data_casament')
+        data_fi = request.form.get('data_fi')
+        estat = request.form.get('estat', 'actiu')
+        
+        matrimoni.data_casament = dt.strptime(data_casament, '%Y-%m-%d').date() if data_casament else None
+        matrimoni.data_fi = dt.strptime(data_fi, '%Y-%m-%d').date() if data_fi else None
+        matrimoni.estat = estat
+        
+        # Desassignar tots els fills primers
+        fills_antics = MembreFamilia.query.filter_by(matrimoni_id=matrimoni_id).all()
+        for fill in fills_antics:
+            fill.matrimoni_id = None
+        
+        # Assignar fills seleccionats
+        fills_seleccionats = request.form.getlist('fills[]')
+        if fills_seleccionats:
+            for fill_id in fills_seleccionats:
+                fill = MembreFamilia.query.get(int(fill_id))
+                if fill:
+                    fill.matrimoni_id = matrimoni_id
+        
+        db.session.commit()
+        flash('Matrimoni actualitzat correctament!', 'success')
+        return redirect(url_for('membres.veure_matrimoni', matrimoni_id=matrimoni_id))
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error editant matrimoni: {e}")
+        import traceback
+        traceback.print_exc()
+        flash('Error editant el matrimoni', 'error')
+        return redirect(url_for('membres.editar_matrimoni', matrimoni_id=matrimoni_id))

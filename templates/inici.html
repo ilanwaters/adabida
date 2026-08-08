@@ -20,13 +20,23 @@
     
     <!-- Columna esquerra - Menú -->
     <aside class="portada-sidebar">
-      <h2>{{ _('Navegació') }}</h2>
       <nav>
         <ul class="menu-lateral">
           <li>
             <a href="{{ url_for('home.home') }}">{{ _('Adabida Principal') }}</a>
           </li>
-          
+
+          <li class="menu-item-desplegable">
+  <a href="#" class="menu-toggle" onclick="toggleSubmenu(event, 'submenu-crear')">
+    <span>{{ _('Crear entrada') }}</span>
+    <span class="fletxa">▼</span>
+  </a>
+
+  <ul class="submenu" id="submenu-crear">
+    <li><a href="{{ url_for('pagina_personal.nova_entrada') }}">{{ _('Entrada personal') }}</a></li>
+    <li><a href="{{ url_for('converses.nova_conversa_adabida') }}">{{ _('Conversa') }}</a></li>
+  </ul>
+</li>
           <li>
             {% if not session.get('usuari') %}
               <a href="#" id="login-toggle-principal">{{ _('Espai personal') }}</a>
@@ -36,43 +46,60 @@
           </li>
           
           <!-- Desplegable Família -->
-          <li class="menu-item-desplegable">
-            <a href="#" class="menu-toggle" onclick="toggleSubmenu(event, 'submenu-familia')">
-              <span>{{ _('Família') }}</span>
-              <span class="fletxa">▼</span>
-            </a>
-            <ul class="submenu" id="submenu-familia">
-              {% if session.get('usuari') %}
-                <li><a href="{{ url_for('familia.crear') }}">{{ _('Crear espai familiar') }}</a></li>
-                <li><a href="{{ url_for('familia.les_meves') }}">{{ _('Els meus espais') }}</a></li>
-                <li><a href="{{ url_for('familia.les_meves') }}">{{ _('Arbre genealògic') }}</a></li>
-                <li><a href="{{ url_for('familia.les_meves') }}">{{ _('Documents familiars') }}</a></li>
-              {% else %}
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Crear espai familiar') }}</a></li>
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Arbre genealògic') }}</a></li>
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Documents familiars') }}</a></li>
-              {% endif %}
-            </ul>
-          </li>
-          
+      <li class="menu-item-desplegable">
+  <a href="#" class="menu-toggle" onclick="toggleSubmenu(event, 'submenu-familia')">
+    <span>{{ _('Família') }}</span>
+    <span class="fletxa">▼</span>
+  </a>
+
+  <ul class="submenu" id="submenu-familia">
+    {% if session.get('usuari') %}
+      <li><a href="{{ url_for('familia.crear') }}">{{ _('Crear espai familiar') }}</a></li>
+      <li><a href="{{ url_for('familia.les_meves') }}">{{ _('Els meus espais') }}</a></li>
+    {% else %}
+      <li class="submenu-info">
+        <p class="submenu-text">
+          {{ _('Crea un espai familiar per documentar la història del teu entorn proper.') }}
+        </p>
+        <p class="submenu-text">
+          {{ _('Arbres genealògics, biografies familiars i documents històrics.') }}
+        </p>
+        <a href="#" class="submenu-cta" onclick="mostraDisclaimer(); return false;">
+          {{ _('Crear perfil personal') }}
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</li>
+
           <!-- Desplegable Organitzacions -->
-          <li class="menu-item-desplegable">
-            <a href="#" class="menu-toggle" onclick="toggleSubmenu(event, 'submenu-org')">
-              <span>{{ _('Organitzacions') }}</span>
-              <span class="fletxa">▼</span>
-            </a>
-            <ul class="submenu" id="submenu-org">
-              {% if session.get('usuari') %}
-                <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Les meves organitzacions') }}</a></li>
-                <li><a href="{{ url_for('organitzacions.crear') }}">{{ _('Crear organització') }}</a></li>
-                <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Història corporativa') }}</a></li>
-              {% else %}
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Crear organització') }}</a></li>
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Història corporativa') }}</a></li>
-                <li><a href="#" onclick="mostrarMissatgeMotivador()">{{ _('Explorar organitzacions') }}</a></li>
-              {% endif %}
-            </ul>
-          </li>
+         <li class="menu-item-desplegable">
+  <a href="#" class="menu-toggle" onclick="toggleSubmenu(event, 'submenu-org')">
+    <span>{{ _('Organitzacions') }}</span>
+    <span class="fletxa">▼</span>
+  </a>
+
+  <ul class="submenu" id="submenu-org">
+    {% if session.get('usuari') %}
+      <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Les meves organitzacions') }}</a></li>
+      <li><a href="{{ url_for('organitzacions.crear') }}">{{ _('Crear organització') }}</a></li>
+      <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Història corporativa') }}</a></li>
+    {% else %}
+      <li class="submenu-info">
+        <p class="submenu-text">
+          {{ _('Crea un espai d’organització per documentar la seva trajectòria i memòria col·lectiva.') }}
+        </p>
+        <p class="submenu-text">
+          {{ _('Història corporativa, testimonis, documents i relats institucionals.') }}
+        </p>
+        <a href="#" class="submenu-cta" onclick="mostraDisclaimer(); return false;">
+          {{ _('Crear perfil personal') }}
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</li>
+
 
            <!-- Cultura popular-->
 <li class="menu-item-desplegable">
@@ -80,18 +107,40 @@
     <span>{{ _('Arxiu de cultura popular') }}</span>
     <span class="fletxa">▼</span>
   </a>
+
   <ul class="submenu" id="submenu-cultura">
     {% if session.get('usuari') %}
-      <li><a href="/nova_entrada_personal?tema=Contes i cançons populars&categoria=Cultura popular">{{ _('Contes i cançons populars') }}</a></li>
-<li><a href="/nova_entrada_personal?tema=Receptes de cuina tradicional&categoria=Cultura popular">{{ _('Receptes de cuina') }}</a></li>
-<li><a href="/nova_entrada_personal?tema=Refranys i dites&categoria=Cultura popular">{{ _('Refranys i dites') }}</a></li>
+      <li>
+        <a href="/nova_entrada_personal?tema=Contes i cançons populars&categoria=Cultura popular">
+          {{ _('Contes i cançons populars') }}
+        </a>
+      </li>
+      <li>
+        <a href="/nova_entrada_personal?tema=Receptes de cuina tradicional&categoria=Cultura popular">
+          {{ _('Receptes de cuina') }}
+        </a>
+      </li>
+      <li>
+        <a href="/nova_entrada_personal?tema=Refranys i dites&categoria=Cultura popular">
+          {{ _('Refranys i dites') }}
+        </a>
+      </li>
     {% else %}
-      <li><a href="#" onclick="mostrarMissatgeMotivador(); return false;">{{ _('Contes i cançons populars') }}</a></li>
-      <li><a href="#" onclick="mostrarMissatgeMotivador(); return false;">{{ _('Receptes de cuina') }}</a></li>
-      <li><a href="#" onclick="mostrarMissatgeMotivador(); return false;">{{ _('Refranys i dites') }}</a></li>
+      <li class="submenu-info">
+        <p class="submenu-text">
+          {{ _('Un espai per preservar i compartir la cultura popular i la memòria col·lectiva.') }}
+        </p>
+        <p class="submenu-text">
+          {{ _('Contes, cançons, receptes, refranys i altres sabers transmesos de generació en generació.') }}
+        </p>
+        <a href="#" class="submenu-cta" onclick="mostraDisclaimer(); return false;">
+          {{ _('Crear perfil personal per participar') }}
+        </a>
+      </li>
     {% endif %}
   </ul>
 </li>
+
 
           <li>
             <a href="{{ url_for('galeria.galeria') }}">{{ _('Galeria i exposicions') }}</a>
@@ -111,18 +160,24 @@
   
   <!-- Caixa 1: Explica'ns sobre -->
   <div class="caixa-contingut">
-    <h2>{{ _('Explica\'ns sobre...') }}</h2>
-    
+    <h2>{{ _('Tria un tema i comença a explicar la teva experiència') }}</h2>
+<p class="lema">
+  {{ _('Pots escriure, enregistrar àudio o vídeo, fer entrevistes, adjuntar documents.') }}
+</p>
+
+ 
     <div class="selector-pais-wrapper">
       <div class="selector-pais-container">
-        <!-- Fila amb 2 selectors -->
+    
+
+
       <!-- Fila amb 2 selectors -->
-<div style="display: flex; gap: 20px; margin-bottom: 15px;">
+    <div class="selectors-row">
   
   <!-- Selector País -->
-  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <h3 style="margin: 0; white-space: nowrap;">{{ _('Tria un país') }}</h3>
-    <select id="selector-pais" class="selector-pais" onchange="canviarPais()" style="flex: 1;">
+  <div class="selector-item">
+    <h3>{{ _('Tria un país') }}</h3>
+    <select id="selector-pais" class="selector-pais" onchange="canviarPais()">
       <option value="">-- {{ _('Selecciona') }} --</option>
       <option value="GLOBAL" selected>{{ _('Temes globals') }}</option>
       <option value="AFEGIR_NOU" style="font-style: italic; color: #999;">+ Afegir país...</option>
@@ -130,9 +185,9 @@
   </div>
   
   <!-- Selector Categoria -->
-  <div style="flex: 1; display: flex; align-items: center; gap: 10px;">
-    <h3 style="margin: 0; white-space: nowrap;">{{ _('o tria una categoria') }}</h3>
-    <select id="selector-categoria" class="selector-pais" onchange="canviarCategoria()" style="flex: 1;">
+  <div class="selector-item">
+    <h3>{{ _('o tria una categoria') }}</h3>
+    <select id="selector-categoria" class="selector-pais" onchange="canviarCategoria()">
       <option value="">-- {{ _('Selecciona') }} --</option>
     </select>
   </div>
@@ -160,7 +215,12 @@
   <div class="grid-entrades" id="grid-entrades">
     {% if entrades_aleatories %}
       {% for entrada in entrades_aleatories[:4] %}
-        {% include 'components/caixa_entrada.html' %}
+        {% if entrada.tipus == 'conversa' %}
+          {% set conversa = entrada %}
+          {% include 'components/caixa_conversa.html' %}
+        {% else %}
+          {% include 'components/caixa_entrada.html' %}
+        {% endif %}
       {% endfor %}
     {% else %}
       <p style="text-align: center; color: #999; grid-column: 1/-1;">{{ _('Encara no hi ha entrades disponibles') }}</p>
@@ -171,7 +231,12 @@
   <div class="grid-entrades entrades-addicionals" id="entrades-addicionals" style="display: none; margin-top: 12px;">
     {% if entrades_aleatories|length > 4 %}
       {% for entrada in entrades_aleatories[4:] %}
-        {% include 'components/caixa_entrada.html' %}
+        {% if entrada.tipus == 'conversa' %}
+          {% set conversa = entrada %}
+          {% include 'components/caixa_conversa.html' %}
+        {% else %}
+          {% include 'components/caixa_entrada.html' %}
+        {% endif %}
       {% endfor %}
     {% endif %}
   </div>
@@ -290,17 +355,18 @@
 <!-- Modal Disclaimer -->
 <div id="disclaimer-modal" class="modal">
   <div class="modal-content">
-    <h2>{{ _('Accés a un projecte acadèmic i científic') }}</h2>
+    <h2>{{ _('Accés a un projecte de memòria i recerca') }}</h2>
     <p>
-      {{ _("Estàs a punt d'accedir a un espai destinat a la recollida de testimonis personals amb finalitats d'investigació històrica, educativa i social. El Projecte Abadia forma part d'un arxiu de memòria oral amb vocació científica i pública.") }}
+      {{ _("Estàs a punt d'accedir a un espai per recollir testimonis personals amb finalitats històriques, educatives i socials. El Projecte Adabida forma part d’un arxiu de memòria oral amb vocació pública i científica.") }}
+
     </p>
     <p>
       {{ _('El registre és voluntari. Molts dels camps del formulari no són obligatoris, però omplir-los amb detall millora significativament el valor documental del teu testimoni.') }}
     </p>
     <p>
-      {{ _('Pots gestionar o suprimir les teves dades en qualsevol moment. La informació aportada es tracta amb criteris ètics, transparència i respecte absolut a la persona.') }}
+      {{ _('Pots gestionar o suprimir les teves dades en qualsevol moment des del teu perfil. La informació aportada es tracta amb criteris ètics, transparència i respecte absolut a la persona.') }}
     </p>
-    <button onclick="acceptarDisclaimer()">{{ _('Acceptar i continuar') }}</button>
+    <button onclick="acceptarDisclaimer()">{{ _('Acceptar i crear perfil') }}</button>
   </div>
 </div>
 
@@ -322,14 +388,23 @@
           maxlength="100"
         >
       </div>
-      
-      <div class="camp-login" style="margin-bottom: 15px;">
-        <label for="categoria-tema-nou">{{ _('Categoria') }}*</label>
-        <select id="categoria-tema-nou" onchange="toggleNovaCategoriaInput()" required>
-          <option value="">{{ _('-- Selecciona una categoria --') }}</option>
-          <option value="nova">{{ _(' Crear nova categoria') }}</option>
-        </select>
-      </div>
+ <div class="camp-login" style="margin-bottom: 15px;">
+  <label>{{ _('Categories') }}* (pots triar-ne més d\'una)</label>
+  <div id="llista-categories-checkboxes" style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+    <!-- Carregat per JS -->
+  </div>
+  
+  <button type="button" onclick="toggleNovaCategoriaInput()" style="margin-top: 10px; background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">
+    + {{ _('Crear categoria nova') }}
+  </button>
+</div>
+
+<div id="container-nova-categoria" style="display: none; margin-bottom: 15px;">
+  <div class="camp-login">
+    <label for="nom-categoria-nova">{{ _('Nom de la categoria nova') }}*</label>
+    <input type="text" id="nom-categoria-nova" placeholder="{{ _('Exemple: Immigració') }}" maxlength="100">
+  </div>
+</div>
       
       <div id="container-nova-categoria" style="display: none; margin-bottom: 15px;">
         <div class="camp-login">
@@ -356,7 +431,7 @@
 </div>
 
 {% include "components/modal_entrada.html" %}
-
+{% include "components/modal_entrada_editar.html" %}
 <!-- Missatges d'error -->
 <div id="missatge-error-login" class="finestra-error-login">
   <p>{{ get_flashed_messages(category_filter=['error-login'])[0] if get_flashed_messages(category_filter=['error-login']) else '' }}</p>
@@ -389,18 +464,46 @@
 
 
 {% block scripts %}
+
 <script>
-  // Variables globals que necessita el JS
   window.USUARI_LOGEJAT = {{ 'true' if session.get('usuari') else 'false' }};
   window.TRADUCCIONS = {
+    // Alerts
+    escriuNomPais: "{{ _('Escriu el nom del país') }}",
+    errorCreantPais: "{{ _('Error creant país') }}",
+    errorConnexio: "{{ _('Error de connexió') }}",
+    paisCreat: "{{ _('creat correctament!') }}",
+    errorAlCrearPais: "{{ _('Error al crear el país') }}",
+    nomTemaObligatori: "{{ _('El nom del tema és obligatori') }}",
+    triaCategoriaObligatoria: "{{ _('Has de triar almenys una categoria o crear-ne una de nova') }}",
+    errorCreantCategoria: "{{ _('Error creant categoria:') }}",
+    errorCreantTema: "{{ _('Error creant tema:') }}",
+    errorDesconegut: "{{ _('Error desconegut') }}",
+    errorConnexioTornar: "{{ _('Error de connexió. Torna-ho a provar.') }}",
+    
+    // Selector
+    selecciona: "{{ _('-- Selecciona --') }}",
+    temesGlobals: "{{ _('Temes globals') }}",
+    afegirPais: "{{ _('+ Afegir país...') }}",
+    
+    // Botons
+    mes: "{{ _('▼ Més') }}",
+    menys: "{{ _('▲ Menys') }}",
+    guardant: "{{ _('Guardant...') }}",
+    
+    // Missatges
+    senseTemesPais: "{{ _('Encara no tenim temes per aquest país. Pots afegir el teu testimoni lliurement:') }}",
+    nousTemes: "{{ _('Pots crear nous temes i categories aquí.') }}",
+    senseCategoriesDisponibles: "{{ _('No hi ha categories disponibles') }}",
+    
+    // Existents
     veureMenys: "{{ _('Veure menys') }}",
     veureMes: "{{ _('Veure més') }}",
-    menysTemes: "{{ _('Menys temes') }}",
-    mesTemes: "{{ _('Més temes') }}",
     errorCarregarEntrades: "{{ _('No s\'han pogut carregar més entrades') }}",
     errorGeneric: "{{ _('Error al carregar entrades') }}"
   };
 </script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/inici.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
 {% endblock %}

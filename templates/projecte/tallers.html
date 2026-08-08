@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Tallers Adabida - Aprèn a recollir memòria oral') }}{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/projecte.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <!-- Hero Section -->
+  <section class="projecte-hero">
+    <h1>{{ _('TALLERS ADABIDA') }}</h1>
+    <p style="font-size: 1.3rem; margin-top: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+      {{ _('Aprèn a recollir testimonis històrics amb rigor acadèmic i sensibilitat humana') }}
+    </p>
+  </section>
+
+  <!-- Contingut Principal -->
+  <div class="projecte-content">
+    
+    <!-- Què són els tallers -->
+    <section class="projecte-section">
+      <h2>{{ _("Què són els tallers Adabida?") }}</h2>
+      <p>
+        {{ _('Els tallers Adabida ofereixen formació pràctica per a persones sense experiència prèvia que vulguin aprendre a realitzar entrevistes de memòria oral. No calen coneixements tècnics ni formació acadèmica: només ganes d\'escoltar i preservar històries que mereixen ser recordades.') }}
+      </p>
+      <p>
+        {{ _('Durant el taller aprendràs a conduir entrevistes que combinen rigor metodològic amb respecte i empatia, especialment quan treballes amb persones grans o col·lectius vulnerables.') }}
+      </p>
+    </section>
+
+    <!-- Què aprendràs -->
+    <section class="projecte-section">
+      <h2>{{ _("Què aprendràs al taller?") }}</h2>
+      <ul style="line-height: 1.8; font-size: 1.1rem;">
+        <li>{{ _('Com preparar i estructurar una entrevista de memòria oral') }}</li>
+        <li>{{ _('Tècniques d\'escolta activa i conducció de converses') }}</li>
+        <li>{{ _('Identificar i adaptar-te a diferents perfils d\'entrevistats') }}</li>
+        <li>{{ _('Ús d\'eines digitals per registrar i preservar testimonis') }}</li>
+        <li>{{ _('Protocol ètic per treballar amb persones vulnerables') }}</li>
+        <li>{{ _('Com validar i organitzar la informació recollida') }}</li>
+      </ul>
+    </section>
+
+    <!-- A qui va dirigit -->
+    <section class="projecte-section">
+      <h2>{{ _("A qui van dirigits els tallers?") }}</h2>
+      <p>{{ _('<strong>Familiars</strong> que volen documentar la història dels seus avis, pares o familiars grans.') | safe }}</p>
+      <p>{{ _('<strong>Voluntaris</strong> d\'organitzacions que treballen amb gent gran, refugiats o col·lectius en risc.') | safe }}</p>
+      <p>{{ _('<strong>Educadors i treballadors socials</strong> interessats en eines de preservació de memòria.') | safe }}</p>
+      <p>{{ _('<strong>Qualsevol persona</strong> amb interès en història oral i amb ganes d\'aprendre.') | safe }}</p>
+    </section>
+
+    <!-- Format del taller -->
+    <section class="projecte-section">
+      <h2>{{ _("Format i durada") }}</h2>
+      <p>
+        {{ _('Els tallers tenen una durada de <strong>6 hores</strong> (format intensiu d\'un dia o repartit en dues sessions).') | safe }}
+      </p>
+      <p>
+        {{ _('Inclouen sessions teòriques, pràctiques amb simulacions d\'entrevistes i resolució de casos reals.') }}
+      </p>
+      <p>
+        {{ _('Tots els participants reben material didàctic i accés a la plataforma Adabida per començar a treballar immediatament.') }}
+      </p>
+    </section>
+
+    <!-- Propers tallers -->
+    <section class="projecte-section">
+      <h2>{{ _("Propers tallers") }}</h2>
+      <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; border-left: 4px solid #14d8ce;">
+        <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+          {{ _('📅 Estem organitzant els primers tallers.') }}
+        </p>
+        <p>
+          {{ _('Si la teva organització està interessada en organitzar un taller Adabida, o vols ser dels primers en participar-hi, contacta amb nosaltres.') }}
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="projecte-section" style="text-align: center; background: #f8f9fa; padding: 3rem; border-radius: 8px;">
+      <h2>{{ _("Vols organitzar un taller?") }}</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+        {{ _("Estem buscant organitzacions col·laboradores per fer arribar la metodologia Adabida a més comunitats.") }}
+      </p>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="mailto:info@adabida.cat" class="boto_nav" style="padding: 1rem 2.5rem; background: #14d8ce; color: white; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          {{ _('Contacta\'ns') }}
+        </a>
+        <a href="{{ url_for('projecte.index') }}" class="boto_nav" style="padding: 1rem 2.5rem; background: white; color: #2c3e50; border: 2px solid #2c3e50; border-radius: 6px; text-decoration: none; font-weight: 600;">
+          {{ _('Torna al projecte') }}
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+{% endblock %}

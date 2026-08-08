@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block titol %}Cookie Policy - Adabida{% endblock %}
+
+{% block css %}
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="document-legal">
+    
+    <h1>COOKIE POLICY</h1>
+    <p class="ultima-actualitzacio">Last updated: 10 January 2026</p>
+
+    <hr>
+
+    <!-- 1. WHAT ARE COOKIES -->
+    <h2>1. WHAT ARE COOKIES</h2>
+    
+    <p>
+      Cookies are files that are downloaded to your computer, smartphone or tablet when you access certain web pages. Cookies allow a website, among other things, to store and retrieve information about a user's browsing habits or their device and, depending on the information they contain and how the device is used, they may be used to recognise the user.
+    </p>
+
+    <!-- 2. ADABIDA COOKIE POLICY -->
+    <h2>2. ADABIDA COOKIE POLICY</h2>
+
+    <div class="success-box">
+      <p><strong>✅ Good news: Adabida only uses strictly necessary cookies</strong></p>
+      <p>
+        We do NOT use tracking, advertising, analytics or third-party cookies. 
+        We only use the minimum essential cookies required for the website to function properly.
+      </p>
+    </div>
+
+    <h3>2.1. COOKIES WE USE</h3>
+    <p>Adabida uses ONLY the following essential technical cookies:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Purpose</th>
+          <th>Duration</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>session</strong></td>
+          <td>Identifies the registered user session. Essential to keep you logged in while browsing.</td>
+          <td>Until you close the browser or the session ends</td>
+          <td>Essential</td>
+        </tr>
+        <tr>
+          <td><strong>language</strong></td>
+          <td>Remembers the language selected by the user to display content in their preferred language.</td>
+          <td>1 year</td>
+          <td>Functional</td>
+        </tr>
+        <tr>
+          <td><strong>csrf_token</strong></td>
+          <td>Protection against Cross-Site Request Forgery (CSRF) attacks. Website security.</td>
+          <td>Until you close the browser</td>
+          <td>Essential</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2.2. WHAT WE DO NOT DO</h3>
+    <p>Adabida does NOT use:</p>
+    <ul>
+      <li>❌ Google Analytics or other third-party analytics tools</li>
+      <li>❌ Advertising cookies</li>
+      <li>❌ Social media cookies (Facebook, Twitter, etc.)</li>
+      <li>❌ Behavioural tracking cookies</li>
+      <li>❌ Advertising personalisation cookies</li>
+    </ul>
+
+    <!-- 3. LEGAL BASIS -->
+    <h2>3. LEGAL BASIS</h2>
+    
+    <p>
+      Strictly necessary technical cookies are exempt from the obligation to obtain user consent under Article 22.2 of Law 34/2002 on Information Society Services and Electronic Commerce (LSSI-CE).
+    </p>
+
+    <div class="info-box">
+      <p><strong>Applicable regulations:</strong></p>
+      <p>✓ Regulation (EU) 2016/679 on Data Protection (GDPR)</p>
+      <p>✓ Organic Law 3/2018 on Data Protection (LOPDGDD)</p>
+      <p>✓ Law 34/2002 on Information Society Services (LSSI-CE)</p>
+    </div>
+
+    <p>
+      According to current legislation, cookies that are essential for providing the service requested by the user do NOT require prior consent. It is only necessary to inform users of their use, as we do in this Cookie Policy.
+    </p>
+
+    <!-- 4. HOW TO MANAGE COOKIES -->
+    <h2>4. HOW TO MANAGE COOKIES</h2>
+
+    <h3>4.1. BROWSER SETTINGS</h3>
+    <p>
+      Although it is not recommended (as the website would no longer function correctly), you may disable cookies through your browser settings:
+    </p>
+
+    <ul>
+      <li><strong>Google Chrome:</strong> Settings → Privacy and security → Cookies and other site data</li>
+      <li><strong>Mozilla Firefox:</strong> Options → Privacy & Security → Cookies and Site Data</li>
+      <li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data</li>
+      <li><strong>Microsoft Edge:</strong> Settings → Cookies and site permissions → Manage and delete cookies and site data</li>
+    </ul>
+
+    <div class="advertencia">
+      <p><strong>⚠️ Important:</strong></p>
+      <p>
+        If you disable essential cookies, you will NOT be able to use Adabida correctly:
+      </p>
+      <ul>
+        <li>You will not be able to log in</li>
+        <li>Your preferred language will not be remembered</li>
+        <li>Some security features will not function</li>
+      </ul>
+    </div>
+
+    <h3>4.2. DELETE COOKIES</h3>
+    <p>
+      You may delete cookies already stored on your device through your browser settings. The process varies depending on the browser, but you will generally find this option under:
+    </p>
+    <p>
+      <strong>Settings → Privacy → Browsing data → Delete cookies</strong>
+    </p>
+
+    <!-- 5. UPDATES -->
+    <h2>5. UPDATES TO THIS POLICY</h2>
+    
+    <p>
+      Adabida reserves the right to modify this Cookie Policy to adapt it to legislative or jurisprudential developments, or to interpretations issued by the Spanish Data Protection Agency.
+    </p>
+    <p>
+      When significant changes are made to this Cookie Policy, they will be indicated on the main page of the website.
+    </p>
+    <p>
+      <strong>Date of last update:</strong> 10 January 2026
+    </p>
+
+    <!-- 6. MORE INFORMATION -->
+    <h2>6. MORE INFORMATION</h2>
+    
+    <p>If you have any questions about this Cookie Policy, you may consult:</p>
+    <ul>
+      <li><a href="{{ url_for('legal.avis_legal') }}" style="color: #14d8ce; text-decoration: underline;">Adabida Legal Notice</a></li>
+      <li><a href="{{ url_for('legal.politica_privadesa') }}" style="color: #14d8ce; text-decoration: underline;">Adabida Privacy Policy</a></li>
+      <li>Contact: <strong>admin@adabida.cat</strong></li>
+    </ul>
+
+    <hr>
+
+    <!-- FINAL SUMMARY -->
+    <div class="seccio-final">
+      <h2 style="color: #333; border: none; padding: 0; margin-bottom: 1rem;">SUMMARY</h2>
+      <p>
+        <strong>Adabida only uses cookies that are strictly necessary for the operation of the website.</strong>
+      </p>
+      <p>
+        We do not track your behaviour, we do not share your data with third parties, and we do not use advertising.
+      </p>
+      <p>
+        Our commitment is to your privacy and the preservation of oral memory, not to commercial profit.
+      </p>
+    </div>
+
+    <p class="ultima-actualitzacio" style="margin-top: 2rem;">
+      Date of last update: 10 January 2026
+    </p>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('inici.inici_pagina') }}" class="boto-tornar">← Back to home</a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

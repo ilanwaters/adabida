@@ -35,12 +35,11 @@
 {% endif %}
       <div class="modal-botons">
         {% if session.get('usuari') %}
-          <button id="boto-guardar" class="boto-guardar-modal" onclick="guardaEntradaFavorita()"> {{ _('Guardar') }}</button>
-          <button id="boto-eliminar-guardada" class="boto-eliminar-guardada" onclick="eliminaEntradaGuardada()" style="display: none;">{{ _('Eliminar de guardades') }}</button>
+          <button id="boto-guardar" class="boto_nav" onclick="guardaEntradaFavorita()"> {{ _('Guardar') }}</button>
+          <button id="boto-eliminar-guardada" class="boto_nav" onclick="eliminaEntradaGuardada()" style="display: none;">{{ _('Eliminar de guardades') }}</button>
         {% endif %}
 
-        <button class="boto-tancar">Tancar</button>
-
+         <button class="boto_nav" onclick="tancaModalEntrada()">Tancar</button>
       </div>
     </div>
   </div>

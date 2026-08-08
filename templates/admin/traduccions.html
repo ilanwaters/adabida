@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block titol %}Traduccions{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/traduccions.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-traduccions">
+    <div class="header-traduccions">
+        <h1>📝 Traduccions</h1>
+    </div>
+
+    <!-- Toggle Temes / Categories -->
+    <div class="toggle-tipus">
+        <a href="{{ url_for('admin_traduccions.traduccions', tipus='temes') }}" 
+           class="{% if tipus == 'temes' %}actiu{% endif %}">
+            📚 Temes ({{ dades|length }})
+        </a>
+        <a href="{{ url_for('admin_traduccions.traduccions', tipus='categories') }}"
+           class="{% if tipus == 'categories' %}actiu{% endif %}">
+            🗂️ Categories ({{ dades|length }})
+        </a>
+    </div>
+
+    <!-- Llistat -->
+    {% for item in dades %}
+    <div class="tema-card">
+        <div class="tema-header" onclick="toggleForm({{ item.objecte.id }})">
+            <div class="tema-info">
+                <h3>
+                    {{ item.objecte.nom }}
+                    {% if item.traduccions_count == 0 %}
+                        <span class="tema-badge badge-pendent">🔴 Sense traduccions</span>
+                    {% elif item.traduccions_count < item.total_idiomes %}
+                        <span class="tema-badge badge-parcial">🟡 {{ item.traduccions_count }}/{{ item.total_idiomes }}</span>
+                    {% else %}
+                        <span class="tema-badge badge-complet">✅ Complet</span>
+                    {% endif %}
+                </h3>
+            </div>
+            <button class="btn-expandir" type="button">
+                {% if item.traduccions_count == 0 %}
+                    + Afegir traduccions
+                {% else %}
+                    ✏️ Editar
+                {% endif %}
+            </button>
+        </div>
+
+        <div class="tema-form" id="form-{{ item.objecte.id }}">
+            <form method="POST" action="{{ url_for('admin_traduccions.guardar_traduccions') }}">
+                <input type="hidden" name="tipus" value="{{ tipus }}">
+                <input type="hidden" name="objecte_id" value="{{ item.objecte.id }}">
+                
+                <div class="form-grid">
+                    {% for idioma in idiomes %}
+                    <div class="form-group">
+                        <label for="trad_{{ idioma }}_{{ item.objecte.id }}">
+                            {{ idiomes_noms.get(idioma, idioma.upper()) }}
+                        </label>
+                        <input 
+                            type="text" 
+                            id="trad_{{ idioma }}_{{ item.objecte.id }}"
+                            name="trad_{{ idioma }}"
+                            value="{% for trad in item.objecte.traduccions %}{% if trad.idioma == idioma %}{{ trad.nom }}{% endif %}{% endfor %}"
+                            placeholder="Traducció en {{ idiomes_noms.get(idioma, idioma) }}"
+                        >
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn-traduccions btn-guardar">💾 Guardar</button>
+                <button type="button" class="btn-traduccions btn-cancelar" onclick="toggleForm({{ item.objecte.id }})">✕ Cancel·lar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function toggleForm(objecteId) {
+    const form = document.getElementById('form-' + objecteId);
+    form.classList.toggle('obert');
+}
+</script>
+{% endblock %}

@@ -35,27 +35,26 @@
   <div class="contingut-membre">
     
     <!-- Nom (amb enllaç si té perfil públic) -->
-    <h3 class="nom-membre">
-      {% if membre.usuari %}
-        {# Membre vinculat - enllaç al seu perfil públic #}
-        <a href="{{ url_for('perfil_public.perfil_public', usuari_login=membre.usuari.nom_login) }}" 
-           style="color: #1a4b75; text-decoration: none;"
-           target="_blank">
-          {{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}
-          {% if membre.usuari.segon_cognom %}{{ membre.usuari.segon_cognom }}{% endif %}
-        </a>
-      {% else %}
-        {# Membre sense usuari - només nom #}
-        {{ membre.nom }} {{ membre.primer_cognom }}
-        {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}
-      {% endif %}
-      
-       
-      {# Badge usuari Adabida #}
-      {% if membre.usuari %}
-        <span class="badge-adabida">{{ _('Usuari Adabida') }}</span>
-      {% endif %}
-    </h3>
+   <!-- Nom (amb enllaç a gestionar relacions) -->
+<h3 class="nom-membre">
+  <a href="{{ url_for('membres.gestionar_relacions', membre_id=membre.id) }}" 
+     style="color: #1a4b75; text-decoration: none;">
+    {% if membre.usuari %}
+      {# Membre vinculat #}
+      {{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}
+      {% if membre.usuari.segon_cognom %}{{ membre.usuari.segon_cognom }}{% endif %}
+    {% else %}
+      {# Membre sense usuari #}
+      {{ membre.nom }} {{ membre.primer_cognom }}
+      {% if membre.segon_cognom %}{{ membre.segon_cognom }}{% endif %}
+    {% endif %}
+  </a>
+  
+  {# Badge usuari Adabida #}
+  {% if membre.usuari %}
+    <span class="badge-adabida">{{ _('Usuari Adabida') }}</span>
+  {% endif %}
+</h3>
 
     <!-- Dates (OBLIGATORI: any naixement mínim) -->
 

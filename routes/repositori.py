@@ -1,12 +1,50 @@
 # routes/repositori.py
 
 from flask import Blueprint, render_template, request, url_for
-from models import Entrada, Usuari, Pais, Regio, Municipi
+from models import Entrada, Usuari, Pais, Regio, Municipi, Conversa
 from sqlalchemy import or_, and_
 from utils import generar_miniatura_entrada
 import re
 
 repositori_bp = Blueprint("repositori", __name__)
+
+
+def preparar_conversa_per_vista(conversa, usuari_nom_login):
+    """Converteix una Conversa en format dict per renderitzar com caixa"""
+    # Obtenir nom del participant principal
+    participant_nom = "Desconegut"
+    if conversa.participants:
+        primer = conversa.participants[0]
+        participant_nom = f"{primer.nom} {primer.primer_cognom or ''} {primer.segon_cognom or ''}".strip()
+    
+    # Construir lloc
+    parts_lloc = [conversa.lloc_municipi, conversa.lloc_regio, conversa.lloc_pais]
+    lloc = ", ".join([p for p in parts_lloc if p]) or None
+    
+    # Extreure any
+    any = conversa.data_conversa.year if conversa.data_conversa else None
+    
+    # Resum del contingut
+    resum = ""
+    if conversa.contingut:
+        contingut_net = re.sub(r'<[^>]+>', '', conversa.contingut)
+        contingut_net = contingut_net.replace('&nbsp;', ' ').replace('&amp;', '&')
+        resum = contingut_net[:120] + "..." if len(contingut_net) > 120 else contingut_net
+    
+    return {
+        "id": conversa.id,
+        "tipus": "conversa",
+        "participant_nom": participant_nom,
+        "tema": conversa.tema,
+        "any": any,
+        "lloc": lloc,
+        "durada_minuts": conversa.durada_minuts,
+        "resum": resum,
+        "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
+        "data_ordenacio": conversa.data_conversa or conversa.created_at,
+        "miniatura": "/static/icons/entrevista.svg",
+        "usuari": conversa.usuari
+    }
 
 @repositori_bp.route("/repositori", methods=["GET"])
 def consulta_repositori():
@@ -145,6 +183,20 @@ def consulta_repositori():
 
     args_copia = request.args.to_dict()
     args_copia.pop('page', None)
+    # Obtenir converses (sense filtres de moment, TODO: afegir filtres)
+    if cerca_realitzada:
+        converses_raw = Conversa.query.limit(per_page).all()
+    else:
+        converses_raw = []
+
+    converses = []
+    for conversa in converses_raw:
+        conv_dict = preparar_conversa_per_vista(conversa, conversa.usuari.nom_login if conversa.usuari else 'anonim')
+        converses.append(conv_dict)
+
+    # Barrejar entrades + converses
+    entrades = entrades + converses
+    entrades.sort(key=lambda x: x.get("data_ordenacio", datetime.min), reverse=True)
 
     return render_template(
         "repositori.html",
@@ -165,3 +217,4 @@ def mostra_entrada(entrada_id):
 def entrada_publica(entrada_id):
     entrada = Entrada.query.get_or_404(entrada_id)
     return render_template('entrada_publica.html', entrada=entrada)
+

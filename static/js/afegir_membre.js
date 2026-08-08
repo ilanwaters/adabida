@@ -14,46 +14,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             timeoutBuscar = setTimeout(() => {
-                console.log('🔍 Buscant:', query);
                 fetch(`/api/buscar-usuaris?q=${encodeURIComponent(query)}`)
-                    .then(r => {
-                        console.log('📡 Resposta rebuda:', r.status);
-                        return r.json();
-                    })
+                    .then(r => r.json())
                     .then(usuaris => {
-                        console.log('👥 Usuaris trobats:', usuaris);
                         const div = document.getElementById('resultats_usuari');
-                        console.log('📦 Div resultats:', div);
-                        
-                        div.innerHTML = ''; // Netejar
+                        div.innerHTML = '';
                         
                         if (usuaris.length === 0) {
                             div.innerHTML = '<div style="padding: 8px; color: #666;">No s\'han trobat usuaris</div>';
                         } else {
                             usuaris.forEach(u => {
                                 const item = document.createElement('div');
-                                item.className = 'usuari-item';
                                 item.style.cssText = 'padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;';
                                 item.textContent = u.text;
-                                item.onclick = function() {
-                                    seleccionarUsuari(u.id, u.text);
-                                };
+                                item.onclick = () => seleccionarUsuari(u.id, u.text);
                                 div.appendChild(item);
                             });
                         }
                         
-                        console.log('✅ Mostrant resultats');
                         div.style.display = 'block';
                     })
-                    .catch(err => console.error('❌ Error:', err));
+                    .catch(err => console.error('Error:', err));
             }, 300);
         });
         
-        // Prevenir Enter al camp de buscar
         buscarInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-            }
+            if (e.key === 'Enter') e.preventDefault();
         });
     }
     
@@ -61,16 +47,20 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         if (!e.target.closest('#buscar_usuari') && !e.target.closest('#resultats_usuari')) {
             const resultatsDiv = document.getElementById('resultats_usuari');
-            if (resultatsDiv) {
-                resultatsDiv.style.display = 'none';
-            }
+            if (resultatsDiv) resultatsDiv.style.display = 'none';
+        }
+        
+        if (!e.target.closest('#buscar_membre') && !e.target.closest('#resultats_membre')) {
+            const resultatsMembre = document.getElementById('resultats_membre');
+            if (resultatsMembre) resultatsMembre.style.display = 'none';
         }
     });
+    
+    // BUSCAR MEMBRE EXISTENT
+    inicialitzarBuscarMembre();
 });
 
-// Funcions globals
 function seleccionarUsuari(id, text) {
-    console.log('✨ Usuari seleccionat:', id, text);
     document.getElementById('usuari_id').value = id;
     document.getElementById('usuari_nom').textContent = text;
     document.getElementById('usuari_seleccionat').style.display = 'block';
@@ -81,6 +71,53 @@ function seleccionarUsuari(id, text) {
 function netejarUsuari() {
     document.getElementById('usuari_id').value = '';
     document.getElementById('usuari_seleccionat').style.display = 'none';
+}
+
+function inicialitzarBuscarMembre() {
+    const inputBuscarMembre = document.getElementById('buscar_membre');
+    if (!inputBuscarMembre || !window.totsMembres) return;
+    
+    inputBuscarMembre.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const resultatsMembre = document.getElementById('resultats_membre');
+        
+        if (query.length < 2) {
+            resultatsMembre.style.display = 'none';
+            return;
+        }
+        
+        const filtrats = window.totsMembres.filter(m => 
+            (m.nom + ' ' + m.primer_cognom).toLowerCase().includes(query)
+        );
+        
+        if (filtrats.length === 0) {
+            resultatsMembre.style.display = 'none';
+            return;
+        }
+        
+        resultatsMembre.innerHTML = filtrats.map(m => `
+            <div onclick="seleccionarMembre(${m.id}, '${m.nom} ${m.primer_cognom}')" 
+                 style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;">
+                ${m.nom} ${m.primer_cognom} 
+                ${m.data_naixement ? '(' + m.data_naixement.split('-')[0] + ')' : ''}
+            </div>
+        `).join('');
+        
+        resultatsMembre.style.display = 'block';
+    });
+}
+
+function seleccionarMembre(id, nom) {
+    document.getElementById('membre_existent_id').value = id;
+    document.getElementById('membre_nom').textContent = nom;
+    document.getElementById('membre_seleccionat').style.display = 'block';
+    document.getElementById('resultats_membre').style.display = 'none';
+    document.getElementById('buscar_membre').value = '';
+}
+
+function netejarMembre() {
+    document.getElementById('membre_existent_id').value = '';
+    document.getElementById('membre_seleccionat').style.display = 'none';
 }
 
 function afegirDocument() {
@@ -129,3 +166,37 @@ function afegirDocument() {
     
     container.appendChild(nouDocument);
 }
+
+function seleccionarMembre(id, nom) {
+    document.getElementById('membre_existent_id').value = id;
+    document.getElementById('membre_nom').textContent = nom;
+    document.getElementById('membre_seleccionat').style.display = 'block';
+    document.getElementById('resultats_membre').style.display = 'none';
+    document.getElementById('buscar_membre').value = '';
+    
+    // AMAGAR FORMULARI I DESACTIVAR VALIDACIÓ
+    const formulari = document.getElementById('formulari-nou-membre');
+    formulari.style.display = 'none';
+    
+    // Desactivar required dels camps amagats
+    formulari.querySelectorAll('[required]').forEach(input => {
+        input.removeAttribute('required');
+        input.dataset.wasRequired = 'true';
+    });
+}
+
+function netejarMembre() {
+    document.getElementById('membre_existent_id').value = '';
+    document.getElementById('membre_seleccionat').style.display = 'none';
+    
+    // MOSTRAR FORMULARI I REACTIVAR VALIDACIÓ
+    const formulari = document.getElementById('formulari-nou-membre');
+    formulari.style.display = 'block';
+    
+    // Reactivar required
+    formulari.querySelectorAll('[data-was-required]').forEach(input => {
+        input.setAttribute('required', '');
+        delete input.dataset.wasRequired;
+    });
+}
+

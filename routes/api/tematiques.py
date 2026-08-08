@@ -89,7 +89,12 @@ def get_temes_pais(codi):
     categories_pais = CategoriaTema.query.filter_by(pais_id=pais.id).all()
     temes_pais = []
     for cat in categories_pais:
-        temes_pais.extend(Tema.query.filter_by(categoria_id=cat.id, aplicar_a_tots_paisos=False).all())
+        temes_pais.extend(
+            Tema.query.filter(
+                Tema.categories.any(id=cat.id),
+                Tema.aplicar_a_tots_paisos == False
+            ).all()
+        )
     
     return jsonify({
         'codi': pais.codi_iso,
@@ -233,9 +238,8 @@ def temes_categoria(categoria_id):
     try:
         from models.tematiques import Tema
         
-        temes = Tema.query.filter_by(
-            categoria_id=categoria_id
-            # ← ELIMINA: actiu=True
+        temes = Tema.query.filter(
+            Tema.categories.any(id=categoria_id)
         ).order_by(Tema.ordre, Tema.nom).all()
         
         return jsonify({

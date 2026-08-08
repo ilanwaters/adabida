@@ -180,17 +180,64 @@
         <div class="card-header-custom card-header-warning">
              {{ _('Gestió de Membres') }} ({{ familia.nombre_membres }})
         </div>
-
-        {% if familia.membres %}
-            {% if familia.membres %}
-    <div class="grid-membres">
-        {% for membre in familia.membres %}
-            {{ targeta.targeta_membre(membre, mode='admin') }}
-        {% endfor %}
-    </div>
-{% else %}
-    <p class="text-muted-custom">{{ _('No hi ha membres') }}</p>
-{% endif %}
+{% if familia.membres %}
+            <ul class="llista-elegant">
+                {% for membre in familia.membres %}
+                <li>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <strong>
+                                {% if membre.usuari %}
+                                    {{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}
+                                {% elif membre.nom %}
+                                    {{ membre.nom }} {{ membre.primer_cognom }}
+                                {% else %}
+                                    {{ _('Sense nom') }}
+                                {% endif %}
+                            </strong>
+                            
+                            <span class="badge-custom {% if membre.rol == 'administrador' %}badge-actiu{% else %}badge-membre{% endif %}">
+                                {% if membre.rol == 'administrador' %}{{ _('Admin') }}{% else %}{{ _('Membre') }}{% endif %}
+                            </span>
+                            
+                            {% if membre.usuari %}
+                                <span class="badge-custom" style="background-color: #17a2b8; color: white;">
+                                    {{ _('Usuari Adabida') }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem;">
+                            {% if membre.rol != 'administrador' %}
+                            <button class="btn-custom btn-outline-custom" 
+                                    style="padding: 0.25rem 0.75rem; font-size: 0.9rem;"
+                                    onclick="canviarRol({{ membre.id }}, 'administrador')">
+                                ⬆ {{ _('Fer Admin') }}
+                            </button>
+                            {% else %}
+                            <button class="btn-custom btn-outline-custom" 
+                                    style="padding: 0.25rem 0.75rem; font-size: 0.9rem;"
+                                    onclick="canviarRol({{ membre.id }}, 'membre')">
+                                ⬇{{ _('Revocar Admin') }}
+                            </button>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('membres.editar', membre_id=membre.id) }}" 
+                               class="btn-custom btn-outline-custom" 
+                               style="padding: 0.25rem 0.75rem; font-size: 0.9rem;">
+                                 {{ _('Editar') }}
+                            </a>
+                            
+                            <button class="btn-custom btn-outline-custom" 
+                                    style="padding: 0.25rem 0.75rem; font-size: 0.9rem; color: #dc3545; border-color: #dc3545;"
+                                    onclick="eliminarMembre({{ membre.id }}, '{{ membre.nom or membre.usuari.nom }}')">
+                                
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         {% else %}
             <p class="text-muted-custom">{{ _('No hi ha membres') }}</p>
         {% endif %}
@@ -290,34 +337,33 @@
 
     <!-- CONFIGURACIÓ AVANÇADA -->
     <div class="card-visualitzacio">
-        <div class="card-header-custom card-header-secondary">
-            🔧 {{ _('Configuració Avançada') }}
+    <div class="card-header-custom card-header-secondary">
+        🔧 {{ _('Configuració Avançada') }}
+    </div>
+
+    <div style="display: grid; gap: 1rem;">
+        <div>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="visibilitat_global" {% if familia.visible_globalment %}checked{% endif %}>
+                <span>{{ _('Espai visible globalment (per arbres genealògics interconnectats)') }}</span>
+            </label>
+            <small class="text-muted-custom">{{ _('Si està desactivat, altres famílies veuran "---oo---" en les connexions') }}</small>
         </div>
 
-        <div style="display: grid; gap: 1rem;">
-            <div>
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="checkbox" id="visibilitat_global" {% if familia.visible_globalment %}checked{% endif %}>
-                    <span>{{ _('Espai visible globalment (per arbres genealògics interconnectats)') }}</span>
-                </label>
-                <small class="text-muted-custom">{{ _('Si està desactivat, altres famílies veuran "---oo---" en les connexions') }}</small>
-            </div>
-
-            <div>
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="checkbox" id="notificacions_actives" checked>
-                    <span>{{ _('Notificacions actives per nous continguts') }}</span>
-                </label>
-            </div>
-
-            <div>
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="checkbox" id="permisos_edicio_membres">
-                    <span>{{ _('Permetre que membres (no admins) editin informació') }}</span>
-                </label>
-            </div>
+        <div>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="notificacions_actives" checked>
+                <span>{{ _('Notificacions actives per nous continguts') }}</span>
+            </label>
         </div>
 
+        <div>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="permisos_edicio_membres">
+                <span>{{ _('Permetre que membres (no admins) editin informació') }}</span>
+            </label>
+        </div>
+    </div>
         <div class="boto-group">
             <button class="btn-custom btn-primary-custom" onclick="desarConfiguracio()">
                  {{ _('Desar Configuració') }}
@@ -452,7 +498,7 @@ function tancarModalInvitar() {
 
 function canviarRol(membreId, nouRol) {
     if (confirm('Segur que vols canviar el rol d\'aquest membre?')) {
-        fetch(`/familia/membre/${membreId}/canviar-rol`, {
+        fetch(`/familia/{{ familia.id }}/administrar/membre/${membreId}/canviar-rol`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

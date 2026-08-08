@@ -36,6 +36,9 @@ from models.tematiques import CategoriaTema, Tema, TemaExclusio
 
 from .aportacio import Aportacio
 
+from models.traduccio_categoria import TraducioCategoriaTema
+
+from models.traduccio_categoria_portada import TraducioCategoria
 __all__ = [
     'db',
     'Usuari', 
@@ -84,5 +87,7 @@ __all__ = [
     'TemaExclusio',
     'Categoria',
     'TraduccioTema',
-    'Aportacio'
+    'Aportacio',
+    'TraducioCategoriaTema',
+    'TraducioCategoria' 
 ]

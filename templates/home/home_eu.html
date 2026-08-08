@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block titol %}Hasiera - Adabida{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="home-seccio">
+  
+  <!-- ALBOKO AURKIBIDEA -->
+  <div class="index-lateral">
+    <h3>Edukia</h3>
+    <nav class="navegacio-index">
+      <ul>
+        <li><a href="#qui-som">Nor gara</a></li>
+        <li><a href="#manifest-etic">Adierazpen etikoa</a></li>
+        <li><a href="#projecte">Adabida proiektua</a></li>
+        <li><a href="#financament">Finantzaketa gardena</a></li>
+        <li><a href="#advertencia">Abisu garrantzitsua</a></li>
+        <li><a href="#documentacio-legal">Dokumentazio legala</a></li>
+        <li><a href="#contacte">Kontaktua</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- EDUKI NAGUSIA -->
+  <div class="contingut-principal">
+    
+    <!-- ATALA: NOR GARA -->
+    <section id="qui-som" class="seccio-home">
+      <h1>Nor gara?</h1>
+      
+      <div class="text-seccio">
+        <h2>Zer da Adabida?</h2>
+        
+        <p>Adabidak biografia pertsonalaren eta gizarteen historiaren arteko harremana eta elkartrukea dokumentatu nahi ditu, bizitza bakoitza, aldi berean, esperientzia indibiduala eta lekukotasun historikoa dela ulertuta. Horrela, Adabida ahozko memoria eta pertsonen ondare pertsonala gordetzeko sortutako artxibo historiko digitala da. Biografia pertsonala historia kolektiboarekin harremanetan jartzen denean, artxiboa sortzen da.</p>
+        
+        <p>Edozein pertsonak bere bizitza dokumentatzeko espazio seguru eta errespetuzkoa eskaintzen du, testigantza idatziak, audioak, bideoak eta argazkiak erabiliz. Ez da sare sozial bat: artxibo bat da. Gordetzeko pentsatutako lekua, ez kontsumitzeko. Oroitzeko, ez ahazteko.</p>
+        
+        <p>Adabida bokazio akademikoa eta zorroztasun historiografikoa dituen proiektu gisa ulertzen da. Artxiboko edukia erabiltzaileek sortzen dute hiru kanal nagusiren bidez: profil indibidualak, familia-espazioak eta erakundeak (instituzioak, kultura-elkarteak, memoria-erakundeak, klubak, etab.). Helburua ahozko memoriaren funts dokumental bat sortzea da, ikertzaileentzat eskuragarri egongo dena, baina baita norberaren edo familiaren ondarea gorde nahi duen edonorentzat ere.</p>
+        
+        <h2>Adabidako taldea</h2>
+        
+        <p>Adabidako taldea ahozko memoria eta ondare pertsonala zaintzeko konpromisoa duten historialariek, psikologoek eta kazetariek osatzen dute.</p>
+        
+        <p>Paradoxa kezkagarri bat ikusi dugu: memoriaren kontserbaziorako gaitasun tekniko handiena dugun garaian bizi gara, baina aldi berean gizateriaren garairik interesgarrienetako bateko iturri primario bakarrak galtzeko arriskuan gaude. Gure gizartean inoiz baino adineko gehiago ditugu, baina inoiz baino gutxiago entzuten zaie. Belaunaldi gutxi batzuk lehenago, adinekoa jakintzaren eta jakinduriaren iturri gisa entzuna eta errespetatua zen. Gaur egun, XX. mendeko esperientzia errepikaezinen gordailu diren adineko pertsonak askotan baztertuak edo gutxietsita daude. Gerrak, eraldaketa sozialak eta aurrekaririk gabeko aldaketa teknologikoak bizi izan dituzten haien testigantzek egunero desagertzeko arriskua dute.</p>
+        
+        <p>Adabida paradoxa hori iraultzeko sortu da: teknologia zer esateko gehien duten eta ahots gutxien jasotzen dutenen zerbitzura jartzeko. Bizitza indibiduala historia kolektibo bihurtzen den lekua gordetzeko sortu da.</p>    
+      </div>
+    </section>
+
+    <!-- ATALA: ADIERAZPEN ETIKOA -->
+    <section id="manifest-etic" class="seccio-home">
+      <h1>Adierazpen etikoa</h1>
+      
+      <div class="text-seccio">
+        <p>Adabida oinarrizko printzipio etikoen arabera gidatzen da:</p>
+        
+        <h2>1. Teknologia libreak eta independentzia korporatiboa</h2>
+        <p>Adabida ez dago korporazio teknologiko handien menpe. Software librea eta zerbitzari independenteak erabiltzen ditu. Kodea gardena eta ikusgarria da. Horrek subiranotasun teknologikoa eta datuen gaineko benetako kontrola bermatzen du.</p>
+        
+        <h2>2. Zure datuak zureak dira</h2>
+        <p>Adabidak ez ditu inoiz erabiltzaileen datuak salduko, partekatuko edo ustiatuko. Pertsona orok ahazte digitalerako eta datuen eramangarritasunerako eskubidea du. Adabidak eskubide hori bermatzen du.</p>
+        
+        <h2>3. Ez gara produktu bat</h2>
+        <p>Ez dago publizitaterik. Ez dago jarraipenik. Ez dago manipulatzeko algoritmoik. Adabida pertsonen zerbitzurako existitzen da, ez haiek ustiatzeko.</p>
+        
+        <h2>4. Zorroztasuna eta gardentasuna memorian</h2>
+        <p>Adabidak argi bereizten ditu memoria pertsonala eta egitate historiko egiaztatua. Testigantzak pertsonek kontatzen dituzten bezala gordetzen dira, baina betiere haien izaerari buruzko gardentasunarekin: iturri primarioak dira, ez egia absolutuak. Horrek erabilera akademikoa ahalbidetzen du, zorroztasunez.</p>
+        
+        <h2>5. Irisgarritasun unibertsala</h2>
+        <p>Adabida %100 doakoa da eta beti izango da. Gainera, adinaren edo esperientzia digitalaren edozein mailatarako erabiltzeko erraza izateko diseinatuta dago. Inor ez da arrazoi ekonomiko edo teknikoengatik kanpoan geratu behar.</p>
+        
+        <h2>6. Errespetua eta duintasuna</h2>
+        <p>Istorio bakoitza merezi duen errespetu eta duintasunarekin tratatzen da. Oroitzapenak ez dira merkantzia.</p>
+      </div>
+    </section>
+  
+     <!-- ATALA: PROIEKTUA -->
+    <section id="projecte" class="seccio-home">
+      <h1>Adabida proiektua</h1>
+      
+      <div class="text-seccio">
+
+        <p><a href="{{ url_for('projecte.index') }}">Adabida proiektuak</a> bi helburu ditu: akademikoa batetik, eta soziala bestetik. Alde batetik, balio akademikoa duten testigantza historikoak gordetzea, planeta osoko edonork eskuratu ahal izango dituen iturri primario zuzen gisa. Bestetik, historian parte izan arren askotan entzunak ez diren pertsona askoren ondarea duintzea eta haien bizitzari zentzua ematea, haien oroimenaren eta esperientziaren garrantzia gorabehera.</p>
+      </div>
+    </section>
+  <!-- ATALA: FINANTZAKETA -->
+    <section id="financament" class="seccio-home">
+      <h1>Finantzaketa gardena</h1>
+<div class="text-seccio">
+        <p>Adabida erabiltzaileentzat %100 doako zerbitzua da, baina haren garapenak eta mantentze-lanek kostu errealak dituzte. Proiektua komunitatearen borondatezko ekarpenen bidez soilik finantzatzen da.</p>
+        
+        <p>Adabidak eredu desberdin bat du: erabilera librea da, baina kostuak (zerbitzariak, garapena, mantentzea) komunitateak bere gain hartzen ditu, modu garden eta borondatezkoan. Inor ez dago ordaintzera behartuta, baina proiektua baloratzen duenak lagundu dezake jasangarria izan dadin.</p>
+        
+        <h2>Zergatik eredu hau?</h2>
+        <ul>
+          <li><strong>Independentzia:</strong> Adabida ez dago korporazio edo inbertitzaileen menpe</li>
+          <li><strong>Pribatutasuna:</strong> Erabiltzaileen datuak ez dira produktua</li>
+          <li><strong>Etika:</strong> Oroitzapenak ez dira monetizatu behar</li>
+          <li><strong>Komunitatea:</strong> Proiektua guztiona da eta guztiontzat</li>
+        </ul>
+        
+        <h2>Konpromiso publikoak</h2>
+        <ul>
+          <li>✅ Inoiz ez da sarbideagatik kobratuko</li>
+          <li>✅ Inoiz ez dira datuak salduko</li>
+          <li>✅ Ez da inoiz publizitaterik egongo</li>
+          <li>✅ Urtero txosten finantzario bat argitaratuko da</li>
+          <li>✅ Teknologia libreak mantenduko dira</li>
+        </ul>
+        <button class="boto-desplegable" onclick="toggleFinancament()">
+  {{ _('Borondatezko ekarpenei buruzko informazio gehiago') }} ▼
+</button>
+
+  <div id="contingut-financament" style="display: none;">
+  <div class="aportacions-container">
+    
+    <h1>Borondatezko ekarpenak</h1>
+    <p class="subtitol">Komunitateak finantzatutako proiektu independente eta etikoa</p>
+
+    <div class="destacat">
+      <p><strong>Adabida %100 doakoa da eta beti izango da guztiontzat.</strong></p>
+      <p>Ez dago harpidetzarik. Ez dago ordainpeko funtzionalitaterik. Ez dago publizitaterik. Ez ditugu zure datuak saltzen.</p>
+    </div>
+
+    <h2>1. Zergatik borondatezko ekarpenak?</h2>
+    
+    <p>Adabida ez da soilik proiektu teknologiko bat, balioetan oinarritutako proiektu bat da. Borondatezko ekarpenen eredua arrazoi etiko funtsezkoengatik aukeratu dugu:</p>
+
+    <ul>
+      <li><strong>Independentzia:</strong> Ez egotea korporazio teknologiko handien edo inbertitzaileen menpe</li>
+      <li><strong>Pribatutasuna:</strong> Zure datuak INOIZ ez dira produktua izango. Ez ditugu inoiz salduko edo monetizatuko</li>
+      <li><strong>Irisgarritasun unibertsala:</strong> Pertsona orok bere memoria gorde ahal izatea, baliabide ekonomikoak edozein direla ere</li>
+      <li><strong>Duintasuna:</strong> Pertsonen oroitzapenak eta testigantzak ez dira merkantzia</li>
+      <li><strong>Komunitatea:</strong> Proiektua guztiona da eta guztiontzat, ez irabazi-asmorik duen enpresa batena</li>
+    </ul>
+
+    <p>Wikipedia bezalako proiektuetan inspiratuta, uste dugu ezagutza eta memoria kolektiboa libreak eta eskuragarriak izan behar direla. Baina horrek kostu bat du.</p>
+
+    <h2>2. Gardentasun finantzarioa</h2>
+
+    <p>Gardentasun osoarekin konprometitzen gara. Ekarpen bakoitzeko euro bakoitza Adabida mantentzera eta hobetzeko erabiltzen da:</p>
+
+    <table class="taula-costos">
+      <thead>
+        <tr>
+          <th>Kontzeptua</th>
+          <th>Kostu estimatua/urte</th>
+          <th>Deskribapena</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Zerbitzaria eta hosting-a</td>
+          <td>500-800€</td>
+          <td>Datu-basearen, multimedia-fitxategien eta web-aplikazioaren ostatatzea</td>
+        </tr>
+        <tr>
+          <td>Domeinua eta SSL ziurtagiriak</td>
+          <td>50-100€</td>
+          <td>adabida.cat domeinuaren mantentzea eta HTTPS segurtasuna</td>
+        </tr>
+        <tr>
+          <td>Babeskopiak</td>
+          <td>100-200€</td>
+          <td>Datuak inoiz gal ez daitezen bermatzeko backup-sistemak</td>
+        </tr>
+        <tr>
+          <td>Garapena eta mantentzea</td>
+          <td>Aldakorra</td>
+          <td>Plataformaren hobekuntzak, erroreen zuzenketak, funtzionalitate berriak</td>
+        </tr>
+        <tr>
+          <td>Elkarrizketetarako AA (etorkizuna)</td>
+          <td>200-400€</td>
+          <td>Ahozko elkarrizketetarako adimen artifiziala integratzen dugunean</td>
+        </tr>
+        <tr class="total">
+          <td colspan="2"><strong>URTEKO GUZTIZKO ESTIMATUA</strong></td>
+          <td><strong>850-1.500€</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="nota">* Hauek proiektuaren hasierako fasera egokitutako kostu estimatuak dira. Komunitatea hazten den heinean, kostuak proportzionalki handituko dira.</p>
+
+    <h2>3. Gure konpromisoak</h2>
+<ul>
+      <li>Inoiz ez sarbideagatik kobratzea: Adabida beti izango da doakoa guztiontzat</li>
+      <li>Inoiz ez datuak saltzea: Zure datu pertsonalak eta testigantzak ez dira inoiz salduko edo monetizatuko</li>
+      <li>Inoiz ez publizitaterik: Ez da inoiz hirugarrenen iragarkirik edo jarraipenik egongo</li>
+      <li>Gardentasun finantzarioa: Urtero gastu eta diru-sarreren txostena argitaratuko dugu</li>
+      <li>Teknologia libreak: Software librearekin eta subiranotasun digitalarekin konpromisoa</li>
+      <li>Zure datuak zureak dira: Zure eduki guztia nahi duzunean ezabatu dezakezu</li>
+    </ul>
+
+    <h2>4. Nola egin ekarpen bat</h2>
+
+    <p>Ez dago gutxieneko zenbatekorik. Ekarpen bakoitzak, txikia izan arren, proiektua bizirik mantentzen laguntzen du.</p>
+
+    <div class="metodes">
+      <h3>Ordainketa-metodoak</h3>
+      
+      <p><strong>Bizum:</strong> [ZENBAKIA PENDENTE]</p>
+      <p><strong>Banku-transferentzia:</strong> IBAN [PENDENTE]</p>
+      <p><strong>Kreditu-txartela:</strong> PayPal edo txartela (laster erabilgarri)</p>
+      
+      <p class="nota">Garapen-fasean gaude. Ordainketa-metodoak proiektua DEMO bertsiotik irteten denean aktibatuko dira.</p>
+    </div>
+
+    <h2>5. Laguntzeko beste modu batzuk</h2>
+
+    <p>Ezin baduzu ekarpen ekonomikorik egin, Adabidarekin kolaboratzeko beste modu asko daude:</p>
+
+    <ul>
+      <li>Zabalkundea: Proiektua interesa izan dezaketen pertsonei azaltzea</li>
+      <li>Itzulpenak: Plataforma hizkuntza gehiagotara itzultzen laguntzea</li>
+      <li>Diseinua: Interfazea eta erabiltzaile-esperientzia hobetzea</li>
+      <li>Garapena: Kodearekin kolaboratzea (teknologia libreak)</li>
+      <li>Testigantzak: Zure istorioa partekatzea eta artxiboa aberastea</li>
+      <li>Harremanak: Ospitale, egoitza edo elkarteekin konektatzea</li>
+    </ul>
+
+    <h2>6. Ohiko galderak</h2>
+
+    <h3>Nork kudeatzen ditu ekarpenak?</h3>
+    <p>DEMO fase honetan, ekarpenak proiektuaren garatzaileek kudeatzen dituzte. Proiektua hazten denean, irabazi-asmorik gabeko kultura-elkarte gisa eratuko da, zuzendaritza-batzordearekin eta gardentasun osoarekin.</p>
+
+    <h3>Aukeratu al dezaket nire ekarpena zertan gastatzen den?</h3>
+    <p>Ekarpenak proiektuaren mantentze orokorrera bideratzen dira. Lehentasun zehatzik baduzu (adibidez, AA garatzea edo hizkuntza jakin batera itzulpena hobetzea), transferentziaren mezuan adierazi dezakezu.</p>
+
+    <h3>Abantailaren bat al dut ekarpen bat egiten badut?</h3>
+    <p><strong>Ez.</strong> Eta hori nahita egina dago. Adabidak ez du premium funtzionalitaterik edo ordainpeko abantailarik. Pertsona guztiek sarbide bera dute, ekarpena egin duten ala ez kontuan hartu gabe. Horrek proiektuaren berdintasuna eta etika bermatzen ditu.</p>
+
+    <h3>Nola jakin dezaket ekarpenak ondo erabiltzen direla?</h3>
+    <p>Urtero gardentasun finantzarioaren txosten bat argitaratuko dugu, diru-sarrera eta gastu guztiak zehaztuta. Gainera, nahi duzunean gurekin harremanetan jar zaitezke informazioa eskatzeko.</p>
+
+    <div class="tancament">
+      <p>Eskerrik asko proiektu desberdin batean sinesteagatik.</p>
+      <p>Adabida memoria, duintasuna eta teknologia etikoaren aldeko apustua da. Ekarpen bakoitzak, txikia izan arren, amets hau bizirik mantentzen laguntzen digu: pertsonak errespetatzen dituen artxibo historiko libre eta doakoa.</p>
+      <p><strong>Zure oroitzapenak historiaren parte dira. Eskerrik asko haiek gordetzen laguntzeagatik.</strong></p>
+    </div>
+
+  </div>
+</div>
+        <p class="text-destacat">
+  <a href="{{ url_for('aportacions.nova_aportacio') }}" class="boto_nav">
+    {{ _('Egin ekarpen bat') }}
+  </a>
+</p>
+      </div>
+    </section>
+
+  
+
+  
+    <!-- ATALA: ABISUA -->
+    <section id="advertencia" class="seccio-home">
+      <h1>Abisu garrantzitsua</h1>
+  
+  <div class="text-seccio advertencia-box">
+    <p><strong>⚠️ Adabidan gordetako testigantzak oroitzapen pertsonal benetakoak dira, baina EZ profesional historialariek egiaztatuak.</strong></p>
+    
+    <h2>Zer esan nahi du honek?</h2>
+    <p>Adabidak memoria pertsonek gogoratzen eta partekatzen duten moduan gordetzen du. Horrek esan nahi du:</p>
+    <ul>
+      <li>Testigantzek pertzepzio eta oroitzapen pertsonalak islatzen dituztela</li>
+      <li>Datetan, izenetan edo gertakarietan akatsak egon daitezkeela</li>
+      <li>Giza memoria subjektiboa dela eta denborarekin alda daitekeela</li>
+      <li>Adabidak ez dituela gertakariak egiaztatzen ezta iturriak kontrastatzen ere</li>
+    </ul>
+    
+    <h2>Adierazpen-askatasuna eta neutraltasuna</h2>
+    <p>Adabidak adierazpen-askatasuna defendatzen du eta espazio ireki bat eskaintzen du, edonork bere oroitzapenak eta testigantzak gorde ahal izateko, jarrera politikoa, sinesmen erlijiosoak edo jatorria edozein direla ere.</p>
+    <p><strong>Adabida ez da eztabaida-foro bat, ezta interpretazio historikorako gune bat ere.</strong> Iturri primarioen artxibo bat da: memoria kolektiboa osatzen duten ahots indibidualak.</p>
+        
+        <h2>Erabiltzaileen egiaztapen-sistema</h2>
+        <p>Adabidak nortasuna egiaztatzeko sistema bat du, erabiltzaileek beraiek aurkeztutako dokumentazioan oinarritua (NANa, jaiotza-agiriak, etab.). Dokumentazioa aurkeztu duten profilak adierazle bisual batekin (berdea) markatzen dira, baina horrek soilik adierazten du erabiltzaileak dokumentuak aurkeztu dituela. Inola ere ez du Adabidak dokumentazio horren benetakotasuna baliozkotzen. Sistema hau orientazio hutsezkoa da proiektuaren barruan, eta ez du balio zientifikorik ez juridikorik.</p>
+        
+        <h2>Erantzukizun akademikoa</h2>
+        <p>Ikertzailea, historialaria edo kazetaria bazara, honako hauek egin behar dituzu:</p>
+        <ul>
+          <li>Informazioa beste iturri primario eta sekundarioekin kontrastatzea</li>
+          <li>Metodologia kritikoa aplikatzea</li>
+          <li>Egiaztapen independenterik gabe testigantzak baliozkotzat ez ematea</li>
+          <li>Iturria eta testuingurua behar bezala aipatzea</li>
+        </ul>
+        
+        <h2>Testigantzen balioa</h2>
+        <p>Hala ere, testigantza pertsonalek <strong>balio historiko eta humano izugarria</strong> dute. Honakoak eskaintzen dituzte:</p>
+        <ul>
+          <li>Gertaera historikoei buruzko ikuspegi pertsonalak</li>
+          <li>Testuinguru emozional eta humanoa</li>
+          <li>Eguneroko bizitzaren xehetasunak</li>
+          <li>Historia ofizialetik askotan kanpo geratzen diren ahotsak</li>
+        </ul>
+<p><em>Adabida ahozko memoriaren artxibo bat da, ez egiaztatutako artxibo historiko bat. Memoria giza ondare gisa baloratzen du, betiere beharrezko espiritu kritikoa mantenduz.</em></p>
+        
+        <p style="margin-top: 1.5rem;">
+          <em>Erabileraren mugak eta abisuak xehetasunez ezagutzeko, kontsultatu <a href="{{ url_for('legal.termes_condicions') }}">artxiboaren erabilera-baldintzen</a> dokumentu osoa.</em>
+        </p>
+      </div>
+    </section>
+    <!-- ATALA: DOKUMENTAZIO LEGALA -->
+    <section id="documentacio-legal" class="seccio-home">
+      <h1>Dokumentazio legala</h1>
+      
+      <div class="text-seccio">
+        <h2>Abisu legala eta DBEO (RGPD)</h2>
+        <p>Kontsultatu gure <a href="{{ url_for('legal.avis_legal') }}">abisu legal osoa</a> zure eskubideak eta gure betebehar legalak ezagutzeko.</p>
+        
+        <h2>Ahazteko eskubidea</h2>
+        <p>Edozein unetan zure kontua eta datu guztiak erabat ezabatzeko eska dezakezu. Erabat errespetatzen dugun oinarrizko eskubidea da.</p>
+        
+        <h2>Jabetza intelektuala</h2>
+        <p>Igotzen dituzun edukiak zure jabetzakoak dira eta beti izango dira. Adabidak zaintzaile gisa baino ez du jarduten.</p>
+        
+        <h2>Erantzukizunaren mugak</h2>
+        <p>Adabida une honetan DEMO fasean dago. Horrek esan nahi du:</p>
+        <ul>
+          <li>Ezin dugula zerbitzuaren erabilgarritasun iraunkorra bermatu</li>
+          <li>Zure edukien babeskopiak egitea gomendatzen dugula</li>
+          <li>Zerbitzua aldatu edo eboluzionatu daitekeela</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ATALA: KONTAKTUA -->
+    <section id="contacte" class="seccio-home">
+      <h1>Kontaktua</h1>
+      
+      <div class="text-seccio">
+        <p>Edozein kontsulta, iradokizun edo zalantza izanez gero, gurekin harremanetan jar zaitezke:</p>
+        
+        <div class="info-contacte">
+          <p><strong>Emaila:</strong> <a href="mailto:admin@adabida.cat">admin@adabida.cat</a></p>
+          <p><strong>Kokapena:</strong> Calella, Bartzelona, Katalunia</p>
+
+        </div>
+        
+        <p>Lankidetzarako irekita gaude honako hauekin:</p>
+        <ul>
+          <li>Osasun-erakundeak eta egoitzak</li>
+          <li>Ikerketa-zentroak eta unibertsitateak</li>
+          <li>Kultura- eta memoria-elkarteak</li>
+          <li>Ahozko memoria gorde nahi duten pertsonak</li>
+        </ul>
+        
+        <p class="text-destacat">Eskerrik asko Adabidaren parte izateagatik. Elkarrekin memoria kolektiboa duintasunez gordetzen dugu.</p>
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

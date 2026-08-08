@@ -241,3 +241,23 @@ textarea {
     text-align: center;
 }
 
+details.bloc-defuncio {
+    margin-top: 1.5rem;
+    padding: 0.5rem 0;
+    border-top: 1px dashed #ddd;
+}
+
+details.bloc-defuncio summary {
+    cursor: pointer;
+    color: #666;
+    font-weight: 500;
+    list-style: none;
+}
+
+details.bloc-defuncio summary::marker {
+    display: none;
+}
+
+details.bloc-defuncio summary:hover {
+    color: #000;
+}

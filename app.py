@@ -1,11 +1,11 @@
 import os
 import pathlib
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import Flask, session, request, render_template, redirect, url_for
 from flask_migrate import Migrate
 from flask_babel import Babel, _, get_locale
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, login_required, login_user
 
 from config import Config
 from models import db
@@ -18,6 +18,9 @@ from routes.auth import auth_bp
 
 app = Flask(__name__)
 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config["SECRET_KEY"] = "abadia_2025_clau_secreta"
 app.config.from_object(Config)  # ← PRIMER carregar configuració
 mail.init_app(app)  # ← DESPRÉS inicialitzar mail
@@ -28,6 +31,7 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login.login'
+
 
 @login_manager.user_loader
 def carrega_usuari(user_id):
@@ -133,6 +137,7 @@ from routes.api.barra_lateral import barra_lateral_api_bp
 from routes.admin.traduccions import admin_traduccions_bp
 from routes.admin.aportacions import admin_aportacions_bp
 from routes.api_usuaris import api_usuaris_bp
+from routes.projecte import projecte_bp
 
 app.register_blueprint(pagina_personal_bp)
 app.register_blueprint(inici_bp)
@@ -166,7 +171,7 @@ app.register_blueprint(contactes_bp, url_prefix='/contactes')
 app.register_blueprint(aportacions_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(familia_bp)
-app.register_blueprint(membres_bp)
+app.register_blueprint(membres_bp, url_prefix='/familia/membre')
 app.register_blueprint(administrar_bp)
 app.register_blueprint(personal_biografia_bp)
 app.register_blueprint(biografia_seccions_bp)
@@ -180,6 +185,7 @@ app.register_blueprint(barra_lateral_api_bp)
 app.register_blueprint(admin_traduccions_bp)
 app.register_blueprint(admin_aportacions_bp)
 app.register_blueprint(api_usuaris_bp)
+app.register_blueprint(projecte_bp)
 # ─── Ping ──────────────────────────────────────────────────────
 
 @app.route("/prova_tema")
@@ -201,9 +207,6 @@ def format_data(data_str):
         return data.strftime('%d/%m/%Y')
     except Exception:
         return data_str  # Si ja està formatada o buida
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 @app.route("/")
 def splash():
@@ -232,3 +235,35 @@ def inject_rtl():
     return {
         "is_rtl": str(get_locale()) in Config.RTL_LANGS
     }
+
+@app.route('/app/login', methods=['GET', 'POST'])
+def app_login():
+    if current_user.is_authenticated:
+        return redirect('/app')
+    
+    if request.method == 'POST':
+        from models.usuari import Usuari
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        usuari = Usuari.query.filter_by(nom_login=username).first()
+        
+        if usuari and usuari.check_contrasenya(password):
+            session.permanent = True
+            session["usuari"] = usuari.nom_login  # ← AFEGIR AIXÒ
+            session["usuari_id"] = usuari.id      # ← AFEGIR AIXÒ
+            session["es_admin"] = usuari.es_admin # ← AFEGIR AIXÒ
+            login_user(usuari, remember=True)
+            return redirect('/app')
+        else:
+            return render_template('app/login.html', error='Usuari o contrasenya incorrectes')
+    
+    return render_template('app/login.html')
+
+@app.route('/app')
+@login_required
+def app_home():
+    return render_template('app/home.html')
+
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,0 +1,131 @@
+.confirmacio-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.confirmacio-container h1 {
+  color: #2c5282;
+  margin-bottom: 20px;
+}
+
+.dades-bancaries {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 6px;
+  margin: 20px 0;
+  border-left: 4px solid #4299e1;
+}
+
+.dades-bancaries h2 {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  color: #2d3748;
+}
+
+.dada-item {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dada-label {
+  font-weight: 600;
+  color: #4a5568;
+  min-width: 120px;
+}
+
+.dada-valor {
+  font-family: 'Courier New', monospace;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  flex: 1;
+  font-size: 1.1em;
+}
+
+.quantitat-destacada {
+  font-size: 2em;
+  color: #2c5282;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.instruccions {
+  background: #fffaf0;
+  padding: 20px;
+  border-radius: 6px;
+  margin: 20px 0;
+  border-left: 4px solid #f6ad55;
+}
+
+.instruccions h3 {
+  color: #c05621;
+  margin-bottom: 10px;
+}
+
+.instruccions ol {
+  margin-left: 20px;
+}
+
+.instruccions li {
+  margin: 8px 0;
+}
+
+.nota-final {
+  text-align: center;
+  color: #718096;
+  margin-top: 30px;
+  font-size: 0.95em;
+}
+
+.boto-tornar {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4299e1;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.boto-tornar:hover {
+  background: #3182ce;
+}
+
+
+.qr-container {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+.qr-container h2 {
+  color: #2c5282;
+  margin-bottom: 15px;
+}
+
+.qr-code {
+  max-width: 300px;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+}
+
+.qr-nota {
+  color: #718096;
+  font-size: 0.9em;
+  max-width: 400px;
+  margin: 15px auto 0;
+}

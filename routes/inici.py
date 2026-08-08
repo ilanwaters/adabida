@@ -6,7 +6,7 @@ import os
 import datetime
 import random
 from sqlalchemy.orm import joinedload
-from models import Entrada, Exposicio
+from models import Entrada, Exposicio, Conversa
 from flask_login import current_user
 
 inici_bp = Blueprint("inici", __name__)
@@ -36,6 +36,43 @@ def obtenir_entrades_aleatories(limit=10):
     )
     
     return entrades
+
+def preparar_conversa_per_vista(conversa, usuari_nom_login):
+    """Converteix una Conversa en format dict per renderitzar com caixa"""
+    # Obtenir nom del participant principal
+    participant_nom = "Desconegut"
+    if conversa.participants:
+        primer = conversa.participants[0]
+        participant_nom = f"{primer.nom} {primer.primer_cognom or ''} {primer.segon_cognom or ''}".strip()
+    
+    # Construir lloc
+    parts_lloc = [conversa.lloc_municipi, conversa.lloc_regio, conversa.lloc_pais]
+    lloc = ", ".join([p for p in parts_lloc if p]) or None
+    
+    # Extreure any
+    any = conversa.data_conversa.year if conversa.data_conversa else None
+    
+    # Resum del contingut
+    resum = ""
+    if conversa.contingut:
+        import re
+        contingut_net = re.sub(r'<[^>]+>', '', conversa.contingut)
+        contingut_net = contingut_net.replace('&nbsp;', ' ').replace('&amp;', '&')
+        resum = contingut_net[:120] + "..." if len(contingut_net) > 120 else contingut_net
+    
+    return {
+        "id": conversa.id,
+        "tipus": "conversa",
+        "participant_nom": participant_nom,
+        "tema": conversa.tema,
+        "any": any,
+        "lloc": lloc,
+        "durada_minuts": conversa.durada_minuts,
+        "resum": resum,
+        "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
+        "miniatura": "/static/icons/entrevista.svg",
+        "usuari": conversa.usuari
+    }
 
 @inici_bp.route("/")
 def inici_pagina():
@@ -96,6 +133,29 @@ def inici_pagina():
 
     for entrada in entrades_aleatories:
         print(f"DEBUG Entrada {entrada.id}: miniatura={entrada.miniatura}, imatge_gran={entrada.imatge_gran}")  
+
+    # Obtenir converses aleatòries
+    min_id_conv = db.session.query(func.min(Conversa.id)).scalar()
+    max_id_conv = db.session.query(func.max(Conversa.id)).scalar()
+
+    converses_aleatories = []
+    if min_id_conv and max_id_conv:
+        ids_aleatoris_conv = random.sample(range(min_id_conv, max_id_conv + 1), min(5 * 3, max_id_conv - min_id_conv + 1))
+        converses_raw = (
+            Conversa.query
+            .options(joinedload(Conversa.usuari))
+            .filter(Conversa.id.in_(ids_aleatoris_conv))
+            .limit(5)
+            .all()
+        )
+        
+        for conversa in converses_raw:
+            conv_dict = preparar_conversa_per_vista(conversa, conversa.usuari.nom_login if conversa.usuari else 'anonim')
+            converses_aleatories.append(conv_dict)
+
+    # Barrejar entrades + converses
+    contingut_aleatori = entrades_aleatories[:5] + converses_aleatories[:5]
+    random.shuffle(contingut_aleatori)   
         
     return render_template(
         "inici.html",
@@ -106,7 +166,7 @@ def inici_pagina():
         entrades_blog=entrades_blog,
         mesos_disponibles=mesos_disponibles,
         datetime=datetime.datetime,
-        entrades_aleatories=entrades_aleatories
+        entrades_aleatories=contingut_aleatori
     )
 
 

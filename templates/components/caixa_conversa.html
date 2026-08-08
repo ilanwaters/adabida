@@ -1,0 +1,45 @@
+<!-- templates/components/caixa_conversa.html -->
+<div class="caixa-entrada">
+    <div class="imatge-lateral">
+        <a href="{{ conversa.miniatura }}" data-lightbox="galeria-{{ conversa.id }}">
+            <img src="{{ conversa.miniatura }}" class="miniatura" alt="Miniatura">
+        </a>
+    </div>
+    <div class="contingut-lateral">
+        <h3 class="titol-entrada clicable" 
+            onclick='obreModalConversa({{ conversa.id }}, "{{ conversa.usuari.nom_login if conversa.usuari else usuari.nom_login }}")'>
+            Entrevista a {{ conversa.participant_nom }}
+            {% if conversa.any %}<span class="any">({{ conversa.any }})</span>{% endif %}
+        </h3>
+
+        {% if conversa.tema %}
+        <p style="margin: 0.3rem 0; color: #555;">{{ conversa.tema }}</p>
+        {% endif %}
+
+        {% if conversa.lloc %}
+        <p class="lloc" style="font-size: 0.9rem; color: #555; margin: 0.3rem 0;">
+             {{ conversa.lloc }}
+        </p>
+        {% endif %}
+        
+        {% if conversa.durada_minuts %}
+        <p style="font-size: 0.85rem; color: #777; margin: 0.3rem 0;">
+            Durada: {{ conversa.durada_minuts }} min
+        </p>
+        {% endif %}
+
+        {% if conversa.resum %}
+        <p class="resum">{{ conversa.resum }}</p>
+        {% endif %}
+
+        <div class="metadades">
+            {% if conversa.usuari and conversa.usuari.bandera_preferida %}
+            <img src="/static/banderes/{{ conversa.usuari.bandera_preferida }}.svg" 
+                 class="mini-bandera-caixa" 
+                 alt="Bandera"
+                 style="width: 16px; height: 11px; margin-right: 5px; vertical-align: middle;">
+            {% endif %}
+            <small>De: {{ conversa.usuari.nom if conversa.usuari else usuari.nom }} ({{ conversa.data }})</small>
+        </div>
+    </div>
+</div>

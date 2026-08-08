@@ -316,9 +316,10 @@ function tancarModalPais() {
 async function confirmarPaisNou() {
     const input = document.getElementById('input-nom-pais');
     const nom = input.value.trim();
+    const T = window.TRADUCCIONS;
     
     if (!nom) {
-        alert('Escriu el nom del país');
+        alert(T.escriuNomPais);
         input.focus();
         return;
     }
@@ -333,25 +334,18 @@ async function confirmarPaisNou() {
         const data = await response.json();
         
         if (data.success) {
-            // Tancar modal
             document.getElementById('modal-afegir-pais').style.display = 'none';
-            
-            // Recarregar països (inclou el nou)
             await carregarPaisosSelector();
-            
-            // Seleccionar el nou
             document.getElementById('selector-pais').value = data.codi;
             carregarTemesPais(data.codi);
-            
         } else {
-            alert(data.error || 'Error creant país');
+            alert(data.error || T.errorCreantPais);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de connexió');
+        alert(T.errorConnexio);
     }
 }
-
 
 function guardarPaisNou() {
     const selector = document.getElementById('selector-pais');
@@ -423,19 +417,20 @@ async function carregarPaisosSelector() {
         const data = await response.json();
         const selector = document.getElementById('selector-pais');
         const seleccioActual = selector.value;
+        const T = window.TRADUCCIONS;
         
         selector.innerHTML = '';
         
-        // Opció buida inicial
+        // Opció buida
         const opcioBuida = document.createElement('option');
         opcioBuida.value = '';
-        opcioBuida.text = '-- Selecciona --';
+        opcioBuida.text = T.selecciona;
         selector.appendChild(opcioBuida);
         
         // GLOBAL
         const opcioGlobal = document.createElement('option');
         opcioGlobal.value = 'GLOBAL';
-        opcioGlobal.text = 'Temes globals';
+        opcioGlobal.text = T.temesGlobals;
         selector.appendChild(opcioGlobal);
         
         // Països
@@ -449,7 +444,7 @@ async function carregarPaisosSelector() {
         // Afegir nou
         const opcioAfegir = document.createElement('option');
         opcioAfegir.value = 'AFEGIR_NOU';
-        opcioAfegir.text = '+ Afegir país...';
+        opcioAfegir.text = T.afegirPais;
         opcioAfegir.style.fontStyle = 'italic';
         opcioAfegir.style.color = '#999';
         selector.appendChild(opcioAfegir);
@@ -465,6 +460,7 @@ async function carregarPaisosSelector() {
         console.error('Error carregant països:', error);
     }
 }
+
 async function carregarTemesPais(paisCodi) {
     try {
         const response = await fetch(`/api/temes-pais/${paisCodi}`);
@@ -486,6 +482,7 @@ function actualitzarGridTemes(temes) {
     if (!gridTemes) return;
     
     const usuariLogejat = window.USUARI_LOGEJAT || false;
+    const T = window.TRADUCCIONS;
     gridTemes.innerHTML = '';
     
     if (temes.length === 0) {
@@ -493,7 +490,7 @@ function actualitzarGridTemes(temes) {
         missatge.style.fontStyle = 'italic';
         missatge.style.color = '#999';
         missatge.style.marginBottom = '20px';
-        missatge.textContent = 'Encara no tenim temes per aquest país. Pots afegir el teu testimoni lliurement:';
+        missatge.textContent = T.senseTemesPais;
         gridTemes.appendChild(missatge);
         gridTemes.appendChild(crearBotoAltreTema(usuariLogejat));
         return;
@@ -502,21 +499,18 @@ function actualitzarGridTemes(temes) {
     const temesVisibles = temes.slice(0, 9);
     const temesOcults = temes.slice(9);
     
-    // Temes visibles
     temesVisibles.forEach(tema => {
         gridTemes.appendChild(crearBotoTema(tema.nom, usuariLogejat));
     });
     
-    // Botó "Més" si hi ha temes ocults
     if (temesOcults.length > 0) {
         const botoMes = document.createElement('button');
         botoMes.className = 'boto-tema boto-mes';
         botoMes.id = 'boto-mes-inicial';
-        botoMes.textContent = '▼ Més';
+        botoMes.textContent = T.mes;
         botoMes.onclick = () => toggleTemesAddicionals();
         gridTemes.appendChild(botoMes);
         
-        // Container addicionals
         const containerAddicionals = document.createElement('div');
         containerAddicionals.className = 'temes-addicionals';
         containerAddicionals.id = 'temes-addicionals';
@@ -527,16 +521,16 @@ function actualitzarGridTemes(temes) {
         
         const botoMenys = document.createElement('button');
         botoMenys.className = 'boto-tema boto-mes';
-        botoMenys.textContent = '▲ Menys';
+        botoMenys.textContent = T.menys;
         botoMenys.onclick = () => toggleTemesAddicionals();
         containerAddicionals.appendChild(botoMenys);
         
         gridTemes.appendChild(containerAddicionals);
     }
     
-    // Botó "altre tema" sempre al final
     gridTemes.appendChild(crearBotoAltreTema(usuariLogejat));
 }
+
 
 function crearBotoTema(nomTema, usuariLogejat) {
     if (usuariLogejat) {
@@ -555,19 +549,18 @@ function crearBotoTema(nomTema, usuariLogejat) {
 }
 
 function crearBotoAltreTema(usuariLogejat) {
+    const T = window.TRADUCCIONS;
+    const button = document.createElement('button');
+    button.className = 'boto-tema boto-altre-tema';
+    button.textContent = T.nousTemes;
+    
     if (usuariLogejat) {
-        const button = document.createElement('button');
-        button.className = 'boto-tema boto-altre-tema';
-        button.textContent = 'Pots parlar-nos de qualsevol altre tema aquí';
-        button.onclick = () => mostrarModalNouTema();  // ← Nova funció
-        return button;
+        button.onclick = () => mostrarModalNouTema();
     } else {
-        const button = document.createElement('button');
-        button.className = 'boto-tema boto-altre-tema';
-        button.textContent = 'Pots parlar-nos de qualsevol tema aquí';
         button.onclick = () => mostrarMissatgeMotivador();
-        return button;
     }
+    
+    return button;
 }
 
 function toggleTemesAddicionals() {
@@ -686,87 +679,74 @@ function tancarModalNouTema() {
     }
 }
 
+
 async function carregarCategoriesModal() {
-    console.log('🔍 Carregant categories modal...');
     try {
         const response = await fetch(`/api/barra-lateral/categories`);
         const data = await response.json();
+        const container = document.getElementById('llista-categories-checkboxes');
+        const T = window.TRADUCCIONS;
         
-        const select = document.getElementById('categoria-tema-nou');
-        if (!select) return;
+        if (!container) return;
         
-        const primeraOpcio = select.options[0];
-        const novaOpcio = select.querySelector('option[value="nova"]');
-        select.innerHTML = '';
-        select.appendChild(primeraOpcio);
+        container.innerHTML = '';
         
         if (data && data.length > 0) {
             data.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = cat.nom;
-                select.appendChild(option);
+                const label = document.createElement('label');
+                label.className = 'checkbox';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = cat.id;
+                checkbox.name = 'categories';
+                
+                const checkmark = document.createElement('span');
+                checkmark.className = 'checkmark';
+                
+                label.appendChild(checkbox);
+                label.appendChild(checkmark);
+                label.appendChild(document.createTextNode(' ' + cat.nom));
+                
+                container.appendChild(label);
             });
+        } else {
+            container.innerHTML = `<p style="color: #999;">${T.senseCategoriesDisponibles}</p>`;
         }
-        
-        if (novaOpcio) select.appendChild(novaOpcio);
-        
-        select.selectedIndex = 0;  // ← AQUESTA LÍNIA
         
     } catch (error) {
         console.error('Error carregant categories:', error);
     }
 }
-
-function toggleNovaCategoriaInput() {
-    const select = document.getElementById('categoria-tema-nou');
-    const container = document.getElementById('container-nova-categoria');
-    const input = document.getElementById('nom-categoria-nova');
-    
-    if (select.value === 'nova') {
-        container.style.display = 'block';
-        input.required = true;
-        setTimeout(() => input.focus(), 100);
-    } else {
-        container.style.display = 'none';
-        input.required = false;
-        input.value = '';
-    }
-}
-
 async function guardarNouTema() {
     const nomTema = document.getElementById('nom-tema-nou').value.trim();
-    const categoriaId = document.getElementById('categoria-tema-nou').value;
     const nomCategoriaNova = document.getElementById('nom-categoria-nova').value.trim();
     const paisSeleccionat = document.getElementById('selector-pais')?.value || 'ES';
+    const checkboxes = document.querySelectorAll('#llista-categories-checkboxes input[type="checkbox"]:checked');
+    const categoriesIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+    const T = window.TRADUCCIONS;
     
     // Validació
     if (!nomTema) {
-        alert('El nom del tema és obligatori');
+        alert(T.nomTemaObligatori);
         return;
     }
     
-    if (!categoriaId) {
-        alert('Has de seleccionar o crear una categoria');
+    if (categoriesIds.length === 0 && !nomCategoriaNova) {
+        alert(T.triaCategoriaObligatoria);
         return;
     }
     
-    if (categoriaId === 'nova' && !nomCategoriaNova) {
-        alert('Has de posar un nom a la categoria nova');
-        return;
-    }
-    
-    // Deshabilitar botó mentre processa
     const botoSubmit = document.querySelector('#form-nou-tema button[type="submit"]');
     const textOriginal = botoSubmit.textContent;
     botoSubmit.disabled = true;
-    botoSubmit.textContent = 'Guardant...';
+    botoSubmit.textContent = T.guardant;
     
     try {
-        // Crear categoria nova si cal
-        let categoriaFinalId = categoriaId;
+        let categoriesFinals = [...categoriesIds];
         
-        if (categoriaId === 'nova') {
+        // Crear categoria nova si hi ha nom
+        if (nomCategoriaNova) {
             const responseCategoria = await fetch('/api/categoria/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -779,38 +759,35 @@ async function guardarNouTema() {
             const dataCategoria = await responseCategoria.json();
             
             if (!dataCategoria.success) {
-                alert('Error creant categoria: ' + (dataCategoria.error || 'Error desconegut'));
+                alert(T.errorCreantCategoria + ' ' + (dataCategoria.error || T.errorDesconegut));
                 return;
             }
             
-            categoriaFinalId = dataCategoria.id;
+            categoriesFinals.push(dataCategoria.id);
         }
         
-        // Crear tema
-        const responseTema = await fetch('/api/tema/crear', {
+        // Crear tema amb múltiples categories
+        const responseTema = await fetch('/api/tema/crear-multiple', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 nom: nomTema,
-                categoria_id: categoriaFinalId
+                categories: categoriesFinals
             })
         });
         
         const dataTema = await responseTema.json();
         
         if (dataTema.success) {
-            // Tancar modal
             tancarModalNouTema();
-            
-            // Redirigir a nova entrada amb el tema
             window.location.href = `/nova_entrada_personal?titol=${encodeURIComponent(nomTema)}`;
         } else {
-            alert('Error creant tema: ' + (dataTema.error || 'Error desconegut'));
+            alert(T.errorCreantTema + ' ' + (dataTema.error || T.errorDesconegut));
         }
         
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de connexió. Torna-ho a provar.');
+        alert(T.errorConnexioTornar);
     } finally {
         botoSubmit.disabled = false;
         botoSubmit.textContent = textOriginal;
@@ -827,9 +804,10 @@ async function carregarCategoriesSelector() {
     try {
         const res = await fetch('/api/barra-lateral/categories');
         const categories = await res.json();
-        
         const selector = document.getElementById('selector-categoria');
-        selector.innerHTML = '<option value="">-- Selecciona --</option>';
+        const T = window.TRADUCCIONS;
+        
+        selector.innerHTML = `<option value="">${T.selecciona}</option>`;
         
         categories.forEach(cat => {
             const option = document.createElement('option');
@@ -841,7 +819,6 @@ async function carregarCategoriesSelector() {
         console.error('Error carregant categories:', error);
     }
 }
-
 function canviarCategoria() {
     const selectorCategoria = document.getElementById('selector-categoria');
     const selectorPais = document.getElementById('selector-pais');
@@ -862,6 +839,21 @@ async function carregarTemesCategoria(categoriaId) {
         actualitzarGridTemes(data.temes);
     } catch (error) {
         console.error('Error carregant temes:', error);
+    }
+}
+function toggleNovaCategoriaInput() {
+    const check = document.getElementById('check-nova-categoria');
+    const container = document.getElementById('container-nova-categoria');
+    const input = document.getElementById('nom-categoria-nova');
+    
+    if (check && check.checked) {
+        container.style.display = 'block';
+        input.required = true;
+        setTimeout(() => input.focus(), 100);
+    } else {
+        container.style.display = 'none';
+        input.required = false;
+        input.value = '';
     }
 }
 // Funcions globals
@@ -893,3 +885,19 @@ window.canviarCategoria = canviarCategoria;
 document.addEventListener('DOMContentLoaded', function() {
     gestionaErrorsLogin();
 });
+
+
+function toggleNovaCategoriaInput() {
+    const container = document.getElementById('container-nova-categoria');
+    const input = document.getElementById('nom-categoria-nova');
+    
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        input.required = true;
+        setTimeout(() => input.focus(), 100);
+    } else {
+        container.style.display = 'none';
+        input.required = false;
+        input.value = '';
+    }
+}

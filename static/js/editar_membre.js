@@ -120,3 +120,57 @@ function afegirDocument() {
     
     container.appendChild(nouDocument);
 }
+
+// Funcions per carregar ubicacions al formulari d'editar
+async function carregarRegions(suffix) {
+    const paisId = document.getElementById('pais_' + suffix).value;
+    const selectRegio = document.getElementById('regio_' + suffix);
+    
+    if (!paisId) return;
+    
+    selectRegio.disabled = true;
+    selectRegio.innerHTML = '<option value="">Carregant...</option>';
+    
+    const response = await fetch(`/api/regions/${paisId}`);
+    const regions = await response.json();
+    
+    selectRegio.innerHTML = '<option value="">-- Selecciona regió --</option>';
+    regions.forEach(regio => {
+        const option = document.createElement('option');
+        option.value = regio.id;
+        option.textContent = regio.nom;
+        selectRegio.appendChild(option);
+    });
+    selectRegio.disabled = false;
+}
+
+async function carregarMunicipis(suffix) {
+    const regioId = document.getElementById('regio_' + suffix).value;
+    const inputMunicipi = document.getElementById('municipi_' + suffix);
+    
+    if (!regioId) return;
+    
+    inputMunicipi.disabled = true;
+    inputMunicipi.placeholder = 'Carregant...';
+    
+    const response = await fetch(`/api/municipis/${regioId}`);
+    const municipis = await response.json();
+    
+    const datalist = document.getElementById('municipis_' + suffix + '_list');
+    datalist.innerHTML = '';
+    
+    municipis.forEach(municipi => {
+        const option = document.createElement('option');
+        option.value = municipi.nom;
+        datalist.appendChild(option);
+    });
+    
+    inputMunicipi.disabled = false;
+    inputMunicipi.placeholder = 'Escriu o selecciona';
+}
+
+function confirmarEliminar() {
+    if (confirm('Estàs segur que vols eliminar aquest membre?')) {
+        window.location.href = window.URL_ELIMINAR_MEMBRE;
+    }
+}

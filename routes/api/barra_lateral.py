@@ -8,11 +8,12 @@ barra_lateral_api_bp = Blueprint('barra_lateral_api', __name__, url_prefix='/api
 @barra_lateral_api_bp.route('/categories', methods=['GET'])
 def get_categories():
     """Retorna totes les categories actives ordenades"""
+    idioma = str(get_locale())  # ← AFEGIR
     categories = Categoria.query.filter_by(activa=True).order_by(Categoria.ordre).all()
     
     return jsonify([{
         'id': c.id,
-        'nom': c.nom,
+        'nom': c.obtenir_nom(idioma),  # ← CANVIAT (abans c.nom)
         'icona': c.icona
     } for c in categories])
 

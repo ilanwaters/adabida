@@ -7,14 +7,8 @@
 
 ## 🔥 PRIORITAT CRÍTICA - Funcionalitats Comunitat
 
-### ✅ Fase 1: Sistema de Validació d'Usuaris - COMPLETADA
-- [x] Models creats (nivell_usuari, data_registre)
-- [x] Migració aplicada
-- [x] Mètodes de càlcul i permisos
-- [x] Distintiu visual al header amb tooltip
-- [x] Context processor per textos nivells
 
-### 🚧 Fase 2: Sistema "Cerquem testimonis sobre..." - EN CURS
+###  Sistema "Cerquem testimonis sobre..." - EN CURS
 - [ ] Crear blueprint `routes/comunitat/peticions.py`
 - [ ] Template llista pública de peticions
 - [ ] Formulari afegir nova petició
@@ -25,19 +19,7 @@ inici ha de ser el "ganxo" per usuaris, s'ha de fer de al manera que la gent ent
 temes, estem buscant per temes/subtemes
 tembé temes oberts pot ser t'enterresa tema/subtema
  
-### Enllaços informatius al quadre de benvinguda
-- [ ] **"Benvinguts a Adabida"** → Convertir en enllaç (modal o pàgina)
-  - Contingut: Què és Adabida, principis del projecte, com funciona
-  - Etiqueta i bones pràctiques de la comunitat
-  - Els "cinc pilars" d'Adabida (a definir)
-  
-- [ ] **"Comparteix-la!"** → Convertir en enllaç (modal o pàgina)
-  - Com fer una bona entrevista (tècniques, preguntes)
-  - Consells per gravar àudio/vídeo amb qualitat
-  - Com estructurar un testimoni (introducció, context, narrativa)
-  - Recomanacions tècniques (micròfons, il·luminació, durada)
-  - Aspectes ètics de les entrevistes (consentiment, respecte, sensibilitat)
-exemple dona/pioneres, etc
+
 ### ⏳ Fase 3: Sistema de Denúncies - PENDENT
 - [ ] Botó "Denunciar" a modals (només usuaris 🟢)
 - [ ] Modal de denúncia amb categories
@@ -67,23 +49,9 @@ exemple dona/pioneres, etc
 
 **Solució recomanada:** Crear un component/macro reutilitzable Jinja2
 
-### Modals d'Entrada
-- [ ] Unificar disseny de totes les modals
-  - [ ] Modal entrada repositori general
-  - [ ] Modal entrada família
-  - [ ] Modal entrada organització
-- [ ] Mostrar correctament la ubicació a totes les modals
-- [ ] Assegurar permisos coherents (edició vs lectura)
 
-### Targetes/Caixes d'Entrades
-- [ ] Sistema de targetes reutilitzables (ja començat)
-- [ ] Aplicar a repositori general
-- [ ] Aplicar a espais familiars
-- [ ] Aplicar a organitzacions
-- [ ] Format consistent de dates
-- [ ] Format consistent de localitzacions
 
----
+
 
 ## ⚙️ PRIORITAT MITJANA - Correccions Tècniques
 
@@ -93,12 +61,6 @@ exemple dona/pioneres, etc
 - [ ] **JavaScript**: `carregaEntradesGuardades()` busca element que no existeix
   - Revisar `pagina_personal.html` línia ~401
 
-### Sistema de Relacions Familiars (pendent de la sessió anterior)
-- [ ] Provar funcionalitat afegir pare/mare
-- [ ] Implementar afegir fill/a
-- [ ] Implementar afegir germà/na
-- [ ] Crear formulari afegir matrimoni
-- [ ] Provar flux complet de relacions
 
 ### Cerca i Duplicats
 - [ ] Cerca en temps real per evitar duplicats al crear membres família
@@ -194,12 +156,6 @@ exemple dona/pioneres, etc
   - Per tipus de contingut (àudio/vídeo/text)
 - [ ] **Interactivitat**: Hover mostra resum, click obre entrada
 
-### Legal i Privacitat
-- [ ] **Banner de Cookies**: Implementar gestió de consentiment
-- [ ] **Política de Cookies detallada**: Explicar quines cookies i per què
-- [ ] **Actualitzar políticas**: Revisar segons normativa actualitzada
-- [ ] **RGPD compliance**: Assegurar compliment total
-- [ ] **Dret a l'oblit**: Procediment clar per eliminar dades
 
 ### Sistema de Referències Acadèmiques 🔗
 - [ ] **Sistema de citació automàtica**: 
@@ -232,16 +188,6 @@ exemple dona/pioneres, etc
   - No convertir en xarxa social
   - Focus en credibilitat, no popularitat
 
-### Onboarding i Missatges
-- [ ] **Pantalla de benvinguda potent**:
-  - Missatge contundent: "La teva vida, la teva visió, el teu testimoni formen part de la història. Comparteix-los!"
-  - Buscar més lemes inspiradors (estil potent/orwellià)
-  - Explicar missió d'Adabida clarament
-  - Valor del testimoni personal per la història
-- [ ] **Tour guiat opcional**: 
-  - Primer cop que entra usuari
-  - Explicar funcionalitats principals
-  - Es pot saltar
 - [ ] **Missatges motivacionals**:
   - Quan usuari crea primera entrada
   - Quan compleix fites (1 mes, 1 any, 10 entrades)
@@ -362,17 +308,6 @@ exemple dona/pioneres, etc
 
 ---
 
-## 🎯 SESSIÓ ACTUAL - Objectius
-
-**Ara mateix estem:**
-- ✅ Fase 1 completada
-- 🚧 Començant Fase 2: Sistema "Cerquem testimonis sobre..."
-
-**Proper pas immediat:**
-1. Crear estructura `routes/comunitat/`
-2. Crear blueprint `peticions.py`
-3. Crear template llista de peticions
-4. Integrar amb modal d'entrada
 
 ---
 

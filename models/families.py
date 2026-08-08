@@ -104,8 +104,10 @@ class MembreFamilia(db.Model):
     # Relacions familiars
     pare_id = db.Column(db.Integer, db.ForeignKey('membres_familia.id'), nullable=True)
     mare_id = db.Column(db.Integer, db.ForeignKey('membres_familia.id'), nullable=True)
+    matrimoni_id = db.Column(db.Integer, db.ForeignKey('matrimonis.id'), nullable=True)
     pare = db.relationship('MembreFamilia', remote_side=[id], foreign_keys=[pare_id], backref='fills_com_pare')
     mare = db.relationship('MembreFamilia', remote_side=[id], foreign_keys=[mare_id], backref='fills_com_mare')
+    matrimoni = db.relationship('Matrimoni', foreign_keys=[matrimoni_id], backref='fills')
    
     # Relacions
     usuari = db.relationship('Usuari', backref='membresies_families')
@@ -117,142 +119,45 @@ class MembreFamilia(db.Model):
         nom_membre = self.nom or (self.usuari.nom if self.usuari else "Sense nom")
         nom_familia = self.espai_familiar.nom if self.espai_familiar else "None"
         return f'<MembreFamilia {nom_membre} a {nom_familia}>'
+    # NAIXEMENT
     @property
     def nom_pais_naixement(self):
-        try:
-            if self.pais_naixement:
-                pais_id = int(self.pais_naixement) if isinstance(self.pais_naixement, str) and self.pais_naixement.isdigit() else self.pais_naixement
-            
-                if isinstance(pais_id, int):
-                    from models.ubicacions import Pais
-                    pais = Pais.query.get(pais_id)
-                    return pais.nom if pais else f"País {pais_id} no trobat"
-                return str(self.pais_naixement)
-            return "Sense país"
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_pais(self.pais_naixement)
+
     @property
     def nom_regio_naixement(self):
-        try:
-            if self.regio_naixement:
-                regio_id = int(self.regio_naixement) if isinstance(self.regio_naixement, str) and self.regio_naixement.isdigit() else self.regio_naixement
-            
-                if isinstance(regio_id, int):
-                    from models.ubicacions import Regio
-                    regio = Regio.query.get(regio_id)
-                    return regio.nom if regio else f"Regió {regio_id} no trobada"
-                return str(self.regio_naixement)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_regio(self.regio_naixement)
 
     @property
     def nom_municipi_naixement(self):
-        try:
-            if self.municipi_naixement:
-                municipi_id = int(self.municipi_naixement) if isinstance(self.municipi_naixement, str) and self.municipi_naixement.isdigit() else self.municipi_naixement
-            
-                if isinstance(municipi_id, int):
-                    from models.ubicacions import Municipi
-                    municipi = Municipi.query.get(municipi_id)
-                    return municipi.nom if municipi else f"Municipi {municipi_id} no trobat"
-                return str(self.municipi_naixement)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_municipi(self.municipi_naixement)
 
-    # DEFUNCIÓ
+# DEFUNCIÓ
     @property
     def nom_pais_defuncio(self):
-        try:
-            if self.pais_defuncio:
-                pais_id = int(self.pais_defuncio) if isinstance(self.pais_defuncio, str) and self.pais_defuncio.isdigit() else self.pais_defuncio
-
-                if isinstance(pais_id, int):
-                    from models.ubicacions import Pais
-                    pais = Pais.query.get(pais_id)
-                    return pais.nom if pais else f"País {pais_id} no trobat"
-                return str(self.pais_defuncio)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_pais(self.pais_defuncio)
 
     @property
     def nom_regio_defuncio(self):
-        try:
-            if self.regio_defuncio:
-                regio_id = int(self.regio_defuncio) if isinstance(self.regio_defuncio, str) and self.regio_defuncio.isdigit() else self.regio_defuncio
-            
-                if isinstance(regio_id, int):
-                    from models.ubicacions import Regio
-                    regio = Regio.query.get(regio_id)
-                    return regio.nom if regio else f"Regió {regio_id} no trobada"
-                return str(self.regio_defuncio)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_regio(self.regio_defuncio)
 
     @property
     def nom_municipi_defuncio(self):
-        try:
-            if self.municipi_defuncio:
-                municipi_id = int(self.municipi_defuncio) if isinstance(self.municipi_defuncio, str) and self.municipi_defuncio.isdigit() else self.municipi_defuncio
-            
-                if isinstance(municipi_id, int):
-                    from models.ubicacions import Municipi
-                    municipi = Municipi.query.get(municipi_id)
-                    return municipi.nom if municipi else f"Municipi {municipi_id} no trobat"
-                return str(self.municipi_defuncio)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_municipi(self.municipi_defuncio)
 
 # ACTUAL
+ 
     @property
     def nom_pais_actual(self):
-        try:
-            if self.pais_actual:
-                pais_id = int(self.pais_actual) if isinstance(self.pais_actual, str) and self.pais_actual.isdigit() else self.pais_actual
-
-                if isinstance(pais_id, int):
-                    from models.ubicacions import Pais
-                    pais = Pais.query.get(pais_id)
-                    return pais.nom if pais else f"País {pais_id} no trobat"
-                return str(self.pais_actual)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_pais(self.pais_actual)
 
     @property
     def nom_regio_actual(self):
-        try:
-            if self.regio_actual:
-                regio_id = int(self.regio_actual) if isinstance(self.regio_actual, str) and self.regio_actual.isdigit() else self.regio_actual
-            
-                if isinstance(regio_id, int):
-                    from models.ubicacions import Regio
-                    regio = Regio.query.get(regio_id)
-                    return regio.nom if regio else f"Regió {regio_id} no trobada"
-                return str(self.regio_actual)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
+        return obtenir_nom_regio(self.regio_actual)
 
     @property
     def nom_municipi_actual(self):
-        try:
-            if self.municipi_actual:
-                municipi_id = int(self.municipi_actual) if isinstance(self.municipi_actual, str) and self.municipi_actual.isdigit() else self.municipi_actual
-            
-                if isinstance(municipi_id, int):
-                    from models.ubicacions import Municipi
-                    municipi = Municipi.query.get(municipi_id)
-                    return municipi.nom if municipi else f"Municipi {municipi_id} no trobat"
-                return str(self.municipi_actual)
-            return ""
-        except Exception as e:
-            return f"Error: {str(e)}"
-
+        return obtenir_nom_municipi(self.municipi_actual)
 
 class EntradaFamilia(db.Model):
     __tablename__ = 'entrades_families'

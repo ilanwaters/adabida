@@ -175,7 +175,7 @@ function poblarMunicipis(municipis, selectElement) {
     
     municipis.forEach(municipi => {
         const option = document.createElement('option');
-        option.value = municipi.id;
+        option.value = municipi.nom;
         option.textContent = municipi.nom;
         selectElement.appendChild(option);
     });

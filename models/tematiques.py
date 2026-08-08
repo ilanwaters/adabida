@@ -1,5 +1,6 @@
 from models import db
-from models.ubicacions import Pais  # ← Importem el Pais existent
+from models.ubicacions import Pais 
+from models.traduccio_categoria import TraducioCategoriaTema  # ← AFEGIR
 
 # ELIMINAR la classe Pais (ja existeix a ubicacions)
 
@@ -10,13 +11,26 @@ class CategoriaTema(db.Model):
     pais_id = db.Column(db.Integer, db.ForeignKey('paisos.id'), nullable=False)
     nom = db.Column(db.String(100), nullable=False)
     ordre = db.Column(db.Integer, default=0)
-    
+    traduccions = db.relationship('TraducioCategoriaTema', backref='categoria', lazy=True, cascade='all, delete-orphan')
+
+    def obtenir_nom(self, idioma='ca'):
+        """Retorna nom traduït o nom original"""
+        idioma_curt = idioma.split('_')[0].lower()
+        
+        traduccio = TraducioCategoriaTema.query.filter_by(
+            categoria_id=self.id,
+            idioma=idioma_curt
+        ).first()
+        
+        if traduccio:
+            return traduccio.nom
+        
+        return self.nom
    
 class Tema(db.Model):
     __tablename__ = 'temes'
     
     id = db.Column(db.Integer, primary_key=True)
-    categoria_id = db.Column(db.Integer, db.ForeignKey('categories_tema.id'), nullable=True)  # ← Ara pot ser NULL
     categories = db.relationship('CategoriaTema', secondary='tema_categoria', backref='temes_relacio')
     nom = db.Column(db.String(100), nullable=False)
     ordre = db.Column(db.Integer, default=0)

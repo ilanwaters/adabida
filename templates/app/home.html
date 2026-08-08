@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adabida App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+        }
+        .btn-main {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 18px;
+            border-radius: 8px;
+            background: #2c3e50;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-secondary {
+            background: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adabida</h1>
+        <a href="{{ url_for('pagina_personal.nova_entrada') }}" class="btn-main">Nova entrada personal</a>
+        <a href="{{ url_for('converses.nova_conversa_adabida') }}" class="btn-main">Nova conversa</a>
+        <a href="{{ url_for('inici.inici_pagina') }}" class="btn-main btn-secondary">Anar a inici</a>
+    </div>
+</body>
+</html>

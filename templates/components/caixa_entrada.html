@@ -7,11 +7,7 @@
     </div>
     <div class="contingut-lateral">
         <h3 class="titol-entrada clicable" 
-            {% if session.usuari_id == (entrada.usuari_id if entrada.usuari_id else usuari.id) %}
-              onclick="obreModalCompleta({{ entrada.id }}, '{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}')"
-            {% else %}
-              onclick='obreModal({{ entrada.id }}, "{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}", "organitzacio")'
-            {% endif %}>
+            onclick='{% if session.get("usuari_id") and session.usuari_id == (entrada.usuari_id if entrada.usuari_id else usuari.id) %}obreModalCompleta({{ entrada.id }}, "{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}"){% else %}obreModal({{ entrada.id }}, "{{ entrada.usuari.nom_login if entrada.usuari else usuari.nom_login }}", "organitzacio"){% endif %}'>
             {{ entrada.titol or entrada.tema }} 
             {% if entrada.any %}<span class="any">({{ entrada.any }})</span>{% endif %}
         </h3>

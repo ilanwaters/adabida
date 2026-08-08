@@ -1,80 +1,105 @@
-/* ─────────────────────────────
-   ESTIL GENERAL MODAL
-──────────────────────────────*/
+/* ═════════════════════════════════
+   MODALS UNIFICAT ADABIDA
+   ═════════════════════════════════ */
+
 .modal {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.6);
-  display: none;                    /* JS activa display: flex */
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
-/* ─────────────────────────────
-   COS DE LA MODAL
-──────────────────────────────*/
+/* Contenidor modal */
 .modal-content {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
+  border: 5px solid #2563EB;
+  border-radius: 6px;
+  padding: 0;
   width: 90%;
-  max-width: 700px;
+  max-width: 900px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: row;
+}
+
+/* Layout: Imatge esquerra + Text dreta */
+.modal-imatge {
+  flex: 0 0 300px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-imatge img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: zoom-in;
+}
+
+.modal-text {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
   flex-direction: column;
-  gap: 20px;
-  scroll-behavior: smooth;
+  gap: 15px;
 }
 
-/* ─────────────────────────────
-   CAPÇALERA I TÍTOL
-──────────────────────────────*/
-.modal-capsalera h2,
+/* Títols */
 .modal-text h2 {
-  font-size: 1.8rem;
-  margin: 0;
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+  color: #1F2937;
 }
 
-/* ─────────────────────────────
-   CONTINGUT DE TEXT
-──────────────────────────────*/
-.modal-dades p,
-.modal-arxius p {
-  margin: 5px 0;
+.modal-text h3 {
+  margin: 15px 0 8px 0;
+  font-size: 1.2rem;
+  color: #1F2937;
 }
 
 .any {
   color: #888;
   font-size: 1rem;
-  margin-bottom: 10px;
+}
+
+/* Contingut */
+.modal-dades p {
+  margin: 5px 0;
+  line-height: 1.6;
 }
 
 .contingut-formatat {
   white-space: pre-line;
   background: #f9f9f9;
+  padding: 15px;
+  border-radius: 4px;
+  line-height: 1.6;
+  color: #111;
+  font-size: 16px;
+}
+
+#modal-contingut {
+  display: block;
+  color: #111;
+  font-size: 16px;
   padding: 10px;
-  border-radius: 6px;
+  white-space: pre-line;
 }
 
-/* ─────────────────────────────
-   IMATGE PRINCIPAL
-──────────────────────────────*/
-.modal-imatge img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: 8px;
-  cursor: zoom-in;
-}
-
-/* ─────────────────────────────
-   ARXIUS ADJUNTS
-──────────────────────────────*/
+/* Arxius adjunts */
 #modal-arxius img,
 .modal-arxius img {
   display: inline-block;
@@ -83,25 +108,33 @@
   max-width: 100px;
 }
 
-/* ─────────────────────────────
-   BOTONS DE LA MODAL
-──────────────────────────────*/
-.modal-botons {
-  margin-top: 20px;
-  text-align: right;
+/* Info imatge */
+.modal-info-imatge {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 4px;
 }
 
-.modal-botons .boto-editar-modal,
-.modal-botons .boto-eliminar-modal,
+/* Botons */
+.modal-botons {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-botons .boto_nav,
 .modal-botons .boto-tancar-modal,
-.boto-tancar-modal {
-  background-color: #f0f0f0;
-  border: none;
+.modal-botons .boto-editar-modal,
+.modal-botons .boto-eliminar-modal {
   padding: 8px 16px;
-  margin-left: 10px;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
+  border: none;
 }
 
 .modal-botons .boto-eliminar-modal {
@@ -118,9 +151,7 @@
   background-color: #eee;
 }
 
-/* ─────────────────────────────
-   ALTRES ELEMENTS INTERACTIUS
-──────────────────────────────*/
+/* Títol clicable */
 .titol-entrada {
   cursor: pointer;
   user-select: none;
@@ -131,21 +162,7 @@
   text-decoration: underline;
 }
 
-
-#modal-contingut {
-  display: block;
-  color: #111;
-  font-size: 16px;
-  padding: 10px;
-  white-space: pre-line;
-}
-.contingut-formatat {
-  white-space: pre-line;
-  color: #111;
-  font-size: 16px;
-  padding: 10px;
-}
-
+/* Modal missatge */
 .modal-missatge {
   display: none;
   position: fixed;
@@ -159,3 +176,14 @@
   z-index: 9999;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    flex-direction: column;
+    max-width: 95%;
+  }
+  
+  .modal-imatge {
+    flex: 0 0 200px;
+  }
+}

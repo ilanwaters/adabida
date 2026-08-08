@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Contacte') }} - Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/projecte.css') }}">
+<style>
+  .contacte-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+  }
+
+  .contacte-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .contacte-header p {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .pilar-card a {
+    display: inline-block;
+    background: #14d8ce;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s;
+    margin-top: 1rem;
+  }
+
+  .pilar-card a:hover {
+    background: #0e9f94;
+  }
+
+  .contacte-info {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .contacte-info h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+
+  .contacte-info p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  .contacte-info a {
+    color: #14d8ce;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .contacte-info a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .contacte-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block contingut %}
+<main>
+  <div class="projecte-content">
+    
+    <div class="contacte-header">
+      <h1>{{ _('Contacte') }}</h1>
+      <p>{{ _("Tens preguntes sobre el projecte? Vols organitzar un taller? Estem aquí per ajudar-te.") }}</p>
+    </div>
+
+    <!-- Reutilitzem pilars-grid del CSS projecte -->
+    <div class="pilars-grid">
+      
+      <!-- Organitzacions -->
+      <div class="pilar-card">
+        <h3>🏢 {{ _('Per a organitzacions') }}</h3>
+        <p>{{ _("Vols organitzar un taller Adabida a la teva entitat, associació o col·lectiu?") }}</p>
+        <a href="mailto:tallers@adabida.cat?subject={{ _('Sol·licitud taller Adabida') }}">
+          {{ _('Contactar per tallers') }}
+        </a>
+      </div>
+
+      <!-- Consultes generals -->
+      <div class="pilar-card">
+        <h3>💬 {{ _('Consultes generals') }}</h3>
+        <p>{{ _("Tens dubtes sobre com funciona Adabida o vols més informació sobre el projecte?") }}</p>
+        <a href="mailto:admin@adabida.cat?subject={{ _('Consulta general') }}">
+          {{ _('Enviar consulta') }}
+        </a>
+      </div>
+
+      <!-- Col·laboracions -->
+      <div class="pilar-card">
+        <h3>🤝 {{ _('Col·laboracions') }}</h3>
+        <p>{{ _("Ets investigador, periodista o professional i vols col·laborar amb Adabida?") }}</p>
+        <a href="mailto:col·laboracions@adabida.cat?subject={{ _('Proposta col·laboració') }}">
+          {{ _('Proposar col·laboració') }}
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Informació de contacte directe -->
+    <div class="contacte-info">
+      <h2>{{ _('Informació de contacte') }}</h2>
+      <p><strong>{{ _('Email general:') }}</strong> <a href="mailto:admin@adabida.cat">admin@adabida.cat</a></p>
+      <p><strong>{{ _('Tallers:') }}</strong> <a href="mailto:tallers@adabida.cat">tallers@adabida.cat</a></p>
+      <p style="margin-top: 2rem; color: #888; font-size: 0.95rem;">
+        {{ _("Normalment responem en un termini de 48 hores.") }}
+      </p>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

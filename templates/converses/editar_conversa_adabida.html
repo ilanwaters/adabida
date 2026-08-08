@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block titol %}Editar Conversa Adabida{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nova_conversa_adabida.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tinymce-custom.css') }}">
+{% endblock %}
+
+{% block contingut %}
+
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ current_user.nom }} {{ current_user.primer_cognom }} {{ current_user.segon_cognom }}
+    <a href="/pagina_personal" class="boto_nav">Espai personal</a>
+  </h1>
+</div>
+
+<main>
+  <form id="formulari-entrada" method="post" enctype="multipart/form-data">
+    
+    <h2>Entrevista amb: </h2>
+    {% set participant = conversa.participants[0] if conversa.participants else None %}
+    <div class="fila-camps-conversa">
+      <div class="camp-conversa">
+        <label for="entrevistat_nom">Nom</label>
+        <input type="text" name="entrevistat_nom" id="entrevistat_nom" 
+               value="{{ participant.nom if participant else '' }}" required>
+      </div>
+      
+      <div class="camp-conversa">
+        <label for="entrevistat_cognom1">Primer cognom</label>
+        <input type="text" name="entrevistat_cognom1" id="entrevistat_cognom1"
+               value="{{ participant.primer_cognom if participant else '' }}">
+      </div>
+      
+      <div class="camp-conversa">
+        <label for="entrevistat_cognom2">Segon cognom</label>
+        <input type="text" name="entrevistat_cognom2" id="entrevistat_cognom2"
+               value="{{ participant.segon_cognom if participant else '' }}">
+      </div>
+    </div>
+
+    <!-- DADES ENTREVISTAT -->
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        Dades i Context de l'Entrevista
+      </h3>
+      <div class="contingut-plegable">
+        
+        <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Dades de l'entrevistat/da</h4>
+        
+        <div class="fila-camps-conversa">
+          <div class="camp-conversa">
+            <label for="entrevistat_data_naixement">Data naixement</label>
+            <input type="date" name="entrevistat_data_naixement" id="entrevistat_data_naixement"
+                   value="{{ participant.data_naixement.strftime('%Y-%m-%d') if participant and participant.data_naixement else '' }}">
+          </div>
+        </div>
+        
+        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Lloc de naixement</h4>
+        
+        <div class="fila-camps-conversa">
+          <div class="camp-conversa">
+            <label for="pais_entrevistat">País</label>
+            <select name="pais_entrevistat" id="pais_entrevistat" class="select-pais">
+              <option value="">Selecciona un país</option>
+            </select>
+          </div>
+          
+          <div class="camp-conversa">
+            <label for="regio_entrevistat">Regió</label>
+            <select name="regio_entrevistat" id="regio_entrevistat" class="select-regio" disabled>
+              <option value="">Selecciona primer el país</option>
+            </select>
+          </div>
+          
+          <div class="camp-conversa">
+            <label for="municipi_entrevistat">Municipi</label>
+            <input type="text" name="municipi_entrevistat" id="municipi_entrevistat" 
+                   value="{{ participant.lloc_municipi if participant else '' }}"
+                   placeholder="Selecciona primer la regió" disabled>
+          </div>
+        </div>
+        
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Context de la conversa</h4>
+        
+        <div class="fila-camps-conversa">
+          <div class="camp-conversa">
+            <label for="data_conversa">Data conversa:</label>
+            <input type="date" id="data_conversa" name="data_conversa" 
+                   value="{{ conversa.data_conversa.strftime('%Y-%m-%d') if conversa.data_conversa else '' }}" required>
+          </div>
+          <div class="camp-conversa">
+            <label for="durada_minuts">Durada (min):</label>
+            <input type="number" id="durada_minuts" name="durada_minuts" min="1" 
+                   value="{{ conversa.durada_minuts if conversa.durada_minuts else '' }}" placeholder="45">
+          </div>
+        </div>
+
+        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Lloc de la conversa</h4>
+        
+        <div class="camp-conversa-complet">
+          <label for="lloc_institucio">Entrevista realitzada a:</label>
+          <input type="text" name="lloc_institucio" id="lloc_institucio" 
+                 value="{{ conversa.lloc_institucio if conversa.lloc_institucio else '' }}"
+                 placeholder="Ex: Residència Fàtima, Hospital Sant Pau, casa de la persona...">
+        </div>
+        <div class="fila-camps-conversa">
+          <div class="camp-conversa">
+            <label for="pais_lloc">País:</label>
+            <select name="pais_lloc" id="pais_lloc" class="select-pais">
+              <option value="">Selecciona un país</option>
+            </select>
+          </div>
+          
+          <div class="camp-conversa">
+            <label for="regio_lloc">Regió:</label>
+            <select name="regio_lloc" id="regio_lloc" class="select-regio" disabled>
+              <option value="">Selecciona primer el país</option>
+            </select>
+          </div>
+          
+          <div class="camp-conversa">
+            <label for="municipi_lloc">Municipi:</label>
+            <input type="text" name="municipi_lloc" id="municipi_lloc" 
+                   value="{{ conversa.lloc_municipi if conversa.lloc_municipi else '' }}"
+                   placeholder="Selecciona primer la regió" disabled>
+          </div>
+        </div>
+
+        <div class="camp-conversa-complet" style="margin-top: 1rem;">
+          <label for="observacions_generals">Observacions generals:</label>
+          <textarea id="observacions_generals" name="observacions_generals" rows="3" 
+                    placeholder="Context, temes tractats, circumstàncies...">{{ conversa.observacions_generals if conversa.observacions_generals else '' }}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSENTIMENT INFORMAT -->
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        Consentiment Informat
+      </h3>
+      <div class="contingut-plegable">
+        <div id="document-consentiment" style="background: #f9f9f9; padding: 1.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
+          <h4 style="text-align: center; margin-bottom: 1rem;">Consentiment Informat</h4>
+          <p><em>El consentiment ja va ser donat en crear l'entrevista.</em></p>
+        </div>
+        <div style="margin-top: 1.5rem;">
+          <label class="checkbox-etica">
+            <input type="checkbox" name="consentiment_informat" id="consentiment_informat" 
+                   {{ 'checked' if conversa.consentiment_informat else '' }}>
+            <span class="checkmark"></span>
+            La persona entrevistada ha estat informada i ha donat el seu consentiment
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONI -->
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        Testimoni
+      </h3>
+      <div class="contingut-plegable">
+        <label for="titol">Títol</label>
+        <input name="titol" id="titol" class="campo-largo" 
+               value="{{ conversa.titol if conversa.titol else '' }}" required>
+
+        <label for="tema">Tema</label>
+        <input name="tema" id="tema" class="campo-largo" 
+               value="{{ conversa.tema if conversa.tema else '' }}">
+
+        <label for="contingut">Contingut</label>
+        <textarea name="contingut" id="contingut" rows="20">{{ conversa.contingut if conversa.contingut else '' }}</textarea>
+
+        <h3>Notes de l'Entrevistador</h3>
+        <label class="checkbox-etica">
+          <input type="checkbox" name="notes_metodologiques_publiques" value="1"
+                 {{ 'checked' if conversa.notes_metodologiques_publiques else '' }}>
+          <span class="checkmark"></span>
+          Fer públiques les notes metodològiques (només visibles per usuaris registrats)
+        </label>
+        
+        <label for="notes_preparacio">Notes de preparació</label>
+        <textarea name="notes_preparacio" id="notes_preparacio" rows="4">{{ conversa.notes_preparacio if conversa.notes_preparacio else '' }}</textarea>
+        
+        <label for="notes_camp">Notes de camp</label>
+        <textarea name="notes_camp" id="notes_camp" rows="4">{{ conversa.notes_camp if conversa.notes_camp else '' }}</textarea>
+        
+        <label for="observacions_post">Observacions post-entrevista</label>
+        <textarea name="observacions_post" id="observacions_post" rows="4">{{ conversa.observacions_post if conversa.observacions_post else '' }}</textarea>
+      </div>
+    </div>
+
+    <div class="botons-final" style="text-align: right; margin-top: 2rem;">
+      <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
+        Desar Canvis
+      </button>
+    </div>
+
+  </form>
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.traduccions = {
+        seleccionaPais: "Selecciona un país",
+        seleccionaRegio: "Selecciona província",
+        seleccionaMunicipi: "Selecciona o escriu el teu municipi",
+        carregant: "Carregant...",
+        errorCarregant: "Error carregant",
+        seleccionaPrimerRegio: "Selecciona primer la regió",
+        seleccionaPrimerPais: "Selecciona primer el país"
+    };
+    
+    // Pre-carregar ubicacions si existeixen
+    {% if participant %}
+    window.participantData = {
+        pais: "{{ participant.lloc_pais if participant else '' }}",
+        regio: "{{ participant.lloc_regio if participant else '' }}",
+        municipi: "{{ participant.lloc_municipi if participant else '' }}"
+    };
+    {% endif %}
+    
+    window.conversaData = {
+        pais: "{{ conversa.lloc_pais if conversa.lloc_pais else '' }}",
+        regio: "{{ conversa.lloc_regio if conversa.lloc_regio else '' }}",
+        municipi: "{{ conversa.lloc_municipi if conversa.lloc_municipi else '' }}"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/nova_conversa_adabida.js') }}"></script>
+<script src="{{ url_for('static', filename='js/nova_entrada.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ubicacions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tinymce/tinymce.min.js') }}"></script>
+<script>
+tinymce.init({
+    selector: '#contingut',
+    height: 500,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
+        'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help',
+    content_css: '{{ url_for("static", filename="css/tinymce-custom.css") }}'
+});
+</script>
+{% endblock %}

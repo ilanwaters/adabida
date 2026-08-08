@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Pagament confirmat') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/confirmacio_aportacio.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="confirmacio-container">
+  <h1>✅ {{ _('Pagament confirmat!') }}</h1>
+  
+  <div class="quantitat-destacada">
+    {{ aportacio.quantitat }}€
+  </div>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    {{ _('Gràcies per la teva aportació a Adabida!') }}
+  </p>
+
+  <div class="instruccions">
+    <h3>📧 {{ _('Què passa ara?') }}</h3>
+    <ul>
+      <li>{{ _('Rebràs un email de confirmació de Stripe') }}</li>
+      <li>{{ _('El càrrec apareixerà com "ADABIDA DONACIO" al teu extracte') }}</li>
+      <li>{{ _('La teva aportació ens ajuda a mantenir Adabida gratuït per a tothom') }}</li>
+    </ul>
+  </div>
+
+  <p class="nota-final">
+    {{ _('Gràcies per confiar en el nostre projecte') }} ❤️
+  </p>
+
+  <div style="text-align: center;">
+    <a href="{{ url_for('inici.inici_pagina') }}" class="boto_nav">{{ _('Tornar a l\'inici') }}</a>
+  </div>
+</div>
+{% endblock %}

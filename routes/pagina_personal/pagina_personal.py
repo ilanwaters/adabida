@@ -10,8 +10,10 @@ from utils import generar_miniatura_entrada
 import re
 from sqlalchemy import cast, Integer
 import pycountry
+from datetime import datetime
+from models import Pais, Regio, Municipi, Conversa
+from datetime import datetime, date
 
-from models import Pais, Regio, Municipi
 pagina_personal_bp = Blueprint("pagina_personal", __name__)
 
 import pycountry
@@ -88,19 +90,44 @@ def pagina_personal():
     else:
         text_biografic = generar_biografia_entrevista(perfil.id)
 
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).order_by(Entrada.data_creacio.desc()).all()
+
+# Obtenir entrades
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).all()
     entrades = []
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
-
         entrades.append({
             "id": entrada.id,
+            "tipus": "entrada",
             "titol": entrada.titol,
+            "tema": entrada.tema,
             "any": entrada.any_text,
-            "resum": entrada.contingut[:120] + "...",
+            "lloc": None,  # TODO: construir lloc igual que a repositori
+            "resum": entrada.contingut[:120] + "..." if entrada.contingut else "",
             "data": entrada.data_creacio.strftime("%d/%m/%Y") if entrada.data_creacio else "",
-            "miniatura": miniatura
+            "data_ordenacio": entrada.data_creacio or datetime.min,
+            "miniatura": miniatura,
+            "usuari": entrada.usuari
         })
+
+    # Obtenir converses
+    converses_raw = Conversa.query.filter_by(usuari_id=usuari.id).all()
+    converses = []
+    for conversa in converses_raw:
+        conv_dict = preparar_conversa_per_vista(conversa, usuari.nom_login)
+        conv_dict["data_ordenacio"] = conversa.data_conversa or conversa.created_at
+        converses.append(conv_dict)
+
+# Barrejar i ordenar per data
+
+    def normalitza_data(d):
+        if isinstance(d, datetime):
+            return d
+        elif isinstance(d, date):
+            return datetime.combine(d, datetime.min.time())
+        return datetime.min
+
+    entrades = sorted(entrades + converses, key=lambda x: normalitza_data(x["data_ordenacio"]), reverse=True)
 
     # ✅ Obtenim la pestanya activa des de l'URL (per exemple: ?pestanya=entrades)
     pestanya_activa = request.args.get("pestanya", "biografia")  # Per defecte: biografia
@@ -236,16 +263,15 @@ def entrades():
         flash(_("Usuari inexistent"))
         return redirect(url_for("login.login"))
 
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).order_by(Entrada.data_creacio.desc()).all()
+    # Obtenir entrades
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).all()
     entrades = []
-    
+
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
         
-        # Intentar buscar noms si són IDs
+        # Construir lloc
         parts_lloc = []
-        
-        # Municipi
         if entrada.municipi:
             try:
                 if entrada.municipi.isdigit():
@@ -256,7 +282,6 @@ def entrades():
             except:
                 parts_lloc.append(entrada.municipi)
         
-        # Regio
         if entrada.regio:
             try:
                 if entrada.regio.isdigit():
@@ -267,7 +292,6 @@ def entrades():
             except:
                 parts_lloc.append(entrada.regio)
         
-        # Pais
         if entrada.pais:
             try:
                 if entrada.pais.isdigit():
@@ -289,14 +313,35 @@ def entrades():
 
         entrades.append({
             "id": entrada.id,
+            "tipus": "entrada",
             "titol": entrada.titol,
             "tema": entrada.tema,
             "any": entrada.any_text,
             "lloc": lloc,
             "resum": resum,
             "data": entrada.data_creacio.strftime("%d/%m/%Y") if entrada.data_creacio else "",
-            "miniatura": miniatura
+            "data_ordenacio": entrada.data_creacio or datetime.min,
+            "miniatura": miniatura,
+            "usuari": entrada.usuari
         })
+
+    # Obtenir converses
+    converses_raw = Conversa.query.filter_by(usuari_id=usuari.id).all()
+    converses = []
+    for conversa in converses_raw:
+        conv_dict = preparar_conversa_per_vista(conversa, usuari.nom_login)
+        conv_dict["data_ordenacio"] = conversa.data_conversa or conversa.created_at
+        converses.append(conv_dict)
+
+    # Barrejar i ordenar per data
+    def normalitza_data(d):
+        if isinstance(d, datetime):
+            return d
+        elif isinstance(d, date):
+            return datetime.combine(d, datetime.min.time())
+        return datetime.min
+
+    entrades = sorted(entrades + converses, key=lambda x: normalitza_data(x["data_ordenacio"]), reverse=True)
 
     return render_template('pagina_personal/entrades.html', usuari=usuari, entrades=entrades)
 
@@ -423,3 +468,42 @@ def guardar_bandera():
     db.session.commit()
     
     return jsonify({'success': True, 'bandera': bandera})
+
+def preparar_conversa_per_vista(conversa, usuari_nom_login):
+    """Converteix una Conversa en format dict per renderitzar com caixa"""
+    from utils import generar_miniatura_entrada
+    
+    # Obtenir nom del participant principal
+    participant_nom = "Desconegut"
+    if conversa.participants:
+        primer = conversa.participants[0]
+        participant_nom = f"{primer.nom} {primer.primer_cognom or ''} {primer.segon_cognom or ''}".strip()
+    
+    # Construir lloc
+    parts_lloc = [conversa.lloc_municipi, conversa.lloc_regio, conversa.lloc_pais]
+    lloc = ", ".join([p for p in parts_lloc if p]) or None
+    
+    # Extreure any
+    any = conversa.data_conversa.year if conversa.data_conversa else None
+    
+    # Resum del contingut
+    resum = ""
+    if conversa.contingut:
+        import re
+        contingut_net = re.sub(r'<[^>]+>', '', conversa.contingut)
+        contingut_net = contingut_net.replace('&nbsp;', ' ').replace('&amp;', '&')
+        resum = contingut_net[:120] + "..." if len(contingut_net) > 120 else contingut_net
+    
+    return {
+        "id": conversa.id,
+        "tipus": "conversa",
+        "participant_nom": participant_nom,
+        "tema": conversa.tema,
+        "any": any,
+        "lloc": lloc,
+        "durada_minuts": conversa.durada_minuts,
+        "resum": resum,
+        "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
+        "miniatura": "/static/icons/entrevista.svg",  # Icona genèrica (crea-la després)
+        "usuari": conversa.usuari
+    }
