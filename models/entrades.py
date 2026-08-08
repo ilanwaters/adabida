@@ -132,10 +132,13 @@ class ImatgeGaleria(db.Model):
     exposicio_id = db.Column(db.Integer, db.ForeignKey('exposicions.id'), nullable=True)
     nom_fitxer = db.Column(db.String(255), nullable=False)
     destinacio = db.Column(db.String(50))
-    data_publicacio = db.Column(db.DateTime, default=datetime.utcnow) 
-    
+    data_publicacio = db.Column(db.DateTime, default=datetime.utcnow)
+    usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
+    mida = db.Column(db.String, default="mitjana")
+    descripcio = db.Column(db.Text)
     entrada = db.relationship("Entrada", back_populates="imatges")
     exposicio = db.relationship("Exposicio", back_populates="imatges")
+    usuari = db.relationship("Usuari", backref="imatges_galeria")
 
 
 class ImatgeExposicio(db.Model):
