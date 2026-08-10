@@ -34,7 +34,7 @@
                  alt="Bandera"
                  style="width: 16px; height: 11px; margin-right: 5px; vertical-align: middle;">
             {% endif %}
-            <small>De: {{ entrada.usuari.nom if entrada.usuari else usuari.nom }} ({{ entrada.data }})</small>
+            <small>De: {{ entrada.usuari.nom if entrada.usuari else usuari.nom }} ({{ entrada.data_creacio.strftime('%d/%m/%Y') if entrada.data_creacio else '' }})</small>
         </div>
     </div>
 </div>

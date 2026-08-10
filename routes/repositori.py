@@ -69,7 +69,7 @@ def consulta_repositori():
         condicions.append(Entrada.tema.ilike(f"%{tema}%"))
 
     if ciutat:
-        condicions.append(Entrada.ubicacio.ilike(f"%{ciutat}%"))
+        condicions.append(Entrada.municipi.ilike(f"%{ciutat}%"))
 
     if any_inici and any_fi:
         condicions.append(Entrada.any_text.between(any_inici, any_fi))

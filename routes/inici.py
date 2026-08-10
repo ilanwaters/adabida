@@ -23,18 +23,14 @@ def obtenir_entrades_aleatories(limit=10):
     if not min_id or not max_id:
         return []
     
-    # Generar IDs aleatoris (generem més per si alguns no existeixen)
-    ids_aleatoris = random.sample(range(min_id, max_id + 1), min(limit * 3, max_id - min_id + 1))
-    
-    # Query directa amb IDs
+    # Query amb ordre aleatori real a nivell de base de dades
     entrades = (
         Entrada.query
         .options(joinedload(Entrada.usuari))
-        .filter(Entrada.id.in_(ids_aleatoris))
+        .order_by(func.random())
         .limit(limit)
         .all()
     )
-    
     return entrades
 
 def preparar_conversa_per_vista(conversa, usuari_nom_login):
@@ -194,20 +190,18 @@ def api_entrades_aleatories():
         'entrades': [{
             'id': e.id,
             'titol': e.titol,
-            'subtitol': e.subtitol,
-            'resum': e.resum,
-            'data': e.data.strftime('%d/%m/%Y') if e.data else '',
-            'miniatura': e.miniatura or '/static/icons/sense_imatge.png',  # ← AFEGEIX
-            'imatge_gran': e.imatge_gran,  # ← AFEGEIX
+            'data': e.data_creacio.strftime('%d/%m/%Y') if e.data_creacio else '',
+            'miniatura': e.miniatura or '/static/icons/sense_imatge.png',
+            'imatge_gran': e.imatge_gran,
             'usuari': {
                 'nom': e.usuari.nom if e.usuari else 'Anònim',
-                'nom_login': e.usuari.nom_login if e.usuari else 'anonim',  # ← AFEGEIX
+                'nom_login': e.usuari.nom_login if e.usuari else 'anonim',
                 'bandera': e.usuari.bandera_preferida if e.usuari else None
             },
             'ubicacio': {
-                'municipi': e.municipi_origen,
-                'regio': e.regio_origen,
-                'pais': e.pais_origen
+                'municipi': e.municipi,
+                'regio': e.regio,
+                'pais': e.pais
             }
         } for e in entrades]
     })
