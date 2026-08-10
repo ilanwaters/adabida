@@ -615,25 +615,6 @@ class ArxiuAdjunt(db.Model):
     data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
     entrada = db.relationship("Entrada", back_populates="arxius_adjuntats")
 
-# ---------- Imatge Galeria ----------
-
-class ImatgeGaleria(db.Model):
-    __tablename__ = 'imatges_galeria'
-
-    id = db.Column(db.Integer, primary_key=True)
-    nom_fitxer = db.Column(db.String, nullable=False)
-    entrada_id = db.Column(db.Integer, db.ForeignKey('entrades.id'), nullable=True)
-    usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))  # <- FK correcte a usuaris.id
-    mida = db.Column(db.String, default="mitjana")
-    descripcio = db.Column(db.Text)
-    data_publicacio = db.Column(db.DateTime, default=datetime.utcnow)
-    destinacio = db.Column(db.String(20))
-    exposicio_id = db.Column(db.Integer, db.ForeignKey('exposicions.id'))
-
-    # Relacions NETES:
-    entrada = db.relationship("Entrada", back_populates="imatges")
-    usuari = db.relationship("Usuari", backref="imatges_galeria")
-    exposicio = db.relationship("Exposicio", back_populates="imatges")
 
 # ---------- Entrada Blog ----------
 class EntradaBlog(db.Model):

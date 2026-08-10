@@ -47,7 +47,7 @@
 </a>
 
   <div class="accions-imatge">
-    {% if img.destinacio != 'galeria' %}
+    {% if img.destinacio != 'galeria' and img.entrada_id %}
     <form method="POST" action="{{ url_for('admin_galeria.afegir_a_galeria') }}">
   <input type="hidden" name="fitxer" value="{{ img.fitxer }}">
   <input type="hidden" name="carpeta" value="{{ ruta }}">

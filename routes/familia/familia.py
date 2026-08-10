@@ -330,13 +330,13 @@ def gestionar_seccio_records(familia, es_admin):
         EntradaFamilia.espai_familiar_id == familia.id
     ).order_by(Entrada.data_creacio.desc()).all()
 
+    anys_disponibles = sorted({e.data_creacio.year for e in entrades if e.data_creacio}, reverse=True)
+
     return render_template('familia/seccio_records.html',
                          familia=familia,
                          es_admin=es_admin,
-                         entrades=entrades)
-
-# Nova funció per afegir a familia.py
-# Aquesta substitueix gestionar_seccio_home
+                         entrades=entrades,
+                         anys_disponibles=anys_disponibles)
 
 def gestionar_qui_som(familia, es_admin):
     """Secció QUI SOM - Informació completa, cronologia i evolució unificats"""

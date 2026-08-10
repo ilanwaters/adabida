@@ -347,25 +347,7 @@ def entrades():
 
 @pagina_personal_bp.route('/nova_entrada')
 def nova_entrada():
-    usuari_id = session.get("usuari_id")
-    if not usuari_id:
-        flash(_("Sessió no vàlida"))
-        return redirect(url_for("login.login"))
-
-    usuari = Usuari.query.get(usuari_id)
-    if not usuari:
-        flash(_("Usuari inexistent"))
-        return redirect(url_for("login.login"))
-
-    # Carregar organitzacions de l'usuari (copiat de nova_entrada_bp)
-    usuari_organitzacions = db.session.query(Organitzacio)\
-        .join(MembreOrganitzacio, MembreOrganitzacio.organitzacio_id == Organitzacio.id)\
-        .filter(MembreOrganitzacio.usuari_id == usuari.id)\
-        .all()
-
-    return render_template('pagina_personal/nova_entrada.html', 
-                          usuari=usuari, 
-                          usuari_organitzacions=usuari_organitzacions)
+    return redirect(url_for('nova_entrada.nova_entrada_personal'))
 
 @pagina_personal_bp.route('/perfil')
 def perfil():

@@ -67,12 +67,12 @@ def guardar_exposicio():
     db.session.commit()
 
     # Redirigir a la pàgina d’administració d’aquesta exposició
-    return redirect(url_for('admin/admin.control_expo', id=nova_expo.id))
+    return redirect(url_for('admin.control_expo', id=nova_expo.id))
 
 @admin_bp.route("/admin/expo/<int:id>")
 def control_expo(id):
     expo = Exposicio.query.get_or_404(id)
-    return render_template("control_expo.html", expo=expo)
+    return render_template("admin/control_expo.html", expo=expo)
 
 @admin_bp.route("/admin/exposicions")
 def admin_exposicions():

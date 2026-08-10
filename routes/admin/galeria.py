@@ -122,7 +122,7 @@ def afegir_a_galeria():
     mida = request.form.get("mida", "mitjana")
     entrada_id = request.form.get("entrada_id")
 
-    if not fitxer or not carpeta or not entrada_id:
+    if not fitxer or not carpeta or not entrada_id or not entrada_id.isdigit():
         flash("Falten dades per afegir a galeria (fitxer, carpeta o entrada_id).")
         return redirect(url_for("admin_galeria.navegar_carpetes", subpath=carpeta))
 
