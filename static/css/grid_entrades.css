@@ -21,7 +21,8 @@
   background-color: #fdfdfd;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
-  height: 120px; /* Altura fixa per consistència */
+  min-height: 120px;
+  height: auto;
 }
 
 .caixa-entrada:hover {
