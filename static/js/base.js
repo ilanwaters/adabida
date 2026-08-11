@@ -67,7 +67,7 @@ function toggleMenu() {
 }
 
 function obrirLoginGlobal() {
-  document.getElementById('submenu-login-global').style.display = 'block';
+  document.getElementById('submenu-login-global').classList.add('mostrar');
 }
 
 function togglePasswordGlobal() {
