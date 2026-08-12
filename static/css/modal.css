@@ -3,6 +3,7 @@
    ═════════════════════════════════ */
 
 .modal {
+  background: #f7f6f3;
   position: fixed;
   top: 0;
   left: 0;
@@ -16,23 +17,44 @@
 }
 
 /* Contenidor modal */
+/* Contenidor modal */
 .modal-content {
-  background: white;
-  border: 5px solid #2563EB;
+  background: #f7f6f3;
+  border: 5px solid #030e23;
   border-radius: 6px;
   padding: 0;
-  width: 90%;
-  max-width: 900px;
-  max-height: 90vh;
+  width: 98vw;
+  max-width: 98vw;
+  max-height: 95vh;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+.modal-botons-accions {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.modal-botons-accions {
+  flex-basis: 100%;
+  padding: 12px 20px;
+  border-top: 1px solid #e5e7eb;
   display: flex;
-  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-botons-accions .boto_nav {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  border-radius: 4px;
 }
 
 /* Layout: Imatge esquerra + Text dreta */
 .modal-imatge {
-  flex: 0 0 300px;
+  flex: 0 0 200px;
   background: #f5f5f5;
   display: flex;
   align-items: center;
@@ -49,6 +71,7 @@
 }
 
 .modal-text {
+  background: #fbfaf8;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -102,6 +125,7 @@
 /* Arxius adjunts */
 #modal-arxius img,
 .modal-arxius img {
+  background: #fbfaf8;
   display: inline-block;
   margin: 10px;
   max-height: 100px;
@@ -130,7 +154,7 @@
 .modal-botons .boto-tancar-modal,
 .modal-botons .boto-editar-modal,
 .modal-botons .boto-eliminar-modal {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
