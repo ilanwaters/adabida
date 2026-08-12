@@ -14,6 +14,7 @@ from utils.gestio_imatges import generar_miniatura
 import subprocess
 import json
 from models.ubicacions import Pais
+from utils.sanititzar import neteja_html
 
 nova_entrada_bp = Blueprint("nova_entrada", __name__)
 
@@ -150,7 +151,7 @@ def nova_entrada_personal():
     regio = request.form.get("regio")
     municipi = request.form.get("municipi")
 
-    contingut = request.form.get("contingut")
+    contingut = neteja_html(request.form.get("contingut"))
     titol_imatge = request.form.get("titol_imatge")
     descripcio_imatge = request.form.get("descripcio_imatge")
     any_imatge = request.form.get("any_imatge")
@@ -426,7 +427,7 @@ def editar_entrada_personal(entrada_id):
         entrada.tema = request.form.get("tema")
         entrada.any_text = request.form.get("any")
         entrada.ubicacio = request.form.get("ubicacio")
-        entrada.contingut = request.form.get("contingut")
+        entrada.contingut = neteja_html(request.form.get("contingut"))
         entrada.titol_imatge = request.form.get("titol_imatge")
         entrada.any_imatge = request.form.get("any_imatge")
         entrada.ubicacio_imatge = request.form.get("ubicacio_imatge")

@@ -30,7 +30,7 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 }
 
 
-      document.getElementById('modal-contingut').innerText = data.contingut || "";
+      document.getElementById('modal-contingut').innerHTML = data.contingut || "";
 
       let arxiusDiv = document.getElementById('modal-arxius');
       arxiusDiv.innerHTML = "";

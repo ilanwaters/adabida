@@ -17,7 +17,7 @@ function obreModalCompleta(entradaId, usuariId) {
         const dataSpan = document.getElementById('modal-data-editar');
         if (dataSpan) dataSpan.innerText = data.data_creacio || "";
 
-        document.getElementById('modal-contingut-editar').innerText = data.contingut || "";
+        document.getElementById('modal-contingut-editar').innerHTML = data.contingut || "";
 
         let arxiusDiv = document.getElementById('modal-arxius-editar');
         arxiusDiv.innerHTML = "";
