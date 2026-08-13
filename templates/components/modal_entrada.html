@@ -1,46 +1,47 @@
 <!-- templates/components/modal_entrada.html -->
 <div id="modal-entrada" class="modal" style="display: none;">
-    <div class="modal-content">
+  <div class="modal-content">
 
-      <div class="modal-imatge">
-        <a id="modal-enllac" href="" data-lightbox="imatge-entrada">
-          <img id="modal-img" src="" alt="imatge entrada">
-        </a>
+    <div class="modal-imatge">
+      <a id="modal-enllac" href="" data-lightbox="imatge-entrada">
+        <img id="modal-img" src="" alt="imatge entrada">
+      </a>
+    </div>
+
+    <div class="modal-text">
+
+      <h2 id="modal-titol">—</h2>
+      <div class="modal-dades">
+        <p><span id="modal-tema"></span></p>
+        <p><span id="modal-ubicacio-any">—</span></p>
+        <div id="modal-contingut" class="contingut-formatat">—</div>
       </div>
 
-      <div class="modal-text">
-  
-        <h2 id="modal-titol">—</h2>
-        <div class="modal-dades">
-      
-          <p><span id="modal-tema"></span></p>
-          <p><span id="modal-ubicacio-any">—</span></p>
+      <div class="modal-arxius" id="modal-arxius"></div>
 
-          <div id="modal-contingut" class="contingut-formatat">—</div>  
-        </div>
-        <div class="modal-arxius" id="modal-arxius"></div>
-  <div class="modal-info-imatge" id="modal-info-imatge" style="display: none;">
+      <div class="modal-info-imatge" id="modal-info-imatge" style="display: none;">
+        <p><strong>{{ _('Arxiu') }}</strong> <span id="modal-titol-imatge">—</span></p>
+        <p><span id="modal-ubicacio-any-imatge">—</span></p>
+        <p><span id="modal-descripcio-imatge">—</span></p>
+        <p><strong>{{ _('Aquest arxiu es pot consultar a:') }}</strong> <span id="modal-referencia-imatge">—</span></p>
+      </div>
 
-    <p><strong>{{ _('Arxiu') }}</strong> <span id="modal-titol-imatge">—</span></p>
-    <p><span id="modal-ubicacio-any-imatge">—</span></p>
+    </div>
 
-    <p><span id="modal-descripcio-imatge">—</span></p>
-    <p><strong>{{ _('Aquest arxiu es pot consultar a:') }}</strong> <span id="modal-referencia-imatge">—</span></p>
-  </div>
-
-      {% if session.get('usuari') %}
-  <p><strong><span id="modal-autor"></span></strong> <span id="modal-data"></span></p>
-{% else %}
-  <p><span id="modal-data"></span></p>
-{% endif %}
-      <div class="modal-botons">
+    <div class="modal-botons">
+      <div class="modal-meta-autoria">
+        <span id="modal-meta-autor"></span><br>
+        <span id="modal-meta-creacio"></span><br>
+        <span id="modal-meta-modificacio"></span>
+      </div>
+      <div class="modal-grup-botons">
         {% if session.get('usuari') %}
-          <button id="boto-guardar" class="boto_nav" onclick="guardaEntradaFavorita()"> {{ _('Guardar') }}</button>
+          <button id="boto-guardar" class="boto_nav" onclick="guardaEntradaFavorita()">{{ _('Guardar') }}</button>
           <button id="boto-eliminar-guardada" class="boto_nav" onclick="eliminaEntradaGuardada()" style="display: none;">{{ _('Eliminar de guardades') }}</button>
         {% endif %}
-
-         <button class="boto_nav" onclick="tancaModalEntrada()">Tancar</button>
+        <button class="boto_nav" onclick="tancaModalEntrada()">{{ _('Tancar') }}</button>
       </div>
     </div>
+
   </div>
 </div>

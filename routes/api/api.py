@@ -33,13 +33,14 @@ def obtenir_entrada(usuari_login, entrada_id):
         "regio_imatge": entrada.regio_imatge,
         "municipi_imatge": entrada.municipi_imatge,
         "data_creacio": entrada.data_creacio.strftime('%d/%m/%Y') if entrada.data_creacio else None,
+        "data_modificacio": entrada.data_modificacio.strftime('%d/%m/%Y') if entrada.data_modificacio else None,
         "any": entrada.any_text,
         "contingut": entrada.contingut,
         "titol_imatge": entrada.titol_imatge,
         "any_imatge": entrada.any_imatge,
         "descripcio_imatge": entrada.descripcio_imatge,
         "referencia": entrada.referencia,
-         "propietari": es_propietari,
+        "propietari": es_propietari,
         "ja_guardada": ja_guardada,
         "arxius": [
             {

@@ -17,7 +17,8 @@ class Entrada(db.Model):
     regio = db.Column(db.String(100), nullable=True)
     municipi = db.Column(db.String(100), nullable=True)
     data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
-
+    data_modificacio = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
+    
     titol_imatge = db.Column(db.String(255))
     descripcio_imatge = db.Column(db.Text)
     any_imatge = db.Column(db.String(10))

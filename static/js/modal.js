@@ -18,6 +18,14 @@ function obreModal(entradaId, usuariId,origen = null) {
       if (dataSpan) dataSpan.innerText = data.data_creacio || "";
 
       const autorSpan = document.getElementById('modal-autor');
+      const metaAutor = document.getElementById('modal-meta-autor');
+      if (metaAutor) metaAutor.textContent = data.usuari_nom || '';
+
+      const metaCreacio = document.getElementById('modal-meta-creacio');
+      if (metaCreacio) metaCreacio.textContent = data.data_creacio ? `Creat: ${data.data_creacio}` : '';
+
+      const metaModificacio = document.getElementById('modal-meta-modificacio');
+      if (metaModificacio) metaModificacio.textContent = data.data_modificacio ? `Modificat: ${data.data_modificacio}` : '';
       
 
 console.log("DEBUG autorSpan:", autorSpan);

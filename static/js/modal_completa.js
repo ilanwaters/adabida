@@ -16,6 +16,14 @@ function obreModalCompleta(entradaId, usuariId) {
       document.getElementById("modal-ubicacio-any-editar").textContent = `${ubicacio || ''}${separador}${any || ''}`;
         const dataSpan = document.getElementById('modal-data-editar');
         if (dataSpan) dataSpan.innerText = data.data_creacio || "";
+        const metaAutor = document.getElementById('modal-meta-autor-editar');
+        if (metaAutor) metaAutor.textContent = data.usuari_nom || '';
+
+        const metaCreacio = document.getElementById('modal-meta-creacio-editar');
+        if (metaCreacio) metaCreacio.textContent = data.data_creacio ? `Creat: ${data.data_creacio}` : '';
+
+        const metaModificacio = document.getElementById('modal-meta-modificacio-editar');
+        if (metaModificacio) metaModificacio.textContent = data.data_modificacio ? `Modificat: ${data.data_modificacio}` : '';
 
         document.getElementById('modal-contingut-editar').innerHTML = data.contingut || "";
 

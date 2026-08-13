@@ -6,6 +6,7 @@
         <a id="modal-enllac-editar" href="" data-lightbox="imatge-entrada">
           <img id="modal-img-editar" src="" alt="imatge entrada">
         </a>
+  
       </div>
 
       <div class="modal-text">
@@ -28,10 +29,18 @@
         </div>
     </div>
 
-    <div class="modal-botons modal-botons-accions">
-      <a id="boto-editar" class="boto_nav" href="">{{ _('Editar') }}</a>
-      <button id="boto-eliminar" type="button" class="boto_nav" data-id="" onclick="confirmaEliminacio()">{{ _('Eliminar') }}</button>
-      <button onclick="tancaModal()" class="boto_nav">{{ _('Tancar') }}</button>
-    </div>
+    
+       <div class="modal-botons modal-botons-accions">
+  <div class="modal-meta-autoria">
+    <span id="modal-meta-autor-editar"></span><br>
+    <span id="modal-meta-creacio-editar"></span><br>
+    <span id="modal-meta-modificacio-editar"></span>
+  </div>
+  <div class="modal-grup-botons">
+    <a id="boto-editar" class="boto_nav" href="">{{ _('Editar') }}</a>
+    <button id="boto-eliminar" type="button" class="boto_nav" data-id="" onclick="confirmaEliminacio()">{{ _('Eliminar') }}</button>
+    <button onclick="tancaModal()" class="boto_nav">{{ _('Tancar') }}</button>
+  </div>
+</div>
   </div>
 </div>
