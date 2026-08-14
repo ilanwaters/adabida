@@ -2,7 +2,7 @@
 <div class="caixa-entrada">
     <div class="imatge-lateral">
         <a href="{{ entrada.imatge_gran or entrada.miniatura }}" data-lightbox="galeria-{{ entrada.id }}">
-            <img src="{{ entrada.miniatura }}" class="miniatura" alt="Miniatura">
+            <img src="{{ entrada.miniatura_calculada if entrada.miniatura_calculada is defined else entrada.miniatura }}" class="miniatura" alt="Miniatura">
         </a>
     </div>
     <div class="contingut-lateral">

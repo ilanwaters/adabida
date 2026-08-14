@@ -355,3 +355,23 @@ function convertirGrupATextLliure(grup) {
         grup.pais.focus();
     }
 }
+
+/**
+ * Inicialitza un grup d'ubicació afegit dinàmicament (ex: participants de conversa)
+ * @param {string} nomCampPais - name del select de país (ex: "pais_participant_0")
+ */
+function inicialitzarGrupPerNom(nomCampPais) {
+    const campPais = document.querySelector(`[name="${nomCampPais}"]`);
+    if (!campPais) return;
+
+    const base = nomCampPais.replace('pais_', '');
+    const grup = {
+        pais: campPais,
+        regio: document.querySelector(`[name="regio_${base}"]`),
+        municipi: document.querySelector(`[name="municipi_${base}"]`)
+    };
+
+    inicialitzarGrup(grup);
+}
+
+window.inicialitzarGrupPerNom = inicialitzarGrupPerNom;

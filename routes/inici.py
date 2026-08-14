@@ -8,6 +8,7 @@ import random
 from sqlalchemy.orm import joinedload
 from models import Entrada, Exposicio, Conversa
 from flask_login import current_user
+from utils import generar_miniatura_entrada
 
 inici_bp = Blueprint("inici", __name__)
 
@@ -128,7 +129,7 @@ def inici_pagina():
     entrades_aleatories = obtenir_entrades_aleatories(10)
 
     for entrada in entrades_aleatories:
-        print(f"DEBUG Entrada {entrada.id}: miniatura={entrada.miniatura}, imatge_gran={entrada.imatge_gran}")  
+        entrada.miniatura_calculada = generar_miniatura_entrada(entrada, entrada.usuari.nom_login if entrada.usuari else "anonim")  
 
     # Obtenir converses aleatòries
     min_id_conv = db.session.query(func.min(Conversa.id)).scalar()

@@ -140,66 +140,20 @@
 </div>
 
 
-  <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
+ <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
 <div class="bloc-plegable">
   <h3 class="titol-plegable" onclick="toggleBloc(this)">
     {{ _('Adjunta arxiu') }}
   </h3>
   <div class="contingut-plegable">
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; align-items: end;">
-  <div>
-    <label for="titol_imatge">{{ _("Nom de l'arxiu") }}</label>
-    <input type="text" name="titol_imatge" id="titol_imatge" class="campo-largo" value="{{ entrada.titol_imatge if entrada else '' }}">
-  </div>
-
-  <div>
-    <label for="any_imatge">{{ _('Any/s') }}</label>
-    <input type="text" name="any_imatge" id="any_imatge" class="campo-largo" value="{{ entrada.any_imatge if entrada else '' }}">
-  </div>
-
-  <div class="input-file-custom">
-    <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
-    <input type="file" id="puja-arxius" name="arxius" multiple>
+    <div class="input-file-custom">
+      <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
+      <input type="file" id="puja-arxius" name="arxius" multiple>
+    </div>
+    <div id="zona-fitxers" class="zona-fitxers"></div>
+    <div id="previsualitzacio-arxius" class="galeria"></div>
   </div>
 </div>
-
-<div id="zona-fitxers" class="zona-fitxers"></div>
-<div id="previsualitzacio-arxius" class="galeria"></div>
-
-<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-  <div>
-    <label for="pais_imatge">{{ _('País') }}</label>
-    <select name="pais_imatge" id="pais_imatge" class="campo-largo">
-      <option value="">Selecciona un país</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="regio_imatge">{{ _('Regió / província') }}</label>
-    <select name="regio_imatge" id="regio_imatge" class="campo-largo" disabled>
-      <option value="">Selecciona primer el país</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="municipi_imatge">{{ _('Municipi o localitat') }}</label>
-    <select name="municipi_imatge" id="municipi_imatge" class="campo-largo" disabled>
-      <option value="">Selecciona primer la regió</option>
-    </select>
-  </div>
-</div>
-<div>
-  <label for="descripcio_imatge">{{ _('Descripció, tipus de document') }}</label>
-  <textarea name="descripcio_imatge" id="descripcio_imatge" rows="4">{{ entrada.descripcio_imatge if entrada else '' }}</textarea>
-</div>
-
-<div>
-  <label for="referencia_ubicacio">{{ _('Ubicació del document (opcional)') }}</label>
-  <input type="text" name="referencia_ubicacio" id="referencia_ubicacio" value="{{ entrada.referencia if entrada else '' }}">
-</div>
-  </div>
-</div>
-
   <!-- BLOC PLEGABLE: Converses i diàlegs -->
 
   <!-- BLOC PLEGABLE: Converses i diàlegs -->

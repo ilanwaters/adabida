@@ -105,6 +105,13 @@ class ArxiuAdjunt(db.Model):
     tipus = db.Column(db.String(50))
     tipus_media = db.Column(db.String(20), nullable=True, default='desconegut')
     data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    titol = db.Column(db.String(255), nullable=True)
+    any_arxiu = db.Column(db.Integer, nullable=True)
+    pais = db.Column(db.String(100), nullable=True)
+    regio = db.Column(db.String(100), nullable=True)
+    municipi = db.Column(db.String(100), nullable=True)
+    descripcio = db.Column(db.Text, nullable=True)
+    referencia = db.Column(db.String(255), nullable=True)
     entrada = db.relationship("Entrada", back_populates="arxius_adjuntats")
 
 

@@ -1,5 +1,6 @@
 // DECLARAR VARIABLES GLOBALS ABANS DEL DOMContentLoaded
 let numeroParticipantIntegrat = 0;
+let numeroArxiuAdjuntat = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
   
@@ -26,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ==============================================
-  // 2. PUJAR FITXERS (netejat)
+ // ==============================================
+  // 2. PUJAR FITXERS (amb metadades per arxiu)
   // ==============================================
   const inputArxius = document.getElementById("puja-arxius");
   if (inputArxius) {
@@ -46,43 +47,95 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(res => res.json())
         .then(data => {
+          if (!data.success) {
+            alert(window.traduccions.error_pujar_video || "Error pujant arxiu");
+            return;
+          }
+
+          const numero = numeroArxiuAdjuntat++;
           const extensio = arxiu.name.split('.').pop().toLowerCase();
-          const div = document.createElement("div");
-          div.classList.add("miniatura");
+
+          const bloc = document.createElement("div");
+          bloc.classList.add("arxiu-amb-metadades");
+          bloc.dataset.arxiu = numero;
+
+          const miniatura = document.createElement("div");
+          miniatura.classList.add("miniatura");
 
           if (["jpg", "jpeg", "png", "gif", "webp"].includes(extensio)) {
             const img = document.createElement("img");
             img.src = URL.createObjectURL(arxiu);
             img.alt = arxiu.name;
-            div.appendChild(img);
+            miniatura.appendChild(img);
           } else if (extensio === "webm") {
             if (data.tipus === "video") {
               const video = document.createElement("video");
               video.controls = true;
               video.src = data.url;
               video.style.width = "160px";
-              div.appendChild(video);
+              miniatura.appendChild(video);
             } else if (data.tipus === "audio") {
               const audio = document.createElement("audio");
               audio.controls = true;
               audio.src = data.url;
-              div.appendChild(audio);
+              miniatura.appendChild(audio);
             } else {
               const icona = document.createElement("img");
               icona.src = "/static/icons/webm.png";
               icona.alt = "webm";
               icona.style.width = "48px";
-              div.appendChild(icona);
+              miniatura.appendChild(icona);
             }
           } else {
             const icona = document.createElement("img");
             icona.src = `/static/icons/${extensio}.png`;
             icona.alt = extensio;
             icona.style.width = "48px";
-            div.appendChild(icona);
+            miniatura.appendChild(icona);
           }
 
-          galeria.appendChild(div);
+          bloc.appendChild(miniatura);
+
+          const fitxerHidden = document.createElement("input");
+          fitxerHidden.type = "hidden";
+          fitxerHidden.name = `arxiu_fitxer_${numero}`;
+          fitxerHidden.value = data.nom_fitxer;
+          bloc.appendChild(fitxerHidden);
+
+          const metadades = document.createElement("div");
+          metadades.classList.add("metadades-arxiu");
+          metadades.innerHTML = `
+            <input type="text" name="arxiu_titol_${numero}" placeholder="${window.traduccions.titolArxiu || 'Títol'}">
+            <input type="text" name="arxiu_any_${numero}" placeholder="${window.traduccions.anyArxiu || 'Any'}">
+            <select name="pais_arxiu_${numero}" class="campo-largo">
+              <option value="">Selecciona un país</option>
+            </select>
+            <select name="regio_arxiu_${numero}" class="campo-largo" disabled>
+              <option value="">Selecciona primer el país</option>
+            </select>
+            <input type="text" name="municipi_arxiu_${numero}" class="campo-largo" disabled placeholder="Selecciona primer la regió">
+            <textarea name="arxiu_descripcio_${numero}" rows="2" placeholder="${window.traduccions.descripcioArxiu || 'Descripció'}"></textarea>
+            <input type="text" name="arxiu_referencia_${numero}" placeholder="${window.traduccions.referenciaArxiu || 'Referència'}">
+          `;
+          bloc.appendChild(metadades);
+
+          const botoEliminar = document.createElement("button");
+          botoEliminar.type = "button";
+          botoEliminar.textContent = window.traduccions.eliminar || "Eliminar";
+          botoEliminar.classList.add("boto-eliminar-arxiu");
+          botoEliminar.addEventListener("click", () => {
+            bloc.remove();
+            fetch("/eliminar_fitxer_temporal", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nom_fitxer: data.nom_fitxer })
+            });
+          });
+          bloc.appendChild(botoEliminar);
+          galeria.appendChild(bloc);
+          inicialitzarGrupPerNom(`pais_arxiu_${numero}`);
+        
+          
         })
         .catch(err => {
           console.error("Error en pujar arxiu:", err);

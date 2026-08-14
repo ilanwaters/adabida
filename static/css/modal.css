@@ -88,9 +88,13 @@
   color: #1F2937;
 }
 .modal-subtitol {
-  margin: 0 0 10px 0;
+  margin: -12px 0 10px 0;
   font-size: 0.95rem;
   color: #555;
+}
+#modal-data,
+#modal-data-editar {
+  font-size: 0.95rem;
 }
 .modal-text h3 {
   margin: 15px 0 8px 0;

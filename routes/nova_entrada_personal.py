@@ -224,6 +224,22 @@ def nova_entrada_personal():
 
     carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, usuari_login, "entrades", str(entrada.id))
 
+    
+    metadades_arxius = {}
+    i = 0
+    while f'arxiu_fitxer_{i}' in request.form:
+        nom_fitxer_meta = request.form.get(f'arxiu_fitxer_{i}')
+        metadades_arxius[nom_fitxer_meta] = {
+            'titol': request.form.get(f'arxiu_titol_{i}', '').strip() or None,
+            'any_arxiu': request.form.get(f'arxiu_any_{i}', '').strip() or None,
+            'pais': request.form.get(f'pais_arxiu_{i}', '').strip() or None,
+            'regio': request.form.get(f'regio_arxiu_{i}', '').strip() or None,
+            'municipi': request.form.get(f'municipi_arxiu_{i}', '').strip() or None,
+            'descripcio': request.form.get(f'arxiu_descripcio_{i}', '').strip() or None,
+            'referencia': request.form.get(f'arxiu_referencia_{i}', '').strip() or None,
+        }
+        i += 1    
+
     if os.path.exists(carpeta_temp):
         os.makedirs(carpeta_final, exist_ok=True)
         for fitxer in os.listdir(carpeta_temp):
@@ -249,11 +265,19 @@ def nova_entrada_personal():
             ruta_desti_pendents = os.path.join(carpeta_pendents, fitxer)
             shutil.copy(ruta_desti, ruta_desti_pendents)
     
+            meta = metadades_arxius.get(fitxer, {})
             nou_arxiu = ArxiuAdjunt(
                 entrada_id=entrada.id,
                 nom_fitxer=fitxer,
                 tipus=fitxer.split(".")[-1].lower(),
-                tipus_media=tipus_media
+                tipus_media=tipus_media,
+                titol=meta.get('titol'),
+                any_arxiu=meta.get('any_arxiu'),
+                pais=meta.get('pais'),
+                regio=meta.get('regio'),
+                municipi=meta.get('municipi'),
+                descripcio=meta.get('descripcio'),
+                referencia=meta.get('referencia'),
             )
             db.session.add(nou_arxiu)
         
@@ -466,6 +490,21 @@ def editar_entrada_personal(entrada_id):
         carpeta_temp = os.path.join("umberto", "media", "temp", pais, any, mes, usuari_login)
         carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, usuari_login, "entrades", str(entrada.id))
 
+        metadades_arxius = {}
+        i = 0
+        while f'arxiu_fitxer_{i}' in request.form:
+            nom_fitxer_meta = request.form.get(f'arxiu_fitxer_{i}')
+            metadades_arxius[nom_fitxer_meta] = {
+                'titol': request.form.get(f'arxiu_titol_{i}', '').strip() or None,
+                'any_arxiu': request.form.get(f'arxiu_any_{i}', '').strip() or None,
+                'pais': request.form.get(f'pais_arxiu_{i}', '').strip() or None,
+                'regio': request.form.get(f'regio_arxiu_{i}', '').strip() or None,
+                'municipi': request.form.get(f'municipi_arxiu_{i}', '').strip() or None,
+                'descripcio': request.form.get(f'arxiu_descripcio_{i}', '').strip() or None,
+                'referencia': request.form.get(f'arxiu_referencia_{i}', '').strip() or None,
+            }
+            i += 1
+
         if os.path.exists(carpeta_temp):
             os.makedirs(carpeta_final, exist_ok=True)
 
@@ -499,15 +538,22 @@ def editar_entrada_personal(entrada_id):
             if os.path.exists(ruta_origen):
                 shutil.move(ruta_origen, ruta_desti)
 
-                ja_existeix = ArxiuAdjunt.query.filter_by(entrada_id=entrada.id, nom_fitxer=nom_fitxer).first()
+                ja_existeix = ArxiuAdjunt.query.filter_by(entrada_id=entrada.id, nom_fitxer=fitxer).first()
                 if not ja_existeix:
+                    meta = metadades_arxius.get(fitxer, {})
                     nou_arxiu = ArxiuAdjunt(
                         entrada_id=entrada.id,
-                        nom_fitxer=nom_fitxer,
-                        tipus="webm"
+                        nom_fitxer=fitxer,
+                        tipus=fitxer.split(".")[-1].lower(),
+                        titol=meta.get('titol'),
+                        any_arxiu=meta.get('any_arxiu'),
+                        pais=meta.get('pais'),
+                        regio=meta.get('regio'),
+                        municipi=meta.get('municipi'),
+                        descripcio=meta.get('descripcio'),
+                        referencia=meta.get('referencia'),
                     )
                     db.session.add(nou_arxiu)
-
         flash("Entrada actualitzada correctament.")
         return redirect("/entrades")
 
