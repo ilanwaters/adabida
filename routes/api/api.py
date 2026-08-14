@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, session, render_template, url_for
-from models import db, Entrada, Usuari, EntradaGuardada
+from models import db, Entrada, Usuari, EntradaGuardada, Conversa
 from models.tematiques import Tema, CategoriaTema
 
 api_bp = Blueprint("api", __name__)
@@ -8,6 +8,7 @@ api_bp = Blueprint("api", __name__)
 def obtenir_entrada(usuari_login, entrada_id):
     usuari = Usuari.query.filter_by(nom_login=usuari_login).first_or_404()
     entrada = Entrada.query.filter_by(id=entrada_id, usuari_id=usuari.id).first_or_404()
+    conversa = Conversa.query.filter_by(entrada_id=entrada.id).first()
 
     # 🔍 Comprovem si l’usuari actual ja ha guardat aquesta entrada
     ja_guardada = False
@@ -42,6 +43,19 @@ def obtenir_entrada(usuari_login, entrada_id):
         "referencia": entrada.referencia,
         "propietari": es_propietari,
         "ja_guardada": ja_guardada,
+        "conversa": {
+            "id": conversa.id,
+            "data": conversa.data_conversa.strftime('%d/%m/%Y') if conversa.data_conversa else None,
+            "durada_minuts": conversa.durada_minuts,
+            "lloc_institucio": conversa.lloc_institucio,
+            "lloc_municipi": conversa.lloc_municipi,
+            "lloc_regio": conversa.lloc_regio,
+            "lloc_pais": conversa.lloc_pais,
+            "observacions_generals": conversa.observacions_generals,
+            "participants": [p.nom + " " + p.primer_cognom for p in conversa.participants],
+            "arxiu_nom": conversa.arxiu_nom,
+            "arxiu_tipus": conversa.arxiu_tipus,
+        } if conversa else None,
         "arxius": [
             {
                 "nom_fitxer": f.nom_fitxer,

@@ -152,6 +152,27 @@ if (arxiuPrincipal) {
         document.getElementById("modal-info-imatge").style.display = "none";
       }
       
+      // Bloc conversa vinculada
+        const blocConversa = document.getElementById("modal-conversa-bloc");
+        if (data.conversa) {
+          const c = data.conversa;
+          const lloc = [c.lloc_municipi, c.lloc_regio, c.lloc_pais].filter(Boolean).join(", ");
+          const participants = c.participants.length ? c.participants.join(", ") : "";
+
+          let resum = [];
+          if (participants) resum.push(participants);
+          if (c.data) resum.push(c.data);
+          if (lloc) resum.push(lloc);
+
+          document.getElementById("modal-conversa-resum").textContent = resum.join(" · ") || "—";
+          document.getElementById("modal-conversa-observacions").textContent = c.observacions_generals || "";
+
+          blocConversa.style.display = "block";
+          document.getElementById("modal-conversa-contingut").style.display = "none";
+          document.getElementById("modal-conversa-fletxa").textContent = "▶";
+        } else {
+          blocConversa.style.display = "none";
+        }
 
       // 🔁 Mostra o amaga botons segons l’origen
 // 🔁 Reinicia estat botons abans de mostrar la modal
@@ -250,3 +271,11 @@ function activaTancarModals() {
 document.addEventListener('DOMContentLoaded', () => {
   activaTancarModals();
 });
+
+function toggleConversaModal() {
+  const contingut = document.getElementById("modal-conversa-contingut");
+  const fletxa = document.getElementById("modal-conversa-fletxa");
+  const obert = contingut.style.display === "block";
+  contingut.style.display = obert ? "none" : "block";
+  fletxa.textContent = obert ? "▶" : "▼";
+}
