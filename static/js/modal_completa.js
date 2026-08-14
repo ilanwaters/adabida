@@ -145,6 +145,28 @@ if (arxiuPrincipal) {
           document.getElementById("modal-info-imatge-editar").style.display = "none";
         }
 
+        // Bloc conversa vinculada
+        const blocConversaEditar = document.getElementById("modal-conversa-bloc-editar");
+        if (data.conversa) {
+          const c = data.conversa;
+          const lloc = [c.lloc_municipi, c.lloc_regio, c.lloc_pais].filter(Boolean).join(", ");
+          const participants = c.participants.length ? c.participants.join(", ") : "";
+
+          let resum = [];
+          if (participants) resum.push(participants);
+          if (c.data) resum.push(c.data);
+          if (lloc) resum.push(lloc);
+
+          document.getElementById("modal-conversa-resum-editar").textContent = resum.join(" · ") || "—";
+          document.getElementById("modal-conversa-observacions-editar").textContent = c.observacions_generals || "";
+
+          blocConversaEditar.style.display = "block";
+          document.getElementById("modal-conversa-contingut-editar").style.display = "none";
+          document.getElementById("modal-conversa-fletxa-editar").textContent = "▶";
+        } else {
+          blocConversaEditar.style.display = "none";
+        }
+
         const botoEliminar = document.getElementById("boto-eliminar");
         if (botoEliminar) {
           botoEliminar.dataset.id = data.id;
@@ -188,4 +210,12 @@ function confirmaEliminacio() {
         }
       });
   }
+}
+
+function toggleConversaModalEditar() {
+  const contingut = document.getElementById("modal-conversa-contingut-editar");
+  const fletxa = document.getElementById("modal-conversa-fletxa-editar");
+  const obert = contingut.style.display === "block";
+  contingut.style.display = obert ? "none" : "block";
+  fletxa.textContent = obert ? "▶" : "▼";
 }
