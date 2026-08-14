@@ -469,6 +469,7 @@ function afegirParticipantIntegrat() {
     .then(html => {
       const container = document.getElementById('participants-container-integrat');
       container.insertAdjacentHTML('beforeend', html);
+      inicialitzarGrupPerNom(`pais_participant_${numeroParticipantIntegrat}`);
       numeroParticipantIntegrat++;
     });
 }
@@ -600,3 +601,32 @@ function processarParametresURL() {
 
 // Funció global
 window.toggleNovaCategoriaEntrada = toggleNovaCategoriaEntrada;
+
+// ==============================================
+// FIX: convertir selects de país/regió (value=ID) al seu text (nom)
+// abans d'enviar el formulari, per no desar IDs numèrics a la BD
+// ==============================================
+document.addEventListener("DOMContentLoaded", function () {
+  const formulari = document.getElementById("formulari-entrada");
+  if (!formulari) return;
+  formulari.addEventListener("submit", function () {
+    const selectsPaisRegio = formulari.querySelectorAll(
+      'select[name*="pais"], select[name*="regio"]'
+    );
+    selectsPaisRegio.forEach(function (select) {
+      const opcioSeleccionada = select.options[select.selectedIndex];
+      if (opcioSeleccionada && opcioSeleccionada.value !== "" && opcioSeleccionada.value !== "ALTRE") {
+        const nomOriginal = select.name;
+        select.name = nomOriginal + "_id";
+        let hidden = formulari.querySelector("input[type=hidden][name=" + nomOriginal + "]");
+        if (!hidden) {
+          hidden = document.createElement("input");
+          hidden.type = "hidden";
+          hidden.name = nomOriginal;
+          formulari.appendChild(hidden);
+        }
+        hidden.value = opcioSeleccionada.textContent;
+      }
+    });
+  });
+});
