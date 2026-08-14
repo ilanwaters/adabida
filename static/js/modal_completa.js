@@ -7,13 +7,16 @@ function obreModalCompleta(entradaId, usuariId) {
 
       try {
         document.getElementById('modal-titol-editar').innerText = data.titol || "—";
-        document.getElementById('modal-tema-editar').innerText = data.tema || "";
 
-       const ubicacio = [data.municipi, data.regio, data.pais].filter(Boolean).join(", ");
-       const any = data.any || '';
-       const separador = (ubicacio && any) ? ", " : '';
+        const ubicacio = [data.municipi, data.regio, data.pais].filter(Boolean).join(", ");
+        const any = data.any || '';
+        const tema = data.tema?.trim();
 
-      document.getElementById("modal-ubicacio-any-editar").textContent = `${ubicacio || ''}${separador}${any || ''}`;
+        let parentesi = [ubicacio, any].filter(Boolean).join(", ");
+        parentesi = parentesi ? ` (${parentesi})` : "";
+
+        document.getElementById('modal-tema-editar').innerText = tema || "";
+        document.getElementById("modal-ubicacio-any-parentesi-editar").textContent = parentesi;
         const dataSpan = document.getElementById('modal-data-editar');
         if (dataSpan) dataSpan.innerText = data.data_creacio || "";
         const metaAutor = document.getElementById('modal-meta-autor-editar');

@@ -7,12 +7,16 @@ function obreModal(entradaId, usuariId,origen = null) {
       window.entradaIdActual = data.id;
 
       document.getElementById('modal-titol').innerText = data.titol || "—";
-      document.getElementById('modal-tema').innerText = data.tema || "";
 
       const any = data.any?.trim();
-      const ubicacio = data.ubicacio?.trim();
-      const separador = (ubicacio && any) ? ', ' : '';
-      document.getElementById("modal-ubicacio-any").textContent = `${ubicacio || ''}${separador}${any || ''}`;
+      const ubicacio = [data.municipi, data.regio, data.pais].filter(Boolean).join(", ");
+      const tema = data.tema?.trim();
+
+      let parentesi = [ubicacio, any].filter(Boolean).join(", ");
+      parentesi = parentesi ? ` (${parentesi})` : "";
+
+      document.getElementById('modal-tema').innerText = tema || "";
+      document.getElementById("modal-ubicacio-any-parentesi").textContent = parentesi;
 
       const dataSpan = document.getElementById('modal-data');
       if (dataSpan) dataSpan.innerText = data.data_creacio || "";
