@@ -24,22 +24,25 @@
   <div class="fila-camps-conversa">
     <div class="camp-conversa">
       <label>{{ _('Data naixement') }}:</label>
-      <input type="date" name="participant_data_naixement_{{ numero }}"required>
-    </div>
-  </div>
-  
-  <div class="fila-camps-conversa">
-    <div class="camp-conversa">
-      <label>{{ _('Municipi') }}:</label>
-      <input type="text" name="participant_municipi_{{ numero }}" required>
-    </div>
-    <div class="camp-conversa">
-      <label>{{ _('Regió') }}:</label>
-      <input type="text" name="participant_regio_{{ numero }}" required>
+      <input type="date" name="participant_data_naixement_{{ numero }}" required>
     </div>
     <div class="camp-conversa">
       <label>{{ _('País') }}:</label>
-      <input type="text" name="participant_pais_{{ numero }}" required>
+      <select name="pais_participant_{{ numero }}" id="pais_participant_{{ numero }}" class="campo-largo" required>
+        <option value="">Selecciona un país</option>
+      </select>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('Regió') }}:</label>
+      <select name="regio_participant_{{ numero }}" id="regio_participant_{{ numero }}" class="campo-largo" disabled required>
+        <option value="">Selecciona primer el país</option>
+      </select>
+    </div>
+    <div class="camp-conversa">
+      <label>{{ _('Municipi') }}:</label>
+      <select name="municipi_participant_{{ numero }}" id="municipi_participant_{{ numero }}" class="campo-largo" disabled required>
+        <option value="">Selecciona primer la regió</option>
+      </select>
     </div>
   </div>
   

@@ -30,34 +30,9 @@
 <label for="titol">{{ _('Títol') }}</label>
 <input name="titol" id="titol" class="campo-largo" required value="{{ entrada.titol if entrada else '' }}">
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;"></div>
   <!-- TEMA -->
-  <div>
-    <label for="tema">{{ _('Tema') }}</label>
-    <input name="tema" id="tema" class="campo-largo" value="{{ tema_preomplert if tema_preomplert else (entrada.tema if entrada else '') }}">
-  </div>
   
-  <!-- CATEGORIA -->
- <div>
-  <label for="categoria">{{ _('Categoria') }}</label>
-  <select name="categoria" id="selector-categoria" class="campo-largo" onchange="toggleNovaCategoriaEntrada()">
-    {% if categoria_preomplerta %}
-      <option value="{{ categoria_preomplerta }}" selected>{{ categoria_preomplerta }}</option>
-    {% endif %}
-    <option value="">{{ _('Selecciona categoria') }}</option>
-    <!-- Les categories es carregaran via JS -->
-    <option value="nova"> {{ _('Nova categoria') }}</option>
-  </select>
-  
-  <!-- Camp manual per nova categoria -->
-  <input type="text" 
-         id="categoria-manual" 
-         name="categoria_manual" 
-         class="campo-largo" 
-         placeholder="{{ _('Escriu el nom de la categoria') }}" 
-         style="display: none; margin-top: 10px;">
-</div>
-</div>
        <!-- BLOC PLEGABLE: Informació bàsica -->
 <div class="bloc-plegable">
   <h3 class="titol-plegable" onclick="toggleBloc(this)">
@@ -66,29 +41,56 @@
   <div class="contingut-plegable">
     <h2>{% if entrada %}Editar entrada{% else %}{% endif %}</h2>
 
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+  <div>
+    <label for="tema">{{ _('Tema') }}</label>
+    <input name="tema" id="tema" class="campo-largo" value="{{ tema_preomplert if tema_preomplert else (entrada.tema if entrada else '') }}">
+  </div>
 
+  <div>
+    <label for="categoria">{{ _('Categoria') }}</label>
+    <select name="categoria" id="selector-categoria" class="campo-largo" onchange="toggleNovaCategoriaEntrada()">
+      {% if categoria_preomplerta %}
+        <option value="{{ categoria_preomplerta }}" selected>{{ categoria_preomplerta }}</option>
+      {% endif %}
+      <option value="">{{ _('Selecciona categoria') }}</option>
+      <option value="nova">{{ _('Nova categoria') }}</option>
+    </select>
+    <input type="text"
+           id="categoria-manual"
+           name="categoria_manual"
+           class="campo-largo"
+           placeholder="{{ _('Escriu el nom de la categoria') }}"
+           style="display: none; margin-top: 10px;">
+  </div>
+
+  <div>
     <label for="any">{{ _('Any/s') }}</label>
-    <input type="text" name="any" id="any" value="{{ entrada.any_text if entrada else '' }}">
-
-    <div class="camp mini">
-  <label for="pais">{{ _('País') }}</label>
-  <select name="pais" id="pais" class="campo-largo">
-    <option value="">Selecciona un país</option>
-  </select>
+    <input type="text" name="any" id="any" class="campo-largo" value="{{ entrada.any_text if entrada else '' }}">
+  </div>
 </div>
 
-<div class="bloque-formulario">
-  <label for="regio">{{ _('Província') }}</label>
-  <select name="regio" id="regio" class="campo-largo" disabled>
-    <option value="">Selecciona primer el país</option>
-  </select>
-</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+  <div>
+    <label for="pais">{{ _('País') }}</label>
+    <select name="pais" id="pais" class="campo-largo">
+      <option value="">Selecciona un país</option>
+    </select>
+  </div>
 
-<div class="bloque-formulario">
-  <label for="municipi">{{ _('Municipi o localitat') }}</label>
-  <select name="municipi" id="municipi" class="campo-largo" disabled>
-    <option value="">Selecciona primer la regió</option>
-  </select>
+  <div>
+    <label for="regio">{{ _('Província') }}</label>
+    <select name="regio" id="regio" class="campo-largo" disabled>
+      <option value="">Selecciona primer el país</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="municipi">{{ _('Municipi o localitat') }}</label>
+    <select name="municipi" id="municipi" class="campo-largo" disabled>
+      <option value="">Selecciona primer la regió</option>
+    </select>
+  </div>
 </div>
 
     <small class="text-ajuda">
@@ -98,6 +100,7 @@
     <label for="contingut">{{ _('Contingut') }}</label>
     <textarea name="contingut" id="contingut" rows="20">{{ entrada.contingut if entrada else '' }}</textarea>
   </div>
+</div>
 </div>
 
   <!-- Bloc: GRAVACIÓ DE VÍDEO -->
@@ -136,49 +139,68 @@
   </div>
 </div>
 
+
   <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
 <div class="bloc-plegable">
   <h3 class="titol-plegable" onclick="toggleBloc(this)">
     {{ _('Adjunta arxiu') }}
   </h3>
   <div class="contingut-plegable">
-    <div class="input-file-custom">
-      <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
-      <input type="file" id="puja-arxius" name="arxius" multiple>
-    </div>
-    <div id="zona-fitxers" class="zona-fitxers"></div>
-    <div id="previsualitzacio-arxius" class="galeria"></div>
-  
-
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; align-items: end;">
+  <div>
     <label for="titol_imatge">{{ _("Nom de l'arxiu") }}</label>
-    <input type="text" name="titol_imatge" id="titol_imatge" value="{{ entrada.titol_imatge if entrada else '' }}">
+    <input type="text" name="titol_imatge" id="titol_imatge" class="campo-largo" value="{{ entrada.titol_imatge if entrada else '' }}">
+  </div>
 
+  <div>
     <label for="any_imatge">{{ _('Any/s') }}</label>
-    <input type="text" name="any_imatge" id="any_imatge" value="{{ entrada.any_imatge if entrada else '' }}">
+    <input type="text" name="any_imatge" id="any_imatge" class="campo-largo" value="{{ entrada.any_imatge if entrada else '' }}">
+  </div>
 
-    <label for="pais_imatge">{{ _('País') }}</label>
-    <input type="text" name="pais_imatge" id="pais_imatge">
-
-    <div class="bloque-formulario">
-      <label for="regio_imatge">{{ _('Regió / província') }}</label>
-      <input type="text" name="regio_imatge" id="regio_imatge">
-    </div>
-
-    <div class="bloque-formulario">
-      <label for="municipi_imatge">{{ _('Municipi o localitat') }}</label>
-      <input type="text" name="municipi_imatge" id="municipi_imatge">
-    </div>
-
-    <label for="descripcio_imatge">{{ _('Descripció, tipus de document') }}</label>
-    <textarea name="descripcio_imatge" id="descripcio_imatge" rows="4">{{ entrada.descripcio_imatge if entrada else '' }}</textarea>
-
-    <label for="referencia_ubicacio">{{ _('Ubicació del document (opcional)') }}</label>
-    <input type="text" name="referencia_ubicacio" id="referencia_ubicacio" value="{{ entrada.referencia if entrada else '' }}">
+  <div class="input-file-custom">
+    <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
+    <input type="file" id="puja-arxius" name="arxius" multiple>
   </div>
 </div>
 
+<div id="zona-fitxers" class="zona-fitxers"></div>
+<div id="previsualitzacio-arxius" class="galeria"></div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+  <div>
+    <label for="pais_imatge">{{ _('País') }}</label>
+    <select name="pais_imatge" id="pais_imatge" class="campo-largo">
+      <option value="">Selecciona un país</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="regio_imatge">{{ _('Regió / província') }}</label>
+    <select name="regio_imatge" id="regio_imatge" class="campo-largo" disabled>
+      <option value="">Selecciona primer el país</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="municipi_imatge">{{ _('Municipi o localitat') }}</label>
+    <select name="municipi_imatge" id="municipi_imatge" class="campo-largo" disabled>
+      <option value="">Selecciona primer la regió</option>
+    </select>
+  </div>
+</div>
+<div>
+  <label for="descripcio_imatge">{{ _('Descripció, tipus de document') }}</label>
+  <textarea name="descripcio_imatge" id="descripcio_imatge" rows="4">{{ entrada.descripcio_imatge if entrada else '' }}</textarea>
 </div>
 
+<div>
+  <label for="referencia_ubicacio">{{ _('Ubicació del document (opcional)') }}</label>
+  <input type="text" name="referencia_ubicacio" id="referencia_ubicacio" value="{{ entrada.referencia if entrada else '' }}">
+</div>
+  </div>
+</div>
+
+  <!-- BLOC PLEGABLE: Converses i diàlegs -->
 
   <!-- BLOC PLEGABLE: Converses i diàlegs -->
 <div class="bloc-plegable">
@@ -213,19 +235,25 @@
       </div>
 
       <div class="fila-camps-conversa">
-        <div class="camp-conversa">
-          <label for="lloc_municipi">{{ _('Municipi') }}:</label>
-          <input type="text" id="lloc_municipi" name="lloc_municipi" placeholder="Barcelona">
-        </div>
-        <div class="camp-conversa">
-          <label for="lloc_regio">{{ _('Regió') }}:</label>
-          <input type="text" id="lloc_regio" name="lloc_regio" placeholder="Catalunya">
-        </div>
-        <div class="camp-conversa">
-          <label for="lloc_pais">{{ _('País') }}:</label>
-          <input type="text" id="lloc_pais" name="lloc_pais" placeholder="Espanya">
-        </div>
-      </div>
+  <div class="camp-conversa">
+    <label for="pais_conversa">{{ _('País') }}:</label>
+    <select id="pais_conversa" name="pais_conversa" class="campo-largo">
+      <option value="">Selecciona un país</option>
+    </select>
+  </div>
+  <div class="camp-conversa">
+    <label for="regio_conversa">{{ _('Regió') }}:</label>
+    <select id="regio_conversa" name="regio_conversa" class="campo-largo" disabled>
+      <option value="">Selecciona primer el país</option>
+    </select>
+  </div>
+  <div class="camp-conversa">
+    <label for="municipi_conversa">{{ _('Municipi') }}:</label>
+    <select id="municipi_conversa" name="municipi_conversa" class="campo-largo" disabled>
+      <option value="">Selecciona primer la regió</option>
+    </select>
+  </div>
+</div>
 
       <div class="camp-conversa-complet">
         <label for="observacions">{{ _('Observacions generals') }}:</label>
@@ -321,9 +349,11 @@
 
       
 {% if usuari_organitzacions or usuari_families %}
-<div class="compartir-amb">
-    <label class="titol-seccio">{{ _('Compartir aquesta entrada amb:') }}</label>
-    
+<div class="bloc-plegable">
+  <h3 class="titol-plegable" onclick="toggleBloc(this)">
+    {{ _('Compartir aquesta entrada amb') }}
+  </h3>
+  <div class="contingut-plegable">
     <div class="opcions-compartir">
         {% if usuari_organitzacions %}
         <fieldset class="grup-opcions">
@@ -357,6 +387,7 @@
     <p class="info-visibilitat">
         <small>{{ _('Si no selecciones res, l\'entrada serà visible només al teu perfil personal') }}</small>
     </p>
+</div>
 </div>
 {% endif %}
 
