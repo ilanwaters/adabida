@@ -53,9 +53,12 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
         link.href = ruta;
         link.target = "_blank";
 
+        const contenidor = document.createElement("div");
+        contenidor.classList.add("arxiu-miniatura-peu");
+
         if (fitxer.tipus.match(/(jpg|png|jpeg|webp)/i)) {
           link.setAttribute("data-lightbox", "galeria-" + data.id);
-          link.setAttribute("data-title", fitxer.nom_fitxer);
+          link.setAttribute("data-title", fitxer.titol || fitxer.nom_fitxer);
 
           const img = document.createElement("img");
           img.src = ruta;
@@ -87,7 +90,14 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 
   link.appendChild(icona);
 }
-        arxiusDiv.appendChild(link);
+        contenidor.appendChild(link);
+
+        const peu = document.createElement("p");
+        peu.classList.add("peu-curt-arxiu");
+        peu.textContent = fitxer.titol || "";
+        contenidor.appendChild(peu);
+
+        arxiusDiv.appendChild(contenidor);
       });
 
    // Buscar la millor imatge principal per mostrar

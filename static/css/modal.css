@@ -132,15 +132,54 @@
 }
 
 /* Arxius adjunts */
+.modal-arxius {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 #modal-arxius img,
 .modal-arxius img {
   background: #fbfaf8;
-  display: inline-block;
-  margin: 10px;
-  max-height: 100px;
-  max-width: 100px;
+  margin: 0;
+  max-height: 80px;
+  max-width: 80px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
+/* Arxius amb peu de foto (modal_completa.js) */
+#modal-arxius-imatges-editar,
+#modal-arxius-media-editar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.arxiu-miniatura-peu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90px;
+}
+
+.arxiu-miniatura-peu img {
+  margin: 0;
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.peu-curt-arxiu {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: #555;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+}
 /* Info imatge */
 .modal-info-imatge {
   margin-top: 15px;
@@ -233,4 +272,78 @@
   .modal-imatge {
     flex: 0 0 200px;
   }
+}
+
+/* Graella d'imatges dins el modal (Fase 5 - ArxiuAdjunt) */
+.modal-arxius-graella {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.arxiu-miniatura-peu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.arxiu-miniatura-peu img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 0 !important;
+}
+
+.peu-curt-arxiu {
+  font-size: 0.75rem;
+  color: #555;
+  margin: 4px 0 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* Bloc plegable "Més material audiovisual" */
+.bloc-plegable-modal {
+  margin-top: 15px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.titol-plegable-modal {
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+  user-select: none;
+}
+
+.contingut-plegable-modal {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .modal-arxius-graella,
+  .contingut-plegable-modal {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.peu-complet-arxiu {
+  font-size: 0.7rem;
+  color: #555;
+  margin: 4px 0 0 0;
+  line-height: 1.3;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

@@ -17,8 +17,6 @@ function obreModalCompleta(entradaId, usuariId) {
 
         document.getElementById('modal-tema-editar').innerText = tema || "";
         document.getElementById("modal-ubicacio-any-parentesi-editar").textContent = parentesi;
-        const dataSpan = document.getElementById('modal-data-editar');
-        if (dataSpan) dataSpan.innerText = data.data_creacio || "";
         const metaAutor = document.getElementById('modal-meta-autor-editar');
         if (metaAutor) metaAutor.textContent = data.usuari_nom || '';
 
@@ -29,9 +27,21 @@ function obreModalCompleta(entradaId, usuariId) {
         if (metaModificacio) metaModificacio.textContent = data.data_modificacio ? `Modificat: ${data.data_modificacio}` : '';
 
         document.getElementById('modal-contingut-editar').innerHTML = data.contingut || "";
-
-        let arxiusDiv = document.getElementById('modal-arxius-editar');
-        arxiusDiv.innerHTML = "";
+        window.__dadesEntradaActual = {
+          titol: data.titol_imatge,
+          any_arxiu: data.any_imatge,
+          pais: data.pais_imatge,
+          regio: data.regio_imatge,
+          municipi: data.municipi_imatge,
+          descripcio: data.descripcio_imatge,
+          referencia: data.referencia,
+        };
+        const imatgesDiv = document.getElementById('modal-arxius-imatges-editar');
+        const mediaDiv = document.getElementById('modal-arxius-media-editar');
+        const comptadorMedia = document.getElementById('comptador-media-editar');
+        imatgesDiv.innerHTML = "";
+        mediaDiv.innerHTML = "";
+        let totalMedia = 0;
 
         data.arxius.forEach(fitxer => {
           const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
@@ -39,9 +49,12 @@ function obreModalCompleta(entradaId, usuariId) {
           link.href = ruta;
           link.target = "_blank";
 
+          const contenidor = document.createElement("div");
+          contenidor.classList.add("arxiu-miniatura-peu");
+
           if (fitxer.tipus.match(/(jpg|png|jpeg|webp)/i)) {
             link.setAttribute("data-lightbox", "galeria-" + data.id);
-            link.setAttribute("data-title", fitxer.nom_fitxer);
+            link.setAttribute("data-title", construeixPeuLightbox(fitxer));
 
             const img = document.createElement("img");
             img.src = ruta;
@@ -49,33 +62,46 @@ function obreModalCompleta(entradaId, usuariId) {
             img.style.margin = "10px";
 
             link.appendChild(img);
+            contenidor.appendChild(link);
+
+            const peu = document.createElement("p");
+            peu.classList.add("peu-curt-arxiu");
+            peu.textContent = fitxer.titol || "";
+            contenidor.appendChild(peu);
+
+            imatgesDiv.appendChild(contenidor);
           } else {
-  const icona = document.createElement("img");
-  
-  // 🔧 Usar tipus_media per webm, sinó tipus normal
-  let iconaPath;
-  if (fitxer.tipus === "webm" && fitxer.tipus_media) {
-    if (fitxer.tipus_media === "video") {
-      iconaPath = "/static/icons/video_webm.png";
-    } else if (fitxer.tipus_media === "audio") {
-      iconaPath = "/static/icons/audio_webm.png";
-    } else {
-      iconaPath = "/static/icons/webm.png";
-    }
-  } else {
-    iconaPath = `/static/icons/${fitxer.tipus}.png`;
-  }
-  
-  icona.src = iconaPath;
-  icona.title = fitxer.nom_fitxer;
-  icona.style.maxWidth = "40px";
-  icona.style.margin = "10px";
+            const icona = document.createElement("img");
+            let iconaPath;
+            if (fitxer.tipus === "webm" && fitxer.tipus_media) {
+              if (fitxer.tipus_media === "video") {
+                iconaPath = "/static/icons/video_webm.png";
+              } else if (fitxer.tipus_media === "audio") {
+                iconaPath = "/static/icons/audio_webm.png";
+              } else {
+                iconaPath = "/static/icons/webm.png";
+              }
+            } else {
+              iconaPath = `/static/icons/${fitxer.tipus}.png`;
+            }
+            icona.src = iconaPath;
+            icona.title = fitxer.nom_fitxer;
+            icona.style.maxWidth = "40px";
+            icona.style.margin = "10px";
+            link.appendChild(icona);
+            contenidor.appendChild(link);
 
-  link.appendChild(icona);
-}
+            const peu = document.createElement("p");
+            peu.classList.add("peu-complet-arxiu");
+            peu.textContent = construeixPeuLightbox(fitxer) || fitxer.nom_fitxer;
+            contenidor.appendChild(peu);
 
-          arxiusDiv.appendChild(link);
+            mediaDiv.appendChild(contenidor);
+            totalMedia++;
+          }
         });
+
+        comptadorMedia.textContent = totalMedia > 0 ? `(${totalMedia})` : "";
 
 // Buscar la millor imatge principal per mostrar
 let arxiuPrincipal = null;
@@ -123,30 +149,7 @@ if (arxiuPrincipal) {
   // No hi ha cap arxiu
   document.getElementById('modal-img-editar').src = "/static/icons/sense_imatge.png";
 }
-        const titolImg = data.titol_imatge?.trim();
-        const anyImg = data.any_imatge?.trim();
-
-        const ubicacioImg = [data.municipi_imatge, data.regio_imatge, data.pais_imatge]
-          .filter(Boolean)
-          .join(", ");
-
-        const descripcioImg = data.descripcio_imatge?.trim();
-        const referenciaImg = data.referencia?.trim();
-
-        const infoVisible = titolImg || anyImg || ubicacioImg || descripcioImg || referenciaImg;
-
-        if (infoVisible) {
-          document.getElementById("modal-info-imatge-editar").style.display = "block";
-          document.getElementById("modal-titol-imatge-editar").textContent = titolImg || "—";
-          document.getElementById("modal-descripcio-imatge-editar").textContent = descripcioImg || "—";
-          document.getElementById("modal-referencia-imatge-editar").textContent = referenciaImg || "—";
-
-          const sep = (ubicacioImg && anyImg) ? ", " : "";
-          document.getElementById("modal-ubicacio-any-imatge-editar").textContent =
-            `${ubicacioImg || ''}${sep}${anyImg || ''}` || "—";
-        } else {
-          document.getElementById("modal-info-imatge-editar").style.display = "none";
-        }
+      
 
         // Bloc conversa vinculada
         const blocConversaEditar = document.getElementById("modal-conversa-bloc-editar");
@@ -221,4 +224,34 @@ function toggleConversaModalEditar() {
   const obert = contingut.style.display === "block";
   contingut.style.display = obert ? "none" : "block";
   fletxa.textContent = obert ? "▶" : "▼";
+}
+
+function construeixPeuLightbox(fitxer) {
+  const teInfoPropia = fitxer.titol || fitxer.descripcio || fitxer.pais || fitxer.municipi || fitxer.any_arxiu;
+  const font = teInfoPropia ? fitxer : (window.__dadesEntradaActual || {});
+
+  const parts = [];
+  if (font.titol) parts.push(font.titol);
+
+  const ubicacio = [font.municipi, font.regio, font.pais].filter(Boolean).join(", ");
+  const anyUbicacio = [ubicacio, font.any_arxiu].filter(Boolean).join(", ");
+  if (anyUbicacio) parts.push(anyUbicacio);
+
+  if (font.descripcio) parts.push(font.descripcio);
+  if (font.referencia) parts.push(`Consulta: ${font.referencia}`);
+
+  return parts.join(" — ");
+}
+
+function obreFitxerAmbInfo(fitxer, ruta) {
+  const info = construeixPeuLightbox(fitxer);
+  alert(`${fitxer.nom_fitxer}\n\n${info || "Sense informació addicional"}`);
+  window.open(ruta, "_blank");
+}
+
+
+function toggleBlocModal(element) {
+  const contingut = element.nextElementSibling;
+  const obert = contingut.style.display === "grid";
+  contingut.style.display = obert ? "none" : "grid";
 }

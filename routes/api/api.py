@@ -60,8 +60,15 @@ def obtenir_entrada(usuari_login, entrada_id):
             {
                 "nom_fitxer": f.nom_fitxer,
                 "tipus": f.tipus,
-                "tipus_media": f.tipus_media, 
-                "ruta": f"/umberto/{usuari.nom_login}/{entrada.id}/{f.nom_fitxer}"
+                "tipus_media": f.tipus_media,
+                "ruta": f"/umberto/{usuari.nom_login}/{entrada.id}/{f.nom_fitxer}",
+                "titol": f.titol,
+                "any_arxiu": f.any_arxiu,
+                "pais": f.pais,
+                "regio": f.regio,
+                "municipi": f.municipi,
+                "descripcio": f.descripcio,
+                "referencia": f.referencia,
             }
             for f in entrada.arxius_adjuntats
         ]

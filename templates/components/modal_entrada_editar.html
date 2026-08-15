@@ -17,27 +17,29 @@
           <div id="modal-contingut-editar" class="contingut-formatat">—</div>  
         </div>
 
-        <div class="modal-arxius" id="modal-arxius-editar"></div>
+        <div class="modal-arxius-graella" id="modal-arxius-imatges-editar"></div>
 
-        <div class="modal-info-imatge" id="modal-info-imatge-editar" style="display: none;">
-          <p><strong>{{ _('Arxiu') }}</strong> <span id="modal-titol-imatge-editar">—</span></p>
-          <p><span id="modal-ubicacio-any-imatge-editar">—</span></p>
-          <p><span id="modal-descripcio-imatge-editar">—</span></p>
-          <p id="modal-data-editar">—</p>
-          <p><strong>{{ _('Aquest arxiu es pot consultar a:') }}</strong> <span id="modal-referencia-imatge-editar">—</span></p>
-        </div>
+<div class="bloc-plegable-modal">
+  <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
+    {{ _('Més material audiovisual') }} <span id="comptador-media-editar"></span>
+  </h4>
+  <div class="contingut-plegable-modal" id="modal-arxius-media-editar" style="display: none;"></div>
+</div>
+
+
+<div class="bloc-plegable-modal" id="modal-conversa-bloc-editar" style="display: none;">
+  <h4 class="titol-plegable-modal" onclick="toggleConversaModalEditar()">
+    {{ _('Conversa vinculada') }} <span id="modal-conversa-fletxa-editar">▶</span>
+  </h4>
+  <div class="modal-conversa-contingut" id="modal-conversa-contingut-editar" style="display: none;">
+    <p id="modal-conversa-resum-editar"></p>
+    <p id="modal-conversa-observacions-editar"></p>
+  </div>
+</div>
     </div>
 
 
-    <div class="modal-conversa-bloc" id="modal-conversa-bloc-editar" style="display: none;">
-          <h3 class="modal-conversa-titol" onclick="toggleConversaModalEditar()">
-            {{ _('Conversa vinculada') }} <span id="modal-conversa-fletxa-editar">▶</span>
-          </h3>
-          <div class="modal-conversa-contingut" id="modal-conversa-contingut-editar" style="display: none;">
-            <p id="modal-conversa-resum-editar"></p>
-            <p id="modal-conversa-observacions-editar"></p>
-          </div>
-        </div>
+   
     
        <div class="modal-botons modal-botons-accions">
   <div class="modal-meta-autoria">
