@@ -66,12 +66,24 @@ def generar_miniatura_segons_tipus(nom_fitxer, ruta_fitxer, carpeta_final, tipus
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         if tipus_media == "video":
+            try:
+                resultat = subprocess.run([
+                    'ffmpeg', '-y', '-i', ruta_fitxer, '-ss', '00:00:01',
+                    '-vframes', '1', '-vf', 'scale=320:-1', desti_mini
+                ], capture_output=True, text=True, timeout=15)
+                if os.path.exists(desti_mini):
+                    print(f"✅ Fotograma extret amb ffmpeg: {desti_mini}")
+                    return
+                else:
+                    print(f"⚠️ ffmpeg no ha generat fotograma: {resultat.stderr}")
+            except Exception as e:
+                print(f"❌ Error extraient fotograma: {e}")
             icona = os.path.join(base_dir, "static", "icons", "video_webm.png")
         elif tipus_media == "audio":
             icona = os.path.join(base_dir, "static", "icons", "audio_webm.png")
         else:
             icona = os.path.join(base_dir, "static", "icons", "sense_imatge.png")
-            
+
         print(f"🔍 Buscant icona a: {icona}")
         
         if os.path.exists(icona):
@@ -348,6 +360,9 @@ def nova_entrada_personal():
                     if os.path.exists(origen):
                         shutil.move(origen, desti)
                         print(f"🎤 Àudio mogut a converses: {audio_nom}")
+                    arxiu_bd = ArxiuAdjunt.query.filter_by(entrada_id=entrada.id, nom_fitxer=audio_nom).first()
+                    if arxiu_bd:
+                        arxiu_bd.es_conversa = True
                 
                 # Vídeos conversa
                 videos_conversa = request.form.getlist("videos_conversa[]")
@@ -357,6 +372,9 @@ def nova_entrada_personal():
                     if os.path.exists(origen):
                         shutil.move(origen, desti)
                         print(f"🎥 Vídeo mogut a converses: {video_nom}")
+                    arxiu_bd = ArxiuAdjunt.query.filter_by(entrada_id=entrada.id, nom_fitxer=video_nom).first()
+                    if arxiu_bd:
+                        arxiu_bd.es_conversa = True
                 
                 # 5. ARXIU MANUAL (si n'hi ha)
                 arxiu_conversa = request.files.get('arxiu_conversa')
@@ -683,7 +701,7 @@ def pujar_audio_temp():
     ruta_relativa = f"temp/{pais}/{any}/{mes}/{usuari_login}/{nom_fitxer}"
     url_audio = url_for("serveis_media.serveix_media", filepath=ruta_relativa)
 
-    return jsonify(success=True, url=url_audio)
+    return jsonify(success=True, url=url_audio, nom_fitxer=nom_fitxer)
 
 @nova_entrada_bp.route("/pujar_imatge_temp", methods=["POST"])
 def pujar_imatge_temp():

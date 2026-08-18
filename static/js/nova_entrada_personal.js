@@ -224,8 +224,9 @@ document.addEventListener("DOMContentLoaded", function () {
           const blob = new Blob(videoChunks, { type: "video/webm" });
           const nomFitxer = `video_${Date.now()}.webm`;
           
-          crearBlocVideo(blob, nomFitxer, videosGravats);
-          pujarVideo(blob, nomFitxer);
+          pujarVideo(blob, nomFitxer, (nomReal) => {
+            crearBlocVideo(blob, nomFitxer, videosGravats, false, nomReal);
+          });
 
           if (video) {
             video.srcObject = null;
@@ -332,8 +333,9 @@ document.addEventListener("DOMContentLoaded", function () {
           const blob = new Blob(videoChunksConversa, { type: "video/webm" });
           const nomFitxer = `video_conversa_${Date.now()}.webm`;
           
-          crearBlocVideo(blob, nomFitxer, videosGravatsConversa, true);
-          pujarVideo(blob, nomFitxer);
+          pujarVideo(blob, nomFitxer, (nomReal) => {
+            crearBlocVideo(blob, nomFitxer, videosGravatsConversa, true, nomReal);
+          });
 
           if (videoConversa) {
             videoConversa.srcObject = null;
@@ -427,13 +429,15 @@ function crearBlocAudio(blob, nomFitxer, container, esConversa = false) {
       audio.controls = true;
       audio.src = data.url;
 
+      const nomFitxerReal = data.nom_fitxer || nomFitxer;
+
       const inputAudio = document.createElement("input");
       inputAudio.type = "hidden";
       inputAudio.name = esConversa ? "audios_conversa[]" : "audios[]";
-      inputAudio.value = nomFitxer;
+      inputAudio.value = nomFitxerReal;
 
       const formulari = document.querySelector("form");
-      if (formulari && !document.querySelector(`input[name="${inputAudio.name}"][value="${nomFitxer}"]`)) {
+      if (formulari && !document.querySelector(`input[name="${inputAudio.name}"][value="${nomFitxerReal}"]`)) {
         formulari.appendChild(inputAudio);
       }
 
@@ -446,7 +450,7 @@ function crearBlocAudio(blob, nomFitxer, container, esConversa = false) {
         fetch("/eliminar_audio_temporal", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nom_fitxer: nomFitxer })
+          body: JSON.stringify({ nom_fitxer: nomFitxerReal })
         });
       });
 
@@ -459,7 +463,7 @@ function crearBlocAudio(blob, nomFitxer, container, esConversa = false) {
   });
 }
 
-function crearBlocVideo(blob, nomFitxer, container, esConversa = false) {
+function crearBlocVideo(blob, nomFitxerProvisional, container, esConversa = false, nomFitxerReal = null) {
   const videoURL = URL.createObjectURL(blob);
   const bloc = document.createElement("div");
   bloc.classList.add("miniatura");
@@ -472,7 +476,9 @@ function crearBlocVideo(blob, nomFitxer, container, esConversa = false) {
   const botoEliminar = document.createElement("button");
   botoEliminar.textContent = window.traduccions.eliminar;
   botoEliminar.classList.add("boto-eliminar-video");
-  
+
+  const nomFitxer = nomFitxerReal || nomFitxerProvisional;
+
   const inputHidden = document.createElement("input");
   inputHidden.type = "hidden";
   inputHidden.name = esConversa ? "videos_conversa[]" : "videos[]";
@@ -497,7 +503,7 @@ function crearBlocVideo(blob, nomFitxer, container, esConversa = false) {
   }
 }
 
-function pujarVideo(blob, nomFitxer) {
+function pujarVideo(blob, nomFitxer, callback) {
   const formData = new FormData();
   formData.append("arxiu", blob, nomFitxer);
 
@@ -509,6 +515,7 @@ function pujarVideo(blob, nomFitxer) {
     .then((data) => {
       if (!data.success) throw new Error("Servidor: success = false");
       console.log("Vídeo pujat correctament.");
+      if (callback) callback(data.nom_fitxer);
     })
     .catch((err) => {
       console.error(err);

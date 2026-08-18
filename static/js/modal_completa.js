@@ -43,7 +43,12 @@ function obreModalCompleta(entradaId, usuariId) {
         mediaDiv.innerHTML = "";
         let totalMedia = 0;
 
+        const arxiusConversa = [];
         data.arxius.forEach(fitxer => {
+          if (fitxer.es_conversa) {
+            arxiusConversa.push(fitxer);
+            return;
+          }
           const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
           const link = document.createElement("a");
           link.href = ruta;
@@ -166,6 +171,44 @@ if (arxiuPrincipal) {
           document.getElementById("modal-conversa-resum-editar").textContent = resum.join(" · ") || "—";
           document.getElementById("modal-conversa-observacions-editar").textContent = c.observacions_generals || "";
 
+                    const conversaArxiusDiv = document.getElementById("modal-conversa-arxius-editar");
+          conversaArxiusDiv.innerHTML = "";
+          arxiusConversa.forEach(fitxer => {
+            const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
+
+            const link = document.createElement("a");
+            link.href = ruta;
+            link.target = "_blank";
+
+            const contenidor = document.createElement("div");
+            contenidor.classList.add("arxiu-miniatura-peu");
+
+            if (fitxer.tipus_media === "video") {
+              const miniatura = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
+              const img = document.createElement("img");
+              img.src = miniatura;
+              img.style.width = "100%";
+              img.style.maxHeight = "80px";
+              img.style.objectFit = "cover";
+              img.onerror = () => { img.src = "/static/icons/video_webm.png"; img.style.objectFit = "contain"; };
+              link.appendChild(img);
+            } else {
+              const audio = document.createElement("audio");
+              audio.controls = true;
+              audio.src = ruta;
+              audio.style.width = "100%";
+              link.appendChild(audio);
+            }
+            contenidor.appendChild(link);
+
+            const peu = document.createElement("p");
+            peu.classList.add("peu-curt-arxiu");
+            peu.textContent = fitxer.titol || "";
+            contenidor.appendChild(peu);
+
+            conversaArxiusDiv.appendChild(contenidor);
+          });
+
           blocConversaEditar.style.display = "block";
           document.getElementById("modal-conversa-contingut-editar").style.display = "none";
           document.getElementById("modal-conversa-fletxa-editar").textContent = "▶";
@@ -220,9 +263,11 @@ function confirmaEliminacio() {
 
 function toggleConversaModalEditar() {
   const contingut = document.getElementById("modal-conversa-contingut-editar");
+  const arxius = document.getElementById("modal-conversa-arxius-editar");
   const fletxa = document.getElementById("modal-conversa-fletxa-editar");
   const obert = contingut.style.display === "block";
   contingut.style.display = obert ? "none" : "block";
+  if (arxius) arxius.style.display = obert ? "none" : "grid";
   fletxa.textContent = obert ? "▶" : "▼";
 }
 

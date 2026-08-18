@@ -112,6 +112,7 @@ class ArxiuAdjunt(db.Model):
     municipi = db.Column(db.String(100), nullable=True)
     descripcio = db.Column(db.Text, nullable=True)
     referencia = db.Column(db.String(255), nullable=True)
+    es_conversa = db.Column(db.Boolean, default=False, nullable=False)
     entrada = db.relationship("Entrada", back_populates="arxius_adjuntats")
 
 

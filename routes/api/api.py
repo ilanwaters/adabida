@@ -69,6 +69,7 @@ def obtenir_entrada(usuari_login, entrada_id):
                 "municipi": f.municipi,
                 "descripcio": f.descripcio,
                 "referencia": f.referencia,
+                "es_conversa": f.es_conversa,
             }
             for f in entrada.arxius_adjuntats
         ]
