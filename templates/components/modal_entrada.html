@@ -16,25 +16,30 @@
         <div id="modal-contingut" class="contingut-formatat">—</div>
       </div>
 
-      <div class="modal-arxius" id="modal-arxius"></div>
+     
 
-      <div class="modal-info-imatge" id="modal-info-imatge" style="display: none;">
-        <p><strong>{{ _('Arxiu') }}</strong> <span id="modal-titol-imatge">—</span></p>
-        <p><span id="modal-ubicacio-any-imatge">—</span></p>
-        <p><span id="modal-descripcio-imatge">—</span></p>
-        <p><strong>{{ _('Aquest arxiu es pot consultar a:') }}</strong> <span id="modal-referencia-imatge">—</span></p>
+
+         <div class="modal-arxius-graella" id="modal-arxius-imatges"></div>
+
+       <div class="bloc-plegable-modal">
+        <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
+          {{ _('Més material audiovisual') }} <span id="comptador-media"></span>
+        </h4>
+        <div class="contingut-plegable-modal" id="modal-arxius-media" style="display: none;"></div>
       </div>
-    </div>
-    
-    <div class="modal-conversa-bloc" id="modal-conversa-bloc" style="display: none;">
-        <h3 class="modal-conversa-titol" onclick="toggleConversaModal()">
+
+      <div class="bloc-plegable-modal" id="modal-conversa-bloc" style="display: none;">
+        <h4 class="titol-plegable-modal" onclick="toggleConversaModal()">
           {{ _('Conversa vinculada') }} <span id="modal-conversa-fletxa">▶</span>
-        </h3>
+        </h4>
         <div class="modal-conversa-contingut" id="modal-conversa-contingut" style="display: none;">
           <p id="modal-conversa-resum"></p>
           <p id="modal-conversa-observacions"></p>
+          <div class="contingut-plegable-modal" id="modal-conversa-arxius" style="display: none;"></div>
         </div>
       </div>
+
+    </div>
 
     <div class="modal-botons">
       <div class="modal-meta-autoria">

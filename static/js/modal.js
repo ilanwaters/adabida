@@ -44,10 +44,19 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 
       document.getElementById('modal-contingut').innerHTML = data.contingut || "";
 
-      let arxiusDiv = document.getElementById('modal-arxius');
-      arxiusDiv.innerHTML = "";
+            const imatgesDiv = document.getElementById('modal-arxius-imatges');
+      const mediaDiv = document.getElementById('modal-arxius-media');
+      const comptadorMedia = document.getElementById('comptador-media');
+      imatgesDiv.innerHTML = "";
+      mediaDiv.innerHTML = "";
+      let totalMedia = 0;
 
+      const arxiusConversa = [];
       data.arxius.forEach(fitxer => {
+        if (fitxer.es_conversa) {
+          arxiusConversa.push(fitxer);
+          return;
+        }
         const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
         const link = document.createElement("a");
         link.href = ruta;
@@ -58,7 +67,7 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 
         if (fitxer.tipus.match(/(jpg|png|jpeg|webp)/i)) {
           link.setAttribute("data-lightbox", "galeria-" + data.id);
-          link.setAttribute("data-title", fitxer.titol || fitxer.nom_fitxer);
+          link.setAttribute("data-title", construeixPeuLightbox(fitxer));
 
           const img = document.createElement("img");
           img.src = ruta;
@@ -66,40 +75,47 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
           img.style.margin = "10px";
 
           link.appendChild(img);
+          contenidor.appendChild(link);
+
+          const peu = document.createElement("p");
+          peu.classList.add("peu-curt-arxiu");
+          peu.textContent = fitxer.titol || "";
+          contenidor.appendChild(peu);
+
+          imatgesDiv.appendChild(contenidor);
         } else {
-  const icona = document.createElement("img");
-  
-  // 🔧 Usar tipus_media per webm, sinó tipus normal
-  let iconaPath;
-  if (fitxer.tipus === "webm" && fitxer.tipus_media) {
-    if (fitxer.tipus_media === "video") {
-      iconaPath = "/static/icons/video_webm.png";
-    } else if (fitxer.tipus_media === "audio") {
-      iconaPath = "/static/icons/audio_webm.png";
-    } else {
-      iconaPath = "/static/icons/webm.png";
-    }
-  } else {
-    iconaPath = `/static/icons/${fitxer.tipus}.png`;
-  }
-  
-  icona.src = iconaPath;
-  icona.title = fitxer.nom_fitxer;
-  icona.style.maxWidth = "40px";
-  icona.style.margin = "10px";
+          const icona = document.createElement("img");
+          let iconaPath;
+          if (fitxer.tipus === "webm" && fitxer.tipus_media === "video") {
+            iconaPath = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
+            icona.onerror = () => { icona.onerror = null; icona.src = "/static/icons/video_webm.png"; };
+          } else if (fitxer.tipus === "webm" && fitxer.tipus_media) {
+            if (fitxer.tipus_media === "audio") {
+              iconaPath = "/static/icons/audio_webm.png";
+            } else {
+              iconaPath = "/static/icons/webm.png";
+            }
+          } else {
+            iconaPath = `/static/icons/${fitxer.tipus}.png`;
+          }
+          icona.src = iconaPath;
+          icona.title = fitxer.nom_fitxer;
+          icona.style.maxWidth = "40px";
+          icona.style.margin = "10px";
+          link.appendChild(icona);
+          contenidor.appendChild(link);
 
-  link.appendChild(icona);
-}
-        contenidor.appendChild(link);
+          const peu = document.createElement("p");
+          peu.classList.add("peu-complet-arxiu");
+          peu.textContent = construeixPeuLightbox(fitxer) || fitxer.nom_fitxer;
+          contenidor.appendChild(peu);
 
-        const peu = document.createElement("p");
-        peu.classList.add("peu-curt-arxiu");
-        peu.textContent = fitxer.titol || "";
-        contenidor.appendChild(peu);
-
-        arxiusDiv.appendChild(contenidor);
+          mediaDiv.appendChild(contenidor);
+          totalMedia++;
+        }
       });
 
+      comptadorMedia.textContent = totalMedia > 0 ? `(${totalMedia})` : "";
    // Buscar la millor imatge principal per mostrar
 let arxiuPrincipal = null;
 
@@ -124,12 +140,13 @@ if (arxiuPrincipal) {
   if (arxiuPrincipal.tipus.match(/(jpg|png|jpeg|webp|gif)/i)) {
     // És imatge - mostrar la imatge real
     img.src = url;
-  } else {
+    } else {
     // És àudio/vídeo/document - mostrar la icona gran
-    if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media) {
-      if (arxiuPrincipal.tipus_media === "video") {
-        img.src = "/static/icons/video_webm.png";
-      } else if (arxiuPrincipal.tipus_media === "audio") {
+    if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media === "video") {
+      img.onerror = () => { img.onerror = null; img.src = "/static/icons/video_webm.png"; };
+      img.src = `/umberto/${data.usuari_login}/${data.id}/mini/${arxiuPrincipal.nom_fitxer}.png`;
+    } else if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media) {
+      if (arxiuPrincipal.tipus_media === "audio") {
         img.src = "/static/icons/audio_webm.png";
       } else {
         img.src = "/static/icons/webm.png";
@@ -137,7 +154,7 @@ if (arxiuPrincipal) {
     } else {
       img.src = `/static/icons/${arxiuPrincipal.tipus}.png`;
     }
-     }
+  }
   
   img.style.maxWidth = "400px";
   img.style.height = "auto";
@@ -146,27 +163,8 @@ if (arxiuPrincipal) {
   // No hi ha cap arxiu
   document.getElementById('modal-img').src = "/static/icons/sense_imatge.png";
 }
-      const titolImg = data.titol_imatge?.trim();
-      const anyImg = data.any_imatge?.trim();
-      const ubicacioImg = data.ubicacio_imatge?.trim();
-      const descripcioImg = data.descripcio_imatge?.trim();
-      const referenciaImg = data.referencia?.trim();
-
-      const infoVisible = titolImg || anyImg || ubicacioImg || descripcioImg || referenciaImg;
-
-      if (infoVisible) {
-        document.getElementById("modal-info-imatge").style.display = "block";
-        document.getElementById("modal-titol-imatge").textContent = titolImg || "—";
-        document.getElementById("modal-descripcio-imatge").textContent = descripcioImg || "—";
-        document.getElementById("modal-referencia-imatge").textContent = referenciaImg || "—";
-
-        const sep = (ubicacioImg && anyImg) ? ", " : "";
-        document.getElementById("modal-ubicacio-any-imatge").textContent = `${ubicacioImg || ''}${sep}${anyImg || ''}` || "—";
-      } else {
-        document.getElementById("modal-info-imatge").style.display = "none";
-      }
-      
-      // Bloc conversa vinculada
+    
+            // Bloc conversa vinculada
         const blocConversa = document.getElementById("modal-conversa-bloc");
         if (data.conversa) {
           const c = data.conversa;
@@ -180,6 +178,44 @@ if (arxiuPrincipal) {
 
           document.getElementById("modal-conversa-resum").textContent = resum.join(" · ") || "—";
           document.getElementById("modal-conversa-observacions").textContent = c.observacions_generals || "";
+
+          const conversaArxiusDiv = document.getElementById("modal-conversa-arxius");
+          conversaArxiusDiv.innerHTML = "";
+          arxiusConversa.forEach(fitxer => {
+            const ruta = `/umberto/${data.usuari_login}/${data.id}/${fitxer.nom_fitxer}`;
+
+            const link = document.createElement("a");
+            link.href = ruta;
+            link.target = "_blank";
+
+            const contenidor = document.createElement("div");
+            contenidor.classList.add("arxiu-miniatura-peu");
+
+            if (fitxer.tipus_media === "video") {
+              const miniatura = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
+              const img = document.createElement("img");
+              img.src = miniatura;
+              img.style.width = "100%";
+              img.style.maxHeight = "80px";
+              img.style.objectFit = "cover";
+              img.onerror = () => { img.src = "/static/icons/video_webm.png"; img.style.objectFit = "contain"; };
+              link.appendChild(img);
+            } else {
+              const audio = document.createElement("audio");
+              audio.controls = true;
+              audio.src = ruta;
+              audio.style.width = "100%";
+              link.appendChild(audio);
+            }
+            contenidor.appendChild(link);
+
+            const peu = document.createElement("p");
+            peu.classList.add("peu-curt-arxiu");
+            peu.textContent = fitxer.titol || "";
+            contenidor.appendChild(peu);
+
+            conversaArxiusDiv.appendChild(contenidor);
+          });
 
           blocConversa.style.display = "block";
           document.getElementById("modal-conversa-contingut").style.display = "none";
@@ -288,8 +324,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function toggleConversaModal() {
   const contingut = document.getElementById("modal-conversa-contingut");
+  const arxius = document.getElementById("modal-conversa-arxius");
   const fletxa = document.getElementById("modal-conversa-fletxa");
   const obert = contingut.style.display === "block";
   contingut.style.display = obert ? "none" : "block";
+  if (arxius) arxius.style.display = obert ? "none" : "grid";
   fletxa.textContent = obert ? "▶" : "▼";
+}
+
+function construeixPeuLightbox(fitxer) {
+  const parts = [];
+  if (fitxer.titol) parts.push(fitxer.titol);
+
+  const ubicacio = [fitxer.municipi, fitxer.regio, fitxer.pais].filter(Boolean).join(", ");
+  const anyUbicacio = [ubicacio, fitxer.any_arxiu].filter(Boolean).join(", ");
+  if (anyUbicacio) parts.push(anyUbicacio);
+
+  if (fitxer.descripcio) parts.push(fitxer.descripcio);
+  if (fitxer.referencia) parts.push(`Consulta: ${fitxer.referencia}`);
+
+  return parts.join(" — ");
+}
+
+function toggleBlocModal(element) {
+  const contingut = element.nextElementSibling;
+  const obert = contingut.style.display === "grid";
+  contingut.style.display = obert ? "none" : "grid";
 }

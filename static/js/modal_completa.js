@@ -78,10 +78,11 @@ function obreModalCompleta(entradaId, usuariId) {
           } else {
             const icona = document.createElement("img");
             let iconaPath;
-            if (fitxer.tipus === "webm" && fitxer.tipus_media) {
-              if (fitxer.tipus_media === "video") {
-                iconaPath = "/static/icons/video_webm.png";
-              } else if (fitxer.tipus_media === "audio") {
+            if (fitxer.tipus === "webm" && fitxer.tipus_media === "video") {
+              iconaPath = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
+              icona.onerror = () => { icona.onerror = null; icona.src = "/static/icons/video_webm.png"; };
+            } else if (fitxer.tipus === "webm" && fitxer.tipus_media) {
+              if (fitxer.tipus_media === "audio") {
                 iconaPath = "/static/icons/audio_webm.png";
               } else {
                 iconaPath = "/static/icons/webm.png";
@@ -132,12 +133,13 @@ if (arxiuPrincipal) {
   if (arxiuPrincipal.tipus.match(/(jpg|png|jpeg|webp|gif)/i)) {
     // És imatge - mostrar la imatge real
     img.src = url;
-  } else {
+   } else {
     // És àudio/vídeo/document - mostrar la icona gran
-    if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media) {
-      if (arxiuPrincipal.tipus_media === "video") {
-        img.src = "/static/icons/video_webm.png";
-      } else if (arxiuPrincipal.tipus_media === "audio") {
+    if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media === "video") {
+      img.onerror = () => { img.onerror = null; img.src = "/static/icons/video_webm.png"; };
+      img.src = `/umberto/${data.usuari_login}/${data.id}/mini/${arxiuPrincipal.nom_fitxer}.png`;
+    } else if (arxiuPrincipal.tipus === "webm" && arxiuPrincipal.tipus_media) {
+      if (arxiuPrincipal.tipus_media === "audio") {
         img.src = "/static/icons/audio_webm.png";
       } else {
         img.src = "/static/icons/webm.png";
