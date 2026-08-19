@@ -302,9 +302,9 @@ def nova_entrada_personal():
                 conversa = Conversa(
                     usuari_id=usuari.id,
                     entrada_id=entrada.id,
-                    lloc_municipi=request.form.get("lloc_municipi", ""),
-                    lloc_regio=request.form.get("lloc_regio", ""),
-                    lloc_pais=request.form.get("lloc_pais", ""),
+                    lloc_municipi=request.form.get("municipi_conversa", ""),
+                    lloc_regio=request.form.get("regio_conversa", ""),
+                    lloc_pais=request.form.get("pais_conversa", ""),
                     durada_minuts=int(request.form.get("durada_minuts", 0)) if request.form.get("durada_minuts") else None,
                     observacions_generals=request.form.get("observacions_generals", "")
                 )
@@ -324,9 +324,9 @@ def nova_entrada_personal():
                             nom=request.form.get(f'participant_nom_{i}', '').strip(),
                             primer_cognom=request.form.get(f'participant_primer_cognom_{i}', '').strip() or None,
                             segon_cognom=request.form.get(f'participant_segon_cognom_{i}', '').strip() or None,
-                            lloc_municipi=request.form.get(f'participant_municipi_{i}', ''),
-                            lloc_regio=request.form.get(f'participant_regio_{i}', ''),
-                            lloc_pais=request.form.get(f'participant_pais_{i}', ''),
+                            lloc_municipi=request.form.get(f'municipi_participant_{i}', ''),
+                            lloc_regio=request.form.get(f'regio_participant_{i}', ''),
+                            lloc_pais=request.form.get(f'pais_participant_{i}', ''),
                             observacions=request.form.get(f'participant_observacions_{i}', ''),
                             ordre=i + 1
                         )
