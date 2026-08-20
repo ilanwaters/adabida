@@ -83,6 +83,21 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
           contenidor.appendChild(peu);
 
           imatgesDiv.appendChild(contenidor);
+                } else if (fitxer.tipus === "webm" && fitxer.tipus_media === "audio") {
+          const audio = document.createElement("audio");
+          audio.controls = true;
+          audio.src = ruta;
+          audio.style.width = "250px";
+          audio.style.minWidth = "250px";
+          contenidor.appendChild(audio);
+
+          const peu = document.createElement("p");
+          peu.classList.add("peu-complet-arxiu");
+          peu.textContent = construeixPeuLightbox(fitxer) || fitxer.nom_fitxer;
+          contenidor.appendChild(peu);
+
+          mediaDiv.appendChild(contenidor);
+          totalMedia++;
         } else {
           const icona = document.createElement("img");
           let iconaPath;
@@ -90,11 +105,7 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
             iconaPath = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
             icona.onerror = () => { icona.onerror = null; icona.src = "/static/icons/video_webm.png"; };
           } else if (fitxer.tipus === "webm" && fitxer.tipus_media) {
-            if (fitxer.tipus_media === "audio") {
-              iconaPath = "/static/icons/audio_webm.png";
-            } else {
-              iconaPath = "/static/icons/webm.png";
-            }
+            iconaPath = "/static/icons/webm.png";
           } else {
             iconaPath = `/static/icons/${fitxer.tipus}.png`;
           }
@@ -191,6 +202,24 @@ if (arxiuPrincipal) {
             const contenidor = document.createElement("div");
             contenidor.classList.add("arxiu-miniatura-peu");
 
+                        if (fitxer.tipus_media === "video") {
+              const miniatura = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
+              const img = document.createElement("img");
+              img.src = miniatura;
+              img.style.width = "100%";
+              img.style.maxHeight = "80px";
+              img.style.objectFit = "cover";
+              img.onerror = () => { img.src = "/static/icons/video_webm.png"; img.style.objectFit = "contain"; };
+              link.appendChild(img);
+              contenidor.appendChild(link);
+            } else {
+              const audio = document.createElement("audio");
+              audio.controls = true;
+              audio.src = ruta;
+              audio.style.width = "260px";
+              contenidor.style.width = "260px";
+              contenidor.appendChild(audio);
+            }
             if (fitxer.tipus_media === "video") {
               const miniatura = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
               const img = document.createElement("img");
