@@ -147,8 +147,11 @@
   </h3>
   <div class="contingut-plegable">
     <div class="input-file-custom">
-      <label for="puja-arxius">{{ _('Adjunta arxius') }}</label>
-      <input type="file" id="puja-arxius" name="arxius" multiple>
+            <input type="file" id="puja-arxius" name="arxius" multiple style="display: none;">
+      <button type="button" id="btn-adjuntar-arxiu" class="boto_multimedia" onclick="document.getElementById('puja-arxius').click()">
+        {{ _('Adjuntar arxius') }}
+      </button>
+      <small class="text-ajuda">{{ _('Pots afegir tants arxius com vulguis, un per un o diversos alhora.') }}</small>
     </div>
     <div id="zona-fitxers" class="zona-fitxers"></div>
     <div id="previsualitzacio-arxius" class="galeria"></div>
