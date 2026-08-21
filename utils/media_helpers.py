@@ -20,6 +20,16 @@ def generar_miniatura_entrada(entrada, usuari_login):
     if not arxius:
         return "/static/icons/sense_imatge.png"
     
+    # 0. Prioritat màxima: portada triada explícitament per l'usuari
+    for arxiu in arxius:
+        if arxiu.es_portada:
+            return url_for(
+                "serveis_media.serveix_miniatura",
+                usuari=usuari_login,
+                entrada_id=str(entrada.id),
+                nom_fitxer=arxiu.nom_fitxer
+            )
+    
     # 1. Prioritat: Buscar primera imatge real
     for arxiu in arxius:
         if arxiu.tipus.lower() in ["jpg", "jpeg", "png", "gif", "webp"]:
@@ -29,7 +39,6 @@ def generar_miniatura_entrada(entrada, usuari_login):
                 entrada_id=str(entrada.id),
                 nom_fitxer=arxiu.nom_fitxer
             )
-    
     # 2. Si no hi ha imatge, usar icona segons tipus del primer arxiu
     primer_arxiu = arxius[0]
     

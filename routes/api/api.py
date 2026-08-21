@@ -52,10 +52,31 @@ def obtenir_entrada(usuari_login, entrada_id):
             "lloc_regio": conversa.lloc_regio,
             "lloc_pais": conversa.lloc_pais,
             "observacions_generals": conversa.observacions_generals,
-            "participants": [p.nom + " " + p.primer_cognom for p in conversa.participants],
+            "participants": [
+                {
+                    "nom": p.nom,
+                    "primer_cognom": p.primer_cognom,
+                    "segon_cognom": p.segon_cognom,
+                    "lloc_municipi": p.lloc_municipi,
+                    "lloc_regio": p.lloc_regio,
+                    "data_naixement": p.data_naixement.strftime('%d/%m/%Y') if p.data_naixement else None,
+                }
+                for p in conversa.participants
+            ],
             "arxiu_nom": conversa.arxiu_nom,
             "arxiu_tipus": conversa.arxiu_tipus,
         } if conversa else None,
+        "portada": next(
+            (
+                {
+                    "nom_fitxer": f.nom_fitxer,
+                    "tipus": f.tipus,
+                    "tipus_media": f.tipus_media,
+                }
+                for f in entrada.arxius_adjuntats if f.es_portada
+            ),
+            None
+        ),
         "arxius": [
             {
                 "nom_fitxer": f.nom_fitxer,
@@ -72,6 +93,7 @@ def obtenir_entrada(usuari_login, entrada_id):
                 "es_conversa": f.es_conversa,
             }
             for f in entrada.arxius_adjuntats
+            if not f.es_portada
         ]
     })
 

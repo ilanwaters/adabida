@@ -322,9 +322,9 @@ def entrades():
             "data": entrada.data_creacio.strftime("%d/%m/%Y") if entrada.data_creacio else "",
             "data_ordenacio": entrada.data_creacio or datetime.min,
             "miniatura": miniatura,
-            "usuari": entrada.usuari
+            "usuari": entrada.usuari,
+            "usuari_id": entrada.usuari_id
         })
-
     # Obtenir converses
     converses_raw = Conversa.query.filter_by(usuari_id=usuari.id).all()
     converses = []

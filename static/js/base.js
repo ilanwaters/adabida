@@ -84,3 +84,84 @@ function acceptarDisclaimerGlobal() {
   document.getElementById('disclaimer-modal-global').style.display = 'none';
   window.location.href = '/registre_individual';
 }
+
+function obrirSelectorPortada(entradaId) {
+  document.getElementById(`input-portada-${entradaId}`).click();
+}
+
+function pujarPortada(entradaId, input) {
+  const fitxer = input.files[0];
+  if (!fitxer) return;
+
+  const formData = new FormData();
+  formData.append("imatge", fitxer);
+
+  fetch(`/entrada/${entradaId}/portada`, { method: "POST", body: formData })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert("No s'ha pogut canviar la portada: " + (data.error || "error desconegut"));
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error de servidor en canviar la portada.");
+    });
+}
+
+function obrirPhotoSwipe(link) {
+  const galeria = link.getAttribute('data-lightbox');
+  const totsLinks = Array.from(document.querySelectorAll(`a[data-lightbox="${galeria}"]`));
+  const index = totsLinks.indexOf(link);
+
+  const carregues = totsLinks.map(a => new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => resolve({
+      src: a.getAttribute('href'),
+      title: a.getAttribute('data-title') || '',
+      w: img.naturalWidth,
+      h: img.naturalHeight,
+    });
+    img.onerror = () => resolve({
+      src: a.getAttribute('href'),
+      title: a.getAttribute('data-title') || '',
+      w: 1600,
+      h: 1200,
+    });
+    img.src = a.getAttribute('href');
+  }));
+
+  Promise.all(carregues).then(dataSource => {
+    const pswp = new PhotoSwipe({
+      dataSource,
+      index,
+      paddingFn: () => ({ top: 30, bottom: 60, left: 30, right: 30 }),
+    });
+
+    pswp.on('uiRegister', function () {
+      pswp.ui.registerElement({
+        name: 'peu-foto',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        onInit: (el) => {
+          el.className = 'pswp-peu-foto';
+          pswp.on('change', () => {
+            el.innerHTML = pswp.currSlide?.data?.title || '';
+          });
+        },
+      });
+    });
+
+    pswp.init();
+  });
+}
+document.addEventListener('click', function (e) {
+  const link = e.target.closest('a[data-lightbox]');
+  if (!link) return;
+  if (typeof PhotoSwipe === 'undefined') return;
+  e.preventDefault();
+  obrirPhotoSwipe(link);
+});

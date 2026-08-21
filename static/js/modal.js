@@ -52,6 +52,20 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
       let totalMedia = 0;
 
       const arxiusConversa = [];
+      const comptadorsTipus = {};
+      function etiquetaArxiu(fitxer) {
+        let tipusEtiqueta;
+        if (fitxer.tipus === "webm" && fitxer.tipus_media === "video") {
+          tipusEtiqueta = "Vídeo";
+        } else if (fitxer.tipus === "webm" && fitxer.tipus_media === "audio") {
+          tipusEtiqueta = "Àudio";
+        } else {
+          tipusEtiqueta = "Document";
+        }
+        comptadorsTipus[tipusEtiqueta] = (comptadorsTipus[tipusEtiqueta] || 0) + 1;
+        const titolEntrada = (data.titol || "").trim();
+        return titolEntrada ? `${titolEntrada} · ${tipusEtiqueta} ${comptadorsTipus[tipusEtiqueta]}` : `${tipusEtiqueta} ${comptadorsTipus[tipusEtiqueta]}`;
+      }
       data.arxius.forEach(fitxer => {
         if (fitxer.es_conversa) {
           arxiusConversa.push(fitxer);
@@ -93,7 +107,7 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 
           const peu = document.createElement("p");
           peu.classList.add("peu-complet-arxiu");
-          peu.textContent = construeixPeuLightbox(fitxer) || fitxer.nom_fitxer;
+          peu.textContent = construeixPeuLightbox(fitxer) || etiquetaArxiu(fitxer);
           contenidor.appendChild(peu);
 
           mediaDiv.appendChild(contenidor);
@@ -118,7 +132,7 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
 
           const peu = document.createElement("p");
           peu.classList.add("peu-complet-arxiu");
-          peu.textContent = construeixPeuLightbox(fitxer) || fitxer.nom_fitxer;
+          peu.textContent = construeixPeuLightbox(fitxer) || etiquetaArxiu(fitxer);
           contenidor.appendChild(peu);
 
           mediaDiv.appendChild(contenidor);
@@ -130,17 +144,22 @@ if (autorSpan && data.usuari_nom && data.usuari_login) {
    // Buscar la millor imatge principal per mostrar
 let arxiuPrincipal = null;
 
-// 1. Prioritat: cercar una imatge real
-for (const fitxer of data.arxius) {
-  if (fitxer.tipus.match(/(jpg|png|jpeg|webp|gif)/i)) {
-    arxiuPrincipal = fitxer;
-    break;
+// 0. Prioritat màxima: portada triada per l'usuari
+if (data.portada) {
+  arxiuPrincipal = data.portada;
+} else {
+  // 1. Prioritat: cercar una imatge real
+  for (const fitxer of data.arxius) {
+    if (fitxer.tipus.match(/(jpg|png|jpeg|webp|gif)/i)) {
+      arxiuPrincipal = fitxer;
+      break;
+    }
   }
-}
 
-// 2. Si no hi ha imatge, agafar el primer arxiu (vídeo, àudio, etc.)
-if (!arxiuPrincipal && data.arxius.length > 0) {
-  arxiuPrincipal = data.arxius[0];
+  // 2. Si no hi ha imatge, agafar el primer arxiu (vídeo, àudio, etc.)
+  if (!arxiuPrincipal && data.arxius.length > 0) {
+    arxiuPrincipal = data.arxius[0];
+  }
 }
 
 // Mostrar la imatge principal
@@ -176,18 +195,29 @@ if (arxiuPrincipal) {
 }
     
             // Bloc conversa vinculada
+                    // Bloc conversa vinculada
         const blocConversa = document.getElementById("modal-conversa-bloc");
         if (data.conversa) {
-          const c = data.conversa;
-          const lloc = [c.lloc_municipi, c.lloc_regio, c.lloc_pais].filter(Boolean).join(", ");
-          const participants = c.participants.length ? c.participants.join(", ") : "";
+        const c = data.conversa;
+        const lloc = [c.lloc_municipi, c.lloc_regio].filter(Boolean).join(", ");
+      
 
-          let resum = [];
-          if (participants) resum.push(participants);
-          if (c.data) resum.push(c.data);
-          if (lloc) resum.push(lloc);
+        const nomsParticipants = c.participants.map(p => {
+        const nomComplet = [p.nom, p.primer_cognom, p.segon_cognom].filter(Boolean).join(" ");
+        const naixement = [p.lloc_municipi, p.lloc_regio, p.data_naixement].filter(Boolean).join(", ");
+        return naixement ? `${nomComplet} (${naixement})` : nomComplet;
+      }).join(" i ");
 
-          document.getElementById("modal-conversa-resum").textContent = resum.join(" · ") || "—";
+      let realitzada = "";
+      if (lloc && c.data) {
+        realitzada = ` realitzada a ${lloc} el ${c.data}`;
+      } else if (lloc) {
+        realitzada = ` realitzada a ${lloc}`;
+      } else if (c.data) {
+        realitzada = ` realitzada el ${c.data}`;
+      }
+
+          document.getElementById("modal-conversa-resum").textContent = (nomsParticipants ? `Conversa amb ${nomsParticipants}` : "Conversa") + realitzada || "—";
           document.getElementById("modal-conversa-observacions").textContent = c.observacions_generals || "";
 
           const conversaArxiusDiv = document.getElementById("modal-conversa-arxius");
@@ -220,23 +250,7 @@ if (arxiuPrincipal) {
               contenidor.style.width = "260px";
               contenidor.appendChild(audio);
             }
-            if (fitxer.tipus_media === "video") {
-              const miniatura = `/umberto/${data.usuari_login}/${data.id}/mini/${fitxer.nom_fitxer}.png`;
-              const img = document.createElement("img");
-              img.src = miniatura;
-              img.style.width = "100%";
-              img.style.maxHeight = "80px";
-              img.style.objectFit = "cover";
-              img.onerror = () => { img.src = "/static/icons/video_webm.png"; img.style.objectFit = "contain"; };
-              link.appendChild(img);
-            } else {
-              const audio = document.createElement("audio");
-              audio.controls = true;
-              audio.src = ruta;
-              audio.style.width = "100%";
-              link.appendChild(audio);
-            }
-            contenidor.appendChild(link);
+          
 
             const peu = document.createElement("p");
             peu.classList.add("peu-curt-arxiu");

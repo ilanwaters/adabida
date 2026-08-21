@@ -82,10 +82,13 @@ class Entrada(db.Model):
             return False
     @property
     def miniatura(self):
-        """Retorna la primera imatge o placeholder"""
+        """Retorna la portada triada per l'usuari, si n'hi ha, si no la primera imatge, si no placeholder"""
+        portada = next((a for a in self.arxius_adjuntats if a.es_portada), None)
+        if portada:
+            any_mes = portada.data_pujada.strftime('%Y/%m') if portada.data_pujada else ''
+            return f"/umberto/{self.usuari.nom_login}/{self.id}/mini/{portada.nom_fitxer}"
         if self.imatges:
             primera_imatge = self.imatges[0]
-            # Construir ruta de la imatge
             any_mes = primera_imatge.data_publicacio.strftime('%Y/%m')
             return f"/umberto/media/galeria/{any_mes}/{primera_imatge.nom_fitxer}"
         return '/static/icons/sense_imatge.png'
@@ -113,6 +116,7 @@ class ArxiuAdjunt(db.Model):
     descripcio = db.Column(db.Text, nullable=True)
     referencia = db.Column(db.String(255), nullable=True)
     es_conversa = db.Column(db.Boolean, default=False, nullable=False)
+    es_portada = db.Column(db.Boolean, default=False, nullable=False)
     entrada = db.relationship("Entrada", back_populates="arxius_adjuntats")
 
 

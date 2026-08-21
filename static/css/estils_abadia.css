@@ -500,16 +500,21 @@ textarea.campo-largo:focus {
 }
 
 .llista-entrades {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 20px;
-  align-items: center;
   padding: 30px;
 }
 
+@media (max-width: 768px) {
+  .llista-entrades {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+}
 .caixa-entrada {
   display: flex;
-  width: 600px;
+  width: 500px;
   background-color: #fdfdfd;
   border-radius: 12px;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
@@ -542,6 +547,24 @@ textarea.campo-largo:focus {
   font-size: 0.95rem;
 }
 
+.boto-portada {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+.boto-portada:hover {
+  transform: scale(1.15);
+}
 .resum {
   margin: 10px 0;
   color: #333;
@@ -778,4 +801,17 @@ footer {
 
 .modal-content h2 {
   margin-top: 0;
+}
+
+.pswp-peu-foto {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  z-index: 100000;
 }

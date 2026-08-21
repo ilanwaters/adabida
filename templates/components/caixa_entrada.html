@@ -1,9 +1,15 @@
 <!-- templates/components/caixa_entrada.html -->
 <div class="caixa-entrada">
-    <div class="imatge-lateral">
+        <div class="imatge-lateral" style="position: relative;">
         <a href="{{ entrada.imatge_gran or entrada.miniatura }}" data-lightbox="galeria-{{ entrada.id }}">
-            <img src="{{ entrada.miniatura_calculada if entrada.miniatura_calculada is defined else entrada.miniatura }}" class="miniatura" alt="Miniatura">
+            <img src="{{ entrada.miniatura }}" class="miniatura" alt="Miniatura">
         </a>
+        {% if session.get("usuari_id") and session.usuari_id == entrada.usuari_id %}
+        <button type="button" class="boto-portada" title="{{ _('Canviar imatge de portada') }}"
+                onclick="event.stopPropagation(); obrirSelectorPortada({{ entrada.id }})">⭐</button>
+        <input type="file" id="input-portada-{{ entrada.id }}" accept="image/*" style="display:none;"
+               onchange="pujarPortada({{ entrada.id }}, this)">
+        {% endif %}
     </div>
     <div class="contingut-lateral">
         <h3 class="titol-entrada clicable" 

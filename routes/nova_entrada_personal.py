@@ -72,10 +72,19 @@ def generar_miniatura_segons_tipus(nom_fitxer, ruta_fitxer, carpeta_final, tipus
                     '-vframes', '1', '-vf', 'scale=320:-1', desti_mini
                 ], capture_output=True, text=True, timeout=15)
                 if os.path.exists(desti_mini):
-                    print(f"✅ Fotograma extret amb ffmpeg: {desti_mini}")
+                    print(f"✅ Fotograma extret amb ffmpeg (seg 1): {desti_mini}")
                     return
                 else:
-                    print(f"⚠️ ffmpeg no ha generat fotograma: {resultat.stderr}")
+                    print(f"⚠️ ffmpeg no ha generat fotograma al seg 1, reintentant al seg 0: {resultat.stderr}")
+                    resultat2 = subprocess.run([
+                        'ffmpeg', '-y', '-i', ruta_fitxer, '-ss', '00:00:00',
+                        '-vframes', '1', '-vf', 'scale=320:-1', desti_mini
+                    ], capture_output=True, text=True, timeout=15)
+                    if os.path.exists(desti_mini):
+                        print(f"✅ Fotograma extret amb ffmpeg (seg 0): {desti_mini}")
+                        return
+                    else:
+                        print(f"⚠️ ffmpeg tampoc ha generat fotograma al seg 0: {resultat2.stderr}")
             except Exception as e:
                 print(f"❌ Error extraient fotograma: {e}")
             icona = os.path.join(base_dir, "static", "icons", "video_webm.png")
@@ -770,3 +779,51 @@ def pujar_arxiu_temp():
 @nova_entrada_bp.route("/generar_participant_html/<int:numero>")
 def generar_participant_html(numero):
     return render_template("pagina_personal/participants_conversa.html", numero=numero)
+
+@nova_entrada_bp.route("/entrada/<int:entrada_id>/portada", methods=["POST"])
+def canviar_portada(entrada_id):
+    if "usuari" not in session:
+        return jsonify(success=False, error="Sessió no vàlida"), 401
+
+    usuari_login = session["usuari"]
+    usuari = Usuari.query.filter_by(nom_login=usuari_login).first()
+    if not usuari:
+        return jsonify(success=False, error="Usuari no trobat"), 404
+
+    entrada = Entrada.query.filter_by(id=entrada_id, usuari_id=usuari.id).first()
+    if not entrada:
+        return jsonify(success=False, error="Entrada no trobada o no autoritzada"), 404
+
+    imatge = request.files.get("imatge")
+    if not imatge or not imatge.filename:
+        return jsonify(success=False, error="No s'ha rebut cap imatge"), 400
+
+    extensio = imatge.filename.rsplit('.', 1)[-1].lower()
+    if extensio not in ('jpg', 'jpeg', 'png', 'webp'):
+        return jsonify(success=False, error="Format d'imatge no vàlid"), 400
+
+    _, any_str, mes_str = extreu_dades_identificador(usuari.identificador_abadia)
+    pais = normalitza_pais(usuari.pais_residencia)
+    carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, usuari.nom_login, "entrades", str(entrada.id))
+    os.makedirs(carpeta_final, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    nom_fitxer = f"portada_{usuari.nom_login}_{timestamp}.{extensio}"
+    ruta_final = os.path.join(carpeta_final, nom_fitxer)
+    imatge.save(ruta_final)
+
+    generar_miniatura_segons_tipus(nom_fitxer, ruta_final, carpeta_final, 'imatge')
+
+    ArxiuAdjunt.query.filter_by(entrada_id=entrada.id, es_portada=True).update({"es_portada": False})
+
+    nou_arxiu = ArxiuAdjunt(
+        entrada_id=entrada.id,
+        nom_fitxer=nom_fitxer,
+        tipus=extensio,
+        tipus_media='imatge',
+        es_portada=True,
+    )
+    db.session.add(nou_arxiu)
+    db.session.commit()
+
+    return jsonify(success=True, nom_fitxer=nom_fitxer)
