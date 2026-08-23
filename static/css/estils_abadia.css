@@ -512,40 +512,7 @@ textarea.campo-largo:focus {
     padding: 15px;
   }
 }
-.caixa-entrada {
-  display: flex;
-  width: 500px;
-  background-color: #fdfdfd;
-  border-radius: 12px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
 
-.imatge-lateral img {
-  width: 150px;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.contingut-lateral {
-  flex: 1;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.contingut-lateral h3 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.contingut-lateral .any {
-  font-weight: normal;
-  color: #666;
-  font-size: 0.95rem;
-}
 
 .boto-portada {
   position: absolute;

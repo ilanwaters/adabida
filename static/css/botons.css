@@ -346,3 +346,36 @@ a.boto_nav {
   color: hsl(219, 100%, 20%);
   text-decoration: none;
 }
+
+/* === Botons primari/secundari (unificat, elimina duplicats de base.css, biografia.css, organitzacio_seccio.css) === */
+.boto-primari {
+  background: var(--color-blau) !important;
+  color: var(--color-blanc) !important;
+}
+.boto-primari:hover {
+  background: var(--color-blau-fosc) !important;
+}
+.boto-secundari {
+  background: var(--color-blanc) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+.boto-secundari:hover {
+  background: var(--color-fons-clar) !important;
+}
+
+/* === Navegació de secció (unificat, elimina duplicats de biografia.css, organitzacio_seccio.css) === */
+.navegacio-seccio {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .navegacio-seccio {
+    flex-direction: column;
+  }
+}

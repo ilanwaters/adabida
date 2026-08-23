@@ -3,7 +3,6 @@
 {% block titol %}{{ familia.nom }} - {{ _('Records') }}{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/entrades_grid.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -16,7 +15,7 @@
     </nav>
 
     <div class="capsalera-seccio">
-      <h1><i class="fas fa-folder-open"></i> {{ _('Records de') }} {{ familia.nom }}</h1>
+      <h1>{{ _('Records de') }} {{ familia.nom }}</h1>
       <p class="subtitol">{{ _('Testimonis i històries compartides amb aquest espai familiar') }}</p>
     </div>
 
@@ -27,39 +26,11 @@
         </div>
 
         <div id="grid-entrades" class="llista-entrades">
-          {% for entrada in entrades %}
-          <div class="caixa-entrada clicable"
-               onclick="obreModal({{ entrada.id }}, {{ entrada.usuari_id }})"
-               data-any="{{ entrada.data_creacio.year }}">
-
-              <div class="miniatura">
-                  {% if entrada.tipus_fitxer in ['jpg', 'jpeg', 'png', 'webp'] %}
-                      <img src="{{ url_for('static', filename='umberto/mini/' + entrada.nom_fitxer) }}"
-                           alt="{{ entrada.titol }}" loading="lazy">
-                  {% elif entrada.tipus_fitxer in ['mp4', 'webm', 'avi'] %}
-                      <img src="/static/icons/video.png" alt="Vídeo">
-                  {% elif entrada.tipus_fitxer in ['mp3', 'wav', 'ogg'] %}
-                      <img src="/static/icons/audio.png" alt="Àudio">
-                  {% else %}
-                      <img src="/static/icons/document.png" alt="Document">
-                  {% endif %}
-              </div>
-
-              <div class="contingut-entrada">
-                  <h3>{{ entrada.titol or entrada.tema }}</h3>
-                  <p>
-                      {% if entrada.any_text %}<strong>{{ entrada.any_text }}</strong>{% endif %}
-                      {% if entrada.tema %} – {{ entrada.tema }}{% endif %}
-                  </p>
-                  {% if entrada.contingut %}
-                      <p class="resum">{{ entrada.contingut[:140] }}...</p>
-                  {% endif %}
-                  <p class="autor" style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
-                      De: {{ entrada.usuari.nom }} ({{ entrada.data_creacio.strftime('%d/%m/%Y') }})
-                  </p>
-              </div>
-          </div>
-          {% endfor %}
+  {% for entrada in entrades %}
+    {% include "components/caixa_entrada.html" %}
+  {% endfor %}
+</div>
+          
         </div>
       {% else %}
         <div class="missatge-buit">
@@ -73,14 +44,14 @@
           </div>
         </div>
       {% endif %}
-    </div>
+   
 
     <div class="navegacio-seccio">
-      <a href="{{ url_for('familia.seccio', url=familia.url, seccio='qui-som') }}" class="boto boto-secundari">
-        <i class="fas fa-arrow-left"></i> {{ _('Tornar') }}
-      </a>
+      <a href="{{ url_for('familia.seccio', url=familia.url, seccio='qui-som') }}" class="boto_nav">
+  {{ _('Tornar') }}
+</a>
     </div>
-
+ </div>
   </div>
 </main>
 

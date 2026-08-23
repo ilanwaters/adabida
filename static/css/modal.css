@@ -149,12 +149,30 @@
 }
 
 /* Arxius amb peu de foto (modal_completa.js) */
-#modal-arxius-imatges-editar,
-#modal-arxius-media-editar {
+#modal-arxius-imatges-editar {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 10px;
+}
+
+#modal-arxius-media-editar,
+#modal-arxius-media {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+#modal-arxius-media-editar .arxiu-miniatura-peu,
+#modal-arxius-media .arxiu-miniatura-peu {
+  width: 100%;
+}
+
+#modal-arxius-media-editar audio,
+#modal-arxius-media audio {
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .arxiu-miniatura-peu {
