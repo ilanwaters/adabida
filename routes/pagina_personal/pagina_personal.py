@@ -3,7 +3,7 @@ from models import db, Usuari, Entrada, Experiencia, Estudi, Obra, CarrecPublic,
 from flask_babel import _
 import os
 from utils.text_biografic import generar_biografia_entrevista
-from flask_login import current_user
+from flask_login import current_user, login_required
 from models import PerfilBiografic, ImatgeGaleria, Missatge
 from sqlalchemy import or_
 from utils import generar_miniatura_entrada
@@ -489,3 +489,41 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
         "miniatura": "/static/icons/entrevista.svg",  # Icona genèrica (crea-la després)
         "usuari": conversa.usuari
     }
+
+
+@pagina_personal_bp.route('/pagina_personal/pujar-imatge-card', methods=['POST'])
+def pujar_imatge_card():
+    """Pujar imatge personalitzada per un card de l'espai personal"""
+    try:
+        card_type = request.form.get('card_type')
+        imatge = request.files.get('imatge')
+        if not card_type or not imatge:
+            return jsonify({'success': False, 'error': 'Falten dades'}), 400
+
+        camps_permesos = ['biografia', 'entrades', 'nova_entrada', 'perfil', 'organitzacions', 'familia', 'conversa']
+        if card_type not in camps_permesos:
+            return jsonify({'success': False, 'error': 'Tipus de card invàlid'}), 400
+
+        from werkzeug.utils import secure_filename
+        filename = secure_filename(imatge.filename)
+        ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else 'jpg'
+
+        nom_final = f"usuari_{current_user.id}_card_{card_type}.{ext}"
+
+        carpeta = os.path.join('static', 'cards_personal')
+        os.makedirs(carpeta, exist_ok=True)
+
+        ruta_completa = os.path.join(carpeta, nom_final)
+        imatge.save(ruta_completa)
+
+        camp_bd = f'imatge_card_{card_type}'
+        setattr(current_user, camp_bd, nom_final)
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Imatge guardada correctament'})
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error pujant imatge card: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500

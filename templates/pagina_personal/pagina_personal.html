@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_entrada_personal.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
 {% block contingut %}
@@ -19,12 +20,15 @@
 </div>
 
 <main>
-  <div class="cards-grid">
+    <div class="cards-grid">
 
     <!-- Card: Biografia -->
- <a href="{{ url_for('biografia_seccions.llistar') }}" class="card">
-      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
-   
+    <a href="{{ url_for('biografia_seccions.llistar') }}" class="card">
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('biografia');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_biografia %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_biografia) }}{% else %}{{ url_for('static', filename='img/personal.png') }}{% endif %}');">
+        <div class="card-overlay"></div>
       </div>
       <div class="card-content">
         <h3>{{ _('Biografia') }}</h3>
@@ -33,8 +37,11 @@
 
     <!-- Card: Les meves entrades -->
     <a href="{{ url_for('pagina_personal.entrades') }}" class="card">
-      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/test.jpg') }}');">
-     
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('entrades');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_entrades %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_entrades) }}{% else %}{{ url_for('static', filename='img/test.jpg') }}{% endif %}');">
+        <div class="card-overlay"></div>
       </div>
       <div class="card-content">
         <h3>{{ _('Les meves entrades') }}</h3>
@@ -43,8 +50,11 @@
 
     <!-- Card: Nova entrada -->
     <a href="{{ url_for('pagina_personal.nova_entrada') }}" class="card">
-      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
-    
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('nova_entrada');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_nova_entrada %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_nova_entrada) }}{% else %}{{ url_for('static', filename='img/personal.png') }}{% endif %}');">
+        <div class="card-overlay"></div>
       </div>
       <div class="card-content">
         <h3>{{ _('Nova entrada') }}</h3>
@@ -53,8 +63,11 @@
 
     <!-- Card: Perfil personal -->
     <a href="{{ url_for('pagina_personal.perfil') }}" class="card">
-      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
-   
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('perfil');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_perfil %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_perfil) }}{% else %}{{ url_for('static', filename='img/personal.png') }}{% endif %}');">
+        <div class="card-overlay"></div>
       </div>
       <div class="card-content">
         <h3>{{ _('Perfil personal') }}</h3>
@@ -63,8 +76,11 @@
 
     <!-- Card: Organitzacions -->
     <a href="{{ url_for('organitzacions.hub') }}" class="card">
-      <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/adabida2.jpg') }}');">
-     
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('organitzacions');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_organitzacions %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_organitzacions) }}{% else %}{{ url_for('static', filename='img/adabida2.jpg') }}{% endif %}');">
+        <div class="card-overlay"></div>
       </div>
       <div class="card-content">
         <h3>{{ _('Organitzacions') }}</h3>
@@ -72,28 +88,100 @@
     </a>
 
     <!-- Card: Família -->
-<a href="{{ url_for('familia.hub') }}" class="card">
-  <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/familia.png') }}');">
-  
-  </div>
-  <div class="card-content">
-    <h3>{{ _('Família') }}</h3>
-  </div>
-</a>
-<a href="{{ url_for('converses.nova_conversa_adabida') }}" class="card">
-  <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/conversa.png') }}');">
-    <div class="card-overlay"></div>
-  </div>
-  <div class="card-content">
-    <h3>{{ _('Nova Conversa Adabida') }}</h3>
-  </div>
-</a>
+    <a href="{{ url_for('familia.hub') }}" class="card">
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('familia');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_familia %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_familia) }}{% else %}{{ url_for('static', filename='img/familia.png') }}{% endif %}');">
+        <div class="card-overlay"></div>
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Família') }}</h3>
+      </div>
+    </a>
+
+    <!-- Card: Nova Conversa Adabida -->
+    <a href="{{ url_for('converses.nova_conversa_adabida') }}" class="card">
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('conversa');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      <div class="card-image" style="background-image: url('{% if usuari.imatge_card_conversa %}{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_conversa) }}{% else %}{{ url_for('static', filename='img/conversa.png') }}{% endif %}');">
+        <div class="card-overlay"></div>
+      </div>
+      <div class="card-content">
+        <h3>{{ _('Nova Conversa Adabida') }}</h3>
+      </div>
+    </a>
+
   </div>
 
   {% include "components/modal_entrada.html" %}
   {% include "components/modal_entrada_editar.html" %}
 </main>
 
+<!-- Modal canviar imatge card personal -->
+<!-- Modal canviar imatge card -->
+<div id="modal-imatge-card" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+  <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
+    <span class="boto-tancar" onclick="tancarModalImatge()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</span>
+
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem;">{{ _('Canviar imatge del card') }}</h3>
+
+    <form id="form-imatge-card" enctype="multipart/form-data">
+      <input type="hidden" id="card-type" name="card_type">
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ _('Selecciona una opció:') }}</label>
+
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="document.getElementById('file-input').click()"
+                  style="width: 100%; background: #14d8ce; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-upload"></i>
+            {{ _('Pujar des de l\'ordinador') }}
+          </button>
+          <input type="file" id="file-input" name="imatge" accept="image/*" style="display: none;" onchange="previewImatge(this)">
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="activarCamera()"
+                  style="width: 100%; background: #667eea; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-camera"></i>
+            {{ _('Fer foto amb la càmera') }}
+          </button>
+        </div>
+
+        <div id="preview-container" style="display: none; margin-top: 1rem; text-align: center;">
+          <img id="preview-image" style="max-width: 100%; max-height: 300px; border-radius: 4px;">
+        </div>
+
+        <video id="camera-video" style="display: none; max-width: 100%; border-radius: 4px;" autoplay></video>
+        <canvas id="camera-canvas" style="display: none;"></canvas>
+
+        <div id="camera-controls" style="display: none; margin-top: 1rem; text-align: center;">
+          <button type="button" onclick="capturarFoto()"
+                  style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">
+            <i class="fas fa-camera"></i> {{ _('Capturar') }}
+          </button>
+          <button type="button" onclick="tancarCamera()"
+                  style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+            {{ _('Cancel·lar') }}
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+        <button type="button" onclick="tancarModalImatge()"
+                style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+          {{ _('Cancel·lar') }}
+        </button>
+        <button type="submit" id="btn-guardar-imatge" disabled
+                style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; opacity: 0.5;">
+          {{ _('Guardar imatge') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -274,6 +362,117 @@
     bloc.classList.toggle('tancat');
   }
 </script>
+<script>
+let currentStream = null;
+
+function obrirModalImatge(cardType) {
+  document.getElementById('card-type').value = cardType;
+  document.getElementById('modal-imatge-card').style.display = 'block';
+}
+
+function tancarModalImatge() {
+  document.getElementById('modal-imatge-card').style.display = 'none';
+  tancarCamera();
+  document.getElementById('preview-container').style.display = 'none';
+  document.getElementById('btn-guardar-imatge').disabled = true;
+  document.getElementById('btn-guardar-imatge').style.opacity = '0.5';
+  document.getElementById('file-input').value = '';
+}
+
+function previewImatge(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview-image').src = e.target.result;
+      document.getElementById('preview-container').style.display = 'block';
+      document.getElementById('btn-guardar-imatge').disabled = false;
+      document.getElementById('btn-guardar-imatge').style.opacity = '1';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function activarCamera() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      currentStream = stream;
+      const video = document.getElementById('camera-video');
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('camera-controls').style.display = 'block';
+      document.getElementById('preview-container').style.display = 'none';
+    })
+    .catch(err => {
+      alert('{{ _("No s\'ha pogut accedir a la càmera") }}');
+      console.error(err);
+    });
+}
+
+function capturarFoto() {
+  const video = document.getElementById('camera-video');
+  const canvas = document.getElementById('camera-canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  
+  canvas.toBlob(blob => {
+    const file = new File([blob], "camera-photo.jpg", { type: "image/jpeg" });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    document.getElementById('file-input').files = dataTransfer.files;
+    
+    document.getElementById('preview-image').src = canvas.toDataURL();
+    document.getElementById('preview-container').style.display = 'block';
+    document.getElementById('btn-guardar-imatge').disabled = false;
+    document.getElementById('btn-guardar-imatge').style.opacity = '1';
+    
+    tancarCamera();
+  }, 'image/jpeg');
+}
+
+function tancarCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  document.getElementById('camera-video').style.display = 'none';
+  document.getElementById('camera-controls').style.display = 'none';
+}
+
+// Enviar formulari
+document.getElementById('form-imatge-card').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(this);
+  
+  fetch(`{{ url_for('pagina_personal.pujar_imatge_card') }}`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'same-origin'
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Imatge guardada correctament") }}');
+      location.reload();
+    } else {
+      alert('{{ _("Error") }}: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+});
+
+// Tancar modal amb ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    tancarModalImatge();
+  }
+});
+</script>
+
 
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>

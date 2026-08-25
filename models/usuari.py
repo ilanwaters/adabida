@@ -27,6 +27,13 @@ class Usuari(db.Model, UserMixin):
     nivell_usuari = db.Column(db.String(10), default='blau')  
     data_registre = db.Column(db.DateTime, default=datetime.utcnow) 
     bandera_preferida = db.Column(db.String(10), nullable=True)
+    imatge_card_biografia = db.Column(db.String(255))
+    imatge_card_entrades = db.Column(db.String(255))
+    imatge_card_nova_entrada = db.Column(db.String(255))
+    imatge_card_perfil = db.Column(db.String(255))
+    imatge_card_organitzacions = db.Column(db.String(255))
+    imatge_card_familia = db.Column(db.String(255))
+    imatge_card_conversa = db.Column(db.String(255))
     perfil = db.relationship(
         "PerfilBiografic",
         uselist=False,

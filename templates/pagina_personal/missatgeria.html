@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+div class="contingut-plegable"></div>{% extends "base.html" %}
 
 {% block titol %}{{ _('Missatgeria') }}{% endblock %}
 
@@ -16,22 +16,18 @@
     <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
   </h1>
 </div>
-
-<div class="enllacos-perfil">
-
-  
-<a href="#" onclick="obreModalContactes()" class="enllac-nou-missatge">{{ _('Nou missatge') }}</a>
+<div class="menu-missatgeria">
+  <span class="pestanya-bustia activa" onclick="canviaBustia('rebuts')">{{ _('Rebuts') }}</span>
+  <span class="pestanya-bustia" onclick="canviaBustia('enviats')">{{ _('Enviats') }}</span>
+  <a href="#" onclick="obreModalContactes()" class="pestanya-bustia pestanya-accio">{{ _('+ Nou missatge') }}</a>
 </div>
 
+
 <!-- SECCIÓ MISSATGES -->
-<h3>{{ _('Missatges') }} ({{ missatges|length }})</h3>
+
 
 <div class="contingut-plegable">
-  <!-- Pestanyes rebuts / enviats -->
-  <div class="selector-busties">
-    <span class="pestanya-bustia activa" onclick="canviaBustia('rebuts')">{{ _('Rebuts') }}</span>
-    <span class="pestanya-bustia" onclick="canviaBustia('enviats')">{{ _('Enviats') }}</span>
-  </div>
+  
 
   <!-- Bústia de rebuts -->
   <div id="bustia-rebuts" class="bustia-missatges">
