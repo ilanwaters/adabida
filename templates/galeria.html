@@ -4,6 +4,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/galeria.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -13,22 +14,29 @@
   </div>
 
   <div id="subpestanya-destacades" class="visible">
-    <div class="grid-galeria">
-      {% for img in imatges_destacades %}
-      <div>
+  <div class="grid-galeria">
+    {% for img in imatges_destacades %}
+    <div>
+      {% if img.entrada and img.entrada.usuari %}
+      <a href="{{ url_for('serveis_media.serveix_media', filepath='galeria/' ~ img.data_publicacio.strftime('%Y/%m') ~ '/' ~ img.nom_fitxer) }}"
+         data-lightbox="galeria-destacades"
+         data-title="{% if img.entrada.any_text %}({{ img.entrada.any_text }}) {% endif %}<a href='#' onclick='tancaLightboxIObreModal({{ img.entrada_id }}, &quot;{{ img.entrada.usuari.nom_login }}&quot;); return false;' class='enllac-info'>{{ img.entrada.titol|e }}</a> — <a href='{{ url_for('perfil_public.perfil_public', usuari_login=img.entrada.usuari.nom_login) }}' class='enllac-info'>{{ img.entrada.usuari.nom }} {{ img.entrada.usuari.primer_cognom }}</a>">
         <img
           src="{{ url_for('serveis_media.serveix_media', filepath='galeria/' ~ img.data_publicacio.strftime('%Y/%m') ~ '/' ~ img.nom_fitxer) }}"
           alt="Imatge destacada"
-          class="imatge-galeria"
-          {% if img.entrada and img.entrada.usuari %}
-          onclick="obreModal({{ img.entrada_id }}, '{{ img.entrada.usuari.nom_login }}')">
-          {% else %}
-          onclick="alert('⚠️ Aquesta imatge no té entrada vinculada')">
-          {% endif %}
-      </div>
-      {% endfor %}
+          class="imatge-galeria">
+      </a>
+      {% else %}
+      <img
+        src="{{ url_for('serveis_media.serveix_media', filepath='galeria/' ~ img.data_publicacio.strftime('%Y/%m') ~ '/' ~ img.nom_fitxer) }}"
+        alt="Imatge destacada"
+        class="imatge-galeria"
+        onclick="alert('⚠️ Aquesta imatge no té entrada vinculada')">
+      {% endif %}
     </div>
+    {% endfor %}
   </div>
+</div>
 
   <div id="subpestanya-exposicions" class="ocult">
     <div class="grid-exposicions">
@@ -47,7 +55,18 @@
       {% endfor %}
     </div>
   </div>
-
+<div id="lightbox-overlay" class="ocult">
+  <div class="lightbox-content">
+    <button class="boto" onclick="tancaLightbox()">✖</button>
+    <img id="lightbox-img" src="" alt="Imatge ampliada">
+    <div class="lightbox-peu">
+      <span id="lightbox-any"></span>
+      <a href="#" id="lightbox-titol" class="enllac-info" onclick="return false;"></a>
+      —
+      <a href="#" id="lightbox-autor" class="enllac-info"></a>
+    </div>
+  </div>
+</div>
 {% include "components/modal_entrada.html" %}
 {% endblock %}
 

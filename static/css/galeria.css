@@ -1,16 +1,17 @@
 /* --- Galeria bàsica --- */
 .grid-galeria {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 340px));
+  gap: 24px;
   padding: 20px;
   max-width: 1200px;
   margin: auto;
+  justify-content: center;
 }
 
 .grid-galeria img {
   width: 100%;
-  height: auto;
+  height: 440px;
   object-fit: cover;
   cursor: pointer;
   border: 2px solid #444;
@@ -22,62 +23,6 @@
 .grid-galeria img:hover {
   transform: scale(1.03);
 }
-
-
-/* --- MODAL nova --- */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  position: relative;
-}
-
-.tancar {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 2rem;
-  color: #666;
-  cursor: pointer;
-}
-
-.modal-imatge {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.modal-imatge img {
-  max-width: 100%;
-  max-height: 300px;
-  border-radius: 8px;
-}
-
-.modal-text {
-  text-align: left;
-}
-
-.modal-botons {
-  margin-top: 20px;
-  text-align: right;
-}
-
 
 .imatge-galeria.ampliada {
   transform: scale(2.2);
@@ -102,3 +47,65 @@
   border-radius: 4px;
   max-width: 90%;
 }
+
+
+/* --- Graella d'exposicions (portades) --- */
+.grid-exposicions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.targeta-exposicio {
+  background-color: #d1e4f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.targeta-exposicio:hover {
+  transform: translateY(-4px);
+}
+
+.targeta-exposicio img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+}
+
+.targeta-exposicio .info-item {
+  padding: 8px 16px;
+}
+
+.targeta-exposicio .info-item h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+}
+
+.targeta-exposicio .info-item p {
+  margin: 0 0 12px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.boto-explora {
+  display: inline-block;
+  background-color: #1a4b75;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.boto-explora:hover {
+  background-color: #225e91;
+}
+

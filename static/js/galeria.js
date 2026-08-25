@@ -37,5 +37,11 @@ event.target.classList.add("activa");
 
 }
      
-      
-   
+function tancaLightboxIObreModal(entradaId, usuariLogin) {
+  if (typeof lightbox !== "undefined" && lightbox.end) {
+    lightbox.end();
+  }
+  setTimeout(() => {
+    obreModal(entradaId, usuariLogin);
+  }, 300);
+}

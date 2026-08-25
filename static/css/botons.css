@@ -379,3 +379,41 @@ a.boto_nav {
     flex-direction: column;
   }
 }
+
+/* === Icona d'edició d'imatge (unificat, estàndard visual per canviar fotos/portades) === */
+.icona-editar-imatge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+.icona-editar-imatge--petita {
+  width: 28px;
+  height: 28px;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.icona-editar-imatge--petita i {
+  font-size: 0.8rem;
+}
+.icona-editar-imatge:hover {
+  background: rgba(20, 216, 206, 0.9);
+  transform: scale(1.1);
+}
+
+.icona-editar-imatge i {
+  font-size: 1.1rem;
+}

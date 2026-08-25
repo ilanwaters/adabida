@@ -42,11 +42,25 @@
 
 .imatge-galeria-gran {
   display: block;
-  margin: 0 auto;
-  max-width: 80%;
+  margin: 0 auto 40px;
+  max-width: 550px;
+  width: 100%;
   height: auto;
   border: 4px solid lch(94.9% 2.13 19.25);
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.vista-gran {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 40px;
+  padding: 80px 40px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  background-color: lch(59.35% 1.57 19.29);
 }
 
 .ocult {
@@ -64,16 +78,6 @@
   text-align: center;
 }
 
-.vista-gran,
-.grid-galeria.visible {
-  background-color: lch(59.35% 1.57 19.29);
-  padding: 80px 40px;
-  box-sizing: border-box;
-
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-}
 
 
 .targeta-imatge {
@@ -82,14 +86,7 @@
   align-items: center;
 }
 
-.enllac-info {
-  color: #0055aa;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-left: 8px;
-  font-size: 0.9em;
-}
+
 
 .enllac-info:hover {
   color: #002a66;
