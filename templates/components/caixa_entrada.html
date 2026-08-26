@@ -5,8 +5,10 @@
             <img src="{{ entrada.miniatura }}" class="miniatura" alt="Miniatura">
         </a>
         {% if session.get("usuari_id") and session.usuari_id == entrada.usuari_id %}
-        <button type="button" class="boto-portada" title="{{ _('Canviar imatge de portada') }}"
-                onclick="event.stopPropagation(); obrirSelectorPortada({{ entrada.id }})">⭐</button>
+        <button type="button" class="icona-editar-imatge icona-editar-imatge--petita" title="{{ _('Canviar imatge de portada') }}"
+        onclick="event.stopPropagation(); obrirSelectorPortada({{ entrada.id }})">
+  <i class="fas fa-camera"></i>
+</button>
         <input type="file" id="input-portada-{{ entrada.id }}" accept="image/*" style="display:none;"
                onchange="pujarPortada({{ entrada.id }}, this)">
         {% endif %}

@@ -717,7 +717,7 @@ msgstr "Administrador"
 
 #: templates/exposicio_imatges.html:22
 msgid "Vista gran"
-msgstr "Vista en cuadrícula"
+msgstr "Vista grande"
 
 #: templates/admin/admin_galeria.html:4
 #: templates/familia/familia_distribuidor.html:3
@@ -730,15 +730,15 @@ msgstr "Archivo internacional de memoria oral"
 
 #: templates/galeria.html:11
 msgid "Imatges destacades"
-msgstr "Frase destacada"
+msgstr "Imágenes destacadas"
 
 #: templates/galeria.html:12
 msgid "Exposicions"
-msgstr "Nueva exposición"
+msgstr "Exposiciones"
 
 #: templates/galeria.html:43
 msgid "Explora la col·lecció"
-msgstr "Memoria colectiva"
+msgstr "Explora la colección"
 
 #: templates/home.html:3
 msgid "Home - Adabida"

@@ -35,22 +35,4 @@ def galeria():
                          imatges_destacades=imatges_destacades,
                          exposicions=exposicions)
 
-@galeria_bp.route("/galeria/exposicio/<int:id>")
-def exposicio_imatges(id):
-    exposicio = Exposicio.query.get_or_404(id)
-    relacions = ImatgeExposicio.query.filter_by(exposicio_id=id).all()
-    imatges = []
 
-    for rel in relacions:
-        imatge = ImatgeGaleria.query.get(rel.imatge_id)
-        if imatge:
-           ruta = f"expo/{exposicio.carpeta}/{imatge.nom_fitxer}"
-           url = url_for("serveis_media.serveix_media", filepath=ruta)
-           print("📸 Ruta imatge:", ruta)
-           print("🌐 URL generada:", url)
-           imatges.append({ "url": url })
-
-
-    return render_template("galeria.html",
-                           titol_exposicio=exposicio.titol,
-                           imatges=imatges)

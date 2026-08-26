@@ -232,24 +232,23 @@ def assignar_exposicio():
     imatge_obj = ImatgeGaleria.query.filter_by(nom_fitxer=fitxer).first()
 
     if not imatge_obj:
-        from models import Entrada, ArxiuEntrada
-
-        # Busquem si aquest fitxer està vinculat a alguna entrada
-        entrada = Entrada.query \
-            .join(ArxiuEntrada, Entrada.id == ArxiuEntrada.entrada_id) \
-            .filter(ArxiuEntrada.nom_fitxer == fitxer) \
-            .first()
-
         imatge_obj = ImatgeGaleria(
             nom_fitxer=fitxer,
-            entrada_id=entrada.id if entrada else None,
-            usuari_id=entrada.usuari_id if entrada else None,
             mida="mitjana",
             descripcio="",
             destinacio="exposicio"
         )
         db.session.add(imatge_obj)
-        db.session.commit()
+
+    # Sempre que falti entrada_id, intentem trobar l'entrada d'origen
+    if not imatge_obj.entrada_id:
+        from models import ArxiuAdjunt
+        arxiu = ArxiuAdjunt.query.filter_by(nom_fitxer=fitxer).first()
+        if arxiu and arxiu.entrada:
+            imatge_obj.entrada_id = arxiu.entrada.id
+            imatge_obj.usuari_id = arxiu.entrada.usuari_id
+
+    db.session.commit()
 
     if imatge_obj:
         ja_assignada = ImatgeExposicio.query.filter_by(

@@ -9,14 +9,14 @@
 <main class="contingut-principal">
   <div class="contenidor">
     <nav class="breadcrumb">
-      <a href="{{ url_for('familia.les_meves') }}">{{ _('Famílies') }}</a> ›
-      <a href="{{ url_for('familia.seccio', url=familia.url, seccio='qui-som') }}">{{ familia.nom }}</a> ›
-      <span>{{ _('Records') }}</span>
+     
+      <a href="{{ url_for('familia.seccio', url=familia.url, seccio='qui-som') }}">{{ familia.nom }}</a> 
+     
     </nav>
 
     <div class="capsalera-seccio">
       <h1>{{ _('Records de') }} {{ familia.nom }}</h1>
-      <p class="subtitol">{{ _('Testimonis i històries compartides amb aquest espai familiar') }}</p>
+    
     </div>
 
     <div class="contingut-seccio">

@@ -30,15 +30,15 @@
 <div id="vista-miniatures" class="grid-galeria visible">
   {% for img in imatges %}
     <div class="targeta-imatge">
-      <img
-      
-  src="{{ img.url }}"
-  alt="Imatge exposició"
-  class="imatge-galeria"
- {% if img.entrada_id and img.usuari_login %}
-  onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')"
-{% endif %}>
-
+      {% if img.entrada_id and img.usuari_login %}
+      <a href="{{ img.url }}"
+         data-lightbox="exposicio-imatges"
+         data-title="{% if img.data_creacio %}({{ img.data_creacio }}) {% endif %}<a href='#' onclick='tancaLightboxIObreModal({{ img.entrada_id }}, &quot;{{ img.usuari_login }}&quot;); return false;' class='enllac-info'>{{ img.titol_entrada|e }}</a> — <a href='{{ url_for('perfil_public.perfil_public', usuari_login=img.usuari_login) }}' class='enllac-info'>{{ img.autor_nom }}</a>">
+        <img src="{{ img.url }}" alt="Imatge exposició" class="imatge-galeria">
+      </a>
+      {% else %}
+      <img src="{{ img.url }}" alt="Imatge exposició" class="imatge-galeria">
+      {% endif %}
     </div>
   {% endfor %}
 </div>
@@ -46,33 +46,25 @@
 <div id="vista-gran" class="vista-gran ocult">
   {% for img in imatges %}
     <div class="imatge-gran">
+      {% if img.entrada_id and img.usuari_login %}
+      <a href="{{ img.url }}"
+         data-lightbox="exposicio-imatges"
+         data-title="{% if img.data_creacio %}({{ img.data_creacio }}) {% endif %}<a href='#' onclick='tancaLightboxIObreModal({{ img.entrada_id }}, &quot;{{ img.usuari_login }}&quot;); return false;' class='enllac-info'>{{ img.titol_entrada|e }}</a> — <a href='{{ url_for('perfil_public.perfil_public', usuari_login=img.usuari_login) }}' class='enllac-info'>{{ img.autor_nom }}</a>">
+        <img
+          src="{{ img.url }}"
+          alt="Imatge exposició"
+          class="imatge-galeria-gran">
+      </a>
+      {% else %}
       <img
         src="{{ img.url }}"
         alt="Imatge exposició"
-        class="imatge-galeria-gran"
-        {% if img.entrada_id and img.usuari_login %}
-          onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')"
-        {% endif %}
-      >
-      <p class="llegenda">
-        {% if img.titol_entrada %}
-          <a href="javascript:void(0)" onclick="obreModal({{ img.entrada_id }}, '{{ img.usuari_login }}')" class="enllac-info">
-            {{ img.titol_entrada }}
-          </a>
-          —
-         <a href="{{ url_for('perfil_public.perfil_public', usuari_login=img.usuari_login) }}" class="enllac-info" target="_blank">
-
-            {{ img.autor_nom }}
-          </a>
-          {% if img.data_creacio %}
-            ({{ img.data_creacio }})
-          {% endif %}
-        {% endif %}
-      </p>
+        class="imatge-galeria-gran">
+      {% endif %}
     </div>
   {% endfor %}
 </div>
-
+  
 
 
 
@@ -164,6 +156,16 @@ function canviaVista(vista) {
   }
 }
 
+</script>
+<script>
+function tancaLightboxIObreModal(entradaId, usuariLogin) {
+  if (typeof lightbox !== "undefined" && lightbox.end) {
+    lightbox.end();
+  }
+  setTimeout(() => {
+    obreModal(entradaId, usuariLogin);
+  }, 300);
+}
 </script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 

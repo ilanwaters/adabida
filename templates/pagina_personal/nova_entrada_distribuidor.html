@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ _('Nova entrada') }}{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block contingut %}
+<div class="fila-nom-usuari">
+  <h1 class="nom-complet">
+    {{ _('Nova entrada') }}
+    <a href="{{ url_for('pagina_personal.pagina_personal') }}" class="boto_nav">{{ _('Tornar') }}</a>
+  </h1>
+</div>
+
+<main>
+  <div class="cards-grid">
+
+    <a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" class="card">
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('nova_entrada');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      {% if usuari.imatge_card_nova_entrada %}
+        <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_nova_entrada) }}');">
+          <div class="card-overlay"></div>
+        </div>
+      {% else %}
+        <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/personal.png') }}');">
+          <div class="card-overlay"></div>
+        </div>
+      {% endif %}
+      <div class="card-content">
+        <h3>{{ _('Entrada personal') }}</h3>
+        <p>{{ _('Crea un record o testimoni personal') }}</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('converses.nova_conversa') }}" class="card">
+      <div class="edit-image-icon" onclick="event.preventDefault(); obrirModalImatge('conversa');" title="{{ _('Canviar imatge') }}">
+        <i class="fas fa-camera"></i>
+      </div>
+      {% if usuari.imatge_card_conversa %}
+        <div class="card-image-custom" style="background-image: url('{{ url_for('static', filename='cards_personal/' + usuari.imatge_card_conversa) }}');">
+          <div class="card-overlay"></div>
+        </div>
+      {% else %}
+        <div class="card-image" style="background-image: url('{{ url_for('static', filename='img/adabida2.jpg') }}');">
+          <div class="card-overlay"></div>
+        </div>
+      {% endif %}
+      <div class="card-content">
+        <h3>{{ _('Conversa - Entrevista') }}</h3>
+        <p>{{ _('Registra una entrevista') }}</p>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<!-- Modal canviar imatge card -->
+<div id="modal-imatge-card" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+  <div class="modal-content" style="background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; margin: auto; position: relative; top: 50%; transform: translateY(-50%);">
+    <span class="boto-tancar" onclick="tancarModalImatge()" style="position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</span>
+
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem;">{{ _('Canviar imatge del card') }}</h3>
+
+    <form id="form-imatge-card" enctype="multipart/form-data">
+      <input type="hidden" id="card-type" name="card_type">
+
+      <div style="margin-bottom: 1.5rem;">
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="document.getElementById('file-input').click()"
+                  style="width: 100%; background: #14d8ce; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-upload"></i>
+            {{ _('Pujar des de l\'ordinador') }}
+          </button>
+          <input type="file" id="file-input" name="imatge" accept="image/*" style="display: none;" onchange="previewImatge(this)">
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <button type="button" onclick="activarCamera()"
+                  style="width: 100%; background: #667eea; color: white; padding: 1rem; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fas fa-camera"></i>
+            {{ _('Fer foto amb la càmera') }}
+          </button>
+        </div>
+
+        <div id="preview-container" style="display: none; margin-top: 1rem; text-align: center;">
+          <img id="preview-image" style="max-width: 100%; max-height: 300px; border-radius: 4px;">
+        </div>
+
+        <video id="camera-video" style="display: none; max-width: 100%; border-radius: 4px;" autoplay></video>
+        <canvas id="camera-canvas" style="display: none;"></canvas>
+
+        <div id="camera-controls" style="display: none; margin-top: 1rem; text-align: center;">
+          <button type="button" onclick="capturarFoto()"
+                  style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">
+            <i class="fas fa-camera"></i> {{ _('Capturar') }}
+          </button>
+          <button type="button" onclick="tancarCamera()"
+                  style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+            {{ _('Cancel·lar') }}
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+        <button type="button" onclick="tancarModalImatge()"
+                style="background: #f5f5f5; color: #333; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;">
+          {{ _('Cancel·lar') }}
+        </button>
+        <button type="submit" id="btn-guardar-imatge" disabled
+                style="background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; opacity: 0.5;">
+          {{ _('Guardar imatge') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentStream = null;
+
+function obrirModalImatge(cardType) {
+  document.getElementById('card-type').value = cardType;
+  document.getElementById('modal-imatge-card').style.display = 'block';
+}
+
+function tancarModalImatge() {
+  document.getElementById('modal-imatge-card').style.display = 'none';
+  tancarCamera();
+  document.getElementById('preview-container').style.display = 'none';
+  document.getElementById('btn-guardar-imatge').disabled = true;
+  document.getElementById('btn-guardar-imatge').style.opacity = '0.5';
+  document.getElementById('file-input').value = '';
+}
+
+function previewImatge(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview-image').src = e.target.result;
+      document.getElementById('preview-container').style.display = 'block';
+      document.getElementById('btn-guardar-imatge').disabled = false;
+      document.getElementById('btn-guardar-imatge').style.opacity = '1';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function activarCamera() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      currentStream = stream;
+      const video = document.getElementById('camera-video');
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('camera-controls').style.display = 'block';
+      document.getElementById('preview-container').style.display = 'none';
+    })
+    .catch(err => {
+      alert('{{ _("No s\'ha pogut accedir a la càmera") }}');
+      console.error(err);
+    });
+}
+
+function capturarFoto() {
+  const video = document.getElementById('camera-video');
+  const canvas = document.getElementById('camera-canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+
+  canvas.toBlob(blob => {
+    const file = new File([blob], "camera-photo.jpg", { type: "image/jpeg" });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    document.getElementById('file-input').files = dataTransfer.files;
+
+    document.getElementById('preview-image').src = canvas.toDataURL();
+    document.getElementById('preview-container').style.display = 'block';
+    document.getElementById('btn-guardar-imatge').disabled = false;
+    document.getElementById('btn-guardar-imatge').style.opacity = '1';
+
+    tancarCamera();
+  }, 'image/jpeg');
+}
+
+function tancarCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  document.getElementById('camera-video').style.display = 'none';
+  document.getElementById('camera-controls').style.display = 'none';
+}
+
+document.getElementById('form-imatge-card').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  fetch(`{{ url_for('pagina_personal.pujar_imatge_card') }}`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'same-origin'
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('{{ _("Imatge guardada correctament") }}');
+      location.reload();
+    } else {
+      alert('{{ _("Error") }}: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('{{ _("Error de connexió") }}');
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    tancarModalImatge();
+  }
+});
+</script>
+{% endblock %}
