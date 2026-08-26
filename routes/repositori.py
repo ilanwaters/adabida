@@ -186,7 +186,38 @@ def consulta_repositori():
     args_copia.pop('page', None)
     # Obtenir converses (sense filtres de moment, TODO: afegir filtres)
     if cerca_realitzada:
-        converses_raw = Conversa.query.limit(per_page).all()
+        condicions_conversa = []
+
+        if nom:
+            condicions_conversa.append(Conversa.titol.ilike(f"%{nom}%"))
+
+        if tema:
+            condicions_conversa.append(Conversa.tema.ilike(f"%{tema}%"))
+
+        if ciutat:
+            condicions_conversa.append(Conversa.lloc_municipi.ilike(f"%{ciutat}%"))
+
+        if text:
+            condicions_conversa.append(or_(
+                Conversa.titol.ilike(f"%{text}%"),
+                Conversa.tema.ilike(f"%{text}%"),
+                Conversa.contingut.ilike(f"%{text}%")
+            ))
+
+        if nom_usuari:
+            subquery_conv = Usuari.query.filter(Usuari.nom_login.ilike(f"%{nom_usuari}%")).with_entities(Usuari.id)
+            condicions_conversa.append(Conversa.usuari_id.in_(subquery_conv))
+
+        if pais:
+            condicions_conversa.append(Conversa.lloc_pais.ilike(f"%{pais}%"))
+
+        if condicions_conversa:
+            if strict:
+                converses_raw = Conversa.query.filter(and_(*condicions_conversa)).limit(per_page).all()
+            else:
+                converses_raw = Conversa.query.filter(or_(*condicions_conversa)).limit(per_page).all()
+        else:
+            converses_raw = []
     else:
         converses_raw = []
 

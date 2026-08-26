@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block contingut %}
-  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+<div class="contenidor-repositori">
+
+  <div style="display: flex; align-items: center; gap: 1rem; margin-top: 2rem; margin-bottom: 2rem;">
     <h1 style="margin: 0;">{{ _("Consulta pública de l'arxiu") }}</h1>
     <button type="button" onclick="obrirModalInfo()" class="boto-info" title="{{ _('Informació important sobre els testimonis') }}">
       i
@@ -105,7 +107,7 @@
       <p>{{ _('No hi ha cap entrada disponible amb aquests criteris.') }}</p>
 
     {% endif %}
-
+</div>
 <div class="submenu-login" id="submenu-login">
   <form method="POST" action="{{ url_for('login.login') }}">
     <div class="camp-login">
