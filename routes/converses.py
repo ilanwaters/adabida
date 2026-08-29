@@ -552,22 +552,37 @@ def editar_conversa_adabida(id):
         membres = MembreOrganitzacio.query.filter_by(usuari_id=current_user.id).all()
         for membre in membres:
             organitzacions.append(membre.organitzacio)
-        
+
+        arxius_existents = []
+        if conversa.entrada_id:
+            from models import ArxiuAdjunt
+            arxius_existents = ArxiuAdjunt.query.filter_by(entrada_id=conversa.entrada_id).all()
+
         return render_template('converses/editar_conversa_adabida.html', 
-                             conversa=conversa, organitzacions=organitzacions)
-    
+                             conversa=conversa, organitzacions=organitzacions,
+                             arxius_existents=arxius_existents)
     # POST - Actualitzar
     try:
         conversa.titol = request.form.get('titol', '').strip()
         conversa.tema = request.form.get('tema', '').strip()
         conversa.contingut = request.form.get('contingut', '').strip()
+
+        if conversa.entrada_id:
+            from models import Entrada
+            entrada = Entrada.query.get(conversa.entrada_id)
+            if entrada:
+                entrada.titol = conversa.titol
+                entrada.tema = conversa.tema
+                entrada.contingut = conversa.contingut
         conversa.consentiment_informat = bool(request.form.get('consentiment_informat'))
         conversa.notes_preparacio = request.form.get('notes_preparacio', '').strip()
         conversa.notes_camp = request.form.get('notes_camp', '').strip()
         conversa.observacions_post = request.form.get('observacions_post', '').strip()
-        conversa.lloc_municipi = request.form.get('lloc_municipi', '').strip()
-        conversa.lloc_regio = request.form.get('lloc_regio', '').strip()
-        conversa.lloc_pais = request.form.get('lloc_pais', '').strip()
+        conversa.lloc_institucio = request.form.get('lloc_institucio', '').strip()
+        conversa.lloc_municipi = request.form.get('municipi_lloc', '').strip()
+        conversa.lloc_pais, conversa.lloc_regio = _resol_nom_ubicacio(
+            request.form.get('pais_lloc', ''), request.form.get('regio_lloc', '')
+        )
         durada = request.form.get('durada_minuts', '').strip()
         conversa.durada_minuts = int(durada) if durada else None
         conversa.visible_publicament = bool(request.form.get('visible_publicament'))
@@ -581,7 +596,31 @@ def editar_conversa_adabida(id):
         conversa.organitzacio_id = int(organitzacio_id) if organitzacio_id else None
         
         conversa.updated_at = datetime.utcnow()
-        
+
+        participant = ConversaParticipant.query.filter_by(conversa_id=conversa.id).first()
+        nom_entrevistat = request.form.get('entrevistat_nom', '').strip()
+        if nom_entrevistat:
+            nom_pais_entrevistat, nom_regio_entrevistat = _resol_nom_ubicacio(
+                request.form.get('pais_entrevistat', ''), request.form.get('regio_entrevistat', '')
+            )
+            if not participant:
+                participant = ConversaParticipant(conversa_id=conversa.id, ordre=1)
+                db.session.add(participant)
+
+            participant.nom = nom_entrevistat
+            participant.primer_cognom = request.form.get('entrevistat_cognom1', '').strip()
+            participant.segon_cognom = request.form.get('entrevistat_cognom2', '').strip()
+            participant.lloc_municipi = request.form.get('municipi_entrevistat', '').strip()
+            participant.lloc_regio = nom_regio_entrevistat
+            participant.lloc_pais = nom_pais_entrevistat
+
+            data_naix = request.form.get('entrevistat_data_naixement')
+            if data_naix:
+                try:
+                    participant.data_naixement = datetime.strptime(data_naix, '%Y-%m-%d').date()
+                except ValueError:
+                    pass
+
         db.session.commit()
         flash('Conversa Adabida actualitzada correctament!', 'success')
         return redirect(url_for('pagina_personal.pagina_personal'))
@@ -591,7 +630,79 @@ def editar_conversa_adabida(id):
         current_app.logger.error(f"Error actualitzant conversa Adabida: {e}")
         flash('Error actualitzant la conversa.', 'error')
         return redirect(url_for('converses.editar_conversa_adabida', id=id))
+
+@converses_bp.route('/<int:id>/eliminar_arxiu', methods=['POST'])
+@login_required
+def eliminar_arxiu_conversa(id):
+    """Eliminar un arxiu adjunt d'una conversa Adabida"""
+    conversa = Conversa.query.get_or_404(id)
+
+    if conversa.usuari_id != current_user.id:
+        return jsonify({'error': 'No autoritzat'}), 403
+
+    nom_fitxer = request.json.get('nom_fitxer') if request.is_json else request.form.get('nom_fitxer')
+    if not nom_fitxer:
+        return jsonify({'error': 'Falta nom_fitxer'}), 400
+
+    from models import ArxiuAdjunt
+    arxiu = ArxiuAdjunt.query.filter_by(entrada_id=conversa.entrada_id, nom_fitxer=nom_fitxer).first()
+    if not arxiu:
+        return jsonify({'error': 'Arxiu no trobat'}), 404
+
+    try:
+        for arrel, carpetes, fitxers in os.walk(os.path.join("umberto", "usuaris")):
+            if nom_fitxer in fitxers:
+                os.remove(os.path.join(arrel, nom_fitxer))
+                break
+
+        db.session.delete(arxiu)
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error eliminant arxiu: {e}")
+        return jsonify({'error': 'Error intern'}), 500
     
+@converses_bp.route('/<int:id>/eliminar_adabida', methods=['POST'])
+@login_required
+def eliminar_conversa_adabida(id):
+    """Eliminar una conversa Adabida completa (i la seva entrada vinculada)"""
+    conversa = Conversa.query.get_or_404(id)
+
+    if conversa.usuari_id != current_user.id:
+        flash('No tens permisos per eliminar aquesta conversa.', 'error')
+        return redirect(url_for('pagina_personal.pagina_personal'))
+
+    try:
+        from models import ArxiuAdjunt, Entrada
+
+        if conversa.entrada_id:
+            arxius = ArxiuAdjunt.query.filter_by(entrada_id=conversa.entrada_id).all()
+            for arxiu in arxius:
+                for arrel, carpetes, fitxers in os.walk(os.path.join("umberto", "usuaris")):
+                    if arxiu.nom_fitxer in fitxers:
+                        try:
+                            os.remove(os.path.join(arrel, arxiu.nom_fitxer))
+                        except OSError:
+                            pass
+                        break
+                db.session.delete(arxiu)
+
+            entrada = Entrada.query.get(conversa.entrada_id)
+            if entrada:
+                db.session.delete(entrada)
+
+        db.session.delete(conversa)
+        db.session.commit()
+        flash('Conversa eliminada correctament.', 'success')
+
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error eliminant conversa Adabida: {e}")
+        flash('Error eliminant la conversa.', 'error')
+
+    return redirect(url_for('pagina_personal.pagina_personal'))
+
 @converses_bp.route('/api/conversa/<int:id>')
 def api_conversa(id):
     """Retorna dades conversa en JSON per modal"""
@@ -617,6 +728,8 @@ def api_conversa(id):
         'usuari_id': conversa.usuari_id,
         'usuari_nom': conversa.usuari.nom if conversa.usuari else '',
         'usuari_login': conversa.usuari.nom_login if conversa.usuari else '',
+        'data_creacio': conversa.created_at.strftime('%d/%m/%Y') if conversa.created_at else '',
+        'data_modificacio': conversa.updated_at.strftime('%d/%m/%Y') if conversa.updated_at and conversa.updated_at.date() != conversa.created_at.date() else '',
         'notes_preparacio': conversa.notes_preparacio,
         'notes_camp': conversa.notes_camp,
         'observacions_post': conversa.observacions_post,

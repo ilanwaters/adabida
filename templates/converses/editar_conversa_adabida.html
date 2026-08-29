@@ -142,63 +142,94 @@
     <!-- CONSENTIMENT INFORMAT -->
     <div class="bloc-plegable">
       <h3 class="titol-plegable" onclick="toggleBloc(this)">
-        Consentiment Informat
+        {{ _('Consentiment Informat ') }}
       </h3>
       <div class="contingut-plegable">
         <div id="document-consentiment" style="background: #f9f9f9; padding: 1.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
           <h4 style="text-align: center; margin-bottom: 1rem;">Consentiment Informat</h4>
-          <p><em>El consentiment ja va ser donat en crear l'entrevista.</em></p>
+          <p><em>{{ _("El consentiment ja va ser donat en crear l'entrevista.") }}</em></p>
         </div>
         <div style="margin-top: 1.5rem;">
           <label class="checkbox-etica">
             <input type="checkbox" name="consentiment_informat" id="consentiment_informat" 
                    {{ 'checked' if conversa.consentiment_informat else '' }}>
             <span class="checkmark"></span>
-            La persona entrevistada ha estat informada i ha donat el seu consentiment
+             {{ _('La persona entrevistada ha estat informada i ha donat el seu consentiment') }}
           </label>
         </div>
       </div>
     </div>
+    <!-- ARXIUS EXISTENTS -->
+    {% if arxius_existents %}
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+             
+        {{ _('Arxius adjunts') }}
+    
+      </h3>
+      <div class="contingut-plegable">
+        <div id="arxius-existents-llista" style="display:flex; flex-wrap:wrap; gap:15px;">
+          {% for arxiu in arxius_existents %}
+          <div class="arxiu-existent" data-nom-fitxer="{{ arxiu.nom_fitxer }}" style="border:1px solid #ddd; border-radius:8px; padding:10px; text-align:center; width:160px;">
+            {% if arxiu.tipus_media == 'imatge' %}
+              <img src="{{ url_for('serveis_media.serveix_fitxer', usuari=current_user.nom_login, entrada_id=conversa.entrada_id, nom_fitxer=arxiu.nom_fitxer) }}" style="width:100%; height:100px; object-fit:cover; border-radius:4px;">
+            {% elif arxiu.tipus_media == 'audio' %}
+              <audio controls style="width:100%;" src="{{ url_for('serveis_media.serveix_fitxer', usuari=current_user.nom_login, entrada_id=conversa.entrada_id, nom_fitxer=arxiu.nom_fitxer) }}"></audio>
+            {% elif arxiu.tipus_media == 'video' %}
+              <video controls style="width:100%;" src="{{ url_for('serveis_media.serveix_fitxer', usuari=current_user.nom_login, entrada_id=conversa.entrada_id, nom_fitxer=arxiu.nom_fitxer) }}"></video>
+            {% else %}
+              <div style="padding:20px 0;">📎 {{ arxiu.nom_fitxer }}</div>
+            {% endif %}
+            <button type="button" class="boto-eliminar-arxiu-existent" data-nom-fitxer="{{ arxiu.nom_fitxer }}" style="margin-top:8px; background:#f44336; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
+               {{ _('Eliminar') }}
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
+    
     <!-- TESTIMONI -->
     <div class="bloc-plegable">
       <h3 class="titol-plegable" onclick="toggleBloc(this)">
-        Testimoni
+         {{ _('Testimoni') }}
       </h3>
       <div class="contingut-plegable">
         <label for="titol">Títol</label>
         <input name="titol" id="titol" class="campo-largo" 
                value="{{ conversa.titol if conversa.titol else '' }}" required>
 
-        <label for="tema">Tema</label>
+        <label for="tema"> {{ _('Tema') }}</label>
         <input name="tema" id="tema" class="campo-largo" 
                value="{{ conversa.tema if conversa.tema else '' }}">
 
-        <label for="contingut">Contingut</label>
+        <label for="contingut"> {{ _('Contingut') }}</label>
         <textarea name="contingut" id="contingut" rows="20">{{ conversa.contingut if conversa.contingut else '' }}</textarea>
 
-        <h3>Notes de l'Entrevistador</h3>
+      <h3>{{ _("Notes de l'Entrevistador") }}</h3>
         <label class="checkbox-etica">
           <input type="checkbox" name="notes_metodologiques_publiques" value="1"
                  {{ 'checked' if conversa.notes_metodologiques_publiques else '' }}>
           <span class="checkmark"></span>
-          Fer públiques les notes metodològiques (només visibles per usuaris registrats)
+           {{ _('Fer públiques les notes metodològiques (només visibles per usuaris registrats)') }}
         </label>
         
-        <label for="notes_preparacio">Notes de preparació</label>
+        <label for="notes_preparacio"> {{ _('Notes de preparació') }}</label>
         <textarea name="notes_preparacio" id="notes_preparacio" rows="4">{{ conversa.notes_preparacio if conversa.notes_preparacio else '' }}</textarea>
         
-        <label for="notes_camp">Notes de camp</label>
+        <label for="notes_camp"> {{ _('Notes de camp') }}</label>
         <textarea name="notes_camp" id="notes_camp" rows="4">{{ conversa.notes_camp if conversa.notes_camp else '' }}</textarea>
         
-        <label for="observacions_post">Observacions post-entrevista</label>
+        <label for="observacions_post"> {{ _('Observacions post-entrevista') }}</label>
         <textarea name="observacions_post" id="observacions_post" rows="4">{{ conversa.observacions_post if conversa.observacions_post else '' }}</textarea>
       </div>
     </div>
 
     <div class="botons-final" style="text-align: right; margin-top: 2rem;">
       <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
-        Desar Canvis
+         {{ _('Desar Canvis') }}
       </button>
     </div>
 
@@ -219,12 +250,13 @@
         seleccionaPrimerPais: "Selecciona primer el país"
     };
     
-    // Pre-carregar ubicacions si existeixen
-    {% if participant %}
+  
+        // Pre-carregar ubicacions si existeixen
+    {% if conversa.participants %}
     window.participantData = {
-        pais: "{{ participant.lloc_pais if participant else '' }}",
-        regio: "{{ participant.lloc_regio if participant else '' }}",
-        municipi: "{{ participant.lloc_municipi if participant else '' }}"
+        pais: "{{ conversa.participants[0].lloc_pais or '' }}",
+        regio: "{{ conversa.participants[0].lloc_regio or '' }}",
+        municipi: "{{ conversa.participants[0].lloc_municipi or '' }}"
     };
     {% endif %}
     
@@ -251,5 +283,76 @@ tinymce.init({
     toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help',
     content_css: '{{ url_for("static", filename="css/tinymce-custom.css") }}'
 });
+</script>
+<script>
+    // ... (el que ja hi ha de traduccions, participantData, conversaData) ...
+
+    function preseleccionarUbicacio(prefixCamp, dades) {
+        if (!dades) return;
+        const selectPais = document.querySelector(`[name="pais_${prefixCamp}"]`);
+        const selectRegio = document.querySelector(`[name="regio_${prefixCamp}"]`);
+        const inputMunicipi = document.querySelector(`[name="municipi_${prefixCamp}"]`);
+        if (!selectPais) return;
+
+        function esperaOpcions(select, callback, intents = 40) {
+            if (select.options.length > 1) {
+                callback();
+            } else if (intents > 0) {
+                setTimeout(() => esperaOpcions(select, callback, intents - 1), 100);
+            }
+        }
+
+        esperaOpcions(selectPais, () => {
+            if (!dades.pais) return;
+            const opcioPais = Array.from(selectPais.options).find(o => o.textContent.trim() === dades.pais.trim());
+            if (!opcioPais) return;
+            selectPais.value = opcioPais.value;
+            selectPais.dispatchEvent(new Event('change'));
+
+            if (selectRegio) {
+                esperaOpcions(selectRegio, () => {
+                    if (!dades.regio) return;
+                    const opcioRegio = Array.from(selectRegio.options).find(o => o.textContent.trim() === dades.regio.trim());
+                    if (!opcioRegio) return;
+                    selectRegio.value = opcioRegio.value;
+                    selectRegio.dispatchEvent(new Event('change'));
+
+                    if (inputMunicipi && dades.municipi) {
+                        setTimeout(() => {
+                            inputMunicipi.disabled = false;
+                            inputMunicipi.value = dades.municipi;
+                        }, 300);
+                    }
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        preseleccionarUbicacio('entrevistat', window.participantData);
+        preseleccionarUbicacio('lloc', window.conversaData);
+
+        document.querySelectorAll('.boto-eliminar-arxiu-existent').forEach(function(boto) {
+            boto.addEventListener('click', function() {
+                const nomFitxer = this.dataset.nomFitxer;
+                if (!confirm('{{ _("Segur que vols eliminar aquest arxiu?") }}')) return;
+
+                fetch(`/converses/{{ conversa.id }}/eliminar_arxiu`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nom_fitxer: nomFitxer })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`.arxiu-existent[data-nom-fitxer="${nomFitxer}"]`).remove();
+                    } else {
+                        alert('{{ _("Error eliminant l\'arxiu") }}');
+                    }
+                })
+                .catch(() => alert('{{ _("Error eliminant l\'arxiu") }}'));
+            });
+        });
+    });
 </script>
 {% endblock %}

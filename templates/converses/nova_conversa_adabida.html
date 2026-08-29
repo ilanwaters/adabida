@@ -81,9 +81,14 @@
             
             <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Context de la conversa</h4>
             
-            <div class="fila-camps-conversa">
+                        <div class="fila-camps-conversa">
+              
               <div class="camp-conversa">
-                <label for="durada_minuts">Durada (min):</label>
+                <label for="data_conversa">{{ _("Data de l'entrevista") }}:</label>
+                <input type="date" id="data_conversa" name="data_conversa" required>
+              </div>
+              <div class="camp-conversa">
+                <label for="durada_minuts">{{ _('Durada (min)') }}:</label>
                 <input type="number" id="durada_minuts" name="durada_minuts" min="1" placeholder="45">
               </div>
             </div>

@@ -9,17 +9,21 @@
 
 {% block contingut %}
   
-<div class="fila-nom-usuari">
-  <h1 class="nom-complet">
+<div class="fila-nom-usuari" style="display:flex; justify-content:space-between; align-items:center;">
+  <h1 class="nom-complet" style="margin:0;">
     {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
-    <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
   </h1>
+  <div style="display:flex; gap:10px;">
+    <button type="button" class="boto_nav boto-pestanya-entrades activa" data-pestanya="meves" onclick="canviaPestanyaEntrades('meves')">{{ _('Les meves entrades') }}</button>
+    <button type="button" class="boto_nav boto-pestanya-entrades" data-pestanya="guardades" onclick="canviaPestanyaEntrades('guardades')">{{ _('Entrades guardades') }}</button>
+    <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
+  </div>
 </div>
 <div class="fila-nom-usuari">
-  <h1 class="nom-complet">{{ entrades|length }} {{ _('entrades') }}</h1>
+  <h1 class="nom-complet" id="comptador-entrades">{{ entrades|length }} {{ _('entrades') }}</h1>
 </div>
 
-<section class="arxiu-entrades">
+<section class="arxiu-entrades" id="seccio-meves-entrades">
   {% if entrades %}
   <div class="llista-entrades">
      {% for entrada in entrades %}
@@ -34,7 +38,13 @@
     {% else %}
       <p>{{ _('No hi ha cap entrada enregistrada encara.') }}</p>
     {% endif %}
-  </section>
+</section>
+
+<section class="arxiu-entrades" id="seccio-entrades-guardades" style="display:none;">
+  <div id="llista-guardades">
+    <p>{{ _('Carregant...') }}</p>
+  </div>
+</section>
 <!-- Modals necessaris -->
 {% include "components/modal_entrada.html" %}
 {% include "components/modal_entrada_editar.html" %}
@@ -44,4 +54,42 @@
 <script src="{{ url_for('static', filename='js/perfil.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
+<script>
+   function canviaPestanyaEntrades(nom) {
+    document.querySelectorAll('.boto-pestanya-entrades').forEach(b => b.classList.remove('activa'));
+    document.querySelector(`.boto-pestanya-entrades[data-pestanya="${nom}"]`).classList.add('activa');
+
+    document.getElementById('seccio-meves-entrades').style.display = nom === 'meves' ? '' : 'none';
+    document.getElementById('seccio-entrades-guardades').style.display = nom === 'guardades' ? '' : 'none';
+
+    const comptador = document.getElementById('comptador-entrades');
+    if (nom === 'meves') {
+      comptador.textContent = `{{ entrades|length }} {{ _('entrades') }}`;
+    } else {
+      comptador.textContent = `{{ _('Carregant...') }}`;
+    }
+
+    if (nom === 'guardades' && !window._entradesGuardadesCarregades) {
+      carregaEntradesGuardades('{{ usuari.nom_login }}');
+      window._entradesGuardadesCarregades = true;
+    }
+  }
+
+   function carregaEntradesGuardades(usuariLogin) {
+    fetch(`/api/guardades/${usuariLogin}`)
+      .then(res => {
+        if (!res.ok) throw new Error("No s'ha pogut carregar");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("llista-guardades").innerHTML = html;
+        const num = document.querySelectorAll('#llista-guardades .caixa-entrada, #llista-guardades .caixa-conversa').length;
+        document.getElementById('comptador-entrades').textContent = `${num} {{ _('entrades guardades') }}`;
+      })
+      .catch(() => {
+        document.getElementById("llista-guardades").innerHTML = "<p>{{ _('Error carregant les entrades guardades.') }}</p>";
+        document.getElementById('comptador-entrades').textContent = '';
+      });
+  }
+</script>
 {% endblock %}

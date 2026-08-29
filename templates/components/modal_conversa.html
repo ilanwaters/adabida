@@ -10,12 +10,14 @@
       <h2 id="modal-conversa-titol">—</h2>
 
       <div class="modal-dades">
-        <p class="modal-subtitol">
-          <span id="modal-conversa-tema"></span> <span id="modal-conversa-lloc-data"></span>
+                <p class="modal-subtitol">
+          <span id="modal-conversa-tema"></span>
         </p>
-        <p id="modal-conversa-linia-entrevistat"><strong>Entrevista amb</strong> <span id="modal-conversa-entrevistat-format">—</span></p>
-        <p><strong>Durada:</strong> <span id="modal-conversa-durada">—</span> min</p>
-        <p><strong>Observacions:</strong> <span id="modal-conversa-observacions-generals">—</span></p>
+                        <p id="modal-conversa-linia-entrevistat">
+          <strong>{{ _('Entrevista amb') }}</strong> <span id="modal-conversa-entrevistat-format">—</span><span id="modal-conversa-realitzada-format"></span>
+        </p>
+        <p><strong>{{ _('Durada') }}:</strong> <span id="modal-conversa-durada">—</span> {{ _('min') }}</p>
+        <p><strong>{{ _('Observacions') }}:</strong> <span id="modal-conversa-observacions-generals">—</span></p>
     
       </div>
 
@@ -23,35 +25,50 @@
 
       <div class="bloc-plegable-modal">
         <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
-          L'entrevista<span id="modal-conversa-comptador-media"></span>
+           {{ _("L'entrevista") }}<span id="modal-conversa-comptador-media"></span>
         </h4>
         <div class="contingut-plegable-modal" id="modal-conversa-arxius-media" style="display: none;"></div>
       </div>
 
-      <div class="bloc-plegable-modal" id="modal-conversa-metodologia" style="display: none;">
-        <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
-          Metodologia Adabida
+       <div class="bloc-plegable-modal" id="modal-conversa-metodologia" style="display: none;">
+        <h4 class="titol-plegable-modal" onclick="toggleBlocModalText(this)">
+          {{ _('Notes') }}
         </h4>
         <div class="contingut-plegable-modal" style="display: none;">
-          <p><strong>Notes preparació:</strong> <span id="modal-conversa-notes-prep">—</span></p>
-          <p><strong>Notes camp:</strong> <span id="modal-conversa-notes-camp">—</span></p>
-          <p><strong>Observacions post:</strong> <span id="modal-conversa-obs-post">—</span></p>
+          <p><strong>{{ _('Notes preparació') }}:</strong> <span id="modal-conversa-notes-prep">—</span></p>
+          <p><strong>{{ _('Notes camp') }}:</strong> <span id="modal-conversa-notes-camp">—</span></p>
+          <p><strong>{{ _('Observacions post') }}:</strong> <span id="modal-conversa-obs-post">—</span></p>
         </div>
       </div>
-
     </div>
 
-    <div class="modal-botons">
+
+          <div class="modal-botons">
       <div class="modal-meta-autoria">
-        <strong>Entrevistador:</strong> <span id="modal-conversa-autor">—</span>
+        <strong>{{ _('Entrevistador') }}:</strong> <span id="modal-conversa-autor">—</span><br>
+        <span id="modal-conversa-meta-creacio"></span><br>
+        <span id="modal-conversa-meta-modificacio"></span>
       </div>
+     
       <div class="modal-grup-botons">
-        <button id="boto-guardar-conversa" class="boto_nav" onclick="guardaConversaFavorita()" style="display: none;">Guardar</button>
-        <button id="boto-eliminar-guardada-conversa" class="boto_nav" onclick="eliminaConversaGuardada()" style="display: none;">Eliminar de guardades</button>
-        <button id="boto-editar-conversa" class="boto_nav" style="display: none;">Editar</button>
-        <button class="boto_nav" onclick="tancaModalConversa()">Tancar</button>
+        <a id="boto-editar-conversa" class="boto_nav" href="" style="display: none;">{{ _('Editar') }}</a>
+        <button id="boto-eliminar-conversa" type="button" class="boto_nav" data-id="" style="display: none;" onclick="confirmaEliminacioConversa()">{{ _('Eliminar') }}</button>
+        <button class="boto_nav" onclick="tancaModalConversa()">{{ _('Tancar') }}</button>
       </div>
     </div>
 
   </div>
+<script>
+  window.TRAD_MODAL_CONVERSA = {
+    realitzada: "{{ _('realitzada') }}",
+    a: "{{ _('a') }}",
+    elDia: "{{ _('el dia') }}",
+    creat: "{{ _('Creat') }}",
+    modificat: "{{ _('Modificat') }}",
+    errorCarregant: "{{ _('Error carregant la conversa') }}",
+    confirmaEliminarConversa: "{{ _('Segur que vols eliminar aquesta conversa?') }}",
+    conversaEliminada: "{{ _('Conversa eliminada correctament.') }}",
+    errorEliminantConversa: "{{ _('No s\'ha pogut eliminar') }}"
+  };
+</script>
 </div>

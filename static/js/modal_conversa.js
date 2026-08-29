@@ -1,22 +1,47 @@
+function mostraSiTeValor(idSpan, valor, formatador = (v) => v) {
+    const span = document.getElementById(idSpan);
+    const linia = span.closest('p');
+    if (valor) {
+        span.innerText = formatador(valor);
+        if (linia) linia.style.display = '';
+    } else {
+        if (linia) linia.style.display = 'none';
+    }
+}
+
 function obreModalConversa(conversaId, usuariLogin) {
+    const T = window.TRAD_MODAL_CONVERSA || {};
+
     fetch(`/converses/api/conversa/${conversaId}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById('modal-conversa-titol').innerText = data.titol || '—';
-            document.getElementById('modal-conversa-tema').innerText = data.tema || '—';
-            document.getElementById('modal-conversa-lloc-data').innerText =
-                [data.lloc, data.data_conversa].filter(Boolean).join(' · ');
-            document.getElementById('modal-conversa-durada').innerText = data.durada_minuts || '—';
-            document.getElementById('modal-conversa-contingut').innerText = data.contingut || '—';
+
+            mostraSiTeValor('modal-conversa-tema', data.tema);
+
+            const partsRealitzada = [];
+            if (data.lloc) partsRealitzada.push(`${T.a || 'a'} ${data.lloc}`);
+            if (data.data_conversa) partsRealitzada.push(`${T.elDia || 'el dia'} ${data.data_conversa}`);
+            document.getElementById('modal-conversa-realitzada-format').innerText =
+                partsRealitzada.length ? `, ${T.realitzada || 'realitzada'} ${partsRealitzada.join(', ')}` : '';
+
+            mostraSiTeValor('modal-conversa-durada', data.durada_minuts);
+
+            mostraSiTeValor('modal-conversa-contingut', data.contingut);
+
             const nomComplet = [data.participant_nom, data.participant_cognoms].filter(Boolean).join(' ');
             const detalls = [data.participant_lloc, data.participant_data_naixement].filter(Boolean).join(', ');
             document.getElementById('modal-conversa-entrevistat-format').innerText =
                 detalls ? `${nomComplet} (${detalls})` : nomComplet || '—';
-            document.getElementById('modal-conversa-observacions-generals').innerText = data.observacions_generals || '—';
+
+            mostraSiTeValor('modal-conversa-observacions-generals', data.observacions_generals);
+
             const autorSpan = document.getElementById('modal-conversa-autor');
             if (autorSpan && data.usuari_nom && data.usuari_login) {
                 autorSpan.innerHTML = `<a href="/perfil/${data.usuari_login}" class="enllac-perfil" target="_blank">${data.usuari_nom}</a>`;
             }
+            document.getElementById('modal-conversa-meta-creacio').innerText = data.data_creacio ? `${T.creat || 'Creat'}: ${data.data_creacio}` : '';
+            document.getElementById('modal-conversa-meta-modificacio').innerText = data.data_modificacio ? `${T.modificat || 'Modificat'}: ${data.data_modificacio}` : '';
 
             // Metodologia: bloc plegable, es mostra només si l'entrevistador ho permet i l'usuari està loguejat
             const metodologiaBloc = document.getElementById('modal-conversa-metodologia');
@@ -34,14 +59,16 @@ function obreModalConversa(conversaId, usuariLogin) {
 
             // Botons segons usuari
             const usuariActual = document.body.dataset.usuari;
-            const botoGuardar = document.getElementById('boto-guardar-conversa');
             const botoEditar = document.getElementById('boto-editar-conversa');
+            const botoEliminar = document.getElementById('boto-eliminar-conversa');
 
             if (usuariLogat) {
-                botoGuardar.style.display = 'inline-block';
                 if (usuariActual === data.usuari_login) {
                     botoEditar.style.display = 'inline-block';
-                    botoEditar.onclick = () => window.location.href = `/converses/${data.id}/editar_adabida`;
+                    botoEditar.href = `/converses/${data.id}/editar_adabida`;
+
+                    botoEliminar.style.display = 'inline-block';
+                    botoEliminar.dataset.id = data.id;
                 }
             }
 
@@ -87,10 +114,36 @@ function obreModalConversa(conversaId, usuariLogin) {
         })
         .catch(err => {
             console.error('Error carregant conversa:', err);
-            alert('Error carregant la conversa');
+            alert(T.errorCarregant || 'Error carregant la conversa');
         });
 }
 
 function tancaModalConversa() {
     document.getElementById('modal-conversa').style.display = 'none';
 }
+
+window.toggleBlocModalText = function(element) {
+  const contingut = element.nextElementSibling;
+  const obert = contingut.style.display === "block";
+  contingut.style.display = obert ? "none" : "block";
+};
+
+window.confirmaEliminacioConversa = function() {
+  const T = window.TRAD_MODAL_CONVERSA || {};
+  if (confirm(T.confirmaEliminarConversa || "Segur que vols eliminar aquesta conversa?")) {
+    const id = document.getElementById("boto-eliminar-conversa").dataset.id;
+    fetch(`/converses/${id}/eliminar_adabida`, { method: "POST" })
+      .then(res => {
+        if (res.ok) {
+          alert(T.conversaEliminada || "Conversa eliminada correctament.");
+          window.location.href = "/pagina_personal";
+        } else {
+          res.text().then(msg => {
+            console.error("Error:", msg);
+            alert((T.errorEliminantConversa || "No s'ha pogut eliminar") + ":\n" + msg);
+          });
+        }
+      });
+  }
+};
+
