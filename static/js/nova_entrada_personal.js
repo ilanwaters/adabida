@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
           bloc.dataset.arxiu = numero;
 
           const miniatura = document.createElement("div");
-          miniatura.classList.add("miniatura");
+          miniatura.classList.add("capsa-arxiu-metadades");
 
           if (["jpg", "jpeg", "png", "gif", "webp"].includes(extensio)) {
             const img = document.createElement("img");
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <textarea name="arxiu_descripcio_${numero}" rows="2" placeholder="${window.traduccions.descripcioArxiu || 'Descripció'}"></textarea>
             <input type="text" name="arxiu_referencia_${numero}" placeholder="${window.traduccions.referenciaArxiu || 'Referència'}">
           `;
-          bloc.appendChild(metadades);
+                    bloc.appendChild(metadades);
 
           const botoEliminar = document.createElement("button");
           botoEliminar.type = "button";
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
           });
           bloc.appendChild(botoEliminar);
-          galeria.appendChild(bloc);
+          galeria.prepend(bloc);
           inicialitzarGrupPerNom(`pais_arxiu_${numero}`);
         
           
@@ -466,7 +466,7 @@ function crearBlocAudio(blob, nomFitxer, container, esConversa = false) {
 function crearBlocVideo(blob, nomFitxerProvisional, container, esConversa = false, nomFitxerReal = null) {
   const videoURL = URL.createObjectURL(blob);
   const bloc = document.createElement("div");
-  bloc.classList.add("miniatura");
+  bloc.classList.add("miniatura-video-gravat");
 
   const videoElement = document.createElement("video");
   videoElement.src = videoURL;

@@ -211,7 +211,7 @@ function crearBlocAudio(blob, nomFitxer, container, esConversa = false) {
 function crearBlocVideo(blob, nomFitxer, container, esConversa = false) {
   const videoURL = URL.createObjectURL(blob);
   const bloc = document.createElement("div");
-  bloc.classList.add("miniatura");
+  bloc.classList.add("miniatura-video-gravat");
 
   const videoElement = document.createElement("video");
   videoElement.src = videoURL;

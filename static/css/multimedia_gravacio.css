@@ -1,47 +1,44 @@
-/* === APARTAT ENREGISTRAR === */
-/* === CAMPS FORMULARI === */
+/* === ESTILS COMPARTITS DE GRAVACIÓ/MULTIMÈDIA ===
+   Extret de nova_conversa_adabida.css per reutilitzar-lo
+   a qualsevol formulari que gravi àudio/vídeo o adjunti arxius.
+   NO modificar sense comprovar l'efecte a nova_conversa_adabida.html
+   i a qualsevol altre formulari que inclogui aquest fitxer. */
 
-.fila-camps-conversa {
+/* Botons gravació */
+.botons-gravacio {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
-.camp-conversa {
+.boto-multimedia {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  
-}
-.camp-conversa input[type="date"],
-.camp-conversa input[type="number"] {
-  max-width: 300px;
-}
-.camp-conversa label {
-  margin-bottom: 6px;
+  padding: 14px 24px;
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  background: white;
+  color: #4CAF50;
   font-weight: 600;
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.camp-conversa input,
-.camp-conversa select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.camp-conversa input:focus,
-.camp-conversa select:focus {
-  border-color: #4CAF50;
-  outline: none;
+.boto-multimedia:hover {
+  background: #4CAF50;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
 }
 
+.boto-multimedia:active {
+  transform: translateY(0);
+}
 
-/* Ona gravació */
-#onda-gravacio-conversa {
+/* Ona gravació (conversa) */
+/* Ona gravació (conversa / entrada personal) */
+#onda-gravacio-conversa,
+#onda-gravacio {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,7 +47,8 @@
   margin: 15px 0;
 }
 
-#onda-gravacio-conversa .barra {
+#onda-gravacio-conversa .barra,
+#onda-gravacio .barra {
   width: 5px;
   height: 100%;
   background: #4CAF50;
@@ -59,27 +57,27 @@
   box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
 }
 
-#onda-gravacio-conversa .barra:nth-child(1) { animation-delay: 0s; }
-#onda-gravacio-conversa .barra:nth-child(2) { animation-delay: 0.1s; }
-#onda-gravacio-conversa .barra:nth-child(3) { animation-delay: 0.2s; }
-#onda-gravacio-conversa .barra:nth-child(4) { animation-delay: 0.3s; }
-#onda-gravacio-conversa .barra:nth-child(5) { animation-delay: 0.4s; }
-#onda-gravacio-conversa .barra:nth-child(6) { animation-delay: 0.3s; }
-#onda-gravacio-conversa .barra:nth-child(7) { animation-delay: 0.2s; }
-#onda-gravacio-conversa .barra:nth-child(8) { animation-delay: 0.1s; }
-#onda-gravacio-conversa .barra:nth-child(9) { animation-delay: 0s; }
-#onda-gravacio-conversa .barra:nth-child(10) { animation-delay: 0.1s; }
+#onda-gravacio-conversa .barra:nth-child(1), #onda-gravacio .barra:nth-child(1) { animation-delay: 0s; }
+#onda-gravacio-conversa .barra:nth-child(2), #onda-gravacio .barra:nth-child(2) { animation-delay: 0.1s; }
+#onda-gravacio-conversa .barra:nth-child(3), #onda-gravacio .barra:nth-child(3) { animation-delay: 0.2s; }
+#onda-gravacio-conversa .barra:nth-child(4), #onda-gravacio .barra:nth-child(4) { animation-delay: 0.3s; }
+#onda-gravacio-conversa .barra:nth-child(5), #onda-gravacio .barra:nth-child(5) { animation-delay: 0.4s; }
+#onda-gravacio-conversa .barra:nth-child(6), #onda-gravacio .barra:nth-child(6) { animation-delay: 0.3s; }
+#onda-gravacio-conversa .barra:nth-child(7), #onda-gravacio .barra:nth-child(7) { animation-delay: 0.2s; }
+#onda-gravacio-conversa .barra:nth-child(8), #onda-gravacio .barra:nth-child(8) { animation-delay: 0.1s; }
+#onda-gravacio-conversa .barra:nth-child(9), #onda-gravacio .barra:nth-child(9) { animation-delay: 0s; }
+#onda-gravacio-conversa .barra:nth-child(10), #onda-gravacio .barra:nth-child(10) { animation-delay: 0.1s; }
 
 .onda-oculta {
   display: none !important;
 }
 
 @keyframes onda {
-  0%, 100% { 
+  0%, 100% {
     transform: scaleY(0.3);
     opacity: 0.6;
   }
-  50% { 
+  50% {
     transform: scaleY(1);
     opacity: 1;
   }
@@ -187,6 +185,7 @@
 .info-arxiu-conversa span {
   font-size: 0.85rem;
 }
+
 /* Utilitats */
 .ocult {
   display: none !important;
@@ -210,7 +209,6 @@
   padding: 20px !important;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   #info-arxiu-conversa {
     grid-template-columns: repeat(2, 1fr);
@@ -222,6 +220,7 @@
     grid-template-columns: 1fr;
   }
 }
+
 /* Blocs àudio/vídeo gravats */
 .bloc-audio {
   border: 1px solid #ddd;
@@ -257,7 +256,8 @@
   background: #d32f2f;
 }
 
-.miniatura {
+/* Miniatura del vídeo gravat (NO confondre amb la miniatura d'imatges de galeria) */
+.miniatura-video-gravat {
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 8px;
@@ -266,7 +266,7 @@
   margin-bottom: 15px;
 }
 
-.miniatura video {
+.miniatura-video-gravat video {
   max-width: 100%;
   border-radius: 8px;
   margin: 10px 0;
@@ -274,7 +274,9 @@
 
 /* Grid per àudios/vídeos gravats */
 #llista-audios-conversa,
-#videos-gravats-conversa {
+#videos-gravats-conversa,
+#llista-audios,
+#videos-gravats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -283,14 +285,59 @@
 
 @media (max-width: 768px) {
   #llista-audios-conversa,
-  #videos-gravats-conversa {
+  #videos-gravats-conversa,
+  #llista-audios,
+  #videos-gravats {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
   #llista-audios-conversa,
-  #videos-gravats-conversa {
+  #videos-gravats-conversa,
+  #llista-audios,
+  #videos-gravats {
     grid-template-columns: 1fr;
   }
+}
+
+/* Capsa d'arxiu adjunt amb metadades (nova entrada personal) */
+.capsa-arxiu-metadades {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background: white;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.capsa-arxiu-metadades img,
+.capsa-arxiu-metadades video {
+  max-width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.capsa-arxiu-metadades audio {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.boto-eliminar-arxiu {
+  display: inline-block;
+  margin: 15px auto 0;
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  width: auto;
+}
+
+.boto-eliminar-arxiu:hover {
+  background: #d32f2f;
 }

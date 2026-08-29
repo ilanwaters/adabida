@@ -5,6 +5,7 @@
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/multimedia_gravacio.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_entrada_personal.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tinymce-custom.css') }}">
 {% endblock %}
@@ -141,23 +142,23 @@
 
 
  <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
+ <!-- 📎 Bloc: ARXIUS ADJUNTATS -->
 <div class="bloc-plegable">
   <h3 class="titol-plegable" onclick="toggleBloc(this)">
     {{ _('Adjunta arxiu') }}
   </h3>
   <div class="contingut-plegable">
-    <div class="input-file-custom">
-            <input type="file" id="puja-arxius" name="arxius" multiple style="display: none;">
-      <button type="button" id="btn-adjuntar-arxiu" class="boto_multimedia" onclick="document.getElementById('puja-arxius').click()">
+    <div class="pujar-arxiu-conversa">
+      <input type="file" id="puja-arxius" name="arxius" multiple style="display:none;">
+      <label for="puja-arxius" class="etiqueta-arxiu-conversa">
         {{ _('Adjuntar arxius') }}
-      </button>
-      <small class="text-ajuda">{{ _('Pots afegir tants arxius com vulguis, un per un o diversos alhora.') }}</small>
+      </label>
+      <small class="text-ajuda" style="display:block; margin-top:10px;">{{ _('Pots afegir tants arxius com vulguis, un per un o diversos alhora.') }}</small>
     </div>
     <div id="zona-fitxers" class="zona-fitxers"></div>
     <div id="previsualitzacio-arxius" class="galeria"></div>
   </div>
 </div>
-  <!-- BLOC PLEGABLE: Converses i diàlegs -->
 
   <!-- BLOC PLEGABLE: Converses i diàlegs -->
 <div class="bloc-plegable">
@@ -363,14 +364,27 @@
 {% block scripts %}
 <script>
     
-    window.traduccions = {
+       window.traduccions = {
         seleccionaPais: "{{ _('Selecciona un país') }}",
         seleccionaRegio: "{{ _('Selecciona província') }}",
         seleccionaMunicipi: "{{ _('Selecciona o escriu el teu municipi') }}",
         carregant: "{{ _('Carregant...') }}",
         errorCarregant: "{{ _('Error carregant') }}",
         seleccionaPrimerRegio: "{{ _('Selecciona primer la regió') }}",
-        seleccionaPrimerPais: "{{ _('Selecciona primer el país') }}"
+        seleccionaPrimerPais: "{{ _('Selecciona primer el país') }}",
+        eliminar: "{{ _('Eliminar') }}",
+        eliminar_entrada_confirm: "{{ _('Segur que vols eliminar aquesta entrada?') }}",
+        no_eliminar: "{{ _('No s\'ha pogut eliminar.') }}",
+        permis_microfon: "{{ _('Cal donar permís al micròfon') }}",
+        error_camera: "{{ _('Error accedint a la càmera') }}",
+        error_camera_conversa: "{{ _('Error accedint a la càmera') }}",
+        error_pujar_audio: "{{ _('Error pujant àudio') }}",
+        error_pujar_video: "{{ _('Error pujant vídeo') }}",
+        arxiu_seleccionat: "{{ _('Arxiu seleccionat:') }}",
+        eliminar_arxiu: "{{ _('Eliminar arxiu') }}",
+        audio: "{{ _('àudio') }}",
+        video: "{{ _('vídeo') }}",
+        arxiu: "{{ _('arxiu') }}"
     };
 </script>
 <script src="{{ url_for('static', filename='js/nova_entrada_personal.js') }}"></script>
