@@ -106,17 +106,11 @@ function inicialitzarAutoOmpliment() {
         }
     });
     
-    // Camps de lloc i data
-    const campsLlocData = ['municipi_lloc', 'data_conversa'];
-    campsLlocData.forEach(campId => {
-        const camp = document.getElementById(campId);
-        if (camp) {
-            camp.addEventListener('change', actualitzarLlocDataConsentiment);
-            if (campId === 'municipi_lloc') {
-                camp.addEventListener('input', actualitzarLlocDataConsentiment);
-            }
-        }
-    });
+    // Camp de lloc
+    const campLloc = document.getElementById('municipi_lloc');
+    if (campLloc) {
+        campLloc.addEventListener('input', actualitzarLlocDataConsentiment);
+    }
 }
 
 function actualitzarNomConsentiment() {
@@ -131,19 +125,13 @@ function actualitzarNomConsentiment() {
 
 function actualitzarLlocDataConsentiment() {
     const municipi = document.getElementById('municipi_lloc')?.value || '';
-    const data = document.getElementById('data_conversa')?.value || '';
-    
-    let text = '';
-    if (municipi && data) {
-        const dataFormatada = new Date(data).toLocaleDateString('ca-ES', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        text = `${municipi}, ${dataFormatada}`;
-    } else {
-        text = '___________________________';
-    }
-    
+    const avui = new Date().toLocaleDateString('ca-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    const text = municipi ? `${municipi}, ${avui}` : `___________________________, ${avui}`;
+
     document.getElementById('lloc-data-consentiment').textContent = text;
 }

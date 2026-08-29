@@ -60,6 +60,8 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
     return {
         "id": conversa.id,
         "tipus": "conversa",
+        "usuari_id": conversa.usuari_id,
+        "entrada_id": conversa.entrada_id,
         "participant_nom": participant_nom,
         "tema": conversa.tema,
         "any": any,
@@ -67,7 +69,7 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
         "durada_minuts": conversa.durada_minuts,
         "resum": resum,
         "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
-        "miniatura": "/static/icons/entrevista.svg",
+        "miniatura": Entrada.query.get(conversa.entrada_id).miniatura if conversa.entrada_id else "/static/icons/entrevista.svg",
         "usuari": conversa.usuari
     }
 

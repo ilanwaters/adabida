@@ -92,7 +92,8 @@ def pagina_personal():
 
 
 # Obtenir entrades
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).all()
+    entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
     entrades = []
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
@@ -264,7 +265,9 @@ def entrades():
         return redirect(url_for("login.login"))
 
     # Obtenir entrades
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).all()
+    from models import Conversa
+    entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
     entrades = []
 
     for entrada in entrades_raw:
@@ -408,7 +411,8 @@ def perfil():
     )
 
     # Carregar entrades de l'usuari (copiat de pagina_personal original)
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).order_by(Entrada.data_creacio.desc()).all()
+    entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).order_by(Entrada.data_creacio.desc()).all()
     entrades = []
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
@@ -489,6 +493,8 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
     return {
         "id": conversa.id,
         "tipus": "conversa",
+        "usuari_id": conversa.usuari_id,
+        "entrada_id": conversa.entrada_id,
         "participant_nom": participant_nom,
         "tema": conversa.tema,
         "any": any,
@@ -496,7 +502,7 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
         "durada_minuts": conversa.durada_minuts,
         "resum": resum,
         "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
-        "miniatura": "/static/icons/entrevista.svg",  # Icona genèrica (crea-la després)
+        "miniatura": Entrada.query.get(conversa.entrada_id).miniatura if conversa.entrada_id else "/static/icons/entrevista.svg",
         "usuari": conversa.usuari
     }
 

@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_conversa_adabida.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tinymce-custom.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -19,7 +18,7 @@
 </div>
 
 <main>
-  <form id="formulari-entrada" method="post" enctype="multipart/form-data">
+  <form id="formulari-entrada" method="post" enctype="multipart/form-data" novalidate>
     
     <h2>Entrevista amb: </h2>
         <div class="fila-camps-conversa">
@@ -83,10 +82,6 @@
             <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Context de la conversa</h4>
             
             <div class="fila-camps-conversa">
-              <div class="camp-conversa">
-                <label for="data_conversa">Data conversa:</label>
-                <input type="date" id="data_conversa" name="data_conversa" required>
-              </div>
               <div class="camp-conversa">
                 <label for="durada_minuts">Durada (min):</label>
                 <input type="number" id="durada_minuts" name="durada_minuts" min="1" placeholder="45">
@@ -294,8 +289,8 @@ tinymce.init({
         'searchreplace', 'visualblocks', 'code', 'fullscreen',
         'insertdatetime', 'table', 'help', 'wordcount'
     ],
-    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help',
-    content_css: '{{ url_for("static", filename="css/tinymce-custom.css") }}'
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | removeformat | help'
+    
 });
 </script>
 <script>
@@ -303,25 +298,20 @@ tinymce.init({
 document.getElementById('formulari-entrada').addEventListener('submit', function(e) {
     const campsInvalids = this.querySelectorAll(':invalid');
     
-    if (campsInvalids.length > 0) {
+      if (campsInvalids.length > 0) {
+        e.preventDefault();
         campsInvalids.forEach(camp => {
-            // Trobar el bloc plegable pare
             const bloc = camp.closest('.bloc-plegable');
             if (bloc) {
-                const contingut = bloc.querySelector('.contingut-plegable');
-                const titol = bloc.querySelector('.titol-plegable');
-                
-                // Obrir si està tancat
-                if (contingut && contingut.style.display === 'none') {
-                    contingut.style.display = 'block';
-                    if (titol) titol.classList.add('actiu');
-                }
+                bloc.classList.remove('tancat');
             }
         });
         
-        // Scroll al primer camp invàlid
-        campsInvalids[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        campsInvalids[0].focus();
+        setTimeout(() => {
+            campsInvalids[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            campsInvalids[0].focus();
+        }, 100);
+        return;
     }
     const consentiment = document.getElementById('consentiment_informat');
     if (consentiment && !consentiment.checked) {

@@ -235,15 +235,12 @@ def nova_entrada_personal():
     db.session.commit()
     print(f"💾 Compartició guardada correctament")
 
-    _, any_str, mes_str = extreu_dades_identificador(usuari.identificador_abadia)
     pais = normalitza_pais(usuari.pais_residencia)
-
     avui = datetime.now()
     any = str(avui.year)
     mes = str(avui.month).zfill(2)
     carpeta_temp = os.path.join("umberto", "media", "temp", pais, any, mes, usuari_login)
-
-    carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, usuari_login, "entrades", str(entrada.id))
+    carpeta_final = os.path.join("umberto", "usuaris", pais, any, mes, usuari_login, "entrades", str(entrada.id))
 
     
     metadades_arxius = {}
@@ -449,7 +446,8 @@ def editar_entrada_personal(entrada_id):
         .filter(MembreOrganitzacio.usuari_id == usuari.id)\
         .all()
 
-    _, any_str, mes_str = extreu_dades_identificador(usuari.identificador_abadia)
+    any_str = str(entrada.data_creacio.year)
+    mes_str = str(entrada.data_creacio.month).zfill(2)
     pais = normalitza_pais(usuari.pais_residencia)
 
     perfil = PerfilBiografic.query.filter_by(usuari_id=usuari.id).first()
@@ -653,7 +651,12 @@ def pujar_audio():
     if not entrada_id or not fitxer_audio:
         return jsonify({"error": "Falten dades"}), 400
 
-    _, any_str, mes_str = extreu_dades_identificador(usuari.identificador_abadia)
+    entrada = Entrada.query.get(entrada_id)
+    if not entrada:
+        return jsonify({"error": "Entrada no trobada"}), 404
+
+    any_str = str(entrada.data_creacio.year)
+    mes_str = str(entrada.data_creacio.month).zfill(2)
     pais = normalitza_pais(usuari.pais_residencia)
 
     carpeta_destinacio = os.path.join(
@@ -802,7 +805,8 @@ def canviar_portada(entrada_id):
     if extensio not in ('jpg', 'jpeg', 'png', 'webp'):
         return jsonify(success=False, error="Format d'imatge no vàlid"), 400
 
-    _, any_str, mes_str = extreu_dades_identificador(usuari.identificador_abadia)
+    any_str = str(entrada.data_creacio.year)
+    mes_str = str(entrada.data_creacio.month).zfill(2)
     pais = normalitza_pais(usuari.pais_residencia)
     carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, usuari.nom_login, "entrades", str(entrada.id))
     os.makedirs(carpeta_final, exist_ok=True)

@@ -1,46 +1,57 @@
 <div id="modal-conversa" class="modal" style="display: none;">
-    <div class="modal-content">
-        
-        <div class="modal-imatge">
-            <!-- Futur: aquí aniria imatge o vídeo -->
-        </div>
+  <div class="modal-content">
 
-        <div class="modal-text">
-            <h2 id="modal-conversa-titol">—</h2>
-            
-            <div class="modal-dades">
-                <p><strong>Tema:</strong> <span id="modal-conversa-tema">—</span></p>
-                <p><strong>Entrevistat:</strong> <span id="modal-conversa-participant">—</span></p>
-                <p><strong>Data:</strong> <span id="modal-conversa-data">—</span></p>
-                <p><strong>Lloc:</strong> <span id="modal-conversa-lloc">—</span></p>
-                <p><strong>Durada:</strong> <span id="modal-conversa-durada">—</span> min</p>
-                
-                <h3>Testimoni</h3>
-                <div id="modal-conversa-contingut" class="contingut-formatat">—</div>
-                
-                <div id="modal-conversa-metodologia" style="margin-top: 2rem; display: none;">
-                    <h3>Metodologia Adabida</h3>
-                    <p><strong>Notes preparació:</strong> <span id="modal-conversa-notes-prep">—</span></p>
-                    <p><strong>Notes camp:</strong> <span id="modal-conversa-notes-camp">—</span></p>
-                    <p><strong>Observacions post:</strong> <span id="modal-conversa-obs-post">—</span></p>
-                </div>
-            </div>
-            
-            <p><strong>Entrevistador:</strong> <span id="modal-conversa-autor">—</span></p>
-            
-           <div class="modal-botons">
-                <button id="boto-guardar-conversa" class="boto_nav" onclick="guardaConversaFavorita()" style="display: none;">
-                    Guardar
-                </button>
-                <button id="boto-eliminar-guardada-conversa" class="boto_nav" onclick="eliminaConversaGuardada()" style="display: none;">
-                    Eliminar de guardades
-                </button>
-                <button id="boto-editar-conversa" class="boto_nav" style="display: none;">
-                    Editar
-                </button>
-                <button class="boto_nav" onclick="tancaModalConversa()">Tancar</button>
-            </div>
-        </div>
-        
+    <div class="modal-imatge">
+      <!-- Futur: aquí aniria imatge o vídeo -->
     </div>
+
+    <div class="modal-text">
+
+      <h2 id="modal-conversa-titol">—</h2>
+
+      <div class="modal-dades">
+        <p class="modal-subtitol">
+          <span id="modal-conversa-tema"></span> <span id="modal-conversa-lloc-data"></span>
+        </p>
+        <p id="modal-conversa-linia-entrevistat"><strong>Entrevista amb</strong> <span id="modal-conversa-entrevistat-format">—</span></p>
+        <p><strong>Durada:</strong> <span id="modal-conversa-durada">—</span> min</p>
+        <p><strong>Observacions:</strong> <span id="modal-conversa-observacions-generals">—</span></p>
+    
+      </div>
+
+      <div class="modal-arxius-graella" id="modal-conversa-arxius-imatges"></div>
+
+      <div class="bloc-plegable-modal">
+        <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
+          L'entrevista<span id="modal-conversa-comptador-media"></span>
+        </h4>
+        <div class="contingut-plegable-modal" id="modal-conversa-arxius-media" style="display: none;"></div>
+      </div>
+
+      <div class="bloc-plegable-modal" id="modal-conversa-metodologia" style="display: none;">
+        <h4 class="titol-plegable-modal" onclick="toggleBlocModal(this)">
+          Metodologia Adabida
+        </h4>
+        <div class="contingut-plegable-modal" style="display: none;">
+          <p><strong>Notes preparació:</strong> <span id="modal-conversa-notes-prep">—</span></p>
+          <p><strong>Notes camp:</strong> <span id="modal-conversa-notes-camp">—</span></p>
+          <p><strong>Observacions post:</strong> <span id="modal-conversa-obs-post">—</span></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-botons">
+      <div class="modal-meta-autoria">
+        <strong>Entrevistador:</strong> <span id="modal-conversa-autor">—</span>
+      </div>
+      <div class="modal-grup-botons">
+        <button id="boto-guardar-conversa" class="boto_nav" onclick="guardaConversaFavorita()" style="display: none;">Guardar</button>
+        <button id="boto-eliminar-guardada-conversa" class="boto_nav" onclick="eliminaConversaGuardada()" style="display: none;">Eliminar de guardades</button>
+        <button id="boto-editar-conversa" class="boto_nav" style="display: none;">Editar</button>
+        <button class="boto_nav" onclick="tancaModalConversa()">Tancar</button>
+      </div>
+    </div>
+
+  </div>
 </div>

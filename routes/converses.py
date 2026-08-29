@@ -5,6 +5,7 @@ from datetime import datetime, date
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from models import Pais, Regio
 
 from models import db, Conversa, ConversaParticipant, Organitzacio, MembreOrganitzacio
 
@@ -49,9 +50,7 @@ def nova_conversa():
         )
         
         # Processar data conversa
-        data_str = request.form.get('data_conversa')
-        if data_str:
-            conversa.data_conversa = datetime.strptime(data_str, '%Y-%m-%d').date()
+        conversa.data_conversa = date.today()
         
         # Organització (opcional)
         organitzacio_id = request.form.get('organitzacio_id')
@@ -440,9 +439,8 @@ def nova_conversa_adabida():
             notes_preparacio=request.form.get('notes_preparacio', '').strip(),
             notes_camp=request.form.get('notes_camp', '').strip(),
             observacions_post=request.form.get('observacions_post', '').strip(),
-            lloc_municipi=request.form.get('lloc_municipi', '').strip(),
-            lloc_regio=request.form.get('lloc_regio', '').strip(),
-            lloc_pais=request.form.get('lloc_pais', '').strip(),
+            lloc_institucio=request.form.get('lloc_institucio', '').strip(),
+            lloc_municipi=request.form.get('municipi_lloc', '').strip(),
             durada_minuts=int(request.form.get('durada_minuts') or 0) or None,
             observacions_generals=request.form.get('observacions_generals', '').strip(),
             visible_publicament=bool(request.form.get('visible_publicament')),
@@ -456,6 +454,10 @@ def nova_conversa_adabida():
         organitzacio_id = request.form.get('organitzacio_id')
         if organitzacio_id and organitzacio_id != '':
             conversa.organitzacio_id = int(organitzacio_id)
+
+        conversa.lloc_pais, conversa.lloc_regio = _resol_nom_ubicacio(
+            request.form.get('pais_lloc', ''), request.form.get('regio_lloc', '')
+        )
         
         db.session.add(conversa)
         db.session.flush()
@@ -463,14 +465,17 @@ def nova_conversa_adabida():
         # 3. PARTICIPANT
         nom_entrevistat = request.form.get('entrevistat_nom', '').strip()
         if nom_entrevistat:
+            nom_pais_entrevistat, nom_regio_entrevistat = _resol_nom_ubicacio(
+                request.form.get('pais_entrevistat', ''), request.form.get('regio_entrevistat', '')
+            )
             participant = ConversaParticipant(
                 conversa_id=conversa.id,
                 nom=nom_entrevistat,
                 primer_cognom=request.form.get('entrevistat_cognom1', '').strip(),
                 segon_cognom=request.form.get('entrevistat_cognom2', '').strip(),
-                lloc_municipi=request.form.get('entrevistat_municipi', '').strip(),
-                lloc_regio=request.form.get('entrevistat_regio', '').strip(),
-                lloc_pais=request.form.get('entrevistat_pais', '').strip(),
+                lloc_municipi=request.form.get('municipi_entrevistat', '').strip(),
+                lloc_regio=nom_regio_entrevistat,
+                lloc_pais=nom_pais_entrevistat,
                 ordre=1
             )
             
@@ -484,18 +489,21 @@ def nova_conversa_adabida():
             db.session.add(participant)
         
         # 4. PROCESSAR ARXIUS
-        _, any_str, mes_str = extreu_dades_identificador(current_user.identificador_abadia)
+        avui = datetime.now()
+        any_str = str(avui.year)
+        mes_str = str(avui.month).zfill(2)
         pais = normalitza_pais(current_user.pais_residencia)
-        
+
         carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, 
-                                      current_user.nom_login, "entrades", str(entrada.id))
+                                    current_user.nom_login, "entrades", str(entrada.id))
         os.makedirs(carpeta_final, exist_ok=True)
         os.makedirs(os.path.join(carpeta_final, "mini"), exist_ok=True)
         
         audios = request.form.getlist("audios_conversa[]")
         videos = request.form.getlist("videos_conversa[]")
+        arxius = request.form.getlist("arxius_conversa[]")
         
-        for nom_fitxer in audios + videos:
+        for nom_fitxer in audios + videos + arxius:
             carpeta_temp = os.path.join("umberto", "media", "temp", pais, any_str, mes_str, current_user.nom_login)
             ruta_origen = os.path.join(carpeta_temp, nom_fitxer)
             ruta_desti = os.path.join(carpeta_final, nom_fitxer)
@@ -503,11 +511,18 @@ def nova_conversa_adabida():
             if os.path.exists(ruta_origen):
                 shutil.move(ruta_origen, ruta_desti)
                 
-                tipus_media = 'video' if nom_fitxer in videos else 'audio'
+                if nom_fitxer in videos:
+                    tipus_media = 'video'
+                elif nom_fitxer in audios:
+                    tipus_media = 'audio'
+                else:
+                    extensio = nom_fitxer.rsplit('.', 1)[-1].lower() if '.' in nom_fitxer else ''
+                    tipus_media = 'imatge' if extensio in ('jpg', 'jpeg', 'png', 'webp', 'gif') else 'document'
+                
                 nou_arxiu = ArxiuAdjunt(
                     entrada_id=entrada.id,
                     nom_fitxer=nom_fitxer,
-                    tipus='webm',
+                    tipus=nom_fitxer.rsplit('.', 1)[-1].lower() if '.' in nom_fitxer else 'webm',
                     tipus_media=tipus_media
                 )
                 db.session.add(nou_arxiu)
@@ -593,8 +608,12 @@ def api_conversa(id):
         'contingut': conversa.contingut,
         'data_conversa': conversa.data_conversa.strftime('%d/%m/%Y') if conversa.data_conversa else '',
         'durada_minuts': conversa.durada_minuts,
-        'lloc': f"{conversa.lloc_municipi}, {conversa.lloc_regio}, {conversa.lloc_pais}".strip(', '),
+        'lloc': ', '.join(filter(None, [conversa.lloc_institucio, conversa.lloc_municipi, conversa.lloc_regio, conversa.lloc_pais])),
+        'observacions_generals': conversa.observacions_generals,
         'participant_nom': participant.nom if participant else '',
+        'participant_cognoms': f"{participant.primer_cognom or ''} {participant.segon_cognom or ''}".strip() if participant else '',
+        'participant_lloc': ', '.join(filter(None, [participant.lloc_municipi, participant.lloc_regio, participant.lloc_pais])) if participant else '',
+        'participant_data_naixement': participant.data_naixement.strftime('%d/%m/%Y') if participant and participant.data_naixement else '',
         'usuari_id': conversa.usuari_id,
         'usuari_nom': conversa.usuari.nom if conversa.usuari else '',
         'usuari_login': conversa.usuari.nom_login if conversa.usuari else '',
@@ -602,7 +621,37 @@ def api_conversa(id):
         'notes_camp': conversa.notes_camp,
         'observacions_post': conversa.observacions_post,
         'visible_publicament': conversa.visible_publicament,
-        'notes_metodologiques_publiques': conversa.notes_metodologiques_publiques
+        'notes_metodologiques_publiques': conversa.notes_metodologiques_publiques,
+        'entrada_id': conversa.entrada_id,
     }
-    
+
+    arxius = []
+    if conversa.entrada_id:
+        from models import ArxiuAdjunt
+        for a in ArxiuAdjunt.query.filter_by(entrada_id=conversa.entrada_id).all():
+            arxius.append({
+                'nom_fitxer': a.nom_fitxer,
+                'tipus_media': a.tipus_media
+            })
+    data['arxius'] = arxius
+
     return jsonify(data)
+
+def _resol_nom_ubicacio(pais_id_str, regio_id_str):
+    """Resol els IDs numèrics dels selects de país/regió als seus noms."""
+    nom_pais = ''
+    nom_regio = ''
+
+    if pais_id_str and pais_id_str.isdigit():
+        pais = Pais.query.get(int(pais_id_str))
+        nom_pais = pais.obtenir_nom('ca') if pais else ''
+    elif pais_id_str:
+        nom_pais = pais_id_str
+
+    if regio_id_str and regio_id_str.isdigit():
+        regio = Regio.query.get(int(regio_id_str))
+        nom_regio = regio.nom if regio else ''
+    elif regio_id_str:
+        nom_regio = regio_id_str
+
+    return nom_pais, nom_regio

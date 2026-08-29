@@ -35,6 +35,8 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
     return {
         "id": conversa.id,
         "tipus": "conversa",
+        "usuari_id": conversa.usuari_id,
+        "entrada_id": conversa.entrada_id,
         "participant_nom": participant_nom,
         "tema": conversa.tema,
         "any": any,
@@ -43,7 +45,7 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
         "resum": resum,
         "data": conversa.data_conversa.strftime("%d/%m/%Y") if conversa.data_conversa else conversa.created_at.strftime("%d/%m/%Y"),
         "data_ordenacio": conversa.data_conversa or conversa.created_at,
-        "miniatura": "/static/icons/entrevista.svg",
+        "miniatura": Entrada.query.get(conversa.entrada_id).miniatura if conversa.entrada_id else "/static/icons/entrevista.svg",
         "usuari": conversa.usuari
     }
 
@@ -97,7 +99,8 @@ def consulta_repositori():
         page = request.args.get("page", 1, type=int)
         per_page = 10
 
-        query_base = Entrada.query
+        entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
+        query_base = Entrada.query.filter(~Entrada.id.in_(entrada_ids_amb_conversa))
 
         if strict:
             query = query_base.filter(and_(*condicions))
