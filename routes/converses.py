@@ -501,23 +501,15 @@ def nova_conversa_adabida():
         
         audios = request.form.getlist("audios_conversa[]")
         videos = request.form.getlist("videos_conversa[]")
-        arxius = request.form.getlist("arxius_conversa[]")
         
-        for nom_fitxer in audios + videos + arxius:
+        for nom_fitxer in audios + videos:
             carpeta_temp = os.path.join("umberto", "media", "temp", pais, any_str, mes_str, current_user.nom_login)
             ruta_origen = os.path.join(carpeta_temp, nom_fitxer)
             ruta_desti = os.path.join(carpeta_final, nom_fitxer)
             
             if os.path.exists(ruta_origen):
                 shutil.move(ruta_origen, ruta_desti)
-                
-                if nom_fitxer in videos:
-                    tipus_media = 'video'
-                elif nom_fitxer in audios:
-                    tipus_media = 'audio'
-                else:
-                    extensio = nom_fitxer.rsplit('.', 1)[-1].lower() if '.' in nom_fitxer else ''
-                    tipus_media = 'imatge' if extensio in ('jpg', 'jpeg', 'png', 'webp', 'gif') else 'document'
+                tipus_media = 'video' if nom_fitxer in videos else 'audio'
                 
                 nou_arxiu = ArxiuAdjunt(
                     entrada_id=entrada.id,
@@ -526,6 +518,33 @@ def nova_conversa_adabida():
                     tipus_media=tipus_media
                 )
                 db.session.add(nou_arxiu)
+
+        # Arxius amb metadades (imatges/documents adjuntats amb títol/any/descripció/referència)
+        i = 0
+        while f"arxiu_conversa_fitxer_{i}" in request.form:
+            nom_fitxer = request.form.get(f"arxiu_conversa_fitxer_{i}", "").strip()
+            if nom_fitxer:
+                carpeta_temp = os.path.join("umberto", "media", "temp", pais, any_str, mes_str, current_user.nom_login)
+                ruta_origen = os.path.join(carpeta_temp, nom_fitxer)
+                ruta_desti = os.path.join(carpeta_final, nom_fitxer)
+
+                if os.path.exists(ruta_origen):
+                    shutil.move(ruta_origen, ruta_desti)
+                    extensio = nom_fitxer.rsplit('.', 1)[-1].lower() if '.' in nom_fitxer else ''
+                    tipus_media = 'imatge' if extensio in ('jpg', 'jpeg', 'png', 'webp', 'gif') else 'document'
+
+                    nou_arxiu = ArxiuAdjunt(
+                        entrada_id=entrada.id,
+                        nom_fitxer=nom_fitxer,
+                        tipus=extensio or 'desconegut',
+                        tipus_media=tipus_media,
+                        titol=request.form.get(f"arxiu_conversa_titol_{i}", "").strip(),
+                        any_arxiu=request.form.get(f"arxiu_conversa_any_{i}", "").strip(),
+                        descripcio=request.form.get(f"arxiu_conversa_descripcio_{i}", "").strip(),
+                        referencia=request.form.get(f"arxiu_conversa_referencia_{i}", "").strip()
+                    )
+                    db.session.add(nou_arxiu)
+            i += 1
         
         db.session.commit()
         flash('Conversa Adabida creada correctament!', 'success')

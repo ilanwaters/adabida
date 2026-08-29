@@ -199,10 +199,23 @@
         </div>
         <video id="previsualitzacio-video-conversa" class="ocult" autoplay muted></video>
         <div id="videos-gravats-conversa"></div>
-        
-        
-        
-  
+        </div>
+    </div>
+
+    <!-- ADJUNTAR ARXIUS -->
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Adjuntar arxius') }}
+      </h3>
+      <div class="contingut-plegable">
+        <div class="pujar-arxiu-conversa">
+          <input type="file" id="puja-arxius-conversa" name="arxius" multiple style="display:none;">
+          <label for="puja-arxius-conversa" class="etiqueta-arxiu-conversa">
+            {{ _('Adjuntar arxius') }}
+          </label>
+          <small class="text-ajuda" style="display:block; margin-top:10px;">{{ _('Pots afegir tants arxius com vulguis, un per un o diversos alhora.') }}</small>
+        </div>
+        <div id="previsualitzacio-arxius-conversa" class="galeria"></div>
       </div>
     </div>
 
@@ -221,18 +234,7 @@
         <label for="contingut">Contingut</label>
         <textarea name="contingut" id="contingut" rows="20"></textarea>
 
-      <h3>
-        Afegir Arxiu (documents,imatges,)
-      </h3>
-      <div class="pujar-arxiu-conversa">
-          <input type="file" id="arxiu_conversa" name="arxiu_conversa[]" multiple
-       accept="audio/*,video/*,image/*,application/pdf,.doc,.docx,.txt">
-          <label for="arxiu_conversa" class="etiqueta-arxiu-conversa">
-             Seleccionar arxiu
-          </label>
-        <div id="info-arxiu-conversa" class="info-arxiu-conversa"></div>
-        </div>
-   
+      
       <div>
 
   

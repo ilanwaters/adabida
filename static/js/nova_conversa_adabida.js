@@ -293,6 +293,95 @@ function pujarArxiuConversa(file, id, arxiuDiv) {
       if (estat) { estat.textContent = "Error pujant"; estat.style.color = "red"; }
     });
 }
+let numeroArxiuConversa = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const inputArxiusConversa = document.getElementById("puja-arxius-conversa");
+  if (inputArxiusConversa) {
+    inputArxiusConversa.addEventListener("change", function (e) {
+      const arxius = e.target.files;
+      const galeria = document.getElementById("previsualitzacio-arxius-conversa");
+
+      for (let i = 0; i < arxius.length; i++) {
+        const arxiu = arxius[i];
+        const formData = new FormData();
+        formData.append("arxiu", arxiu);
+
+        fetch("/pujar_arxiu_temp", { method: "POST", body: formData })
+          .then(res => res.json())
+          .then(data => {
+            if (!data.success) {
+              alert("Error pujant arxiu");
+              return;
+            }
+
+            const numero = numeroArxiuConversa++;
+            const extensio = arxiu.name.split('.').pop().toLowerCase();
+
+            const bloc = document.createElement("div");
+            bloc.classList.add("capsa-arxiu-metadades");
+            bloc.dataset.arxiu = numero;
+
+            if (["jpg", "jpeg", "png", "gif", "webp"].includes(extensio)) {
+              const img = document.createElement("img");
+              img.src = URL.createObjectURL(arxiu);
+              img.alt = arxiu.name;
+              bloc.appendChild(img);
+            } else if (extensio === "webm") {
+              if (data.tipus === "video") {
+                const video = document.createElement("video");
+                video.controls = true;
+                video.src = data.url;
+                bloc.appendChild(video);
+              } else if (data.tipus === "audio") {
+                const audio = document.createElement("audio");
+                audio.controls = true;
+                audio.src = data.url;
+                bloc.appendChild(audio);
+              }
+            } else {
+              const icona = document.createElement("img");
+              icona.src = `/static/icons/${extensio}.png`;
+              icona.alt = extensio;
+              icona.style.width = "48px";
+              bloc.appendChild(icona);
+            }
+
+            const fitxerHidden = document.createElement("input");
+            fitxerHidden.type = "hidden";
+            fitxerHidden.name = `arxiu_conversa_fitxer_${numero}`;
+            fitxerHidden.value = data.nom_fitxer;
+            bloc.appendChild(fitxerHidden);
+
+            const metadades = document.createElement("div");
+            metadades.innerHTML = `
+              <input type="text" name="arxiu_conversa_titol_${numero}" placeholder="Títol" class="campo-largo">
+              <input type="text" name="arxiu_conversa_any_${numero}" placeholder="Any" class="campo-largo">
+              <textarea name="arxiu_conversa_descripcio_${numero}" rows="2" placeholder="Descripció" class="campo-largo"></textarea>
+              <input type="text" name="arxiu_conversa_referencia_${numero}" placeholder="Referència" class="campo-largo">
+            `;
+            bloc.appendChild(metadades);
+
+            const botoEliminar = document.createElement("button");
+            botoEliminar.type = "button";
+            botoEliminar.textContent = "Eliminar";
+            botoEliminar.classList.add("boto-eliminar-arxiu");
+            botoEliminar.addEventListener("click", () => {
+              bloc.remove();
+              fetch("/eliminar_fitxer_temporal", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nom_fitxer: data.nom_fitxer })
+              });
+            });
+            bloc.appendChild(botoEliminar);
+            galeria.prepend(bloc);
+          })
+          .catch(err => console.error("Error en pujar arxiu:", err));
+      }
+    });
+  }
+});
 // === FUNCIONS GLOBALS ===
 window.eliminarArxiuConversa = function(id) {
   arxiusSeleccionats = arxiusSeleccionats.filter(a => a.id !== id);

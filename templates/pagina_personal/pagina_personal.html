@@ -228,28 +228,7 @@
   });
 </script>
 
-<script>
-  function carregaEntradesGuardades(usuariLogin) {
-    fetch(`/api/guardades/${usuariLogin}`)
-      .then(res => {
-        if (!res.ok) throw new Error("No s'ha pogut carregar");
-        return res.text();
-      })
-      .then(html => {
-        const cont = document.getElementById("llista-guardades");
-        cont.innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById("llista-guardades").innerHTML = "<p>Error carregant les entrades guardades.</p>";
-      });
-  }
-</script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    carregaEntradesGuardades("{{ session['usuari'] }}");
-  });
-</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
