@@ -50,7 +50,9 @@
         <span id="modal-conversa-meta-modificacio"></span>
       </div>
      
-      <div class="modal-grup-botons">
+      <div class="modal-grup-botons">              
+        <button id="boto-guardar-conversa" class="boto_nav" onclick="guardaConversaFavorita()" style="display: none;">{{ _('Guardar') }}</button>
+        <button id="boto-eliminar-guardada-conversa" class="boto_nav" onclick="eliminaConversaGuardada()" style="display: none;">{{ _('Eliminar de guardades') }}</button>
         <a id="boto-editar-conversa" class="boto_nav" href="" style="display: none;">{{ _('Editar') }}</a>
         <button id="boto-eliminar-conversa" type="button" class="boto_nav" data-id="" style="display: none;" onclick="confirmaEliminacioConversa()">{{ _('Eliminar') }}</button>
         <button class="boto_nav" onclick="tancaModalConversa()">{{ _('Tancar') }}</button>

@@ -332,7 +332,7 @@ function eliminaEntradaGuardada() {
         document.getElementById("modal-entrada").style.display = "none";
         // Opcional: tornar a carregar la llista de guardades
         if (typeof carregaEntradesGuardades === "function") {
-          carregaEntradesGuardades("{{ session['usuari'] }}");
+          carregaEntradesGuardades(document.body.dataset.usuari);
         }
       } else {
         alert("⚠️ No s’ha pogut eliminar.");

@@ -82,7 +82,7 @@
         return res.text();
       })
       .then(html => {
-        document.getElementById("llista-guardades").innerHTML = html;
+        document.getElementById("llista-guardades").innerHTML = `<div class="llista-entrades">${html}</div>`;
         const num = document.querySelectorAll('#llista-guardades .caixa-entrada, #llista-guardades .caixa-conversa').length;
         document.getElementById('comptador-entrades').textContent = `${num} {{ _('entrades guardades') }}`;
       })

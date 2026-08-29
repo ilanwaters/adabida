@@ -726,6 +726,13 @@ def eliminar_conversa_adabida(id):
 def api_conversa(id):
     """Retorna dades conversa en JSON per modal"""
     conversa = Conversa.query.get_or_404(id)
+
+    from models import EntradaGuardada
+    ja_guardada = False
+    if current_user.is_authenticated and conversa.entrada_id:
+        ja_guardada = EntradaGuardada.query.filter_by(
+            usuari_id=current_user.id, entrada_id=conversa.entrada_id
+        ).first() is not None
     
     # Obtenir primer participant
     participant = ConversaParticipant.query.filter_by(conversa_id=id).first()
@@ -755,6 +762,7 @@ def api_conversa(id):
         'visible_publicament': conversa.visible_publicament,
         'notes_metodologiques_publiques': conversa.notes_metodologiques_publiques,
         'entrada_id': conversa.entrada_id,
+        'ja_guardada': ja_guardada,
     }
 
     arxius = []

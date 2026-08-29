@@ -59,10 +59,29 @@ function obreModalConversa(conversaId, usuariLogin) {
 
             // Botons segons usuari
             const usuariActual = document.body.dataset.usuari;
+            const botoGuardar = document.getElementById('boto-guardar-conversa');
+            const botoEliminarGuardada = document.getElementById('boto-eliminar-guardada-conversa');
             const botoEditar = document.getElementById('boto-editar-conversa');
             const botoEliminar = document.getElementById('boto-eliminar-conversa');
 
+            botoGuardar.disabled = false;
+            botoGuardar.textContent = 'Guardar';
+
             if (usuariLogat) {
+                if (usuariActual !== data.usuari_login) {
+                    botoGuardar.dataset.entradaId = data.entrada_id;
+                    if (data.ja_guardada) {
+                        botoGuardar.style.display = 'none';
+                        botoEliminarGuardada.style.display = 'inline-block';
+                        botoEliminarGuardada.dataset.entradaId = data.entrada_id;
+                    } else {
+                        botoGuardar.style.display = 'inline-block';
+                        botoEliminarGuardada.style.display = 'none';
+                    }
+                } else {
+                    botoGuardar.style.display = 'none';
+                    botoEliminarGuardada.style.display = 'none';
+                }
                 if (usuariActual === data.usuari_login) {
                     botoEditar.style.display = 'inline-block';
                     botoEditar.href = `/converses/${data.id}/editar_adabida`;
@@ -147,3 +166,35 @@ window.confirmaEliminacioConversa = function() {
   }
 };
 
+window.guardaConversaFavorita = function() {
+  const boto = document.getElementById('boto-guardar-conversa');
+  const entradaId = boto.dataset.entradaId;
+
+  fetch(`/api/guardar_entrada/${entradaId}`, { method: "POST" })
+    .then(res => {
+      if (res.ok) {
+        alert("✅ Entrada guardada com a favorit!");
+        boto.disabled = true;
+        boto.textContent = "✅ Guardada";
+      } else {
+        alert("❌ No s'ha pogut guardar.");
+      }
+    });
+};
+
+window.eliminaConversaGuardada = function() {
+  const entradaId = document.getElementById('boto-eliminar-guardada-conversa').dataset.entradaId;
+
+  fetch(`/api/eliminar_entrada_guardada/${entradaId}`, { method: "POST" })
+    .then(res => {
+      if (res.ok) {
+        alert("❌ Entrada eliminada dels guardats.");
+        tancaModalConversa();
+        if (typeof carregaEntradesGuardades === "function") {
+          carregaEntradesGuardades(document.body.dataset.usuari);
+        }
+      } else {
+        alert("⚠️ No s'ha pogut eliminar.");
+      }
+    });
+};

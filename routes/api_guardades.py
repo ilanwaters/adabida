@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request, session, abort, render_template, url_for
-from models import db, Usuari, EntradaGuardada, Entrada
+from models import db, Usuari, EntradaGuardada, Entrada, Conversa
+from routes.inici import preparar_conversa_per_vista
+
 
 api_guardades_bp = Blueprint("api_guardades", __name__)
 
@@ -19,16 +21,17 @@ def llista_entrades_guardades(usuari_login):
         if not entrada:
             print(f"⚠️ Entrada amb ID {g.entrada_id} no trobada")
             continue
-        print(f"✔️ Entrada trobada: {entrada.titol}")
-        entrada.usuari_login = entrada.usuari.nom_login
 
-        entrada.miniatura = url_for(
-            "serveis_media.serveix_fitxer",
-            usuari=entrada.usuari.nom_login,
-            entrada_id=entrada.id,
-            nom_fitxer=entrada.nom_fitxer
-        )
-        entrades.append(entrada)
+        conversa = Conversa.query.filter_by(entrada_id=entrada.id).first()
+        if conversa:
+            item = preparar_conversa_per_vista(conversa, entrada.usuari.nom_login)
+            item["usuari_login"] = entrada.usuari.nom_login
+        else:
+            entrada.usuari_login = entrada.usuari.nom_login
+            entrada.tipus = "entrada"
+            item = entrada
+
+        entrades.append(item)
 
     return render_template("fragments/targetes_guardades.html", entrades=entrades)
 

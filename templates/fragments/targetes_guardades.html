@@ -1,3 +1,8 @@
 {% for entrada in entrades %}
-  {% include 'components/caixa_entrada.html' %}
+  {% if entrada.tipus == 'conversa' %}
+    {% set conversa = entrada %}
+    {% include "components/caixa_conversa.html" %}
+  {% else %}
+    {% include "components/caixa_entrada.html" %}
+  {% endif %}
 {% endfor %}
