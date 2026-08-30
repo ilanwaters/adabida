@@ -9,6 +9,8 @@ from models import Exposicio
 coincidencies = defaultdict(int)
 
 def neteja_text(text):
+    if not text:
+        return ""
     text = text.lower().replace(" ", "")
     text = unicodedata.normalize("NFD", text).encode("ascii", "ignore").decode("utf-8")
     return text
