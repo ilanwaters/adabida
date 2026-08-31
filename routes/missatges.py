@@ -16,7 +16,10 @@ def enviar():
         flash("Missatge incomplet.", "error")
         return redirect(request.referrer)
 
-    receptor = Usuari.query.get_or_404(receptor_id)
+    if receptor_id.isdigit():
+        receptor = Usuari.query.get_or_404(int(receptor_id))
+    else:
+        receptor = Usuari.query.filter_by(nom_login=receptor_id).first_or_404()
     if not receptor.rebre_missatges:
         flash("Aquest usuari no accepta missatges.", "error")
         return redirect(request.referrer)

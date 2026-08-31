@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block titol %}{{ usuari.nom_complet }}{% endblock %}
-
 {% block css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil_public.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/repositori.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/estils_formularis.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
-
 {% block page_content %}
 <div class="perfil-public">
   <div class="capcalera-perfil">
@@ -23,9 +22,9 @@
       and usuari.rebre_missatges %}
   <div class="botons-accio">
     <!-- Botó enviar missatge (acció immediata) -->
-    <button type="button" class="boto_nav" onclick="obreModalMissatge()">
-      ✉ {{ _('Enviar missatge') }}
-    </button>
+    <button type="button" class="boto_nav" onclick="obrirModalMissatgeAmbReceptor('{{ usuari.nom_login }}')">
+  {{ _('Enviar missatge') }}
+</button>
     
     <!-- Botó afegir contactes (guardar per al futur) -->
     {% if not current_user.es_contacte(usuari) %}
@@ -234,26 +233,7 @@
 
 
 
-<div id="modal-missatge" class="modal" style="display: none;">
-  <div class="modal-content">
-    <h2>{{ _('Enviar missatge a') }} {{ usuari.nom }}</h2>
-    <form method="post" action="{{ url_for('missatges.enviar') }}">
-      <input type="hidden" name="receptor_id" value="{{ usuari.id }}">
-
-      <label for="assumpte">{{ _('Assumpte') }}</label>
-      <input name="assumpte" id="assumpte" required>
-
-      <label for="contingut">{{ _('Missatge') }}</label>
-      <textarea name="contingut" id="contingut" rows="5" required></textarea>
-
-      <div style="text-align: right; margin-top: 1rem;">
-        <button type="submit" class="boto-enviar">{{ _('Enviar') }}</button>
-        <button type="button" onclick="tancaModalMissatge()">{{ _('Cancel·la') }}</button>
-      </div>
-    </form>
-  </div>
-</div>
-
+{% include 'components/modal_nou_missatge.html' %}
 
 
 {% endblock %}
@@ -285,6 +265,12 @@ document.addEventListener('DOMContentLoaded', function() {
     bloc.classList.add('actiu'); // tots oberts per defecte
   });
 });
+</script>
+<script>
+  function obrirModalMissatgeAmbReceptor(nomLogin) {
+  document.getElementById('nou-receptor').value = nomLogin;
+  document.getElementById('modal-nou-missatge').style.display = 'flex';
+}
 </script>
 <script>
 function afegirContacte(usuariId, login, nom) {
@@ -342,5 +328,6 @@ function afegirContacte(usuariId, login, nom) {
 }
     
     </script>
+    <script src="{{ url_for('static', filename='js/missatgeria.js') }}"></script>
 
 {% endblock %}
