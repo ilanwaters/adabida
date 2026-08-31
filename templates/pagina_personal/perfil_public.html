@@ -23,20 +23,22 @@
       and usuari.rebre_missatges %}
   <div class="botons-accio">
     <!-- Botó enviar missatge (acció immediata) -->
-    <button type="button" class="boto-enviar-missatge" onclick="obreModalMissatge()">
+    <button type="button" class="boto_nav" onclick="obreModalMissatge()">
       ✉ {{ _('Enviar missatge') }}
     </button>
     
     <!-- Botó afegir contactes (guardar per al futur) -->
     {% if not current_user.es_contacte(usuari) %}
-      <button type="button" class="boto-afegir-contacte" onclick="afegirContacte({{ usuari.id }}, '{{ usuari.nom_login }}', '{{ usuari.nom_complet }}')">
+      <button type="button" class="boto_nav" onclick="afegirContacte({{ usuari.id }}, '{{ usuari.nom_login }}', '{{ usuari.nom_complet }}')">
         + {{ _('Afegir a contactes') }}
       </button>
-    {% else %}
-      <span class="contacte-afegit">✓ {{ _('Ja és als teus contactes') }}</span>
+        {% else %}
+      <button type="button" class="boto_nav" onclick="eliminarContacte({{ usuari.id }}, '{{ usuari.nom_complet }}')">
+        ✓ {{ _('Eliminar de contactes') }}
+      </button>
     {% endif %}
   </div>
-{% endif %}
+  {% endif %}
 </div>
 {% if perfil and perfil.mostrar_biografia %}
   {% set seccions_bio = usuari.obtenir_seccions_biografia_ordenades(nomes_visibles=True) %}
@@ -284,7 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-<script>function afegirContacte(usuariId, login, nom) {
+<script>
+function afegirContacte(usuariId, login, nom) {
         console.log('Afegint contacte:', usuariId, login, nom);
         fetch('/contactes/afegir_contacte', {
             method: 'POST',
@@ -309,6 +312,35 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('Error de connexió');
         });
-    }</script>
+    }
+
+    </script>
+<script>
+    function eliminarContacte(usuariId, nom) {
+    fetch('/contactes/eliminar_contacte', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            contacte_id: usuariId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`${nom} eliminat dels teus contactes!`);
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'No s\'ha pogut eliminar el contacte'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de connexió');
+    });
+}
+    
+    </script>
 
 {% endblock %}

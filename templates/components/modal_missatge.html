@@ -1,13 +1,38 @@
-<div id="modal-missatge" class="modal" style="display: none;">
+<div id="modal-nou-missatge" class="modal" style="display: none;">
   <div class="modal-content">
-    <span class="boto-tancar-modal" onclick="tancaModalMissatge()">×</span>
+    <div class="modal-text" style="grid-column: 1 / -1;">
+      <span class="boto-tancar" onclick="tancarModalNouMissatge()">&times;</span>
+      <h2>{{ _('Nou missatge') }}</h2>
 
-    <h2 id="modal-assumpte">—</h2>
-    <p class="modal-remitent"><strong>{{ _('De:') }}</strong> <span id="modal-remitent">—</span></p>
-   <p class="modal-data"><strong>{{ _('Data:') }}</strong> <span id="modal-data-missatge">—</span></p>
+      <div class="camp-formulari">
+        <label for="nou-receptor">{{ _('Per a:') }} *</label>
+        <input type="text" id="nou-receptor"
+               placeholder="{{ _('Nom o login de l\'usuari...') }}"
+               value="{{ receptor_preseleccionat or '' }}">
+        <span id="receptor-nom"
+              style="{% if receptor_preseleccionat %}display: inline;{% else %}display: none;{% endif %} color: #28a745; font-weight: bold;">
+          {% if receptor_preseleccionat %}→ {{ receptor_preseleccionat }}{% endif %}
+        </span>
+        <div id="resultats-cerca" class="resultats-cerca"></div>
+      </div>
 
-<div id="modal-contingut-missatges" class="contingut-formatat"></div>
+      <div class="camp-formulari">
+        <label for="nou-assumpte">{{ _('Assumpte:') }} *</label>
+        <input type="text" id="nou-assumpte"
+               placeholder="{{ _('Assumpte del missatge...') }}"
+               value="{{ assumpte_preseleccionat or '' }}">
+      </div>
 
+      <div class="camp-formulari">
+        <label for="nou-contingut">{{ _('Missatge:') }} *</label>
+        <textarea id="nou-contingut" rows="8"
+                  placeholder="{{ _('Escriu el teu missatge aquí...') }}">{{ contingut_preseleccionat or '' }}</textarea>
+      </div>
+    </div>
 
+    <div class="modal-botons-accions">
+      <button type="button" onclick="tancarModalNouMissatge()" class="boto_nav">{{ _('Cancel·lar') }}</button>
+      <button type="button" onclick="enviarNouMissatge()" class="boto_nav">{{ _('Enviar') }}</button>
+    </div>
   </div>
 </div>

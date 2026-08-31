@@ -21,9 +21,7 @@ function obreModal(entradaId, usuariId,origen = null) {
       const dataSpan = document.getElementById('modal-data');
       if (dataSpan) dataSpan.innerText = data.data_creacio || "";
 
-      const autorSpan = document.getElementById('modal-autor');
       const metaAutor = document.getElementById('modal-meta-autor');
-      if (metaAutor) metaAutor.textContent = data.usuari_nom || '';
 
       const metaCreacio = document.getElementById('modal-meta-creacio');
       if (metaCreacio) metaCreacio.textContent = data.data_creacio ? `Creat: ${data.data_creacio}` : '';
@@ -31,16 +29,14 @@ function obreModal(entradaId, usuariId,origen = null) {
       const metaModificacio = document.getElementById('modal-meta-modificacio');
       if (metaModificacio) metaModificacio.textContent = data.data_modificacio ? `Modificat: ${data.data_modificacio}` : '';
       
-
-console.log("DEBUG autorSpan:", autorSpan);
 console.log("DEBUG data.usuari_nom:", data.usuari_nom);
 console.log("DEBUG data.usuari_login:", data.usuari_login);
 
-if (autorSpan && data.usuari_nom && data.usuari_login) {
-  console.log("🎯 Injectant enllaç a perfil públic:", data.usuari_login);
-  autorSpan.innerHTML = `<a href="/perfil/${data.usuari_login}" class="enllac-perfil" target="_blank">${data.usuari_nom}</a>`;
+if (metaAutor && data.usuari_nom && data.usuari_login) {
+  metaAutor.innerHTML = `<a href="/perfil/${data.usuari_login}" class="enllac-perfil" target="_blank">${data.usuari_nom}</a>`;
+} else if (metaAutor) {
+  metaAutor.textContent = data.usuari_nom || '';
 }
-
 
       document.getElementById('modal-contingut').innerHTML = data.contingut || "";
 

@@ -26,7 +26,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
 <!-- SECCIÓ MISSATGES -->
 
 
-<div class="contingut-plegable">
+
   
 
   <!-- Bústia de rebuts -->
@@ -97,7 +97,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
 <div id="modal-nou-missatge" class="modal" style="display: none;">
   <div class="modal-content">
     <div class="modal-text" style="grid-column: 1 / -1;">
-      <span class="boto-tancar" onclick="tancarModalNouMissatge()">&times;</span>
+    
       <h2>{{ _('Nou missatge') }}</h2>
 
       <div class="camp-formulari">
@@ -122,6 +122,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
     <div class="modal-botons-accions">
       <button type="button" onclick="tancarModalNouMissatge()" class="boto_nav">{{ _('Cancel·lar') }}</button>
       <button type="button" onclick="enviarNouMissatge()" class="boto_nav">{{ _('Enviar') }}</button>
+  
     </div>
   </div>
 </div>
