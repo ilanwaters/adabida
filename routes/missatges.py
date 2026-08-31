@@ -7,20 +7,32 @@ missatges_bp = Blueprint("missatges", __name__)
 @missatges_bp.route("/enviar_missatge", methods=["POST"])
 @login_required
 def enviar():
-    print("📨 Vista enviar() activada")
     receptor_id = request.form.get("receptor_id")
     assumpte = request.form.get("assumpte", "").strip()
     contingut = request.form.get("contingut", "").strip()
 
+    es_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
     if not receptor_id or not contingut or not assumpte:
+        if es_ajax:
+            return jsonify({"success": False, "error": "Missatge incomplet."}), 400
         flash("Missatge incomplet.", "error")
         return redirect(request.referrer)
 
     if receptor_id.isdigit():
-        receptor = Usuari.query.get_or_404(int(receptor_id))
+        receptor = Usuari.query.get(int(receptor_id))
     else:
-        receptor = Usuari.query.filter_by(nom_login=receptor_id).first_or_404()
+        receptor = Usuari.query.filter_by(nom_login=receptor_id).first()
+
+    if not receptor:
+        if es_ajax:
+            return jsonify({"success": False, "error": "Usuari no trobat."}), 404
+        flash("Usuari no trobat.", "error")
+        return redirect(request.referrer)
+
     if not receptor.rebre_missatges:
+        if es_ajax:
+            return jsonify({"success": False, "error": "Aquest usuari no accepta missatges."}), 400
         flash("Aquest usuari no accepta missatges.", "error")
         return redirect(request.referrer)
 
@@ -32,10 +44,11 @@ def enviar():
     )
     db.session.add(missatge)
     db.session.commit()
+
+    if es_ajax:
+        return jsonify({"success": True})
+
     flash("Missatge enviat correctament.", "success")
-    
-    
-    print("🔁 Referrer:", request.referrer)
     return redirect(request.referrer)
 
 @missatges_bp.route("/rebuts")
@@ -135,9 +148,10 @@ def api_missatge(missatge_id):
             "contingut": missatge.contingut,
             "data": missatge.data_env.strftime("%d/%m/%Y %H:%M"),
             "remitent": remitent,
-            "receptor": receptor
+            "receptor": receptor,
+            "emissor_login": missatge.emissor.nom_login
         })
-        
+                
     except Exception as e:
         print(f"❌ ERROR API: {e}")
         return jsonify({"error": str(e)}), 500

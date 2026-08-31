@@ -1,4 +1,4 @@
-div class="contingut-plegable"></div>{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block titol %}{{ _('Missatgeria') }}{% endblock %}
 
@@ -35,7 +35,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
       {% if m.receptor_id == current_user.id %}
       <div class="missatge-item {% if not m.llegit %}no-llegit{% endif %}">
         <div class="missatge-contingut" onclick="obreMissatge({{ m.id }})">
-          <span class="remitent">{{ m.emissor.nom }}</span>
+          <span class="remitent">{{ _('De') }} : {{ m.emissor.nom }}</span>
           <span class="assumpte">{{ m.assumpte }}</span>
           <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
         </div>
@@ -58,7 +58,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
       {% if m.emissor_id == current_user.id %}
       <div class="missatge-item {% if not m.llegit %}no-llegit{% endif %}">
         <div class="missatge-contingut" onclick="obreMissatge({{ m.id }})">
-          <span class="remitent">{{ _('A') }} {{ m.receptor.nom }}</span>
+          <span class="remitent">{{ _('A') }} : {{ m.receptor.nom }}</span>
           <span class="assumpte">{{ m.assumpte }}</span>
           <span class="data">{{ m.data_env.strftime('%d/%m/%Y %H:%M') }}</span>
         </div>
@@ -79,17 +79,20 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
 <!-- MODAL PER VEURE MISSATGE COMPLET -->
 <div id="modal-missatge" class="modal" style="display: none;">
   <div class="modal-content">
-    <span class="boto-tancar" onclick="tancarModalMissatge()">&times;</span>
-    <h3 id="modal-assumpte-missatge"></h3>
-    <div class="detalls-missatge">
-      <p><strong>{{ _('De:') }}</strong> <span id="modal-remitent"></span></p>
-      <p><strong>{{ _('A:') }}</strong> <span id="modal-receptor"></span></p>
-      <p><strong>{{ _('Data:') }}</strong> <span id="modal-data"></span></p>
+    <div class="modal-text" style="grid-column: 1 / -1;">
+      <h2 id="modal-assumpte-missatge"></h2>
+
+      <div class="modal-dades">
+  <p><strong>{{ _('De:') }}</strong> <span id="modal-remitent"></span> · <strong>{{ _('Data:') }}</strong> <span id="modal-data"></span></p>
+</div>
+
+      <div id="modal-contingut-missatge" class="contingut-formatat"></div>
     </div>
-    <div id="modal-contingut-missatge" style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px; white-space: pre-wrap;"></div>
-    <div class="botons-modal" style="display: flex; gap: 1rem; justify-content: flex-end;">
-      <button type="button" onclick="tancarModalMissatge()" class="boto boto-secundari">{{ _('Tancar') }}</button>
-    </div>
+
+    <div class="modal-botons-accions">
+  <button type="button" onclick="tancarModalMissatge()" class="boto_nav">{{ _('Tancar') }}</button>
+  <button type="button" id="boto-respondre" onclick="respondreMissatge()" class="boto_nav">{{ _('Respondre') }}</button>
+</div>
   </div>
 </div>
 
@@ -101,7 +104,7 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
       <h2>{{ _('Nou missatge') }}</h2>
 
       <div class="camp-formulari">
-        <label for="nou-receptor">{{ _('Per a:') }} *</label>
+        <label for="nou-receptor">{{ _('Per a:') }} </label>
         <input type="text" id="nou-receptor" placeholder="{{ _('Nom o login de l\'usuari...') }}"
                oninput="cercarUsuaris()">
         <span id="receptor-nom" style="display: none; color: #28a745; font-weight: bold;"></span>
@@ -109,12 +112,12 @@ div class="contingut-plegable"></div>{% extends "base.html" %}
       </div>
 
       <div class="camp-formulari">
-        <label for="nou-assumpte">{{ _('Assumpte:') }} *</label>
+        <label for="nou-assumpte">{{ _('Assumpte:') }}</label>
         <input type="text" id="nou-assumpte" placeholder="{{ _('Assumpte del missatge...') }}">
       </div>
 
       <div class="camp-formulari">
-        <label for="nou-contingut">{{ _('Missatge:') }} *</label>
+        <label for="nou-contingut">{{ _('Missatge:') }}</label>
         <textarea id="nou-contingut" rows="8" placeholder="{{ _('Escriu el teu missatge aquí...') }}"></textarea>
       </div>
     </div>

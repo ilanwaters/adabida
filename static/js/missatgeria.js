@@ -43,6 +43,8 @@ function obreMissatge(missatgeId) {
       document.getElementById('modal-remitent').textContent = data.remitent;
       document.getElementById('modal-data').textContent = data.data;
       document.getElementById('modal-contingut-missatge').textContent = data.contingut;
+          window.emissorActual = data.emissor_login;
+          window.assumpteActual = data.assumpte;  
       
       // Mostrar modal
       document.getElementById('modal-missatge').style.display = 'flex';
@@ -53,7 +55,12 @@ function obreMissatge(missatgeId) {
       alert('Error de connexió carregant el missatge');
     });
 }
-
+function respondreMissatge() {
+  tancarModalMissatge();
+  document.getElementById('nou-receptor').value = window.emissorActual;
+  document.getElementById('nou-assumpte').value = 'Re: ' + window.assumpteActual;
+  document.getElementById('modal-nou-missatge').style.display = 'flex';
+}
 // TANCAR MODAL DE VEURE MISSATGE (nom exacte del HTML)
 function tancarModalMissatge() {
   document.getElementById('modal-missatge').style.display = 'none';
@@ -120,15 +127,17 @@ function enviarNouMissatge() {
   fetch('/missatges/enviar_missatge', {
     method: 'POST',
     credentials: 'same-origin',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
     body: formData
   })
-  .then(response => {
-    if (response.ok) {
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
       alert('Missatge enviat correctament!');
       tancarModalNouMissatge();
       location.reload();
     } else {
-      throw new Error('Error del servidor');
+      alert('Error: ' + (data.error || 'No s\'ha pogut enviar el missatge'));
     }
   })
   .catch(error => {
