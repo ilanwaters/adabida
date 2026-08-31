@@ -100,7 +100,15 @@
   </div>
   
 </div>
-
+<!-- ───────────────── CONTACTES ───────────────── -->
+<div class="bloc plegable plegat">
+  <h2 class="titol-bloc">{{ _('Els meus contactes') }}</h2>
+  <div class="contingut-bloc">
+    <div id="llista-contactes-personal">
+      <p class="muted">{{ _('Carregant contactes...') }}</p>
+    </div>
+  </div>
+</div>
 <!-- ───────────────── PERFIL BIOGRÀFIC (POST → usuari_admin) ───────────────── -->
 <div class="bloc plegable plegat">
   <h2 class="titol-bloc">{{ _('Perfil públic') }}</h2>
@@ -643,5 +651,42 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+<script>
+function carregarContactesPersonal() {
+  fetch('/contactes/llistar_contactes', { credentials: 'same-origin' })
+    .then(r => r.json())
+    .then(contactes => {
+      const contenidor = document.getElementById('llista-contactes-personal');
+      if (!contactes.length) {
+        contenidor.innerHTML = '<p class="muted">{{ _("Encara no tens cap contacte.") }}</p>';
+        return;
+      }
+      contenidor.innerHTML = contactes.map(c => `
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #eee;">
+          <span>${c.nom_personalitzat || c.nom} <small style="color:#888;">(${c.nom_login})</small></span>
+          <button type="button" class="boto-eliminar" onclick="eliminarContactePersonal(${c.id}, '${c.nom}')">🗑</button>
+        </div>
+      `).join('');
+    });
+}
 
+function eliminarContactePersonal(usuariId, nom) {
+  if (!confirm('{{ _("Segur que vols eliminar aquest contacte?") }}')) return;
+  fetch('/contactes/eliminar_contacte', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contacte_id: usuariId })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      carregarContactesPersonal();
+    } else {
+      alert('Error: ' + (data.error || 'No s\'ha pogut eliminar'));
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', carregarContactesPersonal);
+</script>
 {% endblock %}

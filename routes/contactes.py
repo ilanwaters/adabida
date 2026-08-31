@@ -39,3 +39,15 @@ def llistar_contactes():
         'nom_login': usuari.nom_login,
         'nom_personalitzat': contacte.nom_personalitzat
     } for contacte, usuari in contactes])
+
+@contactes_bp.route('/es_contacte/<nom_login>')
+@login_required
+def es_contacte(nom_login):
+    usuari = Usuari.query.filter_by(nom_login=nom_login).first()
+    if not usuari:
+        return jsonify({'existeix': False})
+    return jsonify({
+        'existeix': True,
+        'es_contacte': current_user.es_contacte(usuari),
+        'usuari_id': usuari.id
+    })

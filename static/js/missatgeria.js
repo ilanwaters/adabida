@@ -45,6 +45,8 @@ function obreMissatge(missatgeId) {
       document.getElementById('modal-contingut-missatge').textContent = data.contingut;
           window.emissorActual = data.emissor_login;
           window.assumpteActual = data.assumpte;  
+    
+         
       
       // Mostrar modal
       document.getElementById('modal-missatge').style.display = 'flex';
@@ -110,20 +112,38 @@ function enviarNouMissatge() {
   const receptor = document.getElementById('nou-receptor').value.trim();
   const assumpte = document.getElementById('nou-assumpte').value.trim();
   const contingut = document.getElementById('nou-contingut').value.trim();
-  
-  // Validació bàsica
+
   if (!receptor || !assumpte || !contingut) {
     alert('Tots els camps són obligatoris');
     return;
   }
-  
-  // Crear FormData per enviar
+
+  fetch(`/contactes/es_contacte/${encodeURIComponent(receptor)}`, { credentials: 'same-origin' })
+    .then(r => r.json())
+    .then(info => {
+      if (info.existeix && !info.es_contacte) {
+        const vol = confirm('Aquest usuari no forma part dels teus contactes. Vols afegir-lo?');
+        if (vol) {
+          fetch('/contactes/afegir_contacte', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contacte_id: info.usuari_id })
+          }).then(() => enviarMissatgeReal(receptor, assumpte, contingut));
+        } else {
+          enviarMissatgeReal(receptor, assumpte, contingut);
+        }
+      } else {
+        enviarMissatgeReal(receptor, assumpte, contingut);
+      }
+    });
+}
+
+function enviarMissatgeReal(receptor, assumpte, contingut) {
   const formData = new FormData();
   formData.append('receptor_id', receptor);
   formData.append('assumpte', assumpte);
   formData.append('contingut', contingut);
-  
-  // Enviar missatge amb cookies de sessió
+
   fetch('/missatges/enviar_missatge', {
     method: 'POST',
     credentials: 'same-origin',
@@ -139,10 +159,6 @@ function enviarNouMissatge() {
     } else {
       alert('Error: ' + (data.error || 'No s\'ha pogut enviar el missatge'));
     }
-  })
-  .catch(error => {
-    console.error('Error enviant missatge:', error);
-    alert('Error enviant el missatge');
   });
 }
 
@@ -204,3 +220,24 @@ document.addEventListener('click', function(e) {
 document.addEventListener("DOMContentLoaded", function () {
   console.log('Missatgeria.js carregat correctament');
 });
+
+function afegirContacte(usuariId, login, nom) {
+  fetch('/contactes/afegir_contacte', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contacte_id: usuariId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(`${nom} afegit als teus contactes!`);
+      document.getElementById('modal-afegir-contacte-container').innerHTML = '';
+    } else {
+      alert('Error: ' + (data.error || 'No s\'ha pogut afegir el contacte'));
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de connexió');
+  });
+}

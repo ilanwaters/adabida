@@ -141,6 +141,7 @@ def api_missatge(missatge_id):
         # Determinem si ets el receptor o l'emissor
         remitent = f"{missatge.emissor.nom} {missatge.emissor.primer_cognom}"
         receptor = f"{missatge.receptor.nom} {missatge.receptor.primer_cognom}"
+        es_contacte = current_user.es_contacte(missatge.emissor) if missatge.emissor_id != current_user.id else True
 
         return jsonify({
             "id": missatge.id,
@@ -149,6 +150,8 @@ def api_missatge(missatge_id):
             "data": missatge.data_env.strftime("%d/%m/%Y %H:%M"),
             "remitent": remitent,
             "receptor": receptor,
+            "es_contacte": es_contacte,
+            "emissor_id": missatge.emissor_id,
             "emissor_login": missatge.emissor.nom_login
         })
                 
