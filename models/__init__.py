@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 from models.usuari import (
     Usuari, PerfilBiografic, BiografiaSeccion,
-    Experiencia, Estudi, CarrecPublic, Obra, Missatge
+    Experiencia, Estudi, CarrecPublic, Obra, Missatge, ArxiuMissatge
 )
 from models.entrades import (
     Entrada, ArxiuAdjunt, Exposicio, ImatgeGaleria, 
@@ -49,6 +49,7 @@ __all__ = [
     'CarrecPublic',
     'Obra',
     'Missatge',
+    'ArxiuMissatge',
     'Contacte',
     'Entrada',
     'ArxiuAdjunt',

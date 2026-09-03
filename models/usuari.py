@@ -428,6 +428,19 @@ class Missatge(db.Model):
 
     emissor = db.relationship("Usuari", foreign_keys=[emissor_id], backref="missatges_enviats")
     receptor = db.relationship("Usuari", foreign_keys=[receptor_id], backref="missatges_rebuts")
+    arxius_adjunts = db.relationship("ArxiuMissatge", back_populates="missatge", cascade="all, delete-orphan")
 
     tipus_missatge = db.Column(db.String(50), nullable=True)  # 'vinculacio_familia', 'convit_organitzacio', etc.
     dades_json = db.Column(db.Text, nullable=True)
+
+class ArxiuMissatge(db.Model):
+    __tablename__ = 'arxius_missatges'
+
+    id = db.Column(db.Integer, primary_key=True)
+    missatge_id = db.Column(db.Integer, db.ForeignKey('missatges.id'), nullable=False)
+    nom_fitxer = db.Column(db.String(255), nullable=False)
+    tipus = db.Column(db.String(50))
+    tipus_media = db.Column(db.String(20), nullable=True, default='desconegut')
+    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+
+    missatge = db.relationship("Missatge", back_populates="arxius_adjunts")

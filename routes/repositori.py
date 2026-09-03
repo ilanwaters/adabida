@@ -1,8 +1,8 @@
 # routes/repositori.py
 
-from flask import Blueprint, render_template, request, url_for
+from flask import Blueprint, render_template, request, url_for, abort
 from models import Entrada, Usuari, Pais, Regio, Municipi, Conversa
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
 from utils import generar_miniatura_entrada
 import re
 from datetime import datetime
@@ -75,12 +75,30 @@ def consulta_repositori():
 
     if any_inici and any_fi:
         condicions.append(Entrada.any_text.between(any_inici, any_fi))
-
+    elif any_inici:
+        condicions.append(Entrada.any_text >= any_inici)
+    elif any_fi:
+        condicions.append(Entrada.any_text <= any_fi)
+        
     if text:
+        nom_complet_usuari = func.concat(
+            func.coalesce(Usuari.nom, ''), ' ',
+            func.coalesce(Usuari.primer_cognom, ''), ' ',
+            func.coalesce(Usuari.segon_cognom, '')
+        )
+        subquery_usuaris_text = Usuari.query.filter(or_(
+            nom_complet_usuari.ilike(f"%{text}%"),
+            Usuari.nom_login.ilike(f"%{text}%")
+        )).with_entities(Usuari.id)
         condicions.append(or_(
             Entrada.titol.ilike(f"%{text}%"),
             Entrada.tema.ilike(f"%{text}%"),
-            Entrada.contingut.ilike(f"%{text}%")
+            Entrada.contingut.ilike(f"%{text}%"),
+            Entrada.any_text.ilike(f"%{text}%"),
+            Entrada.titol_imatge.ilike(f"%{text}%"),
+            Entrada.descripcio_imatge.ilike(f"%{text}%"),
+            Entrada.referencia.ilike(f"%{text}%"),
+            Entrada.usuari_id.in_(subquery_usuaris_text)
         ))
 
     if nom_usuari:
@@ -91,7 +109,8 @@ def consulta_repositori():
         condicions.append(Entrada.pais.ilike(f"%{pais}%"))
 
     if validat:
-        condicions.append(Entrada.validada == True)
+        subquery_validats = Usuari.query.filter(Usuari.nivell_usuari == 'verd').with_entities(Usuari.id)
+        condicions.append(Entrada.usuari_id.in_(subquery_validats))
 
     cerca_realitzada = bool(condicions)
 
@@ -99,8 +118,8 @@ def consulta_repositori():
         page = request.args.get("page", 1, type=int)
         per_page = 10
 
-        entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
-        query_base = Entrada.query.filter(~Entrada.id.in_(entrada_ids_amb_conversa))
+        entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None), Conversa.tipus_conversa == 'entrevista_adabida').all()]
+        query_base = Entrada.query.filter(~Entrada.id.in_(entrada_ids_amb_conversa), Entrada.es_publica == True)
 
         if strict:
             query = query_base.filter(and_(*condicions))
@@ -201,10 +220,23 @@ def consulta_repositori():
             condicions_conversa.append(Conversa.lloc_municipi.ilike(f"%{ciutat}%"))
 
         if text:
+            from models import ConversaParticipant
+          
+
+            nom_complet_participant = func.concat(
+                func.coalesce(ConversaParticipant.nom, ''), ' ',
+                func.coalesce(ConversaParticipant.primer_cognom, ''), ' ',
+                func.coalesce(ConversaParticipant.segon_cognom, '')
+            )
+            subquery_participants = ConversaParticipant.query.filter(
+                nom_complet_participant.ilike(f"%{text}%")
+            ).with_entities(ConversaParticipant.conversa_id)
+
             condicions_conversa.append(or_(
                 Conversa.titol.ilike(f"%{text}%"),
                 Conversa.tema.ilike(f"%{text}%"),
-                Conversa.contingut.ilike(f"%{text}%")
+                Conversa.contingut.ilike(f"%{text}%"),
+                Conversa.id.in_(subquery_participants)
             ))
 
         if nom_usuari:
@@ -214,11 +246,15 @@ def consulta_repositori():
         if pais:
             condicions_conversa.append(Conversa.lloc_pais.ilike(f"%{pais}%"))
 
+        if validat:
+            condicions_conversa.append(Conversa.usuari_id.in_(subquery_validats))
+
         if condicions_conversa:
+            base_conv = Conversa.query.join(Entrada, Conversa.entrada_id == Entrada.id).filter(Entrada.es_publica == True, Conversa.tipus_conversa == 'entrevista_adabida')
             if strict:
-                converses_raw = Conversa.query.filter(and_(*condicions_conversa)).limit(per_page).all()
+                converses_raw = base_conv.filter(and_(*condicions_conversa)).limit(per_page).all()
             else:
-                converses_raw = Conversa.query.filter(or_(*condicions_conversa)).limit(per_page).all()
+                converses_raw = base_conv.filter(or_(*condicions_conversa)).limit(per_page).all()
         else:
             converses_raw = []
     else:
@@ -260,5 +296,6 @@ def mostra_entrada(entrada_id):
 @repositori_bp.route('/entrada/<int:entrada_id>')
 def entrada_publica(entrada_id):
     entrada = Entrada.query.get_or_404(entrada_id)
+    if not entrada.es_publica:
+        abort(404)
     return render_template('entrada_publica.html', entrada=entrada)
-

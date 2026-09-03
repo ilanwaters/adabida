@@ -72,3 +72,27 @@ def eliminar_entrada_guardada(entrada_id):
         return jsonify({"missatge": "Eliminada"}), 200
 
     return jsonify({"missatge": "No trobada"}), 404
+
+@api_guardades_bp.route("/api/esborranys/<usuari_login>")
+def llista_esborranys(usuari_login):
+    usuari = Usuari.query.filter_by(nom_login=usuari_login).first()
+    if not usuari:
+        return "", 404
+
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id, es_publica=False).all()
+    entrades = []
+
+    from utils.media_helpers import generar_miniatura_entrada
+    for entrada in entrades_raw:
+        conversa = Conversa.query.filter_by(entrada_id=entrada.id, tipus_conversa='entrevista_adabida').first()
+        if conversa:
+            item = preparar_conversa_per_vista(conversa, usuari.nom_login)
+            item["usuari_login"] = usuari.nom_login
+        else:
+            entrada.usuari_login = usuari.nom_login
+            entrada.tipus = "entrada"
+            entrada.miniatura_calculada = generar_miniatura_entrada(entrada, usuari.nom_login)
+            item = entrada
+        entrades.append(item)
+
+    return render_template("fragments/targetes_guardades.html", entrades=entrades)

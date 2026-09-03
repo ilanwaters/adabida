@@ -82,11 +82,16 @@ class Entrada(db.Model):
             return False
     @property
     def miniatura(self):
-        """Retorna la portada triada per l'usuari, si n'hi ha, si no la primera imatge, si no placeholder"""
+        """Retorna la portada triada per l'usuari, si no la primera imatge adjuntada, si no galeria, si no placeholder"""
         portada = next((a for a in self.arxius_adjuntats if a.es_portada), None)
         if portada:
-            any_mes = portada.data_pujada.strftime('%Y/%m') if portada.data_pujada else ''
             return f"/umberto/{self.usuari.nom_login}/{self.id}/mini/{portada.nom_fitxer}"
+        primera_imatge_adjuntada = next(
+            (a for a in self.arxius_adjuntats if a.tipus and a.tipus.lower() in ["jpg", "jpeg", "png", "gif", "webp"]),
+            None
+        )
+        if primera_imatge_adjuntada:
+            return f"/umberto/{self.usuari.nom_login}/{self.id}/mini/{primera_imatge_adjuntada.nom_fitxer}"
         if self.imatges:
             primera_imatge = self.imatges[0]
             any_mes = primera_imatge.data_publicacio.strftime('%Y/%m')

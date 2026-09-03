@@ -364,3 +364,99 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* Adjunts a missatges */
+.graella-arxius-missatge {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.arxiu-missatge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.arxiu-missatge-item img {
+  max-width: 220px;
+  max-height: 160px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.arxiu-missatge-document img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border: none;
+}
+
+.arxiu-missatge-item span {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-align: center;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .graella-arxius-missatge {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+#llista-arxius-seleccionats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.arxiu-seleccionat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+}
+
+.arxiu-seleccionat img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 5%, 9%);
+}
+
+.arxiu-seleccionat span:not(.boto-treure-arxiu) {
+  font-size: 0.7rem;
+  text-align: center;
+  word-break: break-word;
+  margin-top: 4px;
+}
+
+.boto-treure-arxiu {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* PhotoSwipe per sobre de qualsevol modal */
+.pswp {
+  z-index: 1000000 !important;
+}

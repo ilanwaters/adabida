@@ -29,6 +29,14 @@
                   placeholder="{{ _('Escriu el teu missatge aquí...') }}">{{ contingut_preseleccionat or '' }}</textarea>
       </div>
     </div>
+          <div class="camp-formulari">
+        <label for="nou-arxius">{{ _('Adjuntar arxius (opcional):') }}</label>
+        <input type="file" id="nou-arxius" multiple
+               accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.doc,.docx">
+        <p style="font-size: 0.85em; color: #666; margin-top: 4px;">
+          {{ _('Els arxius enviats es guarden per permetre la conversa entre usuaris. Adabida no se\'n fa responsable ni en garanteix la conservació a llarg termini — no l\'utilitzis com a únic lloc on guardar documents importants.') }}
+        </p>
+      </div>
 
     <div class="modal-botons-accions">
       <button type="button" onclick="tancarModalNouMissatge()" class="boto_nav">{{ _('Cancel·lar') }}</button>

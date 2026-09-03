@@ -16,6 +16,7 @@
   <div style="display:flex; gap:10px;">
     <button type="button" class="boto_nav boto-pestanya-entrades activa" data-pestanya="meves" onclick="canviaPestanyaEntrades('meves')">{{ _('Les meves entrades') }}</button>
     <button type="button" class="boto_nav boto-pestanya-entrades" data-pestanya="guardades" onclick="canviaPestanyaEntrades('guardades')">{{ _('Entrades guardades') }}</button>
+    <button type="button" class="boto_nav boto-pestanya-entrades" data-pestanya="esborranys" onclick="canviaPestanyaEntrades('esborranys')">{{ _('Esborranys') }}</button>
     <a href="/pagina_personal" class="boto_nav">{{ _('Espai personal') }}</a>
   </div>
 </div>
@@ -45,6 +46,12 @@
     <p>{{ _('Carregant...') }}</p>
   </div>
 </section>
+
+<section class="arxiu-entrades" id="seccio-esborranys" style="display:none;">
+  <div id="llista-esborranys">
+    <p>{{ _('Carregant...') }}</p>
+  </div>
+</section>
 <!-- Modals necessaris -->
 {% include "components/modal_entrada.html" %}
 {% include "components/modal_entrada_editar.html" %}
@@ -55,12 +62,13 @@
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
 <script>
-   function canviaPestanyaEntrades(nom) {
+    function canviaPestanyaEntrades(nom) {
     document.querySelectorAll('.boto-pestanya-entrades').forEach(b => b.classList.remove('activa'));
     document.querySelector(`.boto-pestanya-entrades[data-pestanya="${nom}"]`).classList.add('activa');
 
     document.getElementById('seccio-meves-entrades').style.display = nom === 'meves' ? '' : 'none';
     document.getElementById('seccio-entrades-guardades').style.display = nom === 'guardades' ? '' : 'none';
+    document.getElementById('seccio-esborranys').style.display = nom === 'esborranys' ? '' : 'none';
 
     const comptador = document.getElementById('comptador-entrades');
     if (nom === 'meves') {
@@ -73,6 +81,45 @@
       carregaEntradesGuardades('{{ usuari.nom_login }}');
       window._entradesGuardadesCarregades = true;
     }
+
+    if (nom === 'esborranys' && !window._esborranysCarregats) {
+      carregaEsborranys('{{ usuari.nom_login }}');
+      window._esborranysCarregats = true;
+    }
+  }
+
+   function carregaEntradesGuardades(usuariLogin) {
+    fetch(`/api/guardades/${usuariLogin}`)
+      .then(res => {
+        if (!res.ok) throw new Error("No s'ha pogut carregar");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("llista-guardades").innerHTML = `<div class="llista-entrades">${html}</div>`;
+        const num = document.querySelectorAll('#llista-guardades .caixa-entrada, #llista-guardades .caixa-conversa').length;
+        document.getElementById('comptador-entrades').textContent = `${num} {{ _('entrades guardades') }}`;
+      })
+      .catch(() => {
+        document.getElementById("llista-guardades").innerHTML = "<p>{{ _('Error carregant les entrades guardades.') }}</p>";
+        document.getElementById('comptador-entrades').textContent = '';
+      });
+  }
+
+   function carregaEsborranys(usuariLogin) {
+    fetch(`/api/esborranys/${usuariLogin}`)
+      .then(res => {
+        if (!res.ok) throw new Error("No s'ha pogut carregar");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("llista-esborranys").innerHTML = `<div class="llista-entrades">${html}</div>`;
+        const num = document.querySelectorAll('#llista-esborranys .caixa-entrada, #llista-esborranys .caixa-conversa').length;
+        document.getElementById('comptador-entrades').textContent = `${num} {{ _('esborranys') }}`;
+      })
+      .catch(() => {
+        document.getElementById("llista-esborranys").innerHTML = "<p>{{ _('Error carregant els esborranys.') }}</p>";
+        document.getElementById('comptador-entrades').textContent = '';
+      });
   }
 
    function carregaEntradesGuardades(usuariLogin) {

@@ -351,7 +351,10 @@
 
 
 <div class="botons-final" style="text-align: right; margin-top: 2rem;">
-        <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
+        <button type="submit" name="mode_guardat" value="esborrany" class="boto-secundari" style="padding: 0.8rem 2rem; font-size: 1rem; margin-right: 1rem;">
+          {{ _('Guardar esborrany') }}
+        </button>
+        <button type="submit" name="mode_guardat" value="publicar" style="padding: 0.8rem 2rem; font-size: 1rem;">
           {% if entrada %}{{ _('Desar canvis') }}{% else %}{{ _('Crear entrada') }}{% endif %}
         </button>
       </div>

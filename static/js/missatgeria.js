@@ -43,10 +43,9 @@ function obreMissatge(missatgeId) {
       document.getElementById('modal-remitent').textContent = data.remitent;
       document.getElementById('modal-data').textContent = data.data;
       document.getElementById('modal-contingut-missatge').textContent = data.contingut;
+      pintarArxiusMissatge(data.arxius || []);
           window.emissorActual = data.emissor_login;
-          window.assumpteActual = data.assumpte;  
-    
-         
+          window.assumpteActual = data.assumpte; 
       
       // Mostrar modal
       document.getElementById('modal-missatge').style.display = 'flex';
@@ -86,7 +85,9 @@ function obreModalNouMissatge(receptorLogin = '', receptorNom = '') {
   // Sempre netejar assumpte i contingut
   document.getElementById('nou-assumpte').value = '';
   document.getElementById('nou-contingut').value = '';
-  
+  document.getElementById('nou-arxius').value = '';
+  arxiusSeleccionatsNouMissatge = [];
+  pintarLlistaArxiusSeleccionats();
   // Mostrar modal
   document.getElementById('modal-nou-missatge').style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -112,6 +113,7 @@ function enviarNouMissatge() {
   const receptor = document.getElementById('nou-receptor').value.trim();
   const assumpte = document.getElementById('nou-assumpte').value.trim();
   const contingut = document.getElementById('nou-contingut').value.trim();
+  const arxius = arxiusSeleccionatsNouMissatge;
 
   if (!receptor || !assumpte || !contingut) {
     alert('Tots els camps són obligatoris');
@@ -128,21 +130,27 @@ function enviarNouMissatge() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contacte_id: info.usuari_id })
-          }).then(() => enviarMissatgeReal(receptor, assumpte, contingut));
+          }).then(() => enviarMissatgeReal(receptor, assumpte, contingut, arxius));
         } else {
-          enviarMissatgeReal(receptor, assumpte, contingut);
+          enviarMissatgeReal(receptor, assumpte, contingut, arxius);
         }
       } else {
-        enviarMissatgeReal(receptor, assumpte, contingut);
+        enviarMissatgeReal(receptor, assumpte, contingut, arxius);
       }
     });
 }
 
-function enviarMissatgeReal(receptor, assumpte, contingut) {
+function enviarMissatgeReal(receptor, assumpte, contingut, arxius) {
   const formData = new FormData();
   formData.append('receptor_id', receptor);
   formData.append('assumpte', assumpte);
   formData.append('contingut', contingut);
+
+  if (arxius) {
+    for (let i = 0; i < arxius.length; i++) {
+      formData.append('arxius', arxius[i]);
+    }
+  }
 
   fetch('/missatges/enviar_missatge', {
     method: 'POST',
@@ -240,4 +248,72 @@ function afegirContacte(usuariId, login, nom) {
     console.error('Error:', error);
     alert('Error de connexió');
   });
+}
+
+function pintarArxiusMissatge(arxius) {
+  const contenidor = document.getElementById('modal-arxius-missatge');
+
+  if (!arxius.length) {
+    contenidor.innerHTML = '';
+    return;
+  }
+
+  const IMATGES = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+  let html = '<div class="graella-arxius-missatge">';
+  arxius.forEach(arxiu => {
+    const ext = (arxiu.tipus || '').toLowerCase();
+    if (IMATGES.includes(ext)) {
+      html += `
+        <a href="${arxiu.url}" target="_blank" class="arxiu-missatge-item">
+          <img src="${arxiu.url}" alt="${arxiu.nom_fitxer}">
+        </a>`;
+    } else {
+      const icona = ext === 'pdf' ? '/static/icons/pdf.png' : `/static/icons/${ext}.png`;
+      html += `
+        <a href="${arxiu.url}" target="_blank" class="arxiu-missatge-item arxiu-missatge-document">
+          <img src="${icona}" alt="${ext}" onerror="this.src='/static/icons/sense_imatge.png'">
+          <span>${arxiu.nom_fitxer}</span>
+        </a>`;
+    }
+  });
+  html += '</div>';
+
+  contenidor.innerHTML = html;
+}
+
+let arxiusSeleccionatsNouMissatge = [];
+
+function afegirArxiusSeleccionats(files) {
+  for (let i = 0; i < files.length; i++) {
+    arxiusSeleccionatsNouMissatge.push(files[i]);
+  }
+  document.getElementById('nou-arxius').value = ''; // permet reseleccionar el mateix fitxer després
+  pintarLlistaArxiusSeleccionats();
+}
+
+function eliminarArxiuSeleccionat(index) {
+  arxiusSeleccionatsNouMissatge.splice(index, 1);
+  pintarLlistaArxiusSeleccionats();
+}
+
+function pintarLlistaArxiusSeleccionats() {
+  const contenidor = document.getElementById('llista-arxius-seleccionats');
+  const IMATGES = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+  contenidor.innerHTML = arxiusSeleccionatsNouMissatge.map((f, i) => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    const esImatge = IMATGES.includes(ext);
+    const miniatura = esImatge
+      ? `<img src="${URL.createObjectURL(f)}" alt="${f.name}">`
+      : `<img src="/static/icons/${ext === 'pdf' ? 'pdf' : ext}.png" alt="${ext}" onerror="this.src='/static/icons/sense_imatge.png'">`;
+
+    return `
+      <div class="arxiu-seleccionat">
+        ${miniatura}
+        <span>${f.name}</span>
+        <span class="boto-treure-arxiu" onclick="eliminarArxiuSeleccionat(${i})">&times;</span>
+      </div>
+    `;
+  }).join('');
 }

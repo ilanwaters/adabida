@@ -181,6 +181,7 @@ def nova_entrada_personal():
     municipi_imatge = request.form.get("municipi_imatge")
     referencia = request.form.get("referencia_ubicacio")
 
+    mode_guardat = request.form.get("mode_guardat", "publicar")
     entrada = Entrada(
         usuari_id=usuari.id,
         titol=titol,
@@ -188,6 +189,7 @@ def nova_entrada_personal():
         any_text=any_text,
         contingut=contingut,
         data_creacio=datetime.utcnow(),
+        es_publica=(mode_guardat != "esborrany"),
         titol_imatge=titol_imatge,
         descripcio_imatge=descripcio_imatge,
         any_imatge=any_imatge,
@@ -421,7 +423,10 @@ def nova_entrada_personal():
                 entrada.nom_fitxer = primer.nom_fitxer
                 db.session.commit()
 
-    flash("Entrada creada correctament.")
+    if mode_guardat == "esborrany":
+        flash("Esborrany guardat correctament.")
+    else:
+        flash("Entrada creada correctament.")
     carpeta_static_temp = os.path.join("static", "temp")
     if os.path.exists(carpeta_static_temp):
         shutil.rmtree(carpeta_static_temp, ignore_errors=True)
@@ -431,6 +436,7 @@ def nova_entrada_personal():
 @nova_entrada_bp.route("/editar_entrada_personal/<int:entrada_id>", methods=["GET", "POST"])
 def editar_entrada_personal(entrada_id):
     entrada = Entrada.query.get_or_404(entrada_id)
+    print(f"🐛 SESSIO COMPLETA: {dict(session)}")
     usuari_login = session.get("usuari")
     if not usuari_login:
         flash("Sessió no vàlida")
@@ -451,9 +457,7 @@ def editar_entrada_personal(entrada_id):
     pais = normalitza_pais(usuari.pais_residencia)
 
     perfil = PerfilBiografic.query.filter_by(usuari_id=usuari.id).first()
-    if not perfil:
-        flash("Perfil biogràfic no trobat")
-        return redirect(url_for("login.login"))
+
 
     if request.method == "POST":
         if request.form.get("accio") == "eliminar_arxius":
@@ -473,6 +477,8 @@ def editar_entrada_personal(entrada_id):
             flash(f"S'han eliminat {eliminats} arxius.")
             return redirect(url_for('nova_entrada.editar_entrada_personal', entrada_id=entrada.id))
 
+        mode_guardat = request.form.get("mode_guardat", "publicar")
+        entrada.es_publica = (mode_guardat != "esborrany")
         entrada.titol = request.form.get("titol")
         entrada.tema = request.form.get("tema")
         entrada.any_text = request.form.get("any")
@@ -579,7 +585,10 @@ def editar_entrada_personal(entrada_id):
                         referencia=meta.get('referencia'),
                     )
                     db.session.add(nou_arxiu)
-        flash("Entrada actualitzada correctament.")
+        if mode_guardat == "esborrany":
+            flash("Esborrany guardat correctament.")
+        else:
+            flash("Entrada actualitzada correctament.")
         return redirect("/entrades")
 
     return render_template(

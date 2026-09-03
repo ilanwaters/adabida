@@ -93,7 +93,7 @@ def pagina_personal():
 
 # Obtenir entrades
     entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id, es_publica=True).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
     entrades = []
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
@@ -266,10 +266,9 @@ def entrades():
 
     # Obtenir entrades
     from models import Conversa
-    entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None)).all()]
-    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
+    entrada_ids_amb_conversa = [c.entrada_id for c in Conversa.query.filter(Conversa.entrada_id.isnot(None), Conversa.tipus_conversa == 'entrevista_adabida').all()]
+    entrades_raw = Entrada.query.filter_by(usuari_id=usuari.id, es_publica=True).filter(~Entrada.id.in_(entrada_ids_amb_conversa)).all()
     entrades = []
-
     for entrada in entrades_raw:
         miniatura = generar_miniatura_entrada(entrada, usuari.nom_login)
         
@@ -329,7 +328,7 @@ def entrades():
             "usuari_id": entrada.usuari_id
         })
     # Obtenir converses
-    converses_raw = Conversa.query.filter_by(usuari_id=usuari.id).all()
+    converses_raw = Conversa.query.filter_by(usuari_id=usuari.id, tipus_conversa='entrevista_adabida').all()
     converses = []
     for conversa in converses_raw:
         conv_dict = preparar_conversa_per_vista(conversa, usuari.nom_login)

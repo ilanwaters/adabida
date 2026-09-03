@@ -1,8 +1,26 @@
-from flask import Blueprint, request, redirect, url_for, flash, jsonify, render_template
+from flask import Blueprint, request, redirect, url_for, flash, jsonify, render_template, send_from_directory, abort
 from flask_login import login_required, current_user
 from models import db, Missatge, Usuari
+import os
+from werkzeug.utils import secure_filename
+from models import ArxiuMissatge
+
+
+EXTENSIONS_PERMESES = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf', 'doc', 'docx'}
+MIDA_MAXIMA = 10 * 1024 * 1024  # 10 MB per fitxer
+
+def _extensio_permesa(nom_fitxer):
+    return '.' in nom_fitxer and nom_fitxer.rsplit('.', 1)[1].lower() in EXTENSIONS_PERMESES
+
+import shutil
+
+def _esborra_arxius_fisics(missatge_id):
+    carpeta = os.path.join("umberto", "missatges", str(missatge_id))
+    if os.path.isdir(carpeta):
+        shutil.rmtree(carpeta, ignore_errors=True)
 
 missatges_bp = Blueprint("missatges", __name__)
+
 
 @missatges_bp.route("/enviar_missatge", methods=["POST"])
 @login_required
@@ -10,6 +28,7 @@ def enviar():
     receptor_id = request.form.get("receptor_id")
     assumpte = request.form.get("assumpte", "").strip()
     contingut = request.form.get("contingut", "").strip()
+    arxius = request.files.getlist("arxius")
 
     es_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
@@ -36,6 +55,17 @@ def enviar():
         flash("Aquest usuari no accepta missatges.", "error")
         return redirect(request.referrer)
 
+    # Validació prèvia dels arxius (abans de tocar BD ni disc)
+    for arxiu in arxius:
+        if not arxiu or not arxiu.filename:
+            continue
+        if not _extensio_permesa(arxiu.filename):
+            error = f"Tipus de fitxer no permès: {arxiu.filename}"
+            if es_ajax:
+                return jsonify({"success": False, "error": error}), 400
+            flash(error, "error")
+            return redirect(request.referrer)
+
     missatge = Missatge(
         emissor_id=current_user.id,
         receptor_id=receptor.id,
@@ -43,6 +73,33 @@ def enviar():
         contingut=contingut
     )
     db.session.add(missatge)
+    db.session.commit()  # cal l'id per crear la carpeta
+
+    carpeta = os.path.join("umberto", "missatges", str(missatge.id))
+    for arxiu in arxius:
+        if not arxiu or not arxiu.filename:
+            continue
+
+        arxiu.seek(0, os.SEEK_END)
+        mida = arxiu.tell()
+        arxiu.seek(0)
+        if mida > MIDA_MAXIMA:
+            continue  # fitxer massa gran, s'ignora silenciosament
+
+        os.makedirs(carpeta, exist_ok=True)
+        nom_segur = secure_filename(arxiu.filename)
+        arxiu.save(os.path.join(carpeta, nom_segur))
+
+        ext = nom_segur.rsplit('.', 1)[1].lower()
+        tipus_media = 'imatge' if ext in {'jpg', 'jpeg', 'png', 'webp', 'gif'} else 'document'
+
+        db.session.add(ArxiuMissatge(
+            missatge_id=missatge.id,
+            nom_fitxer=nom_segur,
+            tipus=ext,
+            tipus_media=tipus_media
+        ))
+
     db.session.commit()
 
     if es_ajax:
@@ -72,6 +129,8 @@ def elimina_missatge(missatge_id):
         flash("No tens permís per eliminar aquest missatge.", "error")
         return redirect(url_for("pagina_personal", perfil_id=current_user.id))
 
+
+    _esborra_arxius_fisics(missatge.id)
     db.session.delete(missatge)
     db.session.commit()
     flash("Missatge eliminat.", "success")
@@ -82,12 +141,12 @@ def elimina_missatge(missatge_id):
 def elimina_missatge_enviat(missatge_id):
     missatge = Missatge.query.get_or_404(missatge_id)
 
-    # Només l’emissor pot eliminar-lo
+    # Només l'emissor pot eliminar-lo
     if missatge.emissor_id != current_user.id:
         flash("No tens permís per eliminar aquest missatge.", "error")
         return redirect(url_for("pagina_personal.pagina_personal", perfil_id=current_user.id))
 
-
+    _esborra_arxius_fisics(missatge.id)
     db.session.delete(missatge)
     db.session.commit()
     flash("Missatge enviat eliminat.", "success")
@@ -142,7 +201,14 @@ def api_missatge(missatge_id):
         remitent = f"{missatge.emissor.nom} {missatge.emissor.primer_cognom}"
         receptor = f"{missatge.receptor.nom} {missatge.receptor.primer_cognom}"
         es_contacte = current_user.es_contacte(missatge.emissor) if missatge.emissor_id != current_user.id else True
-
+        
+        arxius_info = [{
+            "nom_fitxer": a.nom_fitxer,
+            "tipus": a.tipus,
+            "tipus_media": a.tipus_media,
+            "url": url_for("missatges.servir_arxiu_missatge", missatge_id=missatge.id, nom_fitxer=a.nom_fitxer)
+        } for a in missatge.arxius_adjunts]
+        
         return jsonify({
             "id": missatge.id,
             "assumpte": missatge.assumpte,
@@ -152,9 +218,9 @@ def api_missatge(missatge_id):
             "receptor": receptor,
             "es_contacte": es_contacte,
             "emissor_id": missatge.emissor_id,
-            "emissor_login": missatge.emissor.nom_login
-        })
-                
+            "emissor_login": missatge.emissor.nom_login,
+            "arxius": arxius_info
+        })      
     except Exception as e:
         print(f"❌ ERROR API: {e}")
         return jsonify({"error": str(e)}), 500
@@ -190,8 +256,18 @@ def api_usuaris():
         'login': u.nom_login
     } for u in usuaris])
 
- 
-    
+@missatges_bp.route("/missatge/arxiu/<int:missatge_id>/<path:nom_fitxer>")
+@login_required
+def servir_arxiu_missatge(missatge_id, nom_fitxer):
+    missatge = Missatge.query.get_or_404(missatge_id)
+
+    if current_user.id not in (missatge.emissor_id, missatge.receptor_id):
+        abort(403)
+
+    carpeta = os.path.join(
+        os.getcwd(), "umberto", "missatges", str(missatge_id)
+    )
+    return send_from_directory(carpeta, nom_fitxer)  
 
 
 
