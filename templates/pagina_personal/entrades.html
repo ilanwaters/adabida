@@ -13,7 +13,8 @@
   <h1 class="nom-complet" style="margin:0;">
     {{ usuari.nom }} {{ usuari.primer_cognom }} {{ usuari.segon_cognom }}
   </h1>
-  <div style="display:flex; gap:10px;">
+  <div style="display:flex; gap:10px; align-items:center;">
+    <input type="text" id="cercador-entrades" placeholder="{{ _('Cerca...') }}" class="campo-largo" style="max-width:220px; margin:0;">
     <button type="button" class="boto_nav boto-pestanya-entrades activa" data-pestanya="meves" onclick="canviaPestanyaEntrades('meves')">{{ _('Les meves entrades') }}</button>
     <button type="button" class="boto_nav boto-pestanya-entrades" data-pestanya="guardades" onclick="canviaPestanyaEntrades('guardades')">{{ _('Entrades guardades') }}</button>
     <button type="button" class="boto_nav boto-pestanya-entrades" data-pestanya="esborranys" onclick="canviaPestanyaEntrades('esborranys')">{{ _('Esborranys') }}</button>
@@ -82,6 +83,8 @@
       window._entradesGuardadesCarregades = true;
     }
 
+    setTimeout(aplicaFiltreCerca, 0);
+
     if (nom === 'esborranys' && !window._esborranysCarregats) {
       carregaEsborranys('{{ usuari.nom_login }}');
       window._esborranysCarregats = true;
@@ -115,6 +118,7 @@
         document.getElementById("llista-esborranys").innerHTML = `<div class="llista-entrades">${html}</div>`;
         const num = document.querySelectorAll('#llista-esborranys .caixa-entrada, #llista-esborranys .caixa-conversa').length;
         document.getElementById('comptador-entrades').textContent = `${num} {{ _('esborranys') }}`;
+        aplicaFiltreCerca();
       })
       .catch(() => {
         document.getElementById("llista-esborranys").innerHTML = "<p>{{ _('Error carregant els esborranys.') }}</p>";
@@ -132,11 +136,25 @@
         document.getElementById("llista-guardades").innerHTML = `<div class="llista-entrades">${html}</div>`;
         const num = document.querySelectorAll('#llista-guardades .caixa-entrada, #llista-guardades .caixa-conversa').length;
         document.getElementById('comptador-entrades').textContent = `${num} {{ _('entrades guardades') }}`;
+        aplicaFiltreCerca();
       })
       .catch(() => {
         document.getElementById("llista-guardades").innerHTML = "<p>{{ _('Error carregant les entrades guardades.') }}</p>";
         document.getElementById('comptador-entrades').textContent = '';
       });
   }
+</script>
+<script>
+function aplicaFiltreCerca() {
+  const text = document.getElementById('cercador-entrades').value.trim().toLowerCase();
+  const seccioActiva = document.querySelector('.arxiu-entrades[id^="seccio-"]:not([style*="display: none"])')
+    || document.getElementById('seccio-meves-entrades');
+  const targetes = seccioActiva.querySelectorAll('.caixa-entrada, .caixa-conversa');
+  targetes.forEach(function(targeta) {
+    const contingut = targeta.textContent.toLowerCase();
+    targeta.style.display = contingut.includes(text) ? '' : 'none';
+  });
+}
+document.getElementById('cercador-entrades').addEventListener('input', aplicaFiltreCerca);
 </script>
 {% endblock %}
