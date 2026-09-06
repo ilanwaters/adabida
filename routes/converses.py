@@ -411,6 +411,7 @@ def nova_conversa_adabida():
         import shutil
         
         # 1. CREAR ENTRADA
+        mode_guardat = request.form.get('mode_guardat', 'publicar')
         entrada = Entrada(
             usuari_id=current_user.id,
             titol=request.form.get('titol', '').strip(),
@@ -421,7 +422,7 @@ def nova_conversa_adabida():
             municipi=request.form.get('lloc_municipi', '').strip(),
             any_text=request.form.get('data_conversa', '').split('-')[0] if request.form.get('data_conversa') else '',
             visible_publicament=bool(request.form.get('visible_publicament')),
-            es_publica=True
+            es_publica=(mode_guardat != 'esborrany')
         )
         
         db.session.add(entrada)
@@ -485,8 +486,44 @@ def nova_conversa_adabida():
                     participant.data_naixement = datetime.strptime(data_naix, '%Y-%m-%d').date()
                 except ValueError:
                     pass
-            
-            db.session.add(participant)
+
+        # Processar arxius nous pujats des del formulari d'edició
+        if conversa.entrada_id:
+            from utils.paisos import normalitza_pais
+            from models import ArxiuAdjunt
+
+            avui = datetime.now()
+            any_str = str(avui.year)
+            mes_str = str(avui.month).zfill(2)
+            pais = normalitza_pais(current_user.pais_residencia)
+
+            carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str,
+                                        current_user.nom_login, "entrades", str(conversa.entrada_id))
+            os.makedirs(carpeta_final, exist_ok=True)
+
+            i = 0
+            while f"arxiu_fitxer_{i}" in request.form:
+                nom_fitxer_meta = request.form.get(f"arxiu_fitxer_{i}", "").strip()
+                i += 1
+
+            arxius_nous = request.form.getlist("arxius[]") or []
+            carpeta_temp = os.path.join("umberto", "media", "temp", pais, any_str, mes_str, current_user.nom_login)
+            if os.path.exists(carpeta_temp):
+                for fitxer in os.listdir(carpeta_temp):
+                    ruta_origen = os.path.join(carpeta_temp, fitxer)
+                    ruta_desti = os.path.join(carpeta_final, fitxer)
+                    shutil.move(ruta_origen, ruta_desti)
+                    extensio = fitxer.rsplit('.', 1)[-1].lower() if '.' in fitxer else ''
+                    tipus_media = 'imatge' if extensio in ('jpg', 'jpeg', 'png', 'webp', 'gif') else 'document'
+                    nou_arxiu = ArxiuAdjunt(
+                        entrada_id=conversa.entrada_id,
+                        nom_fitxer=fitxer,
+                        tipus=extensio or 'desconegut',
+                        tipus_media=tipus_media
+                    )
+                    db.session.add(nou_arxiu)
+
+        db.session.commit()
         
         # 4. PROCESSAR ARXIUS
         avui = datetime.now()
@@ -547,7 +584,10 @@ def nova_conversa_adabida():
             i += 1
         
         db.session.commit()
-        flash('Conversa Adabida creada correctament!', 'success')
+        if mode_guardat == 'esborrany':
+            flash('Esborrany guardat correctament.', 'success')
+        else:
+            flash('Conversa Adabida creada correctament!', 'success')
         return redirect(url_for('repositori.repositori'))
         
     except Exception as e:
@@ -582,6 +622,12 @@ def editar_conversa_adabida(id):
                              arxius_existents=arxius_existents)
     # POST - Actualitzar
     try:
+        mode_guardat = request.form.get('mode_guardat', 'publicar')
+        if conversa.entrada_id:
+            from models import Entrada
+            entrada_vinculada = Entrada.query.get(conversa.entrada_id)
+            if entrada_vinculada:
+                entrada_vinculada.es_publica = (mode_guardat != 'esborrany')
         conversa.titol = request.form.get('titol', '').strip()
         conversa.tema = request.form.get('tema', '').strip()
         conversa.contingut = request.form.get('contingut', '').strip()
@@ -641,7 +687,10 @@ def editar_conversa_adabida(id):
                     pass
 
         db.session.commit()
-        flash('Conversa Adabida actualitzada correctament!', 'success')
+        if mode_guardat == 'esborrany':
+            flash('Esborrany guardat correctament.', 'success')
+        else:
+            flash('Conversa Adabida actualitzada correctament!', 'success')
         return redirect(url_for('pagina_personal.pagina_personal'))
         
     except Exception as e:

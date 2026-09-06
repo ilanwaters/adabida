@@ -328,7 +328,7 @@ def entrades():
             "usuari_id": entrada.usuari_id
         })
     # Obtenir converses
-    converses_raw = Conversa.query.filter_by(usuari_id=usuari.id, tipus_conversa='entrevista_adabida').all()
+    converses_raw = Conversa.query.join(Entrada, Conversa.entrada_id == Entrada.id).filter(Conversa.usuari_id == usuari.id, Conversa.tipus_conversa == 'entrevista_adabida', Entrada.es_publica == True).all()
     converses = []
     for conversa in converses_raw:
         conv_dict = preparar_conversa_per_vista(conversa, usuari.nom_login)

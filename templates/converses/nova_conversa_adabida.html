@@ -259,8 +259,11 @@
 
   </div>
 
-    <div class="botons-final" style="text-align: right; margin-top: 2rem;">
-      <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
+      <div class="botons-final" style="text-align: right; margin-top: 2rem;">
+      <button type="submit" name="mode_guardat" value="esborrany" class="boto-secundari" style="padding: 0.8rem 2rem; font-size: 1rem; margin-right: 1rem;">
+        Guardar esborrany
+      </button>
+      <button type="submit" name="mode_guardat" value="publicar" style="padding: 0.8rem 2rem; font-size: 1rem;">
         Crear Conversa Adabida
       </button>
     </div>
@@ -303,9 +306,15 @@ tinymce.init({
 </script>
 <script>
 // Obrir blocs amb camps invàlids
+let botoClicat = null;
+document.querySelectorAll('#formulari-entrada button[type="submit"]').forEach(function(btn) {
+    btn.addEventListener('click', function() { botoClicat = this.value; });
+});
 document.getElementById('formulari-entrada').addEventListener('submit', function(e) {
+    if (botoClicat === 'esborrany') {
+        return;
+    }
     const campsInvalids = this.querySelectorAll(':invalid');
-    
       if (campsInvalids.length > 0) {
         e.preventDefault();
         campsInvalids.forEach(camp => {

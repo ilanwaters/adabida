@@ -159,6 +159,23 @@
         </div>
       </div>
     </div>
+    <!-- ADJUNTAR ARXIUS -->
+    <div class="bloc-plegable">
+      <h3 class="titol-plegable" onclick="toggleBloc(this)">
+        {{ _('Adjuntar arxius') }}
+      </h3>
+      <div class="contingut-plegable">
+        <div class="pujar-arxiu-conversa">
+          <input type="file" id="puja-arxius-conversa" name="arxius" multiple style="display:none;">
+          <label for="puja-arxius-conversa" class="etiqueta-arxiu-conversa">
+            {{ _('Adjuntar arxius') }}
+          </label>
+          <small class="text-ajuda" style="display:block; margin-top:10px;">{{ _('Pots afegir tants arxius com vulguis, un per un o diversos alhora.') }}</small>
+        </div>
+        <div id="previsualitzacio-arxius-conversa" class="galeria"></div>
+      </div>
+    </div>
+
     <!-- ARXIUS EXISTENTS -->
     {% if arxius_existents %}
     <div class="bloc-plegable">
@@ -227,8 +244,11 @@
       </div>
     </div>
 
-    <div class="botons-final" style="text-align: right; margin-top: 2rem;">
-      <button type="submit" style="padding: 0.8rem 2rem; font-size: 1rem;">
+        <div class="botons-final" style="text-align: right; margin-top: 2rem;">
+      <button type="submit" name="mode_guardat" value="esborrany" class="boto-secundari" style="padding: 0.8rem 2rem; font-size: 1rem; margin-right: 1rem;">
+        {{ _('Guardar esborrany') }}
+      </button>
+      <button type="submit" name="mode_guardat" value="publicar" style="padding: 0.8rem 2rem; font-size: 1rem;">
          {{ _('Desar Canvis') }}
       </button>
     </div>
