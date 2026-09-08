@@ -430,3 +430,16 @@ def detectar_problemes_relacions(familia_id):
     # - Matrimonis sense dates
     
     return problemes
+
+@administrar_bp.route('/toggle-visibilitat-publica', methods=['POST'])
+@login_required
+def toggle_visibilitat_publica(familia_id):
+    """Alternar la visibilitat pública d'una família al cercador/repositori"""
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No tens permisos'}), 403
+
+    familia = EspaiFamiliar.query.get_or_404(familia_id)
+    familia.visible_publicament = not familia.visible_publicament
+    db.session.commit()
+
+    return jsonify({'success': True, 'visible_publicament': familia.visible_publicament})

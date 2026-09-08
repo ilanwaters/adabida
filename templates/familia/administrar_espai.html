@@ -27,6 +27,7 @@
     </div>
 
     <div class="separador"></div>
+    
 
     <!-- Alerta informativa -->
   
@@ -90,6 +91,12 @@
             <a href="{{ url_for('familia.publica', url=familia.url) }}" target="_blank" class="boto_nav">
                  {{ _('Veure espai públic') }}
             </a>
+          <button class="btn-custom btn-outline-custom btn-sm {{ 'estat-public' if familia.visible_publicament else 'estat-privat' }}"
+        id="btn-visibilitat-publica"
+        data-familia-id="{{ familia.id }}"
+        onclick="toggleVisibilitatPublica()">
+    {% if familia.visible_publicament %}{{ _('Visible públicament') }}{% else %}{{ _('Ocult públicament') }}{% endif %}
+</button>
         </div>
     </div>
 
@@ -689,5 +696,20 @@ document.getElementById('form-foto-membre').addEventListener('submit', function(
         alert('Error de connexió');
     });
 });
+</script>
+<script>
+function toggleVisibilitatPublica() {
+    fetch(`/familia/{{ familia.id }}/administrar/toggle-visibilitat-publica`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.error || 'Error canviant la visibilitat');
+        }
+    });
+}
 </script>
 {% endblock %}

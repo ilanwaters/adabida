@@ -66,3 +66,72 @@ function editarMembre(membreId) {
 function tancarModalMembre() {
   document.getElementById('modal-membre').style.display = 'none';
 }
+
+function toggleVisibilitatMembre(membreId) {
+  fetch(`/familia/membre/${membreId}/toggle-visibilitat`, {
+    method: 'POST'
+  })
+    .then(res => res.json())
+    .then(resposta => {
+      if (resposta.success) {
+        window.location.reload();
+      } else {
+        alert(resposta.error || 'Error canviant la visibilitat');
+      }
+    })
+    .catch(() => alert('Error canviant la visibilitat'));
+}
+
+function toggleVisibilitatPublica() {
+  const familiaId = document.getElementById('btn-visibilitat-publica').dataset.familiaId;
+  fetch(`/familia/${familiaId}/administrar/toggle-visibilitat-publica`, {
+    method: 'POST'
+  })
+    .then(res => res.json())
+    .then(resposta => {
+      if (resposta.success) {
+        window.location.reload();
+      } else {
+        alert(resposta.error || 'Error canviant la visibilitat');
+      }
+    })
+    .catch(() => alert('Error canviant la visibilitat'));
+}
+
+function ampliarFotoMembre(src) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out;';
+  overlay.innerHTML = `<img src="${src}" style="max-width:90%;max-height:90%;border-radius:8px;">`;
+  overlay.addEventListener('click', () => overlay.remove());
+  document.body.appendChild(overlay);
+}
+function canviarFotoMembre(membreId) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+
+  input.addEventListener('change', () => {
+    const fitxer = input.files[0];
+    if (!fitxer) return;
+
+    const dades = new FormData();
+    dades.append('membre_id', membreId);
+    dades.append('foto', fitxer);
+
+    fetch('/familia/membre/pujar-foto', {
+      method: 'POST',
+      body: dades
+    })
+      .then(res => res.json())
+      .then(resposta => {
+        if (resposta.success) {
+          window.location.reload();
+        } else {
+          alert(resposta.error || 'Error pujant la foto');
+        }
+      })
+      .catch(() => alert('Error pujant la foto'));
+  });
+
+  input.click();
+}
