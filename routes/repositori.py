@@ -1,7 +1,7 @@
 # routes/repositori.py
 
 from flask import Blueprint, render_template, request, url_for, abort
-from models import Entrada, Usuari, Pais, Regio, Municipi, Conversa
+from models import Entrada, Usuari, Pais, Regio, Municipi, Conversa, UbicacioOrigenFamilia
 from sqlalchemy import or_, and_, func
 from utils import generar_miniatura_entrada
 import re
@@ -47,6 +47,32 @@ def preparar_conversa_per_vista(conversa, usuari_nom_login):
         "data_ordenacio": conversa.data_conversa or conversa.created_at,
         "miniatura": Entrada.query.get(conversa.entrada_id).miniatura if conversa.entrada_id else "/static/icons/entrevista.svg",
         "usuari": conversa.usuari
+    }
+def preparar_familia_per_vista(familia):
+    """Converteix un EspaiFamiliar en format dict per renderitzar com a targeta"""
+    lloc = None
+    origen = familia.ubicacions_origen[0] if familia.ubicacions_origen else None
+    if origen:
+        parts_lloc = [origen.municipi, origen.regio, origen.pais]
+        lloc = ", ".join([p for p in parts_lloc if p]) or None
+
+    resum = ""
+    if familia.descripcio:
+        contingut_net = re.sub(r'<[^>]+>', '', familia.descripcio)
+        resum = contingut_net[:120] + "..." if len(contingut_net) > 120 else contingut_net
+
+    return {
+        "id": familia.id,
+        "tipus": "familia",
+        "nom": familia.nom,
+        "motiu": familia.motiu,
+        "lloc": lloc,
+        "resum": resum,
+        "nombre_membres": familia.nombre_membres,
+        "data": familia.data_creacio.strftime("%d/%m/%Y") if familia.data_creacio else "",
+        "data_ordenacio": familia.data_creacio,
+        "miniatura": familia.imatge_card_home or "/static/icons/familia.svg",
+        "url": familia.url
     }
 
 @repositori_bp.route("/repositori", methods=["GET"])
@@ -260,13 +286,54 @@ def consulta_repositori():
     else:
         converses_raw = []
 
+    # Obtenir famílies (visibles públicament)
+    if cerca_realitzada:
+        from models import EspaiFamiliar, MembreFamilia
+
+        condicions_familia = []
+
+        if text:
+            nom_complet_membre = func.concat(
+                func.coalesce(MembreFamilia.nom, ''), ' ',
+                func.coalesce(MembreFamilia.primer_cognom, ''), ' ',
+                func.coalesce(MembreFamilia.segon_cognom, '')
+            )
+            subquery_membres = MembreFamilia.query.filter(
+                nom_complet_membre.ilike(f"%{text}%")
+            ).with_entities(MembreFamilia.espai_familiar_id)
+
+            condicions_familia.append(or_(
+                EspaiFamiliar.nom.ilike(f"%{text}%"),
+                EspaiFamiliar.descripcio.ilike(f"%{text}%"),
+                EspaiFamiliar.id.in_(subquery_membres)
+            ))
+
+        if pais:
+            subquery_pais_origen = UbicacioOrigenFamilia.query.filter(
+                UbicacioOrigenFamilia.pais.ilike(f"%{pais}%")
+            ).with_entities(UbicacioOrigenFamilia.espai_familiar_id)
+            condicions_familia.append(EspaiFamiliar.id.in_(subquery_pais_origen))
+
+        if condicions_familia:
+            base_familia = EspaiFamiliar.query.filter(EspaiFamiliar.visible_publicament == True)
+            if strict:
+                families_raw = base_familia.filter(and_(*condicions_familia)).limit(per_page).all()
+            else:
+                families_raw = base_familia.filter(or_(*condicions_familia)).limit(per_page).all()
+        else:
+            families_raw = []
+    else:
+        families_raw = []
+
     converses = []
     for conversa in converses_raw:
         conv_dict = preparar_conversa_per_vista(conversa, conversa.usuari.nom_login if conversa.usuari else 'anonim')
         converses.append(conv_dict)
 
-    # Barrejar entrades + converses
-    entrades = entrades + converses
+    families = [preparar_familia_per_vista(f) for f in families_raw]
+
+    # Barrejar entrades + converses + families
+    entrades = entrades + converses + families
     from datetime import date
 
     def normalitza_data(d):

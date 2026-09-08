@@ -1,0 +1,33 @@
+<!-- templates/components/caixa_familia.html -->
+<div class="caixa-entrada">
+    <div class="imatge-lateral" style="position: relative;">
+        <img src="{{ familia.miniatura }}" class="miniatura" alt="{{ _('Miniatura família') }}">
+    </div>
+    <div class="contingut-lateral">
+        <h3 class="titol-entrada clicable" onclick="window.location.href='/familia/{{ familia.url or familia.id }}'">
+            {{ familia.nom }}
+        </h3>
+
+        {% if familia.motiu %}
+        <p style="margin: 0.3rem 0; color: #555;">{{ familia.motiu }}</p>
+        {% endif %}
+
+        {% if familia.lloc %}
+        <p class="lloc" style="font-size: 0.9rem; color: #555; margin: 0.3rem 0;">
+            {{ familia.lloc }}
+        </p>
+        {% endif %}
+
+        <p style="font-size: 0.85rem; color: #777; margin: 0.3rem 0;">
+            {{ _('Membres') }}: {{ familia.nombre_membres }}
+        </p>
+
+        {% if familia.resum %}
+        <p class="resum">{{ familia.resum }}</p>
+        {% endif %}
+
+        <div class="metadades">
+            <small>{{ _('Espai familiar') }} · {{ familia.data }}</small>
+        </div>
+    </div>
+</div>
