@@ -4,7 +4,7 @@
         <img src="{{ familia.miniatura }}" class="miniatura" alt="{{ _('Miniatura família') }}">
     </div>
     <div class="contingut-lateral">
-        <h3 class="titol-entrada clicable" onclick="window.location.href='/familia/{{ familia.url or familia.id }}'">
+        <h3 class="titol-entrada clicable" onclick="window.location.href='{{ url_for('familia.publica', url=familia.url) }}'">
             {{ familia.nom }}
         </h3>
 
