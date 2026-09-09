@@ -1,8 +1,18 @@
 <!-- templates/components/caixa_familia.html -->
 <div class="caixa-entrada">
     <div class="imatge-lateral" style="position: relative;">
-        <img src="{{ familia.miniatura }}" class="miniatura" alt="{{ _('Miniatura família') }}">
-    </div>
+    <a href="{{ familia.miniatura }}" data-lightbox="galeria-familia-{{ familia.id }}">
+    <img src="{{ familia.miniatura }}" class="miniatura" alt="{{ _('Miniatura família') }}">
+</a>
+    {% if session.get("usuari_id") %}
+    <button type="button" class="icona-editar-imatge icona-editar-imatge--petita" title="{{ _('Canviar imatge de portada') }}"
+        onclick="event.stopPropagation(); obrirSelectorPortadaFamilia({{ familia.id }})">
+        <i class="fas fa-camera"></i>
+    </button>
+    <input type="file" id="input-portada-familia-{{ familia.id }}" accept="image/*" style="display:none;"
+           onchange="pujarPortadaFamilia({{ familia.id }}, this)">
+    {% endif %}
+</div>
     <div class="contingut-lateral">
         <h3 class="titol-entrada clicable" onclick="window.location.href='{{ url_for('familia.publica', url=familia.url) }}'">
             {{ familia.nom }}

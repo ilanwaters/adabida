@@ -110,7 +110,31 @@ function pujarPortada(entradaId, input) {
       alert("Error de servidor en canviar la portada.");
     });
 }
+function obrirSelectorPortadaFamilia(familiaId) {
+  document.getElementById(`input-portada-familia-${familiaId}`).click();
+}
 
+function pujarPortadaFamilia(familiaId, input) {
+  const fitxer = input.files[0];
+  if (!fitxer) return;
+
+  const formData = new FormData();
+  formData.append("imatge", fitxer);
+
+  fetch(`/familia/${familiaId}/administrar/portada`, { method: "POST", body: formData })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert("No s'ha pogut canviar la portada: " + (data.error || "error desconegut"));
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error de servidor en canviar la portada.");
+    });
+}
 function obrirPhotoSwipe(link) {
   const galeria = link.getAttribute('data-lightbox');
   const totsLinks = Array.from(document.querySelectorAll(`a[data-lightbox="${galeria}"]`));

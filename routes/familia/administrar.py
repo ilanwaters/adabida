@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia
 from sqlalchemy import func
+from utils.paisos import normalitza_pais
+import os
+from datetime import datetime
 
 administrar_bp = Blueprint('administrar', __name__, url_prefix='/familia/<int:familia_id>/administrar')
 
@@ -443,3 +446,35 @@ def toggle_visibilitat_publica(familia_id):
     db.session.commit()
 
     return jsonify({'success': True, 'visible_publicament': familia.visible_publicament})
+
+@administrar_bp.route('/portada', methods=['POST'])
+@login_required
+def canviar_portada_familia(familia_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify(success=False, error="No autoritzat"), 403
+
+    familia = EspaiFamiliar.query.get_or_404(familia_id)
+
+    imatge = request.files.get("imatge")
+    if not imatge or not imatge.filename:
+        return jsonify(success=False, error="No s'ha rebut cap imatge"), 400
+
+    extensio = imatge.filename.rsplit('.', 1)[-1].lower()
+    if extensio not in ('jpg', 'jpeg', 'png', 'webp'):
+        return jsonify(success=False, error="Format d'imatge no vàlid"), 400
+
+    any_str = str(familia.data_creacio.year)
+    mes_str = str(familia.data_creacio.month).zfill(2)
+    pais = normalitza_pais(current_user.pais_residencia)
+    carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, current_user.nom_login, "families", str(familia.id))
+    os.makedirs(carpeta_final, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    nom_fitxer = f"portada_{current_user.nom_login}_{timestamp}.{extensio}"
+    ruta_final = os.path.join(carpeta_final, nom_fitxer)
+    imatge.save(ruta_final)
+
+    familia.imatge_card_home = f"/umberto/{current_user.nom_login}/{familia.id}/{nom_fitxer}"
+    db.session.commit()
+
+    return jsonify(success=True, nom_fitxer=nom_fitxer)
