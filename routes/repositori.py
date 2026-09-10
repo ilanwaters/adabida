@@ -71,7 +71,7 @@ def preparar_familia_per_vista(familia):
         "nombre_membres": familia.nombre_membres,
         "data": familia.data_creacio.strftime("%d/%m/%Y") if familia.data_creacio else "",
         "data_ordenacio": familia.data_creacio,
-        "miniatura": familia.imatge_card_home or "/static/icons/familia.svg",
+        "miniatura": familia.imatge_card_home or (f"/static/heraldica/{familia.heraldica_fitxer}" if familia.heraldica_fitxer else "/static/icons/espai_familiar.png"),
         "url": familia.url
     }
 
