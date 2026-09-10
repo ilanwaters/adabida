@@ -1,0 +1,35 @@
+<!-- templates/components/caixa_familia_privada.html -->
+<div class="caixa-entrada" onclick="window.location.href='{{ url_for('familia.veure', url=familia.url) }}'">
+    <div class="imatge-lateral" style="position: relative;">
+        <img src="{{ familia.miniatura }}" class="miniatura" alt="{{ _('Miniatura família') }}">
+    </div>
+    <div class="contingut-lateral">
+        <h3 class="titol-entrada">
+            {{ familia.nom }}
+        </h3>
+
+        {% if familia.motiu %}
+        <p style="margin: 0.3rem 0; color: #555;">{{ familia.motiu }}</p>
+        {% endif %}
+
+        {% if familia.lloc %}
+        <p class="lloc" style="font-size: 0.9rem; color: #555; margin: 0.3rem 0;">
+            {{ familia.lloc }}
+        </p>
+        {% endif %}
+
+        <p style="font-size: 0.85rem; color: #777; margin: 0.3rem 0;">
+            {{ _('Membres') }}: {{ familia.nombre_membres }}
+        </p>
+
+        <div class="metadades">
+            <small>{{ _('Espai familiar') }} · {{ familia.data }}</small>
+            {% if es_admin %}
+            <a href="{{ url_for('administrar.index', familia_id=familia.id) }}"
+            class="boto_nav" onclick="event.stopPropagation()">
+                {{ _('Administrar') }}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>

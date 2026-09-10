@@ -561,18 +561,23 @@ def pujar_imatge_card(url):
 @login_required
 def les_meves():
     """Llista els espais familiars de l'usuari"""
+    from routes.repositori import preparar_familia_per_vista
+
     # Obtenir espais on sóc administrador
-    families_admin = MembreFamilia.query.filter_by(
+    membres_admin = MembreFamilia.query.filter_by(
         usuari_id=current_user.id,
         rol='administrador'
     ).all()
-    
+
     # Obtenir espais on sóc membre (no admin)
-    families_membre = MembreFamilia.query.filter_by(
+    membres_no_admin = MembreFamilia.query.filter_by(
         usuari_id=current_user.id,
         rol='membre'
     ).all()
-    
+
+    families_admin = [preparar_familia_per_vista(m.espai_familiar) for m in membres_admin]
+    families_membre = [preparar_familia_per_vista(m.espai_familiar) for m in membres_no_admin]
+
     return render_template('familia/les_meves_families.html', 
                          usuari=current_user,
                          families_admin=families_admin,
@@ -727,11 +732,10 @@ def seccio_publica(url, seccio):
     
     elif seccio == 'membres':
         from datetime import datetime
-    # De moment mostrem tots (després afegirem camp visible_public)
         membres_publics = MembreFamilia.query.filter_by(
-            espai_familiar_id=familia.id
+            espai_familiar_id=familia.id,
+            visible_public=True
         ).order_by(MembreFamilia.nom, MembreFamilia.primer_cognom).all()
-
         return render_template('familia/publica_membres.html', 
                         familia=familia, 
                         membres=membres_publics,

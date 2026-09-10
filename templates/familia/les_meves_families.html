@@ -25,43 +25,12 @@
     </h3>
     <div class="contingut-plegable">
       {% if families_admin %}
-        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-          {% for membre in families_admin %}
-            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
-              <div>
-                <strong>{{ membre.espai_familiar.nom }}</strong>
-                <small style="color: #666; margin-left: 8px;">({{ _('Administrador') }})</small>
-                {% if membre.espai_familiar.motiu %}
-                <div style="font-size: 0.9rem; color: #666; margin-top: 4px; font-style: italic;">
-                  "{{ membre.espai_familiar.motiu }}"
-                </div>
-                {% endif %}
-                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
-                   {{ membre.espai_familiar.nombre_membres }} {{ _('membres') }}
-                </div>
-                {% if membre.espai_familiar.ubicacions_mostrar %}
-                <div style="font-size: 0.9rem; color: #666;">
-                   
-                  {% for ub in membre.espai_familiar.ubicacions_mostrar[:2] %}
-                    {{ ub.municipi }}{% if ub.pais %}, {{ ub.pais }}{% endif %}{% if not loop.last %} · {% endif %}
-                  {% endfor %}
-                  {% if membre.espai_familiar.ubicacions_mostrar|length > 2 %}...{% endif %}
-                </div>
-                {% endif %}
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <a href="{{ url_for('familia.veure', url=membre.espai_familiar.url) }}"
-                   class="boto_nav">
-                  {{ _('Veure') }}
-                </a>
-                <a href="{{ url_for('administrar.index', familia_id=membre.espai_familiar.id) }}"
-                   class="boto_nav">
-                  {{ _('Administrar') }}
-                </a>
-              </div>
-            </li>
+       <div class="grid-entrades">
+          {% for familia in families_admin %}
+              {% set es_admin = true %}
+              {% include "components/caixa_familia_privada.html" %}
           {% endfor %}
-        </ul>
+      </div>
       {% else %}
         <p style="color: #666; font-style: italic; margin-top: 1rem;">
           <em>{{ _('Encara no administres cap espai familiar') }}</em>
@@ -82,30 +51,12 @@
     </h3>
     <div class="contingut-plegable">
       {% if families_membre %}
-        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-          {% for membre in families_membre %}
-            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa; margin-bottom: 8px; border-radius: 6px;">
-              <div>
-                <strong>{{ membre.espai_familiar.nom }}</strong>
-                <small style="color: #666; margin-left: 8px;">({{ _(membre.rol.title()) }})</small>
-                {% if membre.espai_familiar.motiu %}
-                <div style="font-size: 0.9rem; color: #666; margin-top: 4px; font-style: italic;">
-                  "{{ membre.espai_familiar.motiu }}"
-                </div>
-                {% endif %}
-                <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
-                   {{ membre.espai_familiar.nombre_membres }} {{ _('membres') }}
-                </div>
-              </div>
-              <div>
-                <a href="{{ url_for('familia.veure', url=membre.espai_familiar.url) }}"
-                   class="boto_nav">
-                  {{ _('Veure') }}
-                </a>
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
+        <div class="grid-entrades">
+            {% for familia in families_membre %}
+                {% set es_admin = false %}
+                {% include "components/caixa_familia_privada.html" %}
+            {% endfor %}
+        </div>
       {% else %}
         <p style="color: #666; font-style: italic; margin-top: 1rem;">
           <em>{{ _('Encara no pertanys a cap espai familiar com a membre') }}</em>
