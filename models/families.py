@@ -230,7 +230,6 @@ class Matrimoni(db.Model):
     def __repr__(self):
         return f'<Matrimoni {self.membre_1_id} - {self.membre_2_id} ({self.estat})>'
 
-
 class DocumentMembreFamilia(db.Model):
     __tablename__ = 'documents_membres_familia'
     
@@ -276,6 +275,8 @@ class DocumentFamilia(db.Model):
 
     nom_fitxer = db.Column(db.String(255), nullable=False)
     tipus = db.Column(db.String(10))
+    titol = db.Column(db.String(200))
+    any_document = db.Column(db.String(10))
     descripcio = db.Column(db.String(500))
     visible_public = db.Column(db.Boolean, default=False, nullable=False)
 
