@@ -295,7 +295,9 @@ class DocumentFamilia(db.Model):
 
     nom_fitxer = db.Column(db.String(255), nullable=False)
     tipus = db.Column(db.String(10))
+    titol = db.Column(db.String(200))
     any_document = db.Column(db.String(10))
+    descripcio = db.Column(db.String(500))
 
     data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
 
