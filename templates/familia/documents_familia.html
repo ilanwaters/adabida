@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block titol %}{{ familia.nom }} - {{ _('Documents') }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+{% endblock %}
+
+{% block contingut %}
+<div class="container-visualitzacio">
+
+    <div class="nav-tornar">
+        <a href="{{ url_for('familia.veure', url=familia.url) }}">← {{ familia.nom }}</a>
+    </div>
+
+    <div class="capçalera-pagina">
+        <h1>{{ _('Documents') }}</h1>
+    </div>
+
+   {% if es_admin %}
+    <div class="bloc-plegable tancat">
+        <h3 class="titol-plegable" onclick="toggleBloc(this)">{{ _('Pujar nou document') }}</h3>
+        <div class="contingut-plegable">
+        <form id="form-pujar-document" enctype="multipart/form-data">
+            <div style="margin-bottom: 1rem;">
+                <label>{{ _('Fitxer (PDF o imatge)') }}:</label>
+                <input type="file" id="input-fitxer-document" accept=".pdf,.jpg,.jpeg,.png,.webp" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label>{{ _('Títol') }}:</label>
+                <input type="text" id="input-titol-document" style="width: 100%;" maxlength="200">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label>{{ _('Any') }}:</label>
+                <input type="text" id="input-any-document" style="width: 100px;" maxlength="10">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label>{{ _('Descripció') }}:</label>
+                <input type="text" id="input-descripcio-document" style="width: 100%;" maxlength="500">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label class="checkbox-etica">
+                    <input type="checkbox" id="input-visible-public-document">
+                    <span class="checkmark"></span>
+                    {{ _('Visible públicament') }}
+                </label>
+            </div>
+            <button type="button" class="btn-custom btn-primary-custom" onclick="pujarDocumentFamilia()">
+                {{ _('Pujar document') }}
+            </button>
+        </form>
+    </div>
+    </div>
+    {% endif %}
+
+    <div class="grid-galeria" style="margin-top: 1.5rem;">
+        {% for doc in documents %}
+        <div class="targeta-imatge">
+            {% if doc.tipus == 'pdf' %}
+                <a href="{{ doc.nom_fitxer }}" target="_blank">
+                    <div style="height: 150px; display: flex; align-items: center; justify-content: center; background: #f1f1f1;">
+                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: #dc3545;"></i>
+                    </div>
+                </a>
+            {% else %}
+                <a href="{{ doc.nom_fitxer }}" data-lightbox="documents-familia">
+                    <img src="{{ doc.nom_fitxer }}" class="imatge-galeria" alt="Document">
+                </a>
+            {% endif %}
+            {% if doc.descripcio %}
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">{{ doc.descripcio }}</p>
+            {% endif %}
+            <p style="font-size: 0.75rem; color: #999;">
+                {{ _('Públic') if doc.visible_public else _('Privat') }}
+            </p>
+        </div>
+        {% else %}
+        <p>{{ _('Encara no hi ha documents penjats.') }}</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+function toggleBloc(element) {
+  const bloc = element.parentElement;
+  bloc.classList.toggle('tancat');
+}
+
+function pujarDocumentFamilia() {
+    const fitxer = document.getElementById('input-fitxer-document').files[0];
+    if (!fitxer) { alert("{{ _('Cal seleccionar un fitxer') }}"); return; }
+
+    const formData = new FormData();
+    formData.append('fitxer', fitxer);
+    formData.append('descripcio', document.getElementById('input-descripcio-document').value);
+    formData.append('visible_public', document.getElementById('input-visible-public-document').checked);
+
+    fetch(`/familia/{{ familia.id }}/administrar/documents/pujar`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'No s\'ha pogut pujar el document'));
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_required, current_user
-from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia
+from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia, DocumentFamilia
 from sqlalchemy import func
 from utils.paisos import normalitza_pais
 import os
@@ -478,3 +478,78 @@ def canviar_portada_familia(familia_id):
     db.session.commit()
 
     return jsonify(success=True, nom_fitxer=nom_fitxer)
+
+@administrar_bp.route('/heraldica', methods=['POST'])
+@login_required
+def canviar_heraldica(familia_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    familia = EspaiFamiliar.query.get_or_404(familia_id)
+
+    imatge = request.files.get('heraldica')
+    if not imatge or not imatge.filename:
+        return jsonify({'success': False, 'error': "No s'ha rebut cap imatge"}), 400
+
+    extensio = imatge.filename.rsplit('.', 1)[-1].lower()
+    if extensio not in ('png', 'jpg', 'jpeg', 'gif'):
+        return jsonify({'success': False, 'error': "Format d'imatge no vàlid"}), 400
+
+    carpeta = 'static/heraldica'
+    os.makedirs(carpeta, exist_ok=True)
+
+    nom_final = f"familia_{familia.id}_escut.{extensio}"
+    ruta_final = os.path.join(carpeta, nom_final)
+    imatge.save(ruta_final)
+
+    familia.heraldica_fitxer = nom_final
+    db.session.commit()
+
+    return jsonify({'success': True})
+
+@administrar_bp.route('/documents/pujar', methods=['POST'])
+@login_required
+def pujar_document_familia(familia_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    familia = EspaiFamiliar.query.get_or_404(familia_id)
+
+    fitxer = request.files.get('fitxer')
+    if not fitxer or not fitxer.filename:
+        return jsonify({'success': False, 'error': "No s'ha rebut cap fitxer"}), 400
+
+    extensio = fitxer.filename.rsplit('.', 1)[-1].lower()
+    if extensio not in ('pdf', 'jpg', 'jpeg', 'png', 'webp'):
+        return jsonify({'success': False, 'error': "Format de fitxer no vàlid"}), 400
+
+    titol = request.form.get('titol', '').strip()
+    any_document = request.form.get('any_document', '').strip()
+    descripcio = request.form.get('descripcio', '').strip()
+    visible_public = request.form.get('visible_public') == 'true'
+
+    any_str = str(familia.data_creacio.year)
+    mes_str = str(familia.data_creacio.month).zfill(2)
+    pais = normalitza_pais(current_user.pais_residencia)
+    carpeta_final = os.path.join("umberto", "usuaris", pais, any_str, mes_str, current_user.nom_login, "families", str(familia.id), "documents")
+    os.makedirs(carpeta_final, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    nom_fitxer = f"doc_{timestamp}.{extensio}"
+    ruta_final = os.path.join(carpeta_final, nom_fitxer)
+    fitxer.save(ruta_final)
+
+    nou_document = DocumentFamilia(
+        espai_familiar_id=familia.id,
+        nom_fitxer=f"/umberto/{current_user.nom_login}/{familia.id}/documents/{nom_fitxer}",
+        tipus=extensio,
+        titol=titol or None,
+        any_document=any_document or None,
+        descripcio=descripcio or None,
+        visible_public=visible_public,
+        pujat_per_id=current_user.id
+    )
+    db.session.add(nou_document)
+    db.session.commit()
+
+    return jsonify({'success': True})

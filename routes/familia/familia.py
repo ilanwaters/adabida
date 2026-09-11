@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort, jsonify
 from flask_login import login_required, current_user
 from models import db, Usuari, PerfilBiografic, Contacte, Entrada, EntradaFamilia
-from models.families import Matrimoni, EspaiFamiliar, MembreFamilia
+from models.families import Matrimoni, EspaiFamiliar, MembreFamilia, DocumentFamilia
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 import os
@@ -75,10 +75,7 @@ def crear():
                         'regio': obtenir_nom_regio(regions_actual[i]) if regions_actual[i] else '',
                         'municipi': obtenir_nom_municipi(municipis_actual[i]),
                         'ordre': i + 1
-                    })
-
-
-        
+                    }) 
         
         # Gestionar heràldica (fitxer)
         heraldica_fitxer = None
@@ -690,6 +687,30 @@ def arbre_dades(url):
         'matrimonis': matrimonis_data,
         'usuari_actual_id': es_membre.id
     })
+
+@familia_bp.route('/<url>/documents')
+@login_required
+def documents(url):
+    """Secció privada de documents de la família"""
+    familia = EspaiFamiliar.query.filter_by(url=url).first_or_404()
+
+    es_membre = MembreFamilia.query.filter_by(
+        usuari_id=current_user.id,
+        espai_familiar_id=familia.id
+    ).first()
+
+    if not es_membre:
+        flash('No tens accés a aquest espai familiar', 'error')
+        return redirect(url_for('familia.les_meves'))
+
+    documents = DocumentFamilia.query.filter_by(
+        espai_familiar_id=familia.id
+    ).order_by(DocumentFamilia.data_pujada.desc()).all()
+
+    return render_template('familia/documents_familia.html',
+                         familia=familia,
+                         documents=documents,
+                         es_admin=(es_membre.rol == 'administrador'))
 
 # ============================================
 # RUTES PÚBLIQUES (sense login requerit)
