@@ -267,27 +267,42 @@ class BiografiaFamiliaSeccion(db.Model):
     
     espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('seccions_historia', lazy='dynamic', cascade='all, delete-orphan'))
 
-class DocumentFamilia(db.Model):
-    __tablename__ = 'documents_familia'
+class GrupDocumentsFamilia(db.Model):
+    __tablename__ = 'grups_documents_familia'
 
     id = db.Column(db.Integer, primary_key=True)
     espai_familiar_id = db.Column(db.Integer, db.ForeignKey('espais_familiars.id'), nullable=False)
 
-    nom_fitxer = db.Column(db.String(255), nullable=False)
-    tipus = db.Column(db.String(10))
     titol = db.Column(db.String(200))
-    any_document = db.Column(db.String(10))
     descripcio = db.Column(db.String(500))
     visible_public = db.Column(db.Boolean, default=False, nullable=False)
 
     data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
     pujat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
 
-    espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('documents_familia', cascade='all, delete-orphan'))
+    espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('grups_documents', cascade='all, delete-orphan'))
     pujat_per = db.relationship('Usuari')
 
     def __repr__(self):
-        return f'<DocumentFamilia {self.nom_fitxer} ({self.espai_familiar_id})>'
+        return f'<GrupDocumentsFamilia {self.titol} ({self.espai_familiar_id})>'
+
+
+class DocumentFamilia(db.Model):
+    __tablename__ = 'documents_familia'
+
+    id = db.Column(db.Integer, primary_key=True)
+    grup_id = db.Column(db.Integer, db.ForeignKey('grups_documents_familia.id'), nullable=False)
+
+    nom_fitxer = db.Column(db.String(255), nullable=False)
+    tipus = db.Column(db.String(10))
+    any_document = db.Column(db.String(10))
+
+    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+
+    grup = db.relationship('GrupDocumentsFamilia', backref=db.backref('documents', cascade='all, delete-orphan'))
+
+    def __repr__(self):
+        return f'<DocumentFamilia {self.nom_fitxer} (grup {self.grup_id})>'
 
 
 

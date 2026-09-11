@@ -18,7 +18,8 @@ from models.organitzacions import (
 from models.families import (
     EspaiFamiliar, MembreFamilia, EntradaFamilia,
     UbicacioOrigenFamilia, UbicacioActualFamilia, Matrimoni,
-    DocumentMembreFamilia, BiografiaFamiliaSeccion, DocumentFamilia
+    DocumentMembreFamilia, BiografiaFamiliaSeccion, DocumentFamilia,
+    GrupDocumentsFamilia
 )
 from models.ubicacions import Pais, Regio, Municipi, TraducioUbicacio
 from models.blog import EntradaBlog
@@ -73,6 +74,7 @@ __all__ = [
     'Matrimoni',
     'DocumentMembreFamilia',
     'DocumentFamilia',
+    'GrupDocumentsFamilia',
     'BiografiaFamiliaSeccion',
     'Pais',
     'Regio',
