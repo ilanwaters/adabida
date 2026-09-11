@@ -268,6 +268,29 @@ class BiografiaFamiliaSeccion(db.Model):
     
     espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('seccions_historia', lazy='dynamic', cascade='all, delete-orphan'))
 
+class DocumentFamilia(db.Model):
+    __tablename__ = 'documents_familia'
+
+    id = db.Column(db.Integer, primary_key=True)
+    espai_familiar_id = db.Column(db.Integer, db.ForeignKey('espais_familiars.id'), nullable=False)
+
+    nom_fitxer = db.Column(db.String(255), nullable=False)
+    tipus = db.Column(db.String(10))
+    descripcio = db.Column(db.String(500))
+    visible_public = db.Column(db.Boolean, default=False, nullable=False)
+
+    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    pujat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
+
+    espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('documents_familia', cascade='all, delete-orphan'))
+    pujat_per = db.relationship('Usuari')
+
+    def __repr__(self):
+        return f'<DocumentFamilia {self.nom_fitxer} ({self.espai_familiar_id})>'
+
+
+
+
 def obtenir_nom_pais(pais_id):
     """Converteix ID de país a nom"""
     from models import Pais
