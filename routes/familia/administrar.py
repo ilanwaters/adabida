@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_required, current_user
-from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia, DocumentFamilia
+from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia, DocumentFamilia, GrupDocumentsFamilia
 from sqlalchemy import func
 from utils.paisos import normalitza_pais
 import os
@@ -507,6 +507,7 @@ def canviar_heraldica(familia_id):
 
     return jsonify({'success': True})
 
+
 @administrar_bp.route('/documents/pujar', methods=['POST'])
 @login_required
 def pujar_document_familia(familia_id):
@@ -526,7 +527,20 @@ def pujar_document_familia(familia_id):
     titol = request.form.get('titol', '').strip()
     any_document = request.form.get('any_document', '').strip()
     descripcio = request.form.get('descripcio', '').strip()
-    visible_public = request.form.get('visible_public') == 'true'
+    grup_id = request.form.get('grup_id', '').strip()
+
+    if grup_id:
+        grup = GrupDocumentsFamilia.query.filter_by(id=grup_id, espai_familiar_id=familia.id).first_or_404()
+    else:
+        grup = GrupDocumentsFamilia(
+            espai_familiar_id=familia.id,
+            titol=None,
+            descripcio=None,
+            visible_public=False,
+            pujat_per_id=current_user.id
+        )
+        db.session.add(grup)
+        db.session.flush()
 
     any_str = str(familia.data_creacio.year)
     mes_str = str(familia.data_creacio.month).zfill(2)
@@ -540,16 +554,57 @@ def pujar_document_familia(familia_id):
     fitxer.save(ruta_final)
 
     nou_document = DocumentFamilia(
-        espai_familiar_id=familia.id,
-        nom_fitxer=f"/umberto/{current_user.nom_login}/{familia.id}/documents/{nom_fitxer}",
+        grup_id=grup.id,
+        nom_fitxer=f"/umberto/{current_user.nom_login}/{familia.id}/{nom_fitxer}",
         tipus=extensio,
         titol=titol or None,
         any_document=any_document or None,
-        descripcio=descripcio or None,
-        visible_public=visible_public,
-        pujat_per_id=current_user.id
+        descripcio=descripcio or None
     )
     db.session.add(nou_document)
     db.session.commit()
 
+    return jsonify({
+        'success': True,
+        'grup_id': grup.id,
+        'document': {
+            'id': nou_document.id,
+            'nom_fitxer': nou_document.nom_fitxer,
+            'tipus': nou_document.tipus,
+            'titol': nou_document.titol,
+            'any_document': nou_document.any_document,
+            'descripcio': nou_document.descripcio
+        }
+    })
+
+@administrar_bp.route('/documents/grup/<int:grup_id>/actualitzar', methods=['POST'])
+@login_required
+def actualitzar_grup_documents_familia(familia_id, grup_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    grup = GrupDocumentsFamilia.query.filter_by(id=grup_id, espai_familiar_id=familia_id).first_or_404()
+
+    dades = request.get_json()
+    grup.titol = dades.get('titol', '').strip() or None
+    grup.descripcio = dades.get('descripcio', '').strip() or None
+    grup.visible_public = bool(dades.get('visible_public'))
+
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+@administrar_bp.route('/documents/<int:document_id>/eliminar', methods=['POST'])
+@login_required
+def eliminar_document_familia(familia_id, document_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    document = DocumentFamilia.query.join(GrupDocumentsFamilia).filter(
+        DocumentFamilia.id == document_id,
+        GrupDocumentsFamilia.espai_familiar_id == familia_id
+    ).first_or_404()
+
+    db.session.delete(document)
+    db.session.commit()
     return jsonify({'success': True})
