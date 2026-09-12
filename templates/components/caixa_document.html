@@ -1,0 +1,19 @@
+<!-- templates/components/caixa_document.html -->
+<div class="caixa-entrada" onclick="obreModalDocument({{ grup.id }})">
+    <div class="imatge-lateral" style="position: relative;">
+    <img src="{{ url_for('static', filename='icons/document.png') }}" class="miniatura" alt="Document">
+</div>
+    <div class="contingut-lateral">
+        <h3 class="titol-entrada">
+            {{ grup.titol or _('Sense títol') }}
+        </h3>
+
+        {% if grup.descripcio %}
+        <p class="resum">{{ grup.descripcio }}</p>
+        {% endif %}
+
+        <div class="metadades">
+            <small>{{ grup.documents|length }} {{ _('document') if grup.documents|length == 1 else _('documents') }} · {{ _('Públic') if grup.visible_public else _('Privat') }}</small>
+        </div>
+    </div>
+</div>

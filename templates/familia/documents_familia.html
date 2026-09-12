@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/visualitzacio.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_personal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/multimedia_gravacio.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -17,102 +19,265 @@
 
     <div class="capçalera-pagina">
         <h1>{{ _('Documents') }}</h1>
+        <h2>{{ familia.nom }}</h2>
     </div>
 
-   {% if es_admin %}
+    <div class="separador"></div>
+
+    {% if es_admin %}
     <div class="bloc-plegable tancat">
-        <h3 class="titol-plegable" onclick="toggleBloc(this)">{{ _('Pujar nou document') }}</h3>
+        <h3 class="titol-plegable" onclick="toggleBloc(this)">{{ _('Afegir documents') }}</h3>
         <div class="contingut-plegable">
-        <form id="form-pujar-document" enctype="multipart/form-data">
+
             <div style="margin-bottom: 1rem;">
-                <label>{{ _('Fitxer (PDF o imatge)') }}:</label>
-                <input type="file" id="input-fitxer-document" accept=".pdf,.jpg,.jpeg,.png,.webp" required>
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <label>{{ _('Títol') }}:</label>
-                <input type="text" id="input-titol-document" style="width: 100%;" maxlength="200">
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <label>{{ _('Any') }}:</label>
-                <input type="text" id="input-any-document" style="width: 100px;" maxlength="10">
+                <label>{{ _('Títol del conjunt') }}:</label>
+                <input type="text" id="input-titol-grup" style="width: 100%;" maxlength="200" placeholder="{{ _('Ex: Acta notarial compra casa 1962') }}">
             </div>
             <div style="margin-bottom: 1rem;">
                 <label>{{ _('Descripció') }}:</label>
-                <input type="text" id="input-descripcio-document" style="width: 100%;" maxlength="500">
+                <input type="text" id="input-descripcio-grup" style="width: 100%;" maxlength="500">
             </div>
             <div style="margin-bottom: 1rem;">
                 <label class="checkbox-etica">
-                    <input type="checkbox" id="input-visible-public-document">
+                    <input type="checkbox" id="input-visible-grup">
                     <span class="checkmark"></span>
                     {{ _('Visible públicament') }}
                 </label>
             </div>
-            <button type="button" class="btn-custom btn-primary-custom" onclick="pujarDocumentFamilia()">
-                {{ _('Pujar document') }}
+
+            <div class="pujar-arxiu-conversa">
+                <input type="file" id="puja-documents" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple style="display:none;">
+                <label for="puja-documents" class="etiqueta-arxiu-conversa">
+                    {{ _('Adjuntar documents') }}
+                </label>
+                <small class="text-ajuda" style="display:block; margin-top:10px;">{{ _('Pots afegir tants documents com vulguis, un per un o diversos alhora. Cada document pot tenir el seu propi any.') }}</small>
+            </div>
+            <div id="previsualitzacio-documents" class="galeria"></div>
+
+            <button type="button" id="btn-guardar-documents" class="btn-custom btn-primary-custom" style="margin-top: 1rem; display: none;" onclick="guardarGrupDocuments()">
+                {{ _('Guardar conjunt de documents') }}
             </button>
-        </form>
-    </div>
+        </div>
     </div>
     {% endif %}
 
-    <div class="grid-galeria" style="margin-top: 1.5rem;">
-        {% for doc in documents %}
-        <div class="targeta-imatge">
-            {% if doc.tipus == 'pdf' %}
-                <a href="{{ doc.nom_fitxer }}" target="_blank">
-                    <div style="height: 150px; display: flex; align-items: center; justify-content: center; background: #f1f1f1;">
-                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: #dc3545;"></i>
-                    </div>
-                </a>
-            {% else %}
-                <a href="{{ doc.nom_fitxer }}" data-lightbox="documents-familia">
-                    <img src="{{ doc.nom_fitxer }}" class="imatge-galeria" alt="Document">
-                </a>
-            {% endif %}
-            {% if doc.descripcio %}
-            <p style="font-size: 0.85rem; margin-top: 0.3rem;">{{ doc.descripcio }}</p>
-            {% endif %}
-            <p style="font-size: 0.75rem; color: #999;">
-                {{ _('Públic') if doc.visible_public else _('Privat') }}
-            </p>
-        </div>
+    <div class="grid-entrades" id="grid-grups-existents" style="margin-top: 1.5rem;">
+        {% for grup in grups %}
+            {% include "components/caixa_document.html" %}
         {% else %}
-        <p>{{ _('Encara no hi ha documents penjats.') }}</p>
+            <p id="sense-documents-msg">{{ _('Encara no hi ha documents penjats.') }}</p>
         {% endfor %}
     </div>
 
 </div>
+{% include "components/modal_document.html" %}
 {% endblock %}
 
 {% block scripts %}
 <script>
+const GRUPS_DOCUMENTS = {
+{% for grup in grups %}
+    {{ grup.id }}: {
+        titol: {{ (grup.titol or '')|tojson }},
+        descripcio: {{ (grup.descripcio or '')|tojson }},
+        visible_public: {{ grup.visible_public|tojson }},
+        documents: [
+            {% for doc in grup.documents %}
+            { id: {{ doc.id }}, nom_fitxer: {{ doc.nom_fitxer|tojson }}, tipus: {{ doc.tipus|tojson }}, titol: {{ (doc.titol or '')|tojson }}, any_document: {{ (doc.any_document or '')|tojson }}, descripcio: {{ (doc.descripcio or '')|tojson }} },
+            {% endfor %}
+        ]
+    },
+{% endfor %}
+};
+
+let grupPendentId = null;
 
 function toggleBloc(element) {
-  const bloc = element.parentElement;
-  bloc.classList.toggle('tancat');
+    element.parentElement.classList.toggle('tancat');
 }
 
-function pujarDocumentFamilia() {
-    const fitxer = document.getElementById('input-fitxer-document').files[0];
-    if (!fitxer) { alert("{{ _('Cal seleccionar un fitxer') }}"); return; }
+function obreModalDocument(grupId) {
+    const grup = GRUPS_DOCUMENTS[grupId];
+    if (!grup) return;
 
-    const formData = new FormData();
-    formData.append('fitxer', fitxer);
-    formData.append('descripcio', document.getElementById('input-descripcio-document').value);
-    formData.append('visible_public', document.getElementById('input-visible-public-document').checked);
+    document.getElementById('modal-document-grup-titol').textContent = grup.titol || "{{ _('Sense títol') }}";
+    document.getElementById('modal-document-grup-descripcio').textContent = grup.descripcio || '';
+    document.getElementById('modal-document-visibilitat').textContent = grup.visible_public ? "{{ _('Públic') }}" : "{{ _('Privat') }}";
 
-    fetch(`/familia/{{ familia.id }}/administrar/documents/pujar`, {
-        method: 'POST',
-        body: formData
+    const icones = document.getElementById('modal-document-icones');
+    icones.innerHTML = '';
+
+    grup.documents.forEach(doc => {
+        const icona = document.createElement('div');
+        icona.style.cssText = 'width:70px; height:70px; cursor:pointer;';
+        if (doc.tipus === 'pdf') {
+            icona.innerHTML = '<i class="fas fa-file-pdf" style="font-size:2.5rem; color:#dc3545;"></i>';
+        } else {
+            icona.innerHTML = `<img src="${doc.nom_fitxer}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;">`;
+        }
+        icona.addEventListener('click', () => obreDocumentActiu(doc));
+        icones.appendChild(icona);
+    });
+
+    mostraEstatResum();
+    document.getElementById('modal-document').style.display = 'flex';
+}
+
+function mostraEstatResum() {
+    document.getElementById('modal-document-resum').style.display = 'block';
+    document.getElementById('modal-document-actiu').style.display = 'none';
+}
+
+function obreDocumentActiu(doc) {
+    document.getElementById('modal-document-resum').style.display = 'none';
+
+    const actiu = document.getElementById('modal-document-actiu');
+    actiu.style.display = 'flex';
+
+    const visor = document.getElementById('modal-document-actiu-visor');
+    if (doc.tipus === 'pdf') {
+        visor.innerHTML = `<iframe src="${doc.nom_fitxer}" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+    } else {
+        visor.innerHTML = `<img src="${doc.nom_fitxer}" alt="Document" style="max-width:100%; max-height:100%;">`;
+    }
+
+    document.getElementById('modal-document-actiu-titol').textContent = doc.titol || "{{ _('Sense títol') }}";
+    document.getElementById('modal-document-actiu-any').textContent = doc.any_document || '';
+    document.getElementById('modal-document-actiu-descripcio').textContent = doc.descripcio || '';
+}
+function tornaResumDocument() {
+    mostraEstatResum();
+}
+
+function tancaModalDocument() {
+    document.getElementById('modal-document').style.display = 'none';
+}
+
+const inputDocuments = document.getElementById("puja-documents");
+if (inputDocuments) {
+    inputDocuments.addEventListener("change", function (e) {
+        const fitxers = e.target.files;
+        const galeria = document.getElementById("previsualitzacio-documents");
+
+        for (let i = 0; i < fitxers.length; i++) {
+            const fitxer = fitxers[i];
+            const formData = new FormData();
+            formData.append("fitxer", fitxer);
+            formData.append("titol", "");
+            formData.append("any_document", "");
+            formData.append("descripcio", "");
+            if (grupPendentId) formData.append("grup_id", grupPendentId);
+
+            fetch(`/familia/{{ familia.id }}/administrar/documents/pujar`, {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.error || "{{ _('Error pujant document') }}");
+                    return;
+                }
+
+                grupPendentId = data.grup_id;
+                const doc = data.document;
+
+                const bloc = document.createElement("div");
+                bloc.classList.add("arxiu-amb-metadades");
+                bloc.dataset.documentId = doc.id;
+
+                const miniatura = document.createElement("div");
+                miniatura.classList.add("capsa-arxiu-metadades");
+                if (doc.tipus === 'pdf') {
+                    miniatura.innerHTML = '<i class="fas fa-file-pdf" style="font-size:48px;color:#dc3545;"></i>';
+                } else {
+                    miniatura.innerHTML = `<img src="${doc.nom_fitxer}">`;
+                }
+                bloc.appendChild(miniatura);
+
+                const metadades = document.createElement("div");
+                metadades.classList.add("metadades-arxiu");
+                metadades.innerHTML = `
+                    <input type="text" class="input-titol-doc" placeholder="{{ _('Nom d\'aquest document') }}">
+                    <input type="text" class="input-any-doc" placeholder="{{ _('Any') }}">
+                    <textarea class="input-descripcio-doc" rows="2" placeholder="{{ _('Descripció') }}"></textarea>
+                `;
+                bloc.appendChild(metadades);
+
+                const botoEliminar = document.createElement("button");
+                botoEliminar.type = "button";
+                botoEliminar.textContent = "{{ _('Eliminar') }}";
+                botoEliminar.classList.add("boto-eliminar-arxiu");
+                botoEliminar.addEventListener("click", () => {
+                    bloc.remove();
+                    fetch(`/familia/{{ familia.id }}/administrar/documents/${doc.id}/eliminar`, { method: 'POST' });
+                });
+                bloc.appendChild(botoEliminar);
+
+                galeria.appendChild(bloc);
+                document.getElementById('btn-guardar-documents').style.display = 'inline-block';
+            })
+            .catch(err => console.error("Error en pujar document:", err));
+        }
+
+        e.target.value = '';
+    });
+}
+
+function guardarGrupDocuments() {
+    if (!grupPendentId) return;
+
+    const boto = document.getElementById('btn-guardar-documents');
+    boto.disabled = true;
+    boto.textContent = "{{ _('Guardant...') }}";
+
+    const titol = document.getElementById('input-titol-grup').value;
+    const descripcio = document.getElementById('input-descripcio-grup').value;
+    const visible_public = document.getElementById('input-visible-grup').checked;
+
+    const peticionsDocuments = [...document.querySelectorAll('.arxiu-amb-metadades')].map(bloc => {
+        const docId = bloc.dataset.documentId;
+        const docTitol = bloc.querySelector('.input-titol-doc').value;
+        const docAny = bloc.querySelector('.input-any-doc').value;
+        const docDescripcio = bloc.querySelector('.input-descripcio-doc').value;
+
+        return fetch(`/familia/{{ familia.id }}/administrar/documents/${docId}/actualitzar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ titol: docTitol, any_document: docAny, descripcio: docDescripcio })
+        });
+    });
+
+    Promise.all(peticionsDocuments).then(() => {
+        return fetch(`/familia/{{ familia.id }}/administrar/documents/grup/${grupPendentId}/actualitzar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ titol, descripcio, visible_public })
+        });
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
             location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'No s\'ha pogut pujar el document'));
         }
     });
+}
+function pantallaCompletaDocument() {
+    const iframe = document.querySelector('#modal-document-actiu-visor iframe');
+    const img = document.querySelector('#modal-document-actiu-visor img');
+    const element = iframe || img;
+
+    if (!element) return;
+
+    if (element.requestFullscreen) {
+        element.requestFullscreen().catch(err => console.error('Error fullscreen:', err));
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
 }
 </script>
 {% endblock %}
