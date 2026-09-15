@@ -576,6 +576,25 @@ def pujar_document_familia(familia_id):
             'descripcio': nou_document.descripcio
         }
     })
+    
+@administrar_bp.route('/documents/<int:document_id>/actualitzar', methods=['POST'])
+@login_required
+def actualitzar_document_individual_familia(familia_id, document_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    document = DocumentFamilia.query.join(GrupDocumentsFamilia).filter(
+        DocumentFamilia.id == document_id,
+        GrupDocumentsFamilia.espai_familiar_id == familia_id
+    ).first_or_404()
+
+    dades = request.get_json()
+    document.titol = dades.get('titol', '').strip() or None
+    document.any_document = dades.get('any_document', '').strip() or None
+    document.descripcio = dades.get('descripcio', '').strip() or None
+
+    db.session.commit()
+    return jsonify({'success': True})
 
 @administrar_bp.route('/documents/grup/<int:grup_id>/actualitzar', methods=['POST'])
 @login_required
@@ -606,5 +625,16 @@ def eliminar_document_familia(familia_id, document_id):
     ).first_or_404()
 
     db.session.delete(document)
+    db.session.commit()
+    return jsonify({'success': True})
+
+@administrar_bp.route('/documents/grup/<int:grup_id>/eliminar', methods=['POST'])
+@login_required
+def eliminar_grup_documents_familia(familia_id, grup_id):
+    if not es_administrador_familia(familia_id):
+        return jsonify({'success': False, 'error': 'No autoritzat'}), 403
+
+    grup = GrupDocumentsFamilia.query.filter_by(id=grup_id, espai_familiar_id=familia_id).first_or_404()
+    db.session.delete(grup)
     db.session.commit()
     return jsonify({'success': True})

@@ -13,7 +13,13 @@
         {% endif %}
 
         <div class="metadades">
-            <small>{{ grup.documents|length }} {{ _('document') if grup.documents|length == 1 else _('documents') }} · {{ _('Públic') if grup.visible_public else _('Privat') }}</small>
+            {% if grup.pujat_per and grup.pujat_per.bandera_preferida %}
+            <img src="/static/banderes/{{ grup.pujat_per.bandera_preferida }}.svg"
+                class="mini-bandera-caixa"
+                alt="Bandera"
+                style="width: 16px; height: 11px; margin-right: 5px; vertical-align: middle;">
+            {% endif %}
+            <small>{{ grup.pujat_per.nom if grup.pujat_per else _('Desconegut') }} · {{ grup.documents|length }} {{ _('document') if grup.documents|length == 1 else _('documents') }} · {{ _('Públic') if grup.visible_public else _('Privat') }}</small>
         </div>
     </div>
 </div>
