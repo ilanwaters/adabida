@@ -13,6 +13,7 @@
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: box-shadow 0.2s;
+    height: 100%;
 }
 
 .caixa-membre:hover {
@@ -55,8 +56,14 @@
     margin: 0 0 0.5rem 0;
 }
 
+.nom-membre a {
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+
 .nom-membre a:hover {
     text-decoration: underline !important;
+    transform: scale(1.05);
 }
 
 .dates-membre {
@@ -154,4 +161,42 @@
   .grid-membres {
     grid-template-columns: 1fr;
   }
+}
+
+.foto-membre {
+    position: relative;
+}
+
+.btn-canviar-foto {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-canviar-foto:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+.estat-public {
+    background: #e8f5e9 !important;
+    color: hsl(123, 81%, 56%) !important;
+    border-color: #147317 !important;
+}
+
+.estat-privat {
+    background: #fff3e0 !important;
+    color: #e65100 !important;
+    border-color: #ffcc80 !important;
 }

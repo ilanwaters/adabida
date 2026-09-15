@@ -3,6 +3,7 @@
 {% block titol %}{{ familia.nom }} - {{ _('Records') }}{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block contingut %}
@@ -56,9 +57,11 @@
 </main>
 
 {% include 'components/modal_entrada.html' %}
+{% include 'components/modal_entrada_editar.html' %}
 
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_completa.js') }}"></script>
 {% endblock %}

@@ -85,9 +85,11 @@
             <button class="btn-custom btn-primary-custom" onclick="alert('Funció en desenvolupament: Editar informació')">
                  {{ _('Editar Informació') }}
             </button>
-            <button class="btn-custom btn-secondary-custom" onclick="alert('Funció en desenvolupament: Canviar heràldica')">
-                 {{ _('Canviar Heràldica') }}
+            <button class="btn-custom btn-secondary-custom" onclick="document.getElementById('input-heraldica').click()">
+                {{ _('Canviar Heràldica') }}
             </button>
+            <input type="file" id="input-heraldica" accept="image/*" style="display:none;"
+                onchange="pujarHeraldica({{ familia.id }}, this)">
             <a href="{{ url_for('familia.publica', url=familia.url) }}" target="_blank" class="boto_nav">
                  {{ _('Veure espai públic') }}
             </a>
@@ -235,10 +237,10 @@
                                  {{ _('Editar') }}
                             </a>
                             
-                            <button class="btn-custom btn-outline-custom" 
+                           <button class="btn-custom btn-outline-custom" 
                                     style="padding: 0.25rem 0.75rem; font-size: 0.9rem; color: #dc3545; border-color: #dc3545;"
                                     onclick="eliminarMembre({{ membre.id }}, '{{ membre.nom or membre.usuari.nom }}')">
-                                
+                                {{ _('Eliminar membre') }}
                             </button>
                         </div>
                     </div>
@@ -349,25 +351,27 @@
     </div>
 
     <div style="display: grid; gap: 1rem;">
-        <div>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+       <div>
+            <label class="checkbox-etica">
                 <input type="checkbox" id="visibilitat_global" {% if familia.visible_globalment %}checked{% endif %}>
-                <span>{{ _('Espai visible globalment (per arbres genealògics interconnectats)') }}</span>
+                <span class="checkmark"></span>
+                {{ _('Espai visible globalment (per arbres genealògics interconnectats)') }}
             </label>
             <small class="text-muted-custom">{{ _('Si està desactivat, altres famílies veuran "---oo---" en les connexions') }}</small>
         </div>
 
         <div>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <label class="checkbox-etica">
                 <input type="checkbox" id="notificacions_actives" checked>
-                <span>{{ _('Notificacions actives per nous continguts') }}</span>
+                <span class="checkmark"></span>
+                {{ _('Notificacions actives per nous continguts') }}
             </label>
         </div>
-
         <div>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <label class="checkbox-etica">
                 <input type="checkbox" id="permisos_edicio_membres">
-                <span>{{ _('Permetre que membres (no admins) editin informació') }}</span>
+                <span class="checkmark"></span>
+                {{ _('Permetre que membres (no admins) editin informació') }}
             </label>
         </div>
     </div>
@@ -696,6 +700,26 @@ document.getElementById('form-foto-membre').addEventListener('submit', function(
         alert('Error de connexió');
     });
 });
+function pujarHeraldica(familiaId, input) {
+    const fitxer = input.files[0];
+    if (!fitxer) return;
+
+    const formData = new FormData();
+    formData.append('heraldica', fitxer);
+
+    fetch(`/familia/{{ familia.id }}/administrar/heraldica`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'No s\'ha pogut canviar la heràldica'));
+        }
+    });
+}
 </script>
 <script>
 function toggleVisibilitatPublica() {
@@ -711,5 +735,6 @@ function toggleVisibilitatPublica() {
         }
     });
 }
+
 </script>
 {% endblock %}

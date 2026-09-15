@@ -14,16 +14,17 @@
   {% if membre.usuari and membre.usuari.perfil and membre.usuari.perfil.imatge_perfil %}
     {# Membre vinculat amb usuari Adabida - foto obligatòria #}
     <img src="{{ url_for('static', filename='avatars/' + membre.usuari.perfil.imatge_perfil) }}" 
-         alt="{{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}">
+         alt="{{ membre.usuari.nom }} {{ membre.usuari.primer_cognom }}"
+         onclick="ampliarFotoMembre(this.src)" style="cursor: zoom-in;">
   {% elif membre.foto %}
     {# Membre sense usuari però amb foto afegida per admin #}
     <img src="{{ url_for('static', filename='fotos_membres/' + membre.foto) }}" 
-         alt="{{ membre.nom }} {{ membre.primer_cognom }}">
+         alt="{{ membre.nom }} {{ membre.primer_cognom }}"
+         onclick="ampliarFotoMembre(this.src)" style="cursor: zoom-in;">
   {% else %}
     {# Placeholder #}
     <span class="foto-membre-placeholder">👤</span>
   {% endif %}
-  
   {% if mode == 'admin' %}
     <button class="btn-canviar-foto" onclick="canviarFotoMembre({{ membre.id }})">
       📷
@@ -112,7 +113,7 @@
       </a>
   
       
-      <button class="btn-custom btn-outline-custom btn-sm"
+      <button class="btn-custom btn-outline-custom btn-sm {{ 'estat-public' if membre.visible_public else 'estat-privat' }}"
               onclick="toggleVisibilitatMembre({{ membre.id }})">
         {% if membre.visible_public %} {{ _('Públic') }}{% else %} {{ _('Privat') }}{% endif %}
       </button>

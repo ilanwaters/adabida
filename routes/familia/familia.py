@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort, jsonify
 from flask_login import login_required, current_user
 from models import db, Usuari, PerfilBiografic, Contacte, Entrada, EntradaFamilia
-from models.families import Matrimoni, EspaiFamiliar, MembreFamilia, DocumentFamilia
+from models.families import Matrimoni, EspaiFamiliar, MembreFamilia, DocumentFamilia, GrupDocumentsFamilia
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 import os
@@ -703,13 +703,13 @@ def documents(url):
         flash('No tens accés a aquest espai familiar', 'error')
         return redirect(url_for('familia.les_meves'))
 
-    documents = DocumentFamilia.query.filter_by(
+    grups = GrupDocumentsFamilia.query.filter_by(
         espai_familiar_id=familia.id
-    ).order_by(DocumentFamilia.data_pujada.desc()).all()
+    ).order_by(GrupDocumentsFamilia.data_pujada.desc()).all()
 
     return render_template('familia/documents_familia.html',
                          familia=familia,
-                         documents=documents,
+                         grups=grups,
                          es_admin=(es_membre.rol == 'administrador'))
 
 # ============================================

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from models import db, EspaiFamiliar, MembreFamilia, DocumentMembreFamilia, Matrimoni
 from werkzeug.utils import secure_filename
@@ -626,5 +626,26 @@ def editar_matrimoni(matrimoni_id):
         print(f"Error editant matrimoni: {e}")
         import traceback
         traceback.print_exc()
-        flash('Error editant el matrimoni', 'error')
-        return redirect(url_for('membres.editar_matrimoni', matrimoni_id=matrimoni_id))
+        flash('Error afegint el matrimoni. Torna-ho a provar.', 'error')
+        return redirect(url_for('membres.gestionar_relacions', membre_id=membre_id))
+
+@membres_bp.route('/<int:membre_id>/toggle-visibilitat', methods=['POST'])
+@login_required
+def toggle_visibilitat(membre_id):
+    """Alternar la visibilitat pública d'un membre"""
+    membre = MembreFamilia.query.get_or_404(membre_id)
+    familia = membre.espai_familiar
+
+    es_admin = MembreFamilia.query.filter_by(
+        usuari_id=current_user.id,
+        espai_familiar_id=familia.id,
+        rol='administrador'
+    ).first()
+
+    if not es_admin:
+        return jsonify({'success': False, 'error': 'No tens permisos'}), 403
+
+    membre.visible_public = not membre.visible_public
+    db.session.commit()
+
+    return jsonify({'success': True, 'visible_public': membre.visible_public})
