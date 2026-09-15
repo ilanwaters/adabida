@@ -299,7 +299,7 @@
         </div>
       </div>
 
-        <button type="submit" name="accio" value="eliminar_arxius" class="boto-eliminar-seleccionats">
+        <button type="submit" name="accio" value="eliminar_arxius" class="boto-eliminar-seleccionats" style="margin-bottom: 2rem;">
           {{ _('Eliminar seleccionats') }}
         </button>
       {% endif %}
@@ -317,9 +317,10 @@
         <fieldset class="grup-opcions">
             <legend>{{ _('Organitzacions') }}</legend>
             {% for org in usuari_organitzacions %}
-            <label class="checkbox-etica">
+                        <label class="checkbox-etica">
                 <input type="checkbox" name="compartir_org[]" value="{{ org.id }}" 
-                       data-nom="{{ org.nom }}" class="checkbox-compartir">
+                       data-nom="{{ org.nom }}" class="checkbox-compartir"
+                       {% if entrada and org.id in entrada.organitzacions_compartides|map(attribute='organitzacio_id')|list %}checked{% endif %}>
                 <span class="checkmark"></span>
                 {{ org.nom }}
             </label>
@@ -331,9 +332,10 @@
         <fieldset class="grup-opcions">
             <legend>{{ _('Famílies') }}</legend>
             {% for fam in usuari_families %}
-            <label class="checkbox-etica">
+                        <label class="checkbox-etica">
                 <input type="checkbox" name="compartir_fam[]" value="{{ fam.id }}" 
-                       data-nom="{{ fam.nom }}" class="checkbox-compartir">
+                       data-nom="{{ fam.nom }}" class="checkbox-compartir"
+                       {% if entrada and fam.id in entrada.families_compartides|map(attribute='espai_familiar_id')|list %}checked{% endif %}>
                 <span class="checkmark"></span>
                 {{ fam.nom }}
             </label>

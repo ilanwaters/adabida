@@ -452,6 +452,11 @@ def editar_entrada_personal(entrada_id):
         .filter(MembreOrganitzacio.usuari_id == usuari.id)\
         .all()
 
+    usuari_families = db.session.query(EspaiFamiliar)\
+        .join(MembreFamilia, MembreFamilia.espai_familiar_id == EspaiFamiliar.id)\
+        .filter(MembreFamilia.usuari_id == usuari.id)\
+        .all()
+
     any_str = str(entrada.data_creacio.year)
     mes_str = str(entrada.data_creacio.month).zfill(2)
     pais = normalitza_pais(usuari.pais_residencia)
@@ -597,6 +602,7 @@ def editar_entrada_personal(entrada_id):
         perfil=perfil,
         entrada=entrada,
         usuari_organitzacions=usuari_organitzacions,
+        usuari_families=usuari_families,
         mode="editar",
         pestanya="nova"
     )
