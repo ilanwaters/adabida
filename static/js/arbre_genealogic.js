@@ -36,8 +36,11 @@ async function inicialitzarArbre() {
             const personaId = parseInt(e.target.value);
             renderitzarArbre(personaId);
         });
-        
-        document.getElementById('btn-reset-zoom').addEventListener('click', resetZoom);
+        document.getElementById('select-nivell').addEventListener('change', function() {
+            const personaId = parseInt(document.getElementById('select-persona').value);
+            renderitzarArbre(personaId);
+        });
+                document.getElementById('btn-reset-zoom').addEventListener('click', resetZoom);
         
     } catch (error) {
         console.error('Error carregant arbre:', error);
@@ -96,9 +99,8 @@ function resetZoom() {
 function renderitzarArbre(personaCentralId) {
     g.selectAll('*').remove();
     
-    // Calcular generacions segons lògica familiar
-    const generacions = calcularGeneracions(personaCentralId);
-    
+    const maxNivell = parseInt(document.getElementById('select-nivell').value) || 3;
+    const generacions = calcularGeneracions(personaCentralId, maxNivell);
     // Dibuixar arbre
     dibuixarArbrePerGeneracions(generacions, personaCentralId);
 }
@@ -107,7 +109,7 @@ function renderitzarArbre(personaCentralId) {
 // LÒGICA PRINCIPAL: CALCULAR GENERACIONS
 // ========================================
 
-function calcularGeneracions(personaCentralId) {
+function calcularGeneracions(personaCentralId, maxNivell = 3) {
     const mapa = crearMapaNodes();
     const generacions = {};
     
@@ -125,37 +127,19 @@ function calcularGeneracions(personaCentralId) {
         nivell0Ascendents.push(parellaId);
     }
     
-    // Germans usuari 0
+
+        // Germans usuari 0 (només línia directa, sense cunyats ni família política)
     const germans = obtenirGermans(personaCentralId, mapa);
     germans.forEach(germaId => {
         generacions[germaId] = 0;
-        
-        // Parella del germà
-        const parellaGerma = obtenirParella(germaId);
-        if (parellaGerma) {
-            generacions[parellaGerma] = 0;
-        }
     });
     
-    // Germans de la parella
-    if (parellaId) {
-        const germansParella = obtenirGermans(parellaId, mapa);
-        germansParella.forEach(germaId => {
-            generacions[germaId] = 0;
-            
-            // Parella del germà de la parella
-            const parellaGerma = obtenirParella(germaId);
-            if (parellaGerma) {
-                generacions[parellaGerma] = 0;
-            }
-        });
-    }
-    
-    // ========== ASCENDENTS (només usuari 0 i parella) ==========
-    let nivellActual = nivell0Ascendents;
+        // ========== ASCENDENTS ==========
+    // A Nivell 1 només puja per línia pròpia (sense sogres); a nivells superiors, també per la parella
+    let nivellActual = (maxNivell === 1) ? [personaCentralId] : nivell0Ascendents;
     let nivell = 1;
 
-    while (nivellActual.length > 0 && nivell <= 3) {
+    while (nivellActual.length > 0 && nivell <= maxNivell) {
         const seguent = [];
     
         nivellActual.forEach(personaId => {
@@ -190,15 +174,25 @@ function calcularGeneracions(personaCentralId) {
         nivell++;
     }
 
-    // ========== DESCENDENTS (tots del nivell 0) ==========
-    const totesPersonesNivell0 = Object.keys(generacions)
-        .filter(id => generacions[id] === 0)
-        .map(id => parseInt(id));
-    
+        // ========== DESCENDENTS ==========
+    // A Nivell 1 només fills propis; a nivells superiors, també nebots (fills dels germans)
+    const totesPersonesNivell0 = [personaCentralId];
+    if (parellaId) totesPersonesNivell0.push(parellaId);
+    if (maxNivell >= 2) {
+        germans.forEach(germaId => {
+            totesPersonesNivell0.push(germaId);
+            const parellaGerma = obtenirParella(germaId);
+            if (parellaGerma) {
+                generacions[parellaGerma] = 0;
+                totesPersonesNivell0.push(parellaGerma);
+            }
+        });
+    }
+
     let nivellDescendent = totesPersonesNivell0;
     nivell = -1;
     
-    while (nivellDescendent.length > 0 && nivell >= -3) {
+    while (nivellDescendent.length > 0 && nivell >= -maxNivell) {
         const seguent = [];
         
         nivellDescendent.forEach(personaId => {
@@ -275,16 +269,88 @@ function obtenirFills(personaId, mapa) {
         .filter(n => n.pare_id === personaId || n.mare_id === personaId)
         .map(n => n.id);
 }
+// ========================================
+// PAS A: CALCULAR AMPLADA DE SUBARBRES
+// ========================================
 
+function calcularAmplada(personaId, mapa, generacions, cache = {}) {
+    if (cache[personaId] !== undefined) return cache[personaId];
+
+    const fills = obtenirFills(personaId, mapa)
+        .filter(fId => generacions[fId] !== undefined);
+
+    if (fills.length === 0) {
+        cache[personaId] = 1;
+        return 1;
+    }
+
+    let amplada = 0;
+    fills.forEach(fillId => {
+        amplada += calcularAmplada(fillId, mapa, generacions, cache);
+    });
+
+    cache[personaId] = amplada;
+    return amplada;
+}
+
+// ========================================
+// PAS A.2: AMPLADA D'UNA UNITAT FAMILIAR (persona + parella)
+// ========================================
+
+function calcularAmpladaUnitat(personaId, mapa, generacions, cache = {}) {
+    const parellaId = obtenirParella(personaId);
+    
+    const fillsPropis = obtenirFills(personaId, mapa)
+        .filter(fId => generacions[fId] !== undefined);
+    const fillsParella = parellaId 
+        ? obtenirFills(parellaId, mapa).filter(fId => generacions[fId] !== undefined)
+        : [];
+    
+    // Units (evitar comptar fills duplicats si comparteixen fills)
+    const totsFills = [...new Set([...fillsPropis, ...fillsParella])];
+    
+    if (totsFills.length === 0) {
+        return 1; // unitat sense fills = 1 slot
+    }
+    
+    let amplada = 0;
+    totsFills.forEach(fillId => {
+        amplada += calcularAmpladaUnitat(fillId, mapa, generacions, cache);
+    });
+    
+    return amplada;
+}
+// ========================================
+// PAS A.3: AMPLADA TOTAL DE NIVELL 0
+// ========================================
+
+function calcularAmplesNivell0(personaCentralId, mapa, generacions) {
+    const amples = {};
+    
+    // Unitat central
+    amples[personaCentralId] = calcularAmpladaUnitat(personaCentralId, mapa, generacions);
+    
+    // Germans (cadascun com a unitat pròpia)
+    const germans = obtenirGermans(personaCentralId, mapa)
+        .filter(gId => generacions[gId] === 0);
+    
+    germans.forEach(germaId => {
+        amples[germaId] = calcularAmpladaUnitat(germaId, mapa, generacions);
+    });
+    
+    return amples;
+}
 // ========================================
 // DIBUIXAR ARBRE
 // ========================================
 
 function dibuixarArbrePerGeneracions(generacions, personaCentralId) {
     const ESPAI_Y = 150;
-    const ESPAI_X = 180;
+    const ESPAI_X = 200;
     const mapa = crearMapaNodes();
-    
+    const cacheAmplades = {};
+    const amplesNivell0 = calcularAmplesNivell0(personaCentralId, mapa, generacions);
+    console.log('Amples de tot nivell 0:', amplesNivell0);
     // Organitzar per nivells
     const nivells = {};
     Object.keys(generacions).forEach(id => {
@@ -664,9 +730,9 @@ function dibuixarLlinesMatrimoni(posicions) {
             .attr('y1', pos1.y)
             .attr('x2', pos2.x)
             .attr('y2', pos2.y)
-            .attr('stroke', '#27ae60')
-            .attr('stroke-width', 3)
-            .style('opacity', 0.8);
+            .attr('stroke', '#a8b0c3')
+            .attr('stroke-width', 2)
+            .style('opacity', 0.9);
     });
 }
 
@@ -688,24 +754,32 @@ function dibuixarLlinesPareFill(posicions) {
             const puntMigY = Math.max(posPare.y, posMare.y);
             const punIntermigY = puntMigY + 40;
             
+            const distanciaH = Math.abs(posFill.x - puntMigX);
+            const r1 = Math.min(12, distanciaH / 2);
+            const signe1 = posFill.x >= puntMigX ? 1 : -1;
             g.append('path')
-                .attr('d', `M ${puntMigX},${puntMigY} L ${puntMigX},${punIntermigY} L ${posFill.x},${punIntermigY} L ${posFill.x},${posFill.y - 30}`)
+                .attr('d', `M ${puntMigX},${puntMigY}
+                            L ${puntMigX},${punIntermigY - r1}
+                            Q ${puntMigX},${punIntermigY} ${puntMigX + signe1 * r1},${punIntermigY}
+                            L ${posFill.x - signe1 * r1},${punIntermigY}
+                            Q ${posFill.x},${punIntermigY} ${posFill.x},${punIntermigY + r1}
+                            L ${posFill.x},${posFill.y - 30}`)
                 .attr('fill', 'none')
-                .attr('stroke', '#3498db')
-                .attr('stroke-width', 2)
-                .style('opacity', 0.7);
+                .attr('stroke', '#b8bfd1')
+                .attr('stroke-width', 1.8)
+                .style('opacity', 0.85);
         }
         
         else if (pare && posicions[pare.id]) {
-            const posPare = posicions[pare.id];
+        const posPare = posicions[pare.id];
         const punIntermigY = posPare.y + 40;
     
             g.append('path')
                 .attr('d', `M ${posPare.x},${posPare.y} L ${posPare.x},${punIntermigY} L ${posFill.x},${punIntermigY} L ${posFill.x},${posFill.y - 30}`)
                 .attr('fill', 'none')
-                .attr('stroke', '#3498db')
-                .attr('stroke-width', 2)
-                .style('opacity', 0.5);
+                .attr('stroke', '#b8bfd1')
+                .attr('stroke-width', 1.8)
+                .style('opacity', 0.7);
         }
 // Cas 3: Només mare (LÍNIA 318-329)
         else if (mare && posicions[mare.id]) {
@@ -726,37 +800,39 @@ function dibuixarNodes(posicions, personaCentralId) {
     const mapa = crearMapaNodes();
     
     Object.keys(posicions).forEach(id => {
-        if (id === '47') console.log('Dibuixant Avia A:', posicions[id]); // ← AFEGIR
         const persona = mapa[id];
         if (!persona) return;
-        if (id === '47') console.log('Persona trobada:', persona);
+    
 
         const {x, y} = posicions[id];
         const esActual = parseInt(id) === personaCentralId;
-        
         const nodeGrup = g.append('g')
             .attr('transform', `translate(${x}, ${y})`)
             .style('cursor', 'pointer')
             .on('click', () => window.location.href = `/familia/membre/${persona.id}`);
-        if (id === '47') console.log('Node SVG creat a:', x, y);
+
         
         nodeGrup.append('rect')
-            .attr('x', -70)
-            .attr('y', -30)
-            .attr('width', 140)
-            .attr('height', 60)
-            .attr('fill', esActual ? '#667eea' : '#ffffff')
-            .attr('stroke', esActual ? '#667eea' : '#333')
-            .attr('stroke-width', 2)
-            .attr('rx', 6);
+            .attr('x', -80)
+            .attr('y', -32)
+            .attr('width', 160)
+            .attr('height', 64)
+            .attr('fill', esActual ? '#5b6ee8' : '#fefefe')
+            .attr('stroke', esActual ? '#5b6ee8' : '#d8d8d8')
+            .attr('stroke-width', esActual ? 2 : 1.5)
+            .attr('rx', 10)
+            .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.08))');
+        const nomComplet = `${persona.nom || ''} ${persona.primer_cognom || ''}`.trim();
+        const nomMostrat = nomComplet.length > 18 ? nomComplet.substring(0, 17) + '…' : nomComplet;
         
         nodeGrup.append('text')
             .attr('text-anchor', 'middle')
             .attr('dy', -5)
             .attr('font-size', '13px')
-            .attr('font-weight', 'bold')
-            .attr('fill', esActual ? '#fff' : '#333')
-            .text(`${persona.nom || ''} ${persona.primer_cognom || ''}`.substring(0, 20));
+            .attr('font-family', "'Segoe UI', system-ui, sans-serif")
+            .attr('font-weight', '600')
+            .attr('fill', esActual ? '#ffffff' : '#2a2a2a')
+            .text(nomMostrat);
         
         if (persona.data_naixement) {
             const any = persona.data_naixement.split('-')[0];

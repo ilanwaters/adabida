@@ -87,7 +87,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
     const FAMILIA_URL = "{{ familia.url }}";
     const API_URL = "{{ url_for('familia.arbre_dades', url=familia.url) }}";
