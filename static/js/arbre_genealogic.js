@@ -102,7 +102,7 @@ function renderitzarArbre(personaCentralId) {
     const maxNivell = parseInt(document.getElementById('select-nivell').value) || 3;
     const generacions = calcularGeneracions(personaCentralId, maxNivell);
     // Dibuixar arbre
-    dibuixarArbrePerGeneracions(generacions, personaCentralId);
+    dibuixarArbrePerGeneracions(generacions, personaCentralId, maxNivell);
 }
 
 // ========================================
@@ -273,20 +273,21 @@ function obtenirFills(personaId, mapa) {
 // PAS A: CALCULAR AMPLADA DE SUBARBRES
 // ========================================
 
-function calcularAmplada(personaId, mapa, generacions, cache = {}) {
+function calcularAmplada(personaId, mapa, generacions, cache = {}, maxNivellGlobal = 1) {
     if (cache[personaId] !== undefined) return cache[personaId];
 
     const fills = obtenirFills(personaId, mapa)
         .filter(fId => generacions[fId] !== undefined);
 
     if (fills.length === 0) {
-        cache[personaId] = 1;
-        return 1;
+        const ampladaBase = maxNivellGlobal >= 2 ? 2 : 1;
+        cache[personaId] = ampladaBase;
+        return ampladaBase;
     }
 
     let amplada = 0;
     fills.forEach(fillId => {
-        amplada += calcularAmplada(fillId, mapa, generacions, cache);
+        amplada += calcularAmplada(fillId, mapa, generacions, cache, maxNivellGlobal);
     });
 
     cache[personaId] = amplada;
@@ -341,16 +342,138 @@ function calcularAmplesNivell0(personaCentralId, mapa, generacions) {
     return amples;
 }
 // ========================================
+// PAS B.1: POSICIONS X (EN UNITATS) PER NIVELL 0
+// ========================================
+
+function calcularPosicionsNivell0(ordreUnitats, amples) {
+    const posicionsX = {};
+    let cursor = 0;
+    
+    ordreUnitats.forEach(personaId => {
+        const amplada = amples[personaId];
+        const centre = cursor + amplada / 2;
+        posicionsX[personaId] = centre;
+        cursor += amplada;
+    });
+    
+    return posicionsX;
+}
+// ========================================
+// PAS B.2: POSICIONS DE DESCENDENTS (recursiu)
+// ========================================
+
+function posicionarDescendents(personaId, iniciX, mapa, generacions, cacheAmples, posicionsX, maxNivell) {
+    posicionsX[personaId] = iniciX + cacheAmples[personaId] / 2;
+    
+    const parellaId = obtenirParella(personaId);
+    if (parellaId && generacions[parellaId] !== undefined && posicionsX[parellaId] === undefined) {
+        posicionsX[parellaId] = posicionsX[personaId] + 1;
+    }
+    
+    const fills = obtenirFills(personaId, mapa)
+        .filter(fId => generacions[fId] !== undefined);
+    
+    let cursor = iniciX;
+    fills.forEach(fillId => {
+        const amplFill = cacheAmples[fillId] || calcularAmplada(fillId, mapa, generacions, cacheAmples, maxNivell);
+        posicionarDescendents(fillId, cursor, mapa, generacions, cacheAmples, posicionsX, maxNivell);
+        cursor += amplFill;
+    });
+}
+// ========================================
+// PAS B.3: POSICIONS D'ASCENDENTS (a partir de fills ja posicionats)
+function posicionarAscendents(personaId, mapa, generacions, posicionsX, maxNivell) {
+    const persona = mapa[personaId];
+    if (!persona) return;
+    
+    const nivellActual = generacions[personaId];
+    if (nivellActual === undefined || nivellActual >= maxNivell) return;
+    
+    [persona.pare_id, persona.mare_id].forEach(paretId => {
+        if (!paretId || posicionsX[paretId] !== undefined) return;
+        
+        const fillsDaquestPare = obtenirFills(paretId, mapa)
+            .filter(fId => posicionsX[fId] !== undefined);
+        
+        if (fillsDaquestPare.length > 0) {
+            const xFills = fillsDaquestPare.map(fId => posicionsX[fId]);
+            posicionsX[paretId] = (Math.min(...xFills) + Math.max(...xFills)) / 2;
+            
+            const parellaParet = obtenirParella(paretId);
+            if (parellaParet && posicionsX[parellaParet] === undefined) {
+                const nivellParet = nivellActual + 1;
+                const nivellsRestants = maxNivell - nivellParet;
+                const espaiNecessari = Math.pow(2, Math.max(nivellsRestants, 0));
+                posicionsX[parellaParet] = posicionsX[paretId] + espaiNecessari;
+            }
+        }
+    });
+}
+// ========================================
+// LAYOUT COMPLET (substitueix assignarSlots)
+// ========================================
+
+function calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell) {
+    const posicionsX = {};
+    const cacheAmples = {};
+
+    // 1. Amplada de cada unitat de nivell 0 (central + germans)
+    const germansCentral = obtenirGermans(personaCentralId, mapa)
+        .filter(gId => generacions[gId] === 0);
+    const ordreUnitats = [...germansCentral, personaCentralId];
+
+    const amplesNivell0 = {};
+    ordreUnitats.forEach(id => {
+        amplesNivell0[id] = calcularAmplada(id, mapa, generacions, cacheAmples, maxNivell);
+    });
+
+    // 2. Posicionar cada unitat de nivell 0 al seu bloc, i baixar pels seus descendents
+    let cursor = 0;
+    ordreUnitats.forEach(id => {
+        const amplada = amplesNivell0[id];
+        posicionarDescendents(id, cursor, mapa, generacions, cacheAmples, posicionsX);
+
+        // Parella de la persona de nivell 0 (si en té) es col·loca al costat
+        const parellaId = obtenirParella(id);
+        if (parellaId && generacions[parellaId] === 0 && posicionsX[parellaId] === undefined) {
+            posicionsX[parellaId] = posicionsX[id] + 1;
+        }
+
+        cursor += amplada;
+    });
+
+    // 3. Pujar per ascendents, nivell a nivell, fins a maxNivell
+    for (let n = 0; n < maxNivell; n++) {
+        Object.keys(generacions).forEach(id => {
+            if (generacions[id] === n) {
+                posicionarAscendents(parseInt(id), mapa, generacions, posicionsX, maxNivell);
+            }
+        });
+    }
+
+    return posicionsX;
+}
+// ========================================
 // DIBUIXAR ARBRE
 // ========================================
 
-function dibuixarArbrePerGeneracions(generacions, personaCentralId) {
+function dibuixarArbrePerGeneracions(generacions, personaCentralId, maxNivell) {
     const ESPAI_Y = 150;
     const ESPAI_X = 200;
     const mapa = crearMapaNodes();
     const cacheAmplades = {};
-    const amplesNivell0 = calcularAmplesNivell0(personaCentralId, mapa, generacions);
-    console.log('Amples de tot nivell 0:', amplesNivell0);
+    const cacheAmples = {};
+    calcularAmplada(personaCentralId, mapa, generacions, cacheAmples);
+    const posicionsXTest = {};
+    const layoutComplet = calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell);
+    const totes = Object.keys(generacions).map(id => ({
+        nom: (mapa[id]?.nom || '?') + ' ' + (mapa[id]?.primer_cognom || ''),
+        nivell: generacions[id],
+        x_unitats: layoutComplet[id],
+        x_pixels: layoutComplet[id] !== undefined ? (layoutComplet[id] * ESPAI_X + width / 2) : undefined
+    }));
+    console.log('TOTES LES POSICIONS:', JSON.stringify(totes, null, 2));
+    console.log('TOTES LES POSICIONS:', JSON.stringify(totes, null, 2));
     // Organitzar per nivells
     const nivells = {};
     Object.keys(generacions).forEach(id => {
@@ -363,15 +486,15 @@ function dibuixarArbrePerGeneracions(generacions, personaCentralId) {
     const nivellsOrdenats = Object.keys(nivells).map(Number).sort((a, b) => a - b);
     const offsetY = -nivellsOrdenats[0] * ESPAI_Y + 100;
     
-    // ========== ASSIGNAR SLOTS ==========
-    const slots = assignarSlots(personaCentralId, generacions, mapa);
+        // ========== CALCULAR LAYOUT (nou sistema basat en amplades) ==========
+    const layoutX = calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell);
     
     // ========== CALCULAR POSICIONS ==========
-    Object.keys(slots).forEach(personaId => {
+    Object.keys(layoutX).forEach(personaId => {
         const niv = generacions[personaId];
-        const slot = slots[personaId];
+        if (niv === undefined) return;
         
-        const x = slot * ESPAI_X + width / 2;
+        const x = layoutX[personaId] * ESPAI_X + width / 2;
         const y = -niv * ESPAI_Y + offsetY;
         
         posicions[personaId] = {x, y};
