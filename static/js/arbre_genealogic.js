@@ -382,30 +382,97 @@ function posicionarDescendents(personaId, iniciX, mapa, generacions, cacheAmples
 }
 // ========================================
 // PAS B.3: POSICIONS D'ASCENDENTS (a partir de fills ja posicionats)
-function posicionarAscendents(personaId, mapa, generacions, posicionsX, maxNivell) {
-    const persona = mapa[personaId];
-    if (!persona) return;
-    
-    const nivellActual = generacions[personaId];
-    if (nivellActual === undefined || nivellActual >= maxNivell) return;
-    
-    [persona.pare_id, persona.mare_id].forEach(paretId => {
-        if (!paretId || posicionsX[paretId] !== undefined) return;
-        
-        const fillsDaquestPare = obtenirFills(paretId, mapa)
-            .filter(fId => posicionsX[fId] !== undefined);
-        
-        if (fillsDaquestPare.length > 0) {
-            const xFills = fillsDaquestPare.map(fId => posicionsX[fId]);
-            posicionsX[paretId] = (Math.min(...xFills) + Math.max(...xFills)) / 2;
-            
-            const parellaParet = obtenirParella(paretId);
-            if (parellaParet && posicionsX[parellaParet] === undefined) {
-                const nivellParet = nivellActual + 1;
-                const nivellsRestants = maxNivell - nivellParet;
-                const espaiNecessari = Math.pow(2, Math.max(nivellsRestants, 0));
-                posicionsX[parellaParet] = posicionsX[paretId] + espaiNecessari;
+function posicionarAscendents(nivellFill, mapa, generacions, posicionsX, maxNivell) {
+    // Recollim totes les parelles de pares que calen col·locar en aquest pas
+    const parelles = {}; // clau "id1-id2" -> { membres:[...], refX: mitjana de fills que hi apunten }
+
+    Object.keys(generacions).forEach(idStr => {
+        if (generacions[idStr] !== nivellFill) return;
+        const persona = mapa[idStr];
+        if (!persona) return;
+
+        [persona.pare_id, persona.mare_id].forEach(paretId => {
+            if (!paretId || posicionsX[paretId] !== undefined) return;
+            const parella = obtenirParella(paretId);
+            const membres = parella ? [paretId, parella].sort((a, b) => a - b) : [paretId];
+            const clau = membres.join('-');
+
+            if (!parelles[clau]) {
+                parelles[clau] = { membres, refXs: [] };
             }
+            parelles[clau].refXs.push(posicionsX[idStr]);
+        });
+    });
+
+    // Ordenem les parelles pel seu punt de referència (mitjana dels fills coneguts)
+    const llistaParelles = Object.values(parelles).map(p => ({
+        ...p,
+        refX: p.refXs.reduce((a, b) => a + b, 0) / p.refXs.length
+    })).sort((a, b) => a.refX - b.refX);
+
+    // Col·loquem cada parella, garantint que mai s'intercalin ni se solapin
+    let cursorMinim = -Infinity;
+    llistaParelles.forEach(p => {
+        const centreDesitjat = p.refX;
+        const ampladaParella = p.membres.length === 2 ? 1 : 0.5;
+        let centreFinal = Math.max(centreDesitjat, cursorMinim + ampladaParella);
+
+        if (p.membres.length === 2) {
+            posicionsX[p.membres[0]] = centreFinal - 0.5;
+            posicionsX[p.membres[1]] = centreFinal + 0.5;
+            cursorMinim = centreFinal + 0.5 + 1;
+        } else {
+            posicionsX[p.membres[0]] = centreFinal;
+            cursorMinim = centreFinal + 1;
+        }
+    });
+}
+
+function separarColisions(posicionsX, generacions, nivell, mapa, minDistancia = 1) {
+    function desplacarBranca(personaId, delta, visitats = new Set()) {
+        if (visitats.has(personaId)) return;
+        visitats.add(personaId);
+        if (posicionsX[personaId] === undefined) return;
+        posicionsX[personaId] += delta;
+        obtenirFills(personaId, mapa).forEach(fillId => {
+            if (posicionsX[fillId] !== undefined) desplacarBranca(fillId, delta, visitats);
+        });
+    }
+
+    const idsDelNivell = Object.keys(generacions)
+        .filter(id => generacions[id] === nivell && posicionsX[id] !== undefined)
+        .sort((a, b) => posicionsX[a] - posicionsX[b]);
+
+    for (let i = 1; i < idsDelNivell.length; i++) {
+        const anterior = idsDelNivell[i - 1];
+        const actual = idsDelNivell[i];
+        const parellaAnterior = obtenirParella(parseInt(anterior));
+        if (parellaAnterior === parseInt(actual)) continue;
+
+        const distanciaReal = posicionsX[actual] - posicionsX[anterior];
+        if (distanciaReal < minDistancia) {
+            const desplacament = minDistancia - distanciaReal;
+            for (let j = i; j < idsDelNivell.length; j++) {
+                desplacarBranca(parseInt(idsDelNivell[j]), desplacament);
+            }
+        }
+    }
+}
+function recentrarFillsRespectePares(posicionsX, generacions, nivellFills, mapa) {
+    Object.keys(generacions).forEach(id => {
+        if (generacions[id] !== nivellFills) return;
+        const persona = mapa[id];
+        if (!persona) return;
+        const pares = [persona.pare_id, persona.mare_id].filter(p => p && posicionsX[p] !== undefined);
+        if (pares.length === 0) return;
+        // Només recentrem si aquesta persona no té parella ja processada al mateix punt (evitem descol·locar parelles)
+        const xPares = pares.map(p => posicionsX[p]);
+        const nouCentre = (Math.min(...xPares) + Math.max(...xPares)) / 2;
+        const parellaId = obtenirParella(parseInt(id));
+        const delta = nouCentre - posicionsX[id];
+        posicionsX[id] += delta;
+        if (parellaId && posicionsX[parellaId] !== undefined) {
+            posicionsX[parellaId] += delta;
         }
     });
 }
@@ -444,13 +511,8 @@ function calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell) {
 
     // 3. Pujar per ascendents, nivell a nivell, fins a maxNivell
     for (let n = 0; n < maxNivell; n++) {
-        Object.keys(generacions).forEach(id => {
-            if (generacions[id] === n) {
-                posicionarAscendents(parseInt(id), mapa, generacions, posicionsX, maxNivell);
-            }
-        });
+        posicionarAscendents(n, mapa, generacions, posicionsX, maxNivell);
     }
-
     return posicionsX;
 }
 // ========================================
@@ -469,11 +531,9 @@ function dibuixarArbrePerGeneracions(generacions, personaCentralId, maxNivell) {
     const totes = Object.keys(generacions).map(id => ({
         nom: (mapa[id]?.nom || '?') + ' ' + (mapa[id]?.primer_cognom || ''),
         nivell: generacions[id],
-        x_unitats: layoutComplet[id],
-        x_pixels: layoutComplet[id] !== undefined ? (layoutComplet[id] * ESPAI_X + width / 2) : undefined
-    }));
-    console.log('TOTES LES POSICIONS:', JSON.stringify(totes, null, 2));
-    console.log('TOTES LES POSICIONS:', JSON.stringify(totes, null, 2));
+        x: layoutComplet[id]
+    })).sort((a, b) => a.nivell - b.nivell || a.x - b.x);
+    console.log('POSICIONS ORDENADES:', JSON.stringify(totes, null, 2));
     // Organitzar per nivells
     const nivells = {};
     Object.keys(generacions).forEach(id => {
@@ -486,7 +546,7 @@ function dibuixarArbrePerGeneracions(generacions, personaCentralId, maxNivell) {
     const nivellsOrdenats = Object.keys(nivells).map(Number).sort((a, b) => a - b);
     const offsetY = -nivellsOrdenats[0] * ESPAI_Y + 100;
     
-        // ========== CALCULAR LAYOUT (nou sistema basat en amplades) ==========
+            // ========== CALCULAR LAYOUT (nou sistema basat en amplades) ==========
     const layoutX = calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell);
     
     // ========== CALCULAR POSICIONS ==========
@@ -527,11 +587,8 @@ function assignarSlots(adminId, generacions, mapa) {
     const slots = {};
     
     // ========== NIVELL 0 ==========
-    slots[adminId] = 0;
-    
-    const parellaAdmin = obtenirParella(adminId);
     if (parellaAdmin) {
-        slots[parellaAdmin] = 1;
+        slots[parellaAdmin] = 1.5;
     }
     
     // Germans admin (esquerra)
