@@ -33,7 +33,7 @@
   </a>
 
   <ul class="submenu" id="submenu-crear">
-    <li><a href="{{ url_for('pagina_personal.nova_entrada') }}">{{ _('Entrada personal') }}</a></li>
+    <li><a href="{{ url_for('nova_entrada.nova_entrada_personal') }}">{{ _('Entrada personal') }}</a></li>
     <li><a href="{{ url_for('converses.nova_conversa_adabida') }}">{{ _('Conversa') }}</a></li>
   </ul>
 </li>
@@ -55,7 +55,9 @@
   <ul class="submenu" id="submenu-familia">
     {% if session.get('usuari') %}
       <li><a href="{{ url_for('familia.crear') }}">{{ _('Crear espai familiar') }}</a></li>
-      <li><a href="{{ url_for('familia.les_meves') }}">{{ _('Els meus espais') }}</a></li>
+      {% for m in families_usuari %}
+  <li><a href="{{ url_for('familia.seccio', url=m.url, seccio='qui-som') }}">{{ m.nom }}</a></li>
+{% endfor %}
     {% else %}
       <li class="submenu-info">
         <p class="submenu-text">
@@ -81,9 +83,10 @@
 
   <ul class="submenu" id="submenu-org">
     {% if session.get('usuari') %}
-      <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Les meves organitzacions') }}</a></li>
       <li><a href="{{ url_for('organitzacions.crear') }}">{{ _('Crear organització') }}</a></li>
-      <li><a href="{{ url_for('organitzacions.llistat') }}">{{ _('Història corporativa') }}</a></li>
+      {% for o in organitzacions_usuari %}
+        <li><a href="{{ url_for('organitzacions.seccio', slug=o.url_publica, seccio='qui-som') }}">{{ o.nom }}</a></li>
+      {% endfor %}
     {% else %}
       <li class="submenu-info">
         <p class="submenu-text">

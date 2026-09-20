@@ -79,6 +79,16 @@ def inici_pagina():
     if current_user.is_authenticated and "usuari_id" not in session:
         session["usuari_id"] = current_user.id
         session["nom_login"] = current_user.nom_login
+    families_usuari = []
+    if current_user.is_authenticated:
+        from models.families import MembreFamilia
+        memberships = MembreFamilia.query.filter_by(usuari_id=current_user.id).all()
+        families_usuari = [m.espai_familiar for m in memberships]
+        organitzacions_usuari = []
+    if current_user.is_authenticated:
+        from models.organitzacions import MembreOrganitzacio
+        memberships_org = MembreOrganitzacio.query.filter_by(usuari_id=current_user.id).all()
+        organitzacions_usuari = [m.organitzacio for m in memberships_org]
     base_path = os.path.join("umberto", "media", "galeria")
     imatges_destacades = []
     exposicions = Exposicio.query.order_by(Exposicio.id.desc()).all()
@@ -165,7 +175,9 @@ def inici_pagina():
         entrades_blog=entrades_blog,
         mesos_disponibles=mesos_disponibles,
         datetime=datetime.datetime,
-        entrades_aleatories=contingut_aleatori
+        entrades_aleatories=contingut_aleatori,
+        families_usuari=families_usuari,
+        organitzacions_usuari=organitzacions_usuari
     )
 
 
