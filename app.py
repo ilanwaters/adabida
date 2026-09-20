@@ -112,7 +112,7 @@ from routes.exposicio import exposicio_bp
 from routes.usuari_admin import usuari_admin_bp
 from routes.api_guardades import api_guardades_bp
 from routes.missatges import missatges_bp
-from routes.xorganitzacions import organitzacions_bp
+from routes.organitzacions.organitzacions import organitzacions_bp
 from routes.converses import converses_bp
 from routes.home import home_bp
 from routes.organitzacions.admin_organitzacions import admin_organitzacions_bp
