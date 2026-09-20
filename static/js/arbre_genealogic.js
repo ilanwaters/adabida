@@ -932,7 +932,8 @@ function dibuixarLlinesPareFill(posicions) {
             
             const puntMigX = (posPare.x + posMare.x) / 2;
             const puntMigY = Math.max(posPare.y, posMare.y);
-            const punIntermigY = puntMigY + 40;
+            const variacioY = (parseInt(node.id) % 5) * 6;
+            const punIntermigY = puntMigY + 40 + variacioY;
             
             const distanciaH = Math.abs(posFill.x - puntMigX);
             const r1 = Math.min(12, distanciaH / 2);
