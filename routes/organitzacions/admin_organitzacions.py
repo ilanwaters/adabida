@@ -6,8 +6,9 @@ from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func, and_, or_
-from models import db, Organitzacio, MembreOrganitzacio, Usuari, Entrada, SolicitudOrganitzacio, MissatgeOrganitzacio, Missatge
+from models import db, Organitzacio, MembreOrganitzacio, Usuari, Entrada, SolicitudOrganitzacio, MissatgeOrganitzacio, Missatge, EntradaOrganitzacio
 from datetime import datetime
+from utils.temps import ara_utc
 
 admin_organitzacions_bp = Blueprint('organitzacions_admin', __name__, url_prefix='/organitzacions')
 
@@ -33,8 +34,10 @@ def admin(id):
         flash('No tens permisos per administrar aquesta organització', 'error')
         return redirect(url_for('pagina_personal.pagina_personal'))
     
-    entrades_compartides = Entrada.query.filter_by(
-        organitzacio_compartida_id=id
+    entrades_compartides = Entrada.query.join(
+        EntradaOrganitzacio, EntradaOrganitzacio.entrada_id == Entrada.id
+    ).filter(
+        EntradaOrganitzacio.organitzacio_id == id
     ).order_by(Entrada.data_creacio.desc()).all()
 
     solicituds_pendents = SolicitudOrganitzacio.query.filter_by(
@@ -185,13 +188,13 @@ def processar_solicitud():
                 usuari_id=solicitud.usuari_id,
                 organitzacio_id=solicitud.organitzacio_id,
                 rol='adherit',  # Rol per defecte
-                data_adhesio=datetime.utcnow()
+                data_adhesio=ara_utc()
             )
             db.session.add(nou_membre)
             
             # Actualitzar sol·licitud
             solicitud.estat = 'acceptada'
-            solicitud.data_resposta = datetime.utcnow()
+            solicitud.data_resposta = ara_utc()
             solicitud.processat_per_id = current_user.id
             
             db.session.commit()
@@ -201,7 +204,7 @@ def processar_solicitud():
             
         elif accio == 'rebutjar':
             solicitud.estat = 'rebutjada'
-            solicitud.data_resposta = datetime.utcnow()
+            solicitud.data_resposta = ara_utc()
             solicitud.processat_per_id = current_user.id
             
             db.session.commit()

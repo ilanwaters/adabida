@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from utils.temps import ara_utc
 from unidecode import unidecode
 
 # Ruta base del projecte
@@ -24,7 +25,7 @@ def crear_carpeta_usuari(usuari, tipus='usuaris'):
     pais = unidecode((usuari.pais_residencia or 'desconegut').lower())
 
     # Data de creació
-    data_creacio = getattr(usuari, 'data_registre', None) or datetime.utcnow()
+    data_creacio = getattr(usuari, 'data_registre', None) or ara_utc()
     any_str = str(data_creacio.year)
     mes_str = f"{data_creacio.month:02d}"
 

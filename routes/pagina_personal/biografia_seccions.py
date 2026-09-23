@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, jsonify, redirect, url_fo
 from flask_login import login_required, current_user
 from models import db, BiografiaSeccion
 from datetime import datetime
+from utils.temps import ara_utc
 
 biografia_seccions_bp = Blueprint('biografia_seccions', __name__, url_prefix='/perfil/biografia-seccions')
 
@@ -100,7 +101,7 @@ def editar_seccio(seccio_id):
         any_final = request.form.get('any_final', '').strip()
         seccio.any_inici = int(any_inici) if any_inici else None
         seccio.any_final = int(any_final) if any_final else None
-        seccio.data_modificacio = datetime.utcnow()
+        seccio.data_modificacio = ara_utc()
         
         if not seccio.titol:
             flash('El títol és obligatori', 'error')

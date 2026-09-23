@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, redirect, url_fo
 from flask_login import login_required, current_user
 from models import db, BiografiaFamiliaSeccion, EspaiFamiliar, MembreFamilia
 from datetime import datetime
+from utils.temps import ara_utc
 
 historia_familia_bp = Blueprint('historia_familia', __name__, url_prefix='/familia/<int:familia_id>/historia')
 
@@ -134,7 +135,7 @@ def editar_seccio(familia_id, seccio_id):
         seccio.titol = request.form.get('titol', '').strip()
         seccio.contingut = request.form.get('contingut', '').strip()
         seccio.visible = request.form.get('visible') == 'on'
-        seccio.data_modificacio = datetime.utcnow()
+        seccio.data_modificacio = ara_utc()
         
         if not seccio.titol:
             flash('El títol és obligatori', 'error')

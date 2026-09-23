@@ -2,6 +2,7 @@ from models import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
+from utils.temps import ara_utc
 import secrets
 
 
@@ -25,7 +26,7 @@ class Usuari(db.Model, UserMixin):
     es_admin = db.Column(db.Boolean, default=False)
     identificador_abadia = db.Column(db.String(64), unique=True)
     nivell_usuari = db.Column(db.String(10), default='blau')  
-    data_registre = db.Column(db.DateTime, default=datetime.utcnow) 
+    data_registre = db.Column(db.DateTime, default=ara_utc) 
     bandera_preferida = db.Column(db.String(10), nullable=True)
     imatge_card_biografia = db.Column(db.String(255))
     imatge_card_entrades = db.Column(db.String(255))
@@ -63,12 +64,12 @@ class Usuari(db.Model, UserMixin):
         
     def generar_token_verificacio(self):
         self.token_verificacio = secrets.token_urlsafe(32)
-        self.data_token = datetime.utcnow()
+        self.data_token = ara_utc()
         return self.token_verificacio
     
     def generar_token_reset_password(self):
         self.token_reset_password = secrets.token_urlsafe(32)
-        self.data_token_reset = datetime.utcnow()
+        self.data_token_reset = ara_utc()
         return self.token_reset_password
 
     def eliminar_token_reset_password(self):
@@ -92,7 +93,7 @@ class Usuari(db.Model, UserMixin):
             return False
         
         expiracio = data_token + timedelta(hours=hores_expiracio)
-        if datetime.utcnow() > expiracio:
+        if ara_utc() > expiracio:
             return False
         
         return True
@@ -343,8 +344,8 @@ class BiografiaSeccion(db.Model):
     visible = db.Column(db.Boolean, default=True)  # Si es mostra al perfil públic
     
     # Timestamps
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
-    data_modificacio = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
+    data_modificacio = db.Column(db.DateTime, default=ara_utc, onupdate=ara_utc)
     
     # Relació amb usuari
     usuari = db.relationship('Usuari', backref=db.backref('seccions_biografia', lazy='dynamic', cascade='all, delete-orphan'))
@@ -412,7 +413,7 @@ class Obra(db.Model):
     titol = db.Column(db.String(200), nullable=True)
     descripcio = db.Column(db.Text, nullable=True)
 
-    creat_el = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    creat_el = db.Column(db.DateTime, default=ara_utc, nullable=False)
 
 
 class Missatge(db.Model):
@@ -424,7 +425,7 @@ class Missatge(db.Model):
     assumpte = db.Column(db.String(150), nullable=False)  
     contingut = db.Column(db.Text, nullable=False)
     llegit = db.Column(db.Boolean, default=False)
-    data_env = db.Column(db.DateTime, default=datetime.utcnow)
+    data_env = db.Column(db.DateTime, default=ara_utc)
 
     emissor = db.relationship("Usuari", foreign_keys=[emissor_id], backref="missatges_enviats")
     receptor = db.relationship("Usuari", foreign_keys=[receptor_id], backref="missatges_rebuts")
@@ -441,6 +442,6 @@ class ArxiuMissatge(db.Model):
     nom_fitxer = db.Column(db.String(255), nullable=False)
     tipus = db.Column(db.String(50))
     tipus_media = db.Column(db.String(20), nullable=True, default='desconegut')
-    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    data_pujada = db.Column(db.DateTime, default=ara_utc)
 
     missatge = db.relationship("Missatge", back_populates="arxius_adjunts")

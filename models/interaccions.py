@@ -1,5 +1,6 @@
 from models import db
 from datetime import datetime
+from utils.temps import ara_utc
 
 
 class Contacte(db.Model):
@@ -9,7 +10,7 @@ class Contacte(db.Model):
     usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=False)
     contacte_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=False)
     nom_personalitzat = db.Column(db.String(100))
-    data_afegit = db.Column(db.DateTime, default=datetime.utcnow)
+    data_afegit = db.Column(db.DateTime, default=ara_utc)
 
     usuari = db.relationship('Usuari', foreign_keys=[usuari_id], backref='contactes_propis')
     contacte = db.relationship('Usuari', foreign_keys=[contacte_id], backref='contactes_aliens')

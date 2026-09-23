@@ -1,5 +1,6 @@
 from models import db
 from datetime import datetime
+from utils.temps import ara_utc
 from collections import Counter
 
 
@@ -21,7 +22,7 @@ class EspaiFamiliar(db.Model):
     imatge_card_records = db.Column(db.String(255))
     imatge_card_documents = db.Column(db.String(255))
     
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     creat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=False)
     activa = db.Column(db.Boolean, default=True)
     visible_globalment = db.Column(db.Boolean, default=True)
@@ -77,7 +78,7 @@ class MembreFamilia(db.Model):
     usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=True)
     espai_familiar_id = db.Column(db.Integer, db.ForeignKey('espais_familiars.id'), nullable=False)
     rol = db.Column(db.String(20), nullable=False, default='membre')
-    data_adhesio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_adhesio = db.Column(db.DateTime, default=ara_utc)
     visible_public = db.Column(db.Boolean, default=True, nullable=False)
     
     # Ubicació actual del membre
@@ -167,7 +168,7 @@ class EntradaFamilia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     entrada_id = db.Column(db.Integer, db.ForeignKey('entrades.id'), nullable=False)
     espai_familiar_id = db.Column(db.Integer, db.ForeignKey('espais_familiars.id'), nullable=False)
-    data_compartit = db.Column(db.DateTime, default=datetime.utcnow)
+    data_compartit = db.Column(db.DateTime, default=ara_utc)
     
     entrada = db.relationship('Entrada', back_populates='families_compartides')
     espai_familiar = db.relationship('EspaiFamiliar', backref='entrades_vinculades')
@@ -241,7 +242,7 @@ class DocumentMembreFamilia(db.Model):
     descripcio = db.Column(db.String(500))
     visibilitat = db.Column(db.String(20), default='familia')
     
-    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    data_pujada = db.Column(db.DateTime, default=ara_utc)
     pujat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
     
     membre = db.relationship('MembreFamilia', backref='documents')
@@ -262,8 +263,8 @@ class BiografiaFamiliaSeccion(db.Model):
     ordre = db.Column(db.Integer, default=0)
     visible = db.Column(db.Boolean, default=True)
     
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
-    data_modificacio = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
+    data_modificacio = db.Column(db.DateTime, default=ara_utc, onupdate=ara_utc)
     
     espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('seccions_historia', lazy='dynamic', cascade='all, delete-orphan'))
 
@@ -277,7 +278,7 @@ class GrupDocumentsFamilia(db.Model):
     descripcio = db.Column(db.String(500))
     visible_public = db.Column(db.Boolean, default=False, nullable=False)
 
-    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    data_pujada = db.Column(db.DateTime, default=ara_utc)
     pujat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
 
     espai_familiar = db.relationship('EspaiFamiliar', backref=db.backref('grups_documents', cascade='all, delete-orphan'))
@@ -299,7 +300,7 @@ class DocumentFamilia(db.Model):
     any_document = db.Column(db.String(10))
     descripcio = db.Column(db.String(500))
 
-    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    data_pujada = db.Column(db.DateTime, default=ara_utc)
 
     grup = db.relationship('GrupDocumentsFamilia', backref=db.backref('documents', cascade='all, delete-orphan'))
 

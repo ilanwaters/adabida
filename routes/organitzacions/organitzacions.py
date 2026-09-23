@@ -7,6 +7,7 @@ from models import db, Organitzacio, MembreOrganitzacio, Usuari, Entrada, Solici
 import os
 import uuid
 from datetime import datetime, timedelta
+from utils.temps import ara_utc
 
 organitzacions_bp = Blueprint('organitzacions', __name__, url_prefix='/organitzacions')
 def obtenir_nom_pais(pais_id):
@@ -119,7 +120,7 @@ def crear():
                 telefon_contacte=telefon_contacte if telefon_contacte else None,
                 adresa=adresa if adresa else None,
                 creat_per_id=current_user.id,
-                data_creacio=datetime.utcnow()
+                data_creacio=ara_utc()
             )
             
             print("AFEGINT ORGANITZACIÓ A LA SESSIÓ...")
@@ -133,7 +134,7 @@ def crear():
                 usuari_id=current_user.id,
                 organitzacio_id=nova_org.id,
                 rol='admin',
-                data_adhesio=datetime.utcnow()
+                data_adhesio=ara_utc()
             )
             
             db.session.add(membre_admin)
@@ -146,7 +147,7 @@ def crear():
             
             # REDIRIGIR AL PANELL D'ADMINISTRACIÓ
             print(f"*** REDIRIGINT A ADMIN AMB ID: {nova_org.id} ***")
-            return redirect(url_for('organitzacions.admin', id=nova_org.id))
+            return redirect(url_for('organitzacions.publica', slug=nova_org.url_publica))
             
         except Exception as e:
             print(f"*** ERROR CRÍTIC: {str(e)} ***")

@@ -1,5 +1,6 @@
 from models import db
 from datetime import datetime
+from utils.temps import ara_utc
 
 
 class Organitzacio(db.Model):
@@ -32,7 +33,7 @@ class Organitzacio(db.Model):
     data_premium = db.Column(db.Date)
     
     # Metadades
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     creat_per_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'), nullable=False)
     activa = db.Column(db.Boolean, default=True)
     
@@ -84,7 +85,7 @@ class MembreOrganitzacio(db.Model):
     
     rol = db.Column(db.String(20), nullable=False)
     estat = db.Column(db.String(20), default='actiu')
-    data_adhesio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_adhesio = db.Column(db.DateTime, default=ara_utc)
     data_sortida = db.Column(db.DateTime)
     
     mostrar_entrades = db.Column(db.Boolean, default=True)
@@ -108,7 +109,7 @@ class SolicitudOrganitzacio(db.Model):
     organitzacio_id = db.Column(db.Integer, db.ForeignKey('organitzacions.id'), nullable=False)
     
     estat = db.Column(db.String(20), default='pendent')
-    data_solicitud = db.Column(db.DateTime, default=datetime.utcnow)
+    data_solicitud = db.Column(db.DateTime, default=ara_utc)
     data_resposta = db.Column(db.DateTime)
     missatge = db.Column(db.Text)
     notes_admin = db.Column(db.Text)
@@ -135,7 +136,7 @@ class BiografiaOrganitzacioSeccion(db.Model):
     contingut = db.Column(db.Text)
     ordre = db.Column(db.Integer, default=0)
     visible = db.Column(db.Boolean, default=True)
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     data_modificacio = db.Column(db.DateTime)
     
     organitzacio = db.relationship('Organitzacio', backref='seccions_historia')
@@ -147,7 +148,7 @@ class EntradaOrganitzacio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     entrada_id = db.Column(db.Integer, db.ForeignKey('entrades.id'), nullable=False)
     organitzacio_id = db.Column(db.Integer, db.ForeignKey('organitzacions.id'), nullable=False)
-    data_compartit = db.Column(db.DateTime, default=datetime.utcnow)
+    data_compartit = db.Column(db.DateTime, default=ara_utc)
     
     entrada = db.relationship('Entrada', back_populates='organitzacions_compartides')
     organitzacio = db.relationship('Organitzacio', backref='entrades_vinculades')
@@ -166,7 +167,7 @@ class MissatgeOrganitzacio(db.Model):
     contingut = db.Column(db.Text, nullable=False)
     llegit = db.Column(db.Boolean, default=False)
     tipus = db.Column(db.String(10), default='rebut')
-    data_env = db.Column(db.DateTime, default=datetime.utcnow)
+    data_env = db.Column(db.DateTime, default=ara_utc)
     
     organitzacio = db.relationship('Organitzacio', backref='missatges_organitzacio')
     emissor = db.relationship('Usuari', foreign_keys=[emissor_id])

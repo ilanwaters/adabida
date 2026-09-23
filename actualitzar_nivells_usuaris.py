@@ -6,6 +6,7 @@ Executar una sola vegada després de la migració
 from app import app, db
 from models.usuari import Usuari
 from datetime import datetime
+from utils.temps import ara_utc
 
 with app.app_context():
     # Obtenir tots els usuaris
@@ -17,7 +18,7 @@ with app.app_context():
         
         # Si no té data_registre, posar ara
         if usuari.data_registre is None:
-            usuari.data_registre = datetime.utcnow()
+            usuari.data_registre = ara_utc()
             canvis = True
             print(f"✓ Usuari {usuari.nom_login}: data_registre actualitzada")
         

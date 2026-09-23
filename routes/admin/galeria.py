@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, flash, url_for,
 import os
 import shutil
 from datetime import datetime
+from utils.temps import ara_utc
 from models import db
 from models.entrades import ImatgeGaleria, Exposicio
 from models.entrades import Entrada, ArxiuEntrada
@@ -157,7 +158,7 @@ def afegir_a_galeria():
 
     imatge.mida = mida
     imatge.destinacio = "galeria"
-    imatge.data_publicacio = datetime.utcnow()
+    imatge.data_publicacio = ara_utc()
     imatge.entrada_id = entrada.id
     db.session.commit()
 
@@ -240,14 +241,13 @@ def assignar_exposicio():
         )
         db.session.add(imatge_obj)
 
-    # Sempre que falti entrada_id, intentem trobar l'entrada d'origen
-    if not imatge_obj.entrada_id:
-        from models import ArxiuAdjunt
-        arxiu = ArxiuAdjunt.query.filter_by(nom_fitxer=fitxer).first()
-        if arxiu and arxiu.entrada:
-            imatge_obj.entrada_id = arxiu.entrada.id
-            imatge_obj.usuari_id = arxiu.entrada.usuari_id
-
+        # Sincronitzem sempre entrada_id/usuari_id des de l'ArxiuAdjunt d'origen
+    from models import ArxiuAdjunt
+    arxiu = ArxiuAdjunt.query.filter_by(nom_fitxer=fitxer).first()
+    if arxiu and arxiu.entrada:
+        imatge_obj.entrada_id = arxiu.entrada.id
+        imatge_obj.usuari_id = arxiu.entrada.usuari_id
+        
     db.session.commit()
 
     if imatge_obj:

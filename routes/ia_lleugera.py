@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from datetime import datetime
+from utils.temps import ara_utc
 from models import db, Usuari, TemaEntrevista, Entrevista, Missatge
 from models import PerfilBiografic 
 ia_lleugera_bp = Blueprint("ia_lleugera", __name__)
@@ -70,13 +71,13 @@ def entrevista_ia(perfil_id):
                 entrevista_id=entrevista.id,
                 autor="usuari",
                 text=nou_text,
-                timestamp=datetime.utcnow()
+                timestamp=ara_utc()
             )
             resposta_echo = Missatge(
                 entrevista_id=entrevista.id,
                 autor="echo",
                 text="(Simulació) M'ho pots explicar una mica més?",
-                timestamp=datetime.utcnow()
+                timestamp=ara_utc()
             )
             db.session.add_all([missatge_usuari, resposta_echo])
             db.session.commit()

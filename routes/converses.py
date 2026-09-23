@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_login import login_required, current_user
 from datetime import datetime, date
+from utils.temps import ara_utc
 import os
 from werkzeug.utils import secure_filename
 import uuid
@@ -157,7 +158,7 @@ def editar_conversa(id):
         organitzacio_id = request.form.get('organitzacio_id')
         conversa.organitzacio_id = int(organitzacio_id) if organitzacio_id else None
         
-        conversa.updated_at = datetime.utcnow()
+        conversa.updated_at = ara_utc()
         
         # TODO: Actualitzar participants (més complex)
         
@@ -660,7 +661,7 @@ def editar_conversa_adabida(id):
         organitzacio_id = request.form.get('organitzacio_id')
         conversa.organitzacio_id = int(organitzacio_id) if organitzacio_id else None
         
-        conversa.updated_at = datetime.utcnow()
+        conversa.updated_at = ara_utc()
 
         participant = ConversaParticipant.query.filter_by(conversa_id=conversa.id).first()
         nom_entrevistat = request.form.get('entrevistat_nom', '').strip()

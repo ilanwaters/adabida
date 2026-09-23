@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.utils import secure_filename
 from datetime import datetime
+from utils.temps import ara_utc
 import os
 import shutil
 from utils.paisos import normalitza_pais
@@ -188,7 +189,7 @@ def nova_entrada_personal():
         tema=tema,
         any_text=any_text,
         contingut=contingut,
-        data_creacio=datetime.utcnow(),
+        data_creacio=ara_utc(),
         es_publica=(mode_guardat != "esborrany"),
         titol_imatge=titol_imatge,
         descripcio_imatge=descripcio_imatge,

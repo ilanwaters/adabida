@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db, EntradaBlog, Usuari
 from datetime import datetime
+from utils.temps import ara_utc
 from sqlalchemy import extract, func
 
 blog_bp = Blueprint("blog", __name__)
@@ -71,7 +72,7 @@ def guardar_entrada_blog():
         contingut=contingut,
         autor=usuari,
         firma=firma,
-        data_creacio=datetime.utcnow()
+        data_creacio=ara_utc()
     )
 
     db.session.add(nova_entrada)

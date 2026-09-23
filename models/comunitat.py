@@ -1,5 +1,6 @@
 from models import db
 from datetime import datetime
+from utils.temps import ara_utc
 
 
 class PeticioTestimoni(db.Model):
@@ -21,7 +22,7 @@ class PeticioTestimoni(db.Model):
     
     # Estat
     completada = db.Column(db.Boolean, default=False)
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     data_completada = db.Column(db.DateTime, nullable=True)
     
     # Si algú respon, qui ho fa i quina entrada crea
@@ -64,7 +65,7 @@ class Denuncia(db.Model):
     # Opcions: 'pendent', 'revisada', 'acceptada', 'rebutjada'
     
     # Dates
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     data_revisio = db.Column(db.DateTime, nullable=True)
     
     # Admin que revisa
@@ -127,8 +128,8 @@ class TemaForum(db.Model):
     fixat = db.Column(db.Boolean, default=False)   # Temes destacats
     
     # Dates
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
-    data_ultim_missatge = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
+    data_ultim_missatge = db.Column(db.DateTime, default=ara_utc)
     
     # Comptadors
     nombre_respostes = db.Column(db.Integer, default=0)
@@ -162,7 +163,7 @@ class MissatgeForum(db.Model):
     contingut = db.Column(db.Text, nullable=False)
     
     # Dates
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
     data_modificacio = db.Column(db.DateTime, nullable=True)
     editat = db.Column(db.Boolean, default=False)
     

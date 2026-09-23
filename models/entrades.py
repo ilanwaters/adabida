@@ -1,5 +1,6 @@
 from models import db
 from datetime import datetime
+from utils.temps import ara_utc
 
 
 class Entrada(db.Model):
@@ -16,8 +17,8 @@ class Entrada(db.Model):
     pais = db.Column(db.String(100), nullable=True)
     regio = db.Column(db.String(100), nullable=True)
     municipi = db.Column(db.String(100), nullable=True)
-    data_creacio = db.Column(db.DateTime, default=datetime.utcnow)
-    data_modificacio = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
+    data_creacio = db.Column(db.DateTime, default=ara_utc)
+    data_modificacio = db.Column(db.DateTime, default=ara_utc, onupdate=ara_utc) 
     
     titol_imatge = db.Column(db.String(255))
     descripcio_imatge = db.Column(db.Text)
@@ -34,7 +35,7 @@ class Entrada(db.Model):
     organitzacions_compartides = db.relationship('EntradaOrganitzacio', back_populates='entrada', cascade='all, delete-orphan')
     families_compartides = db.relationship('EntradaFamilia', back_populates='entrada', cascade='all, delete-orphan')
     
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=ara_utc)
     arxius_adjuntats = db.relationship("ArxiuAdjunt", back_populates="entrada", cascade="all, delete-orphan")
     imatges = db.relationship("ImatgeGaleria", back_populates="entrada", cascade="all, delete-orphan")
     tipus_fitxer = db.Column(db.String(10))
@@ -112,7 +113,7 @@ class ArxiuAdjunt(db.Model):
     nom_fitxer = db.Column(db.String(255), nullable=False)
     tipus = db.Column(db.String(50))
     tipus_media = db.Column(db.String(20), nullable=True, default='desconegut')
-    data_pujada = db.Column(db.DateTime, default=datetime.utcnow)
+    data_pujada = db.Column(db.DateTime, default=ara_utc)
     titol = db.Column(db.String(255), nullable=True)
     any_arxiu = db.Column(db.Integer, nullable=True)
     pais = db.Column(db.String(100), nullable=True)
@@ -150,7 +151,7 @@ class ImatgeGaleria(db.Model):
     exposicio_id = db.Column(db.Integer, db.ForeignKey('exposicions.id'), nullable=True)
     nom_fitxer = db.Column(db.String(255), nullable=False)
     destinacio = db.Column(db.String(50))
-    data_publicacio = db.Column(db.DateTime, default=datetime.utcnow)
+    data_publicacio = db.Column(db.DateTime, default=ara_utc)
     usuari_id = db.Column(db.Integer, db.ForeignKey('usuaris.id'))
     mida = db.Column(db.String, default="mitjana")
     descripcio = db.Column(db.Text)
@@ -165,7 +166,7 @@ class ImatgeExposicio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     imatge_id = db.Column(db.Integer, db.ForeignKey('imatges_galeria.id'), nullable=False)
     ruta_expo = db.Column(db.String(255), nullable=False)
-    data_afegit = db.Column(db.DateTime, default=datetime.utcnow)
+    data_afegit = db.Column(db.DateTime, default=ara_utc)
     exposicio_id = db.Column(db.Integer, db.ForeignKey("exposicions.id"))
     
     imatge = db.relationship('ImatgeGaleria', backref='exposicions')
@@ -233,8 +234,8 @@ class Conversa(db.Model):
     # Vinculació amb entrada (si és entrevista Adabida)
     entrada_id = db.Column(db.Integer, db.ForeignKey('entrades.id'), nullable=True)
     # Timestamps
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
+    created_at = db.Column(db.DateTime, default=ara_utc)
+    updated_at = db.Column(db.DateTime, default=ara_utc, onupdate=ara_utc) 
     
     # Relacions
     usuari = db.relationship('Usuari', backref='converses')
@@ -282,7 +283,7 @@ class ConversaParticipant(db.Model):
     # Ordre en la conversa (per mantenir ordre d'afegit)
     ordre = db.Column(db.Integer, default=1)
     
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=ara_utc)
     
     def __repr__(self):
         return f'<Participant {self.nom} - Conversa {self.conversa_id}>'
