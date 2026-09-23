@@ -1,0 +1,146 @@
+/* ============================================
+   PÀGINA PÚBLICA - Estructura comuna
+   Colors i tipografia: definits pels temes
+   ============================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body.pagina-publica {
+    margin: 0;
+    background: var(--pp-fons);
+    color: var(--pp-text);
+    font-family: var(--pp-font-text);
+    line-height: 1.7;
+}
+
+.pagina-publica img { max-width: 100%; display: block; }
+
+/* Capçalera */
+.pp-capcalera {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background: var(--pp-fons);
+    border-bottom: 1px solid var(--pp-linia);
+}
+.pp-marca {
+    font-family: var(--pp-font-titols);
+    font-size: 1.2rem;
+    color: var(--pp-text);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+}
+.pp-nav { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+.pp-nav a {
+    color: var(--pp-text-suau);
+    text-decoration: none;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.pp-nav a:hover { color: var(--pp-accent); }
+
+/* Portada */
+.pp-portada {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--pp-fons-alt) center / cover no-repeat;
+}
+.pp-portada.amb-imatge::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--pp-vel-portada);
+}
+.pp-portada-contingut { position: relative; max-width: 800px; }
+.pp-portada h1 {
+    font-family: var(--pp-font-titols);
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 400;
+    margin: 0 0 1rem;
+    letter-spacing: 0.04em;
+}
+.pp-portada.amb-imatge h1,
+.pp-portada.amb-imatge .pp-lema { color: #fff; }
+.pp-lema { font-size: 1.2rem; color: var(--pp-text-suau); margin: 0; }
+
+/* Blocs */
+.pp-bloc { padding: 5rem 2rem; scroll-margin-top: 4rem; }
+.pp-bloc:nth-of-type(even) { background: var(--pp-fons-alt); }
+.pp-bloc-interior { max-width: var(--pp-amplada); margin: 0 auto; }
+.pp-bloc h2 {
+    font-family: var(--pp-font-titols);
+    font-weight: 400;
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 0 3rem;
+    letter-spacing: 0.04em;
+}
+
+/* Text + imatge alternats */
+.pp-alternat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+.pp-alternat:nth-child(even) .pp-alternat-imatge { order: 2; }
+.pp-alternat h3 {
+    font-family: var(--pp-font-titols);
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+}
+.pp-alternat-imatge img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--pp-radi); }
+.pp-alternat.sense-imatge { grid-template-columns: 1fr; max-width: 700px; margin-left: auto; margin-right: auto; }
+
+/* Galeria */
+.pp-galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.5rem;
+}
+.pp-galeria img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--pp-radi); }
+
+/* Targetes (membres, testimonis) */
+.pp-targetes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+}
+.pp-targeta { text-align: center; }
+.pp-targeta img { width: 140px; height: 140px; margin: 0 auto 1rem; object-fit: cover; border-radius: 50%; }
+.pp-targeta h4 { margin: 0; font-weight: 500; }
+.pp-targeta p { margin: 0.25rem 0 0; font-size: 0.9rem; color: var(--pp-text-suau); }
+
+/* Bloc en construcció */
+.pp-en-construccio { text-align: center; color: var(--pp-text-suau); font-style: italic; }
+
+/* Peu */
+.pp-peu {
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    border-top: 1px solid var(--pp-linia);
+}
+.pp-peu a { color: var(--pp-text-suau); text-decoration: none; }
+
+/* Mòbil */
+@media (max-width: 768px) {
+    .pp-capcalera { flex-direction: column; padding: 1rem; }
+    .pp-nav { justify-content: center; gap: 1rem; }
+    .pp-alternat { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pp-alternat:nth-child(even) .pp-alternat-imatge { order: 0; }
+    .pp-bloc { padding: 3rem 1rem; }
+}

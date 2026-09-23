@@ -1,0 +1,16 @@
+/* Tema CLÀSSIC: sobri, càlid, tipografia serif als títols */
+.tema-classic {
+    --pp-fons: #ffffff;
+    --pp-fons-alt: #f5f0e8;
+    --pp-text: #2b2b2b;
+    --pp-text-suau: #6b6b6b;
+    --pp-accent: #8b5e3c;
+    --pp-linia: #e6dfd3;
+    --pp-vel-portada: rgba(0, 0, 0, 0.35);
+
+    --pp-font-titols: Georgia, "Times New Roman", serif;
+    --pp-font-text: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --pp-radi: 2px;
+    --pp-amplada: 1100px;
+}

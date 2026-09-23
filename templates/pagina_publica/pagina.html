@@ -1,0 +1,20 @@
+{% extends "pagina_publica/base_publica.html" %}
+
+{% block contingut %}
+<section class="pp-portada {% if pagina.imatge_portada_url %}amb-imatge{% endif %}"
+         {% if pagina.imatge_portada_url %}style="background-image: url('{{ pagina.imatge_portada_url }}');"{% endif %}>
+    <div class="pp-portada-contingut">
+        <h1>{{ pagina.titol }}</h1>
+        {% if pagina.lema %}<p class="pp-lema">{{ pagina.lema }}</p>{% endif %}
+    </div>
+</section>
+
+{% for bloc in pagina.blocs %}
+<section class="pp-bloc" id="{{ bloc.id }}">
+    <div class="pp-bloc-interior">
+        <h2>{{ bloc.etiqueta }}</h2>
+        {% include bloc.plantilla %}
+    </div>
+</section>
+{% endfor %}
+{% endblock %}

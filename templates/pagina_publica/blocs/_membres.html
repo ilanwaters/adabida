@@ -1,0 +1,9 @@
+<div class="pp-targetes">
+    {% for t in bloc.dades.targetes %}
+    <div class="pp-targeta">
+        {% if t.foto_url %}<img src="{{ t.foto_url }}" alt="{{ t.nom }}" loading="lazy">{% endif %}
+        <h4>{{ t.nom }}</h4>
+        {% if t.anys %}<p>{{ t.anys }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,8 @@
+{% for seccio in bloc.dades.seccions %}
+<article class="pp-alternat sense-imatge">
+    <div class="pp-alternat-text">
+        <h3>{{ seccio.titol }}</h3>
+        {{ seccio.contingut | sanititzar }}
+    </div>
+</article>
+{% endfor %}

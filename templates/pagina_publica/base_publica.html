@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('idioma', 'ca') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ pagina.titol }}{% endblock %} · Adabida</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_publica/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_publica/temes/' ~ pagina.tema ~ '.css') }}">
+    {% block css %}{% endblock %}
+</head>
+<body class="pagina-publica tema-{{ pagina.tema }}">
+
+    <header class="pp-capcalera">
+        <a href="#inici" class="pp-marca">{{ pagina.titol }}</a>
+        <nav class="pp-nav">
+            {% for bloc in pagina.blocs %}
+                <a href="#{{ bloc.id }}">{{ bloc.etiqueta }}</a>
+            {% endfor %}
+        </nav>
+    </header>
+
+    <main id="inici">
+        {% block contingut %}{% endblock %}
+    </main>
+
+    <footer class="pp-peu">
+        <a href="{{ url_for('inici.inici_pagina') }}">{{ _('Creat amb Adabida') }}</a>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

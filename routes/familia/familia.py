@@ -718,55 +718,20 @@ def documents(url):
 
 @familia_bp.route('/publica/<url>')
 def publica(url):
-    """Perfil públic de la família - vista principal amb 4 cards"""
+    """Pàgina pública de la família (pàgina única amb blocs)."""
+    from utils.pagina_publica import preparar_pagina_familia
+
     familia = EspaiFamiliar.query.filter_by(url=url).first_or_404()
-    
-    # TODO: Verificar si la família té perfil públic activat
-    # if not familia.perfil_public_actiu:
-    #     abort(404)
-    
-    return render_template('familia/familia_publica.html', familia=familia)
-    
+    pagina = preparar_pagina_familia(familia)
+    return render_template('pagina_publica/pagina.html', pagina=pagina)
+
+
 @familia_bp.route('/publica/<url>/<seccio>')
 def seccio_publica(url, seccio):
-    """Seccions públiques de la família"""
-    familia = EspaiFamiliar.query.filter_by(url=url).first_or_404()
-    
-    # TODO: Verificar perfil públic
-    # if not familia.perfil_public_actiu:
-    #     abort(404)
-    
-    if seccio == 'historia':
-        # Carregar seccions públiques
-        from models import BiografiaFamiliaSeccion
-        seccions_publiques = BiografiaFamiliaSeccion.query.filter_by(
-            familia_id=familia.id,
-            visible=True
-        ).order_by(BiografiaFamiliaSeccion.ordre).all()
-    
-        return render_template('familia/publica_historia.html', 
-                        familia=familia,
-                        seccions_publiques=seccions_publiques)
-    
-    elif seccio == 'arbre':
-        return render_template('familia/publica_arbre.html', familia=familia)
-    
-    elif seccio == 'membres':
-        from datetime import datetime
-        membres_publics = MembreFamilia.query.filter_by(
-            espai_familiar_id=familia.id,
-            visible_public=True
-        ).order_by(MembreFamilia.nom, MembreFamilia.primer_cognom).all()
-        return render_template('familia/publica_membres.html', 
-                        familia=familia, 
-                        membres=membres_publics,
-                        now=datetime.now())
-    
-    elif seccio == 'documents':
-        return render_template('familia/publica_documents.html', familia=familia)
-    
-    else:
+    """Compatibilitat amb els enllaços antics: redirigeix a l'àncora del bloc."""
+    if seccio not in ('historia', 'membres', 'arbre', 'documents'):
         abort(404)
+    return redirect(url_for('.publica', url=url) + f'#{seccio}')
 
 @familia_bp.route('/membre/pujar-foto', methods=['POST'])
 @login_required

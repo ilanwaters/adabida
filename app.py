@@ -226,6 +226,13 @@ def nl2br_filter(text):
         return text.replace('\n', '<br>')
     return text
 
+@app.template_filter('sanititzar')
+def filtre_sanititzar(contingut):
+    """Neteja HTML d'usuari i el marca com a segur per a Jinja."""
+    from markupsafe import Markup
+    from utils.sanititzar import neteja_html
+    return Markup(neteja_html(contingut or ''))
+
 @app.context_processor
 def inject_usuari():
     if current_user.is_authenticated:
