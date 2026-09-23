@@ -137,6 +137,7 @@ from routes.api.barra_lateral import barra_lateral_api_bp
 from routes.admin.traduccions import admin_traduccions_bp
 from routes.admin.aportacions import admin_aportacions_bp
 from routes.api_usuaris import api_usuaris_bp
+from routes.api_cercar_usuaris import api_cercar_usuaris_bp
 from routes.projecte import projecte_bp
 
 app.register_blueprint(pagina_personal_bp)
@@ -185,6 +186,7 @@ app.register_blueprint(barra_lateral_api_bp)
 app.register_blueprint(admin_traduccions_bp)
 app.register_blueprint(admin_aportacions_bp)
 app.register_blueprint(api_usuaris_bp)
+app.register_blueprint(api_cercar_usuaris_bp)
 app.register_blueprint(projecte_bp)
 # ─── Ping ──────────────────────────────────────────────────────
 

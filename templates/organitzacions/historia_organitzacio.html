@@ -15,10 +15,22 @@
     <span>{{ _('Història de l\'organització') }}</span>
   </div>
 
-  <h1>📖 {{ _('Història de l\'organització') }}</h1>
-  <p style="color: #666; margin-bottom: 2rem;">
-    {{ _('La memòria col·lectiva organitzada en seccions. Cada secció es pot editar individualment.') }}
-  </p>
+  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+    <h1 style="margin: 0;">{{ _('Història de l\'organització') }}</h1>
+    <button type="button" onclick="obrirModalInfo()" class="boto-info" title="{{ _('Informació sobre aquesta secció') }}">
+      i
+    </button>
+  </div>
+
+  <div id="modal-info-historia" class="modal">
+    <div class="modal-content">
+      <button onclick="tancarModalInfo()" style="float: right; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+      <p>{{ _('La memòria col·lectiva organitzada en seccions. Cada secció es pot editar individualment.') }}</p>
+      <button onclick="tancarModalInfo()" style="margin-top: 2rem; padding: 0.8rem 2rem; background: #14d8ce; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+        {{ _('Entesos') }}
+      </button>
+    </div>
+  </div>
 
   {% if seccions %}
     <!-- Seccions d'història -->
@@ -101,16 +113,26 @@
   </div>
   {% endif %}
 
-  <div style="text-align: center; margin-top: 2rem;">
-    <a href="{{ url_for('organitzacions.publica', slug=organitzacio.url_publica) }}">{{ organitzacio.nom }}</a> › 
-      ← {{ _('Tornar a l\'organització') }}
-    </a>
-  </div>
+
 
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script>
+function obrirModalInfo() {
+  const modal = document.getElementById('modal-info-historia');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function tancarModalInfo() {
+  const modal = document.getElementById('modal-info-historia');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+</script>
+
 <script>
 const organitzacioId = {{ organitzacio.id }};
 

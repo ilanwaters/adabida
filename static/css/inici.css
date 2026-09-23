@@ -38,7 +38,7 @@
 /* Layout Grid 3 columnes */
 .portada-layout {
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 200px 1fr;
     gap: 20px;
     max-width: 1400px;
     margin: 0 auto;
@@ -191,13 +191,12 @@
 /* ========== GRID DE TEMES ========== */
 
 .grid-temes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-
 .boto-tema {
     display: block;
     padding: 12px 20px;
@@ -922,4 +921,84 @@
     .grid-temes {
         grid-template-columns: 1fr;
     }
+}
+
+.filtre-desplegable .portada-sidebar,
+.filtre-desplegable .barra-lateral {
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    position: static;
+    width: 100%;
+    max-height: none;
+}
+
+.capcalera-testimonis {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.capcalera-testimonis .filtre-desplegable[open] {
+    flex-basis: 100%;
+    order: 3;
+}
+
+.filtre-desplegable summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.filtre-desplegable summary::-webkit-details-marker {
+    display: none;
+}
+
+.filtre-desplegable[open] summary {
+    display: none;
+}
+
+.btn-tancar-filtre {
+    display: block;
+    margin-left: auto;
+    margin-bottom: 10px;
+    padding: 6px 14px;
+    background: none;
+    border: 1px solid #1a4b75;
+    color: #1a4b75;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.boto-rec-portada {
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.boto-rec-portada img {
+  width: 360px;
+  height: auto;
+  transition: transform 0.2s ease;
+}
+
+.boto-rec-portada:hover img {
+  transform: scale(1.05);
+}
+
+.capcalera-desplegable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desplegable-tema-inici summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.desplegable-tema-inici summary::-webkit-details-marker {
+  display: none;
 }

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block titol %}{{ organitzacio.nom }} - {{ _('Arxiu internacional de memòria oral') }}{% endblock %}
-
 {% block css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/inici.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/familia.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/botons.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 {% endblock %}
@@ -26,10 +26,8 @@
         
         <!-- Botó administrar només per admins -->
         {% if es_admin %}
-          <a href="{{ url_for('organitzacions_admin.admin', id=organitzacio.id) }}"
-             style="display: inline-block; background: #14d8ce; color: white; padding: 0.8rem 1.5rem; border-radius: 4px; text-decoration: none; transition: background 0.3s;">
-            {{ _('Administrar') }}
-          </a>
+          <a href="{{ url_for('organitzacions_admin.admin', id=organitzacio.id) }}"class="boto_nav">  {{ _('Administrar') }}</a>
+           
         {% endif %}
       </div>
     </div>

@@ -24,6 +24,8 @@
   background-color: #fdfdfd;
   cursor: pointer;
   transition: box-shadow 0.2s ease;
+  height: 190px;
+  
 }
 
 .caixa-entrada:hover {

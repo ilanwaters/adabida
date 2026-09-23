@@ -56,7 +56,7 @@
     {% if session.get('usuari') %}
       <li><a href="{{ url_for('familia.crear') }}">{{ _('Crear espai familiar') }}</a></li>
       {% for m in families_usuari %}
-  <li><a href="{{ url_for('familia.seccio', url=m.url, seccio='qui-som') }}">{{ m.nom }}</a></li>
+  <li><a href="{{ url_for('familia.veure', url=m.url) }}">{{ m.nom }}</a></li>
 {% endfor %}
     {% else %}
       <li class="submenu-info">
@@ -85,7 +85,7 @@
     {% if session.get('usuari') %}
       <li><a href="{{ url_for('organitzacions.crear') }}">{{ _('Crear organització') }}</a></li>
       {% for o in organitzacions_usuari %}
-        <li><a href="{{ url_for('organitzacions.seccio', slug=o.url_publica, seccio='qui-som') }}">{{ o.nom }}</a></li>
+        <li><a href="{{ url_for('organitzacions.publica', slug=o.url_publica) }}">{{ o.nom }}</a></li>
       {% endfor %}
     {% else %}
       <li class="submenu-info">
@@ -160,64 +160,125 @@
 
     <!-- Columna dreta - Contingut -->
   <div class="portada-contingut">
-  
-  <!-- Caixa 1: Explica'ns sobre -->
-  <div class="caixa-contingut">
-    <h2>{{ _('Tria un tema i comença a explicar la teva experiència') }}</h2>
-<p class="lema">
-  {{ _('Pots escriure, enregistrar àudio o vídeo, fer entrevistes, adjuntar documents.') }}
-</p>
+   <div class="caixa-contingut">
+    <h2>{{ _('Comença a explicar els teus records') }}</h2>
 
- 
-    <div class="selector-pais-wrapper">
-      <div class="selector-pais-container">
-    
+    {% if session.get('usuari_id') %}
+<a href="{{ url_for('nova_entrada.nova_entrada_personal') }}" class="boto-rec-portada">
+  <img src="{{ url_for('static', filename='icons/adabidarec.png') }}" alt="{{ _('Comença a gravar') }}">
+</a>
+{% else %}
+<a href="#" onclick="mostrarMissatgeMotivador(); return false;" class="boto-rec-portada">
+  <img src="{{ url_for('static', filename='icons/adabidarec.png') }}" alt="{{ _('Comença a gravar') }}">
+</a>
+{% endif %}
 
+   <details class="desplegable-tema-inici">
+  <summary><h2>{{ _('O tria un tema i comença a explicar la teva experiència') }}</h2></summary>
+
+  <p class="lema">
+    {{ _('Pots escriure, enregistrar àudio o vídeo, fer entrevistes, adjuntar documents.') }}
+  </p>
+
+  <div class="selector-pais-wrapper">
+    <div class="selector-pais-container">
 
       <!-- Fila amb 2 selectors -->
-    <div class="selectors-row">
-  
-  <!-- Selector País -->
-  <div class="selector-item">
-    <h3>{{ _('Tria un país') }}</h3>
-    <select id="selector-pais" class="selector-pais" onchange="canviarPais()">
-      <option value="">-- {{ _('Selecciona') }} --</option>
-      <option value="GLOBAL" selected>{{ _('Temes globals') }}</option>
-      <option value="AFEGIR_NOU" style="font-style: italic; color: #999;">+ Afegir país...</option>
-    </select>
-  </div>
-  
-  <!-- Selector Categoria -->
-  <div class="selector-item">
-    <h3>{{ _('o tria una categoria') }}</h3>
-    <select id="selector-categoria" class="selector-pais" onchange="canviarCategoria()">
-      <option value="">-- {{ _('Selecciona') }} --</option>
-    </select>
-  </div>
-  
-</div>
-      </div>
-      
-      <div class="grid-temes" id="grid-temes">
-        <p style="text-align: center; color: #999;">{{ _('Carregant temes...') }}</p>
+      <div class="selectors-row">
+
+        <!-- Selector País -->
+        <div class="selector-item">
+          <h3>{{ _('Tria un país') }}</h3>
+          <select id="selector-pais" class="selector-pais" onchange="canviarPais()">
+            <option value="">-- {{ _('Selecciona') }} --</option>
+            <option value="GLOBAL" selected>{{ _('Temes globals') }}</option>
+            <option value="AFEGIR_NOU" style="font-style: italic; color: #999;">+ Afegir país...</option>
+          </select>
+        </div>
+
+        <!-- Selector Categoria -->
+        <div class="selector-item">
+          <h3>{{ _('o tria una categoria') }}</h3>
+          <select id="selector-categoria" class="selector-pais" onchange="canviarCategoria()">
+            <option value="">-- {{ _('Selecciona') }} --</option>
+          </select>
+        </div>
+
       </div>
     </div>
+
+    <div class="grid-temes" id="grid-temes">
+      <p style="text-align: center; color: #999;">{{ _('Carregant temes...') }}</p>
+    </div>
+  </div>
+
+</details>
     
-  </div> <!-- tanca caixa-contingut -->
+  </div> 
   
   <!-- Caixa 2: Últims testimonis compartits -->
 <div class="caixa-contingut">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2 style="margin: 0;">{{ _('Últims testimonis compartits') }}</h2>
-    <button id="btn-refresh-entrades" class="btn-refresh" title="{{ _('Actualitzar') }}">
-      ↻
-    </button>
-  </div>
+  <div class="capcalera-testimonis">
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <h2 style="margin: 0;">{{ _('Últims testimonis compartits') }}</h2>
+        <button id="btn-refresh-entrades" class="btn-refresh" title="{{ _('Actualitzar') }}">↻</button>
+    
+    </div>
+
+    <details class="filtre-desplegable">
+    <summary><h2 style="display: inline; margin: 0;">{{ _('Filtra per tema') }}</h2></summary>
+      <aside class="portada-sidebar">
+       
+  
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+  <h2 style="margin: 0;">{{ _('Explora Temes') }}</h2>
+  <button type="button" class="boto_nav" onclick="this.closest('details').open = false;">
+     {{ _('Tancar') }}
+  </button>
+</div>
+  
+      <!-- Columna dreta - Barra lateral -->
+      <div class="barra-lateral">
+        <div class="toggle-buttons">
+          <button id="btn-tema" class="toggle-btn active" onclick="canviarMode('tema')">{{ _('Tema') }}</button>
+          <button id="btn-pais" class="toggle-btn" onclick="canviarMode('pais')">{{ _('País') }}</button>
+        </div>
+        
+        <!-- Mode TEMA (categories) -->
+        <div id="mode-tema" class="mode-content active">
+          <div class="llista-scroll" id="llista-categories"></div>
+        </div>
+        
+        <!-- Mode PAÍS -->
+        <div id="mode-pais" class="mode-content">
+          <div class="llista-scroll" id="llista-paisos"></div>
+        </div>
+        
+        <!-- Mode PAÍS-TEMES -->
+        <div id="mode-pais-temes" class="mode-content">
+          <button class="btn-tornar" onclick="tornarPaisos()">← {{ _('Tornar') }}</button>
+          <h4 id="nom-pais-seleccionat"></h4>
+          <div class="llista-scroll" id="llista-temes-pais"></div>
+        </div>
+        
+        <!-- NOU: Mode CATEGORIA-TEMES -->
+        <div id="mode-categoria-temes" class="mode-content">
+          <button class="btn-tornar" onclick="tornarCategories()">← {{ _('Tornar') }}</button>
+          <h4 id="nom-categoria-seleccionada"></h4>
+          <div class="llista-scroll" id="llista-temes-categoria"></div>
+        </div>
+        
+      </div>
+   
+</aside>
+ </details>
+      </div>
   
   <!-- Grid 2x2 inicial -->
   <div class="grid-entrades" id="grid-entrades">
     {% if entrades_aleatories %}
-      {% for entrada in entrades_aleatories[:4] %}
+      {% for entrada in entrades_aleatories[:6] %}
         {% if entrada.tipus == 'conversa' %}
           {% set conversa = entrada %}
           {% include 'components/caixa_conversa.html' %}
@@ -255,45 +316,8 @@
 </div>
 
  </div> 
-    <aside class="portada-sidebar">
-  <h2>{{ _('Explora Temes') }}</h2>
-  <nav>
-    <ul class="menu-lateral">
-      <!-- Columna dreta - Barra lateral -->
-      <div class="barra-lateral">
-        <div class="toggle-buttons">
-          <button id="btn-tema" class="toggle-btn active" onclick="canviarMode('tema')">{{ _('TEMA') }}</button>
-          <button id="btn-pais" class="toggle-btn" onclick="canviarMode('pais')">{{ _('PAÍS') }}</button>
-        </div>
-        
-        <!-- Mode TEMA (categories) -->
-        <div id="mode-tema" class="mode-content active">
-          <div class="llista-scroll" id="llista-categories"></div>
-        </div>
-        
-        <!-- Mode PAÍS -->
-        <div id="mode-pais" class="mode-content">
-          <div class="llista-scroll" id="llista-paisos"></div>
-        </div>
-        
-        <!-- Mode PAÍS-TEMES -->
-        <div id="mode-pais-temes" class="mode-content">
-          <button class="btn-tornar" onclick="tornarPaisos()">← {{ _('Tornar') }}</button>
-          <h4 id="nom-pais-seleccionat"></h4>
-          <div class="llista-scroll" id="llista-temes-pais"></div>
-        </div>
-        
-        <!-- NOU: Mode CATEGORIA-TEMES -->
-        <div id="mode-categoria-temes" class="mode-content">
-          <button class="btn-tornar" onclick="tornarCategories()">← {{ _('Tornar') }}</button>
-          <h4 id="nom-categoria-seleccionada"></h4>
-          <div class="llista-scroll" id="llista-temes-categoria"></div>
-        </div>
-        
-      </div>
-    </ul>
-  </nav>
-</aside>
+
+   
     
 
   </div> <!-- tanca portada-layout -->
@@ -398,7 +422,7 @@
   </div>
   
   <button type="button" onclick="toggleNovaCategoriaInput()" style="margin-top: 10px; background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline;">
-    + {{ _('Crear categoria nova') }}
+     {{ _('Crear categoria nova') }}
   </button>
 </div>
 

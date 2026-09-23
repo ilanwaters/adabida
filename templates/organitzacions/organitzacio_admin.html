@@ -61,22 +61,23 @@
                                     <textarea id="descripcio" name="descripcio" rows="4">{{ organitzacio.descripcio }}</textarea>
                                 </div>
                             </div>
-
-                            <button type="submit" class="boto boto-primari">
-                                {{ _('Actualitzar dades') }}
-                            </button>
-                        </form>
+  <div class="bloc">
+                        <div class="bloc fila-url-actualitzar">
+    <div class="info-url">
+        <span class="info-url-etiqueta">{{ _('URL pública') }}:</span>
+        <strong>{{ request.host_url }}o/{{ organitzacio.slug }}</strong>
+        <button type="button" class="boto_nav" onclick="copyToClipboard('{{ request.host_url }}o/{{ organitzacio.slug }}')">
+            {{ _('Copiar') }}
+        </button>
+    </div>
+    <button type="submit" class="boto_nav">
+        {{ _('Actualitzar dades') }}
+    </button>
+</form>
+</div>
                     </div>
 
-                    <div class="bloc">
-                        <h2 class="titol-bloc">{{ _('URL pública') }}</h2>
-                        <div class="info-url">
-                            <strong>{{ request.host_url }}o/{{ organitzacio.slug }}</strong>
-                            <button type="button" class="boto boto-petit" onclick="copyToClipboard('{{ request.host_url }}o/{{ organitzacio.slug }}')">
-                                {{ _('Copiar') }}
-                            </button>
-                        </div>
-                    </div>
+                    
                     <!-- BLOC MEMBRES DE L'ORGANITZACIÓ -->
 <div class="bloc-plegable tancat">
     <h3 class="titol-plegable" onclick="toggleBloc(this)">
@@ -143,7 +144,7 @@
 </div>
 <!-- Modal detalls sol·licitud -->
 <div id="modal-detalls-solicitud" class="modal" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-content modal-content-info">
         <span class="boto-tancar" onclick="tancarModalDetalls()">&times;</span>
         <h3 id="modal-nom-solicitant"></h3>
         <div id="modal-missatge-complet" style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 4px;"></div>
@@ -223,7 +224,7 @@
 
 <!-- MODAL PER VEURE MISSATGE COMPLET D'ORGANITZACIÓ -->
 <div id="modal-missatge-org" class="modal" style="display: none;">
-  <div class="modal-content">
+  <div class="modal-content modal-content-info">
     <span class="boto-tancar" onclick="tancarModalMissatgeOrg()">&times;</span>
     <h3 id="modal-assumpte-missatge-org"></h3>
     <div class="detalls-missatge">
@@ -241,12 +242,12 @@
 
 <!-- MODAL PER ENVIAR NOU MISSATGE COM A ORGANITZACIÓ -->
 <div id="modal-nou-missatge-org" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="boto-tancar" onclick="tancarModalNouMissatgeOrg()">&times;</span>
+  <div class="modal-content modal-content-info">
+  
     <h3>{{ _('Enviar missatge com a') }} {{ organitzacio.nom }}</h3>
     
     <div class="camp-formulari">
-      <label for="nou-receptor-org">{{ _('Per a:') }} *</label>
+      <label for="nou-receptor-org">{{ _('Per a:') }}</label>
       <input type="text" id="nou-receptor-org" placeholder="{{ _('Nom o login de l\'usuari...') }}" 
              oninput="cercarUsuarisOrg()">
       <span id="receptor-nom-org" style="display: none; color: #28a745; font-weight: bold;"></span>
@@ -254,12 +255,12 @@
     </div>
     
     <div class="camp-formulari">
-      <label for="nou-assumpte-org">{{ _('Assumpte:') }} *</label>
+      <label for="nou-assumpte-org">{{ _('Assumpte:') }}</label>
       <input type="text" id="nou-assumpte-org" placeholder="{{ _('Assumpte del missatge...') }}">
     </div>
     
     <div class="camp-formulari">
-      <label for="nou-contingut-org">{{ _('Missatge:') }} *</label>
+      <label for="nou-contingut-org">{{ _('Missatge:') }}</label>
       <textarea id="nou-contingut-org" rows="8" placeholder="{{ _('Escriu el missatge en nom de l\'organització...') }}"></textarea>
     </div>
     
@@ -342,165 +343,29 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/missatgeria_organitzacio.js') }}"></script>
 <script>
     let orgIdActual = {{ organitzacio.id }};
+    window.TRAD_ORG = {
+        url_copiada: "{{ _('URL copiada al portapapers!') }}",
+        confirmar_esborrar_1: `{{ _('Segur que vols esborrar l\'organització') }} "{{ organitzacio.nom }}"? {{ _('Aquesta acció no es pot desfer i s\'esborraran tots els membres.') }}`,
+        confirmar_esborrar_2: "{{ _('ÚLTIMA CONFIRMACIÓ: Això esborrarà TOTES les dades de l\'organització. Continuar?') }}",
+        esborrada_correctament: "{{ _('Organització esborrada correctament') }}",
+        error_connexio: "{{ _('Error de connexió') }}",
+        error: "{{ _('Error') }}",
+        url_esborrar: "{{ url_for('organitzacions_admin.esborrar', id=organitzacio.id) }}",
+        url_pagina_personal: "{{ url_for('pagina_personal.pagina_personal') }}?pestanya=perfil",
+        url_canviar_rol: "{{ url_for('organitzacions_admin.canviar_rol') }}",
+        rol_actualitzat: "{{ _('Rol actualitzat correctament') }}",
+        confirmar_expulsar: "{{ _('Segur que vols expulsar aquest membre?') }}",
+        url_expulsar_membre: "{{ url_for('organitzacions_admin.expulsar_membre') }}",
+        solicitud_de: "{{ _('Sol·licitud de') }}",
+        confirmar_acceptar: "{{ _('Acceptar aquesta sol·licitud d\'adhesió?') }}",
+        url_processar_solicitud: "{{ url_for('organitzacions_admin.processar_solicitud') }}",
+        solicitud_acceptada: "{{ _('Sol·licitud acceptada') }}",
+        confirmar_rebutjar: "{{ _('Rebutjar aquesta sol·licitud?') }}",
+        solicitud_rebutjada: "{{ _('Sol·licitud rebutjada') }}"
+    };
 </script>
- <script src="{{ url_for('static', filename='js/missatgeria_organitzacio.js') }}"></script>
-    <script>
-        // Funció per copiar URL
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('{{ _("URL copiada al portapapers!") }}');
-            });
-        }
-
-        // FUNCIÓ ESBORRAR ORGANITZACIÓ - AMB TRADUCCIONS
-        function esborrarOrganitzacio() {
-            const nomOrg = '{{ organitzacio.nom }}';
-            const missatge1 = `{{ _('Segur que vols esborrar l\'organització') }} "${nomOrg}"? {{ _('Aquesta acció no es pot desfer i s\'esborraran tots els membres.') }}`;
-            const missatge2 = '{{ _('ÚLTIMA CONFIRMACIÓ: Això esborrarà TOTES les dades de l\'organització. Continuar?') }}';
-            const missatgeExit = '{{ _('Organització esborrada correctament') }}';
-            const missatgeError = '{{ _('Error de connexió') }}';
-            
-            if (confirm(missatge1)) {
-                if (confirm(missatge2)) {
-                    fetch(`{{ url_for('organitzacions_admin.esborrar', id=organitzacio.id) }}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert(missatgeExit);
-                            window.location.href = '{{ url_for("pagina_personal.pagina_personal") }}?pestanya=perfil';
-                        } else {
-                            alert('{{ _('Error') }}: ' + data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert(missatgeError);
-                    });
-                }
-            }
-
-        /* 
-        FUNCIONS AJAX COMENTADES (per implementar després):
-        - canviarRol() 
-        - expulsarMembre()
-        - acceptarSolicitud()
-        - rebutjarSolicitud() 
-        - togglePublicaEntrada()
-        */
-    </script>
-    <script>// Canviar rol d'un membre
-function canviarRol(membreId, nouRol) {
-    fetch(`{{ url_for('organitzacions_admin.canviar_rol') }}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            membre_id: membreId,
-            nou_rol: nouRol
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('{{ _("Rol actualitzat correctament") }}');
-        } else {
-            alert('{{ _("Error") }}: ' + data.error);
-            location.reload();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('{{ _("Error de connexió") }}');
-        location.reload();
-    });
-}
-
-// Expulsar membre
-function expulsarMembre(membreId) {
-    if (confirm('{{ _("Segur que vols expulsar aquest membre?") }}')) {
-        fetch(`{{ url_for('organitzacions_admin.expulsar_membre') }}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                membre_id: membreId
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('{{ _("Error") }}: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('{{ _("Error de connexió") }}');
-        });
-    }
-}</script>
-<script>// Funció per plegar/desplegar blocs
-function toggleBloc(element) {
-    const bloc = element.parentElement;
-    bloc.classList.toggle('tancat');
-}</script>
-<script>function veureDetallsSolicitud(solicitudId, nomUsuari, missatge) {
-    document.getElementById('modal-nom-solicitant').textContent = `{{ _('Sol·licitud de') }} ${nomUsuari}`;
-    document.getElementById('modal-missatge-complet').textContent = missatge;
-    document.getElementById('modal-detalls-solicitud').style.display = 'flex';
-}
-
-function tancarModalDetalls() {
-    document.getElementById('modal-detalls-solicitud').style.display = 'none';
-}
-
-function acceptarSolicitud(solicitudId) {
-    if (confirm('{{ _("Acceptar aquesta sol·licitud d\'adhesió?") }}')) {
-        fetch(`{{ url_for('organitzacions_admin.processar_solicitud') }}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ solicitud_id: solicitudId, accio: 'acceptar' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('{{ _("Sol·licitud acceptada") }}');
-                location.reload();
-            } else {
-                alert('{{ _("Error") }}: ' + data.error);
-            }
-        });
-    }
-}
-
-function rebutjarSolicitud(solicitudId) {
-    if (confirm('{{ _("Rebutjar aquesta sol·licitud?") }}')) {
-        fetch(`{{ url_for('organitzacions_admin.processar_solicitud') }}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ solicitud_id: solicitudId, accio: 'rebutjar' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('{{ _("Sol·licitud rebutjada") }}');
-                location.reload();
-            } else {
-                alert('{{ _("Error") }}: ' + data.error);
-            }
-        });
-    }
-}</script>
-
-
+<script src="{{ url_for('static', filename='js/organitzacions.js') }}"></script>
 {% endblock %}

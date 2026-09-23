@@ -460,3 +460,8 @@
 .pswp {
   z-index: 1000000 !important;
 }
+.modal-content-info {
+  display: block !important;
+  padding: 2rem;
+  overflow-y: auto;
+}

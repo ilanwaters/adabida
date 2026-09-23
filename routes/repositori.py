@@ -268,7 +268,12 @@ def consulta_repositori():
         if nom_usuari:
             subquery_conv = Usuari.query.filter(Usuari.nom_login.ilike(f"%{nom_usuari}%")).with_entities(Usuari.id)
             condicions_conversa.append(Conversa.usuari_id.in_(subquery_conv))
-
+        if any_inici and any_fi:
+            condicions_conversa.append(func.extract('year', Conversa.data_conversa).between(int(any_inici), int(any_fi)))
+        elif any_inici:
+            condicions_conversa.append(func.extract('year', Conversa.data_conversa) >= int(any_inici))
+        elif any_fi:
+            condicions_conversa.append(func.extract('year', Conversa.data_conversa) <= int(any_fi))
         if pais:
             condicions_conversa.append(Conversa.lloc_pais.ilike(f"%{pais}%"))
 

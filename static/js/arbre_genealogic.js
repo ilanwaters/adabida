@@ -520,7 +520,7 @@ function calcularLayoutComplet(personaCentralId, mapa, generacions, maxNivell) {
 // ========================================
 
 function dibuixarArbrePerGeneracions(generacions, personaCentralId, maxNivell) {
-    const ESPAI_Y = 150;
+    const ESPAI_Y = 190;
     const ESPAI_X = 200;
     const mapa = crearMapaNodes();
     const cacheAmplades = {};
@@ -932,8 +932,8 @@ function dibuixarLlinesPareFill(posicions) {
             
             const puntMigX = (posPare.x + posMare.x) / 2;
             const puntMigY = Math.max(posPare.y, posMare.y);
-            const variacioY = (parseInt(node.id) % 5) * 6;
-            const punIntermigY = puntMigY + 40 + variacioY;
+            const variacioY = (parseInt(node.id) % 5) * 14;
+            const punIntermigY = puntMigY + 70 + variacioY;
             
             const distanciaH = Math.abs(posFill.x - puntMigX);
             const r1 = Math.min(12, distanciaH / 2);
@@ -953,7 +953,7 @@ function dibuixarLlinesPareFill(posicions) {
         
         else if (pare && posicions[pare.id]) {
         const posPare = posicions[pare.id];
-        const punIntermigY = posPare.y + 40;
+        const punIntermigY = posPare.y + 70;
     
             g.append('path')
                 .attr('d', `M ${posPare.x},${posPare.y} L ${posPare.x},${punIntermigY} L ${posFill.x},${punIntermigY} L ${posFill.x},${posFill.y - 30}`)
@@ -965,7 +965,7 @@ function dibuixarLlinesPareFill(posicions) {
 // Cas 3: Només mare (LÍNIA 318-329)
         else if (mare && posicions[mare.id]) {
             const posMare = posicions[mare.id];
-            const punIntermigY = posMare.y + 40;
+            const punIntermigY = posMare.y + 70;
     
             g.append('path')
                 .attr('d', `M ${posMare.x},${posMare.y} L ${posMare.x},${punIntermigY} L ${posFill.x},${punIntermigY} L ${posFill.x},${posFill.y - 30}`)
@@ -983,30 +983,41 @@ function dibuixarNodes(posicions, personaCentralId) {
     Object.keys(posicions).forEach(id => {
         const persona = mapa[id];
         if (!persona) return;
-    
 
         const {x, y} = posicions[id];
         const esActual = parseInt(id) === personaCentralId;
+
+        let classeGenere = 'node-desconegut';
+        if (persona.genere === 'home') classeGenere = 'node-mascle';
+        else if (persona.genere === 'dona') classeGenere = 'node-femella';
+
+        const classeDifunt = persona.data_defuncio ? ' node-difunt' : '';
+
         const nodeGrup = g.append('g')
+            .attr('class', `node-arbre ${classeGenere}${classeDifunt}`)
             .attr('transform', `translate(${x}, ${y})`)
-            .style('cursor', 'pointer')
             .on('click', () => window.location.href = `/familia/membre/${persona.id}`);
 
-        
-        nodeGrup.append('rect')
-            .attr('x', -80)
-            .attr('y', -32)
-            .attr('width', 160)
-            .attr('height', 64)
-            .attr('fill', esActual ? '#5b6ee8' : '#fefefe')
-            .attr('stroke', esActual ? '#5b6ee8' : '#d8d8d8')
-            .attr('stroke-width', esActual ? 2 : 1.5)
+        const caixa = nodeGrup.append('g')
+            .attr('class', 'node-caixa');
+
+        const rect = caixa.append('rect')
+            .attr('class', 'node-rect')
+            .attr('x', -95)
+            .attr('y', -38)
+            .attr('width', 190)
+            .attr('height', 76)
             .attr('rx', 10)
             .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.08))');
+
+        if (esActual) {
+            rect.attr('fill', '#5b6ee8').attr('stroke', '#5b6ee8').attr('stroke-width', 2);
+        }
+
         const nomComplet = `${persona.nom || ''} ${persona.primer_cognom || ''}`.trim();
         const nomMostrat = nomComplet.length > 18 ? nomComplet.substring(0, 17) + '…' : nomComplet;
-        
-        nodeGrup.append('text')
+
+        caixa.append('text')
             .attr('text-anchor', 'middle')
             .attr('dy', -5)
             .attr('font-size', '13px')
@@ -1014,10 +1025,10 @@ function dibuixarNodes(posicions, personaCentralId) {
             .attr('font-weight', '600')
             .attr('fill', esActual ? '#ffffff' : '#2a2a2a')
             .text(nomMostrat);
-        
+
         if (persona.data_naixement) {
             const any = persona.data_naixement.split('-')[0];
-            nodeGrup.append('text')
+            caixa.append('text')
                 .attr('text-anchor', 'middle')
                 .attr('dy', 12)
                 .attr('font-size', '11px')

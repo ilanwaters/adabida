@@ -109,3 +109,6 @@
   background-color: #225e91;
 }
 
+a[data-lightbox] {
+  cursor: zoom-in;
+}

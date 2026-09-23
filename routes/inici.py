@@ -80,11 +80,11 @@ def inici_pagina():
         session["usuari_id"] = current_user.id
         session["nom_login"] = current_user.nom_login
     families_usuari = []
+    organitzacions_usuari = []
     if current_user.is_authenticated:
         from models.families import MembreFamilia
         memberships = MembreFamilia.query.filter_by(usuari_id=current_user.id).all()
         families_usuari = [m.espai_familiar for m in memberships]
-        organitzacions_usuari = []
     if current_user.is_authenticated:
         from models.organitzacions import MembreOrganitzacio
         memberships_org = MembreOrganitzacio.query.filter_by(usuari_id=current_user.id).all()

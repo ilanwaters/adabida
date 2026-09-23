@@ -55,15 +55,20 @@
 /* Nodes de l'arbre */
 .node-arbre {
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 g[class*="dummy"] .node-rect,
 g[class*="dummy"] .node-text {
     display: none;
 }
 
-.node-arbre:hover {
-    filter: brightness(1.1);
+.node-caixa {
+    transition: transform 0.2s ease;
+    transform-origin: 0px 0px;
+}
+
+.node-arbre:hover .node-caixa {
+    transform: scale(1.6);
+    filter: brightness(1.05);
 }
 
 .node-rect {
@@ -74,13 +79,13 @@ g[class*="dummy"] .node-text {
 
 /* Colors per gènere i estat */
 .node-mascle .node-rect {
-    fill: #cce5ff;
-    stroke: #66b3ff;
+    fill: #d4f0dc;
+    stroke: #5cb87a;
 }
 
 .node-femella .node-rect {
-    fill: #ffe6f0;
-    stroke: #ff99cc;
+    fill: #ffe8cc;
+    stroke: #e8a355;
 }
 
 .node-desconegut .node-rect {
@@ -164,13 +169,13 @@ g[class*="dummy"] .node-text {
 }
 
 .node-example.node-mascle {
-    background: #cce5ff;
-    border: 2px solid #66b3ff;
+    background: #d4f0dc;
+    border: 2px solid #5cb87a;
 }
 
 .node-example.node-femella {
-    background: #ffe6f0;
-    border: 2px solid #ff99cc;
+    background: #ffe8cc;
+    border: 2px solid #e8a355;
 }
 
 .node-example.node-desconegut {
