@@ -134,7 +134,7 @@
         <small style="color: #666; font-size: 0.85em;">{{ _('Aquesta biografia serà visible per tots els membres de la família') }}</small>
     </div>
     
-    <details class="bloc-defuncio">
+        <details class="bloc-defuncio" {% if membre.data_defuncio or membre.pais_defuncio %}open{% endif %}>
     <summary>
         <h3>{{ _('Dades de defunció (si escau)') }}</h3>
     </summary>
@@ -142,7 +142,8 @@
     <div class="fila-formulari" style="margin-top: 1rem;">
         <div>
             <label for="data_defuncio">{{ _('Data de defunció') }}</label>
-            <input type="date" id="data_defuncio" name="data_defuncio">
+            <input type="date" id="data_defuncio" name="data_defuncio"
+                   value="{{ membre.data_defuncio.strftime('%Y-%m-%d') if membre.data_defuncio else '' }}">
         </div>
         <div>
             <label for="pais_defuncio">{{ _('País') }}</label>
