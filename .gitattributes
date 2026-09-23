@@ -1,0 +1,22 @@
+# Normalitza tots els fitxers de text a LF
+* text=auto eol=lf
+
+# Binaris: no tocar mai
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.webp   binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
+*.webm   binary
+*.mp4    binary
+*.mp3    binary
+*.wav    binary
+*.ttf    binary
+*.otf    binary
+*.woff   binary
+*.woff2  binary
+*.docx   binary
+*.xlsx   binary
