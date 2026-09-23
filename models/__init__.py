@@ -19,7 +19,7 @@ from models.families import (
     EspaiFamiliar, MembreFamilia, EntradaFamilia,
     UbicacioOrigenFamilia, UbicacioActualFamilia, Matrimoni,
     DocumentMembreFamilia, BiografiaFamiliaSeccion, DocumentFamilia,
-    GrupDocumentsFamilia
+    GrupDocumentsFamilia,
 )
 from models.ubicacions import Pais, Regio, Municipi, TraducioUbicacio
 from models.blog import EntradaBlog
@@ -40,6 +40,9 @@ from .aportacio import Aportacio
 from models.traduccio_categoria import TraducioCategoriaTema
 
 from models.traduccio_categoria_portada import TraducioCategoria
+
+from models.pagina_publica import PaginaPublica
+
 __all__ = [
     'db',
     'Usuari', 
@@ -93,5 +96,7 @@ __all__ = [
     'TraduccioTema',
     'Aportacio',
     'TraducioCategoriaTema',
-    'TraducioCategoria' 
+    'TraducioCategoria',
+    'PaginaPublica'
 ]
+
