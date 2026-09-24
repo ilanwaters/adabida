@@ -119,6 +119,63 @@ def preparar_pagina_familia(familia):
         titol=familia.nom,
         tema=_tema(config),
         lema=(config.lema if config and config.lema else familia.periode_referencia),
-        imatge_portada_url=None,  # s'afegirà amb la configuració des d'administrar
+        imatge_portada_url=(config.imatge_portada if config and config.imatge_portada
+                            else familia.imatge_card_home),
         blocs=blocs,
     )
+
+
+# --------------------------------------------
+# Configuració des del panell d'administració
+# --------------------------------------------
+
+from flask_babel import lazy_gettext as _l
+
+from models import db
+
+ETIQUETES_BLOCS = {
+    'historia': _l('Història'),
+    'membres': _l('Membres'),
+    'arbre': _l('Arbre genealògic'),
+}
+
+ETIQUETES_TEMES = {
+    'classic': _l('Clàssic'),
+}
+
+
+def obtenir_o_crear_config(tipus, entitat_id):
+    config = obtenir_config(tipus, entitat_id)
+    if config is None:
+        config = PaginaPublica(tipus_entitat=tipus, entitat_id=entitat_id, config={})
+        db.session.add(config)
+    return config
+
+
+def blocs_per_formulari(tipus, config):
+    """Tots els blocs disponibles, en l'ordre guardat, amb el seu estat de visibilitat."""
+    disponibles = BLOCS_PER_TIPUS[tipus]
+    guardats = (config.config or {}).get('blocs', []) if config else []
+
+    resultat, vistos = [], set()
+    for b in guardats:
+        if b.get('id') in disponibles and b['id'] not in vistos:
+            resultat.append({'id': b['id'], 'etiqueta': ETIQUETES_BLOCS[b['id']],
+                             'visible': b.get('visible', True)})
+            vistos.add(b['id'])
+    # Blocs nous que encara no eren a la configuració guardada
+    for bloc_id in disponibles:
+        if bloc_id not in vistos:
+            resultat.append({'id': bloc_id, 'etiqueta': ETIQUETES_BLOCS[bloc_id], 'visible': True})
+    return resultat
+
+
+def desar_config(config, tipus, tema, lema, ordre_blocs, blocs_visibles):
+    """ordre_blocs: llista d'ids en l'ordre desitjat. blocs_visibles: conjunt d'ids marcats."""
+    disponibles = BLOCS_PER_TIPUS[tipus]
+    config.tema = tema if tema in TEMES_DISPONIBLES else TEMA_PER_DEFECTE
+    config.lema = (lema or '').strip()[:200] or None
+    config.config = {
+        **(config.config or {}),
+        'blocs': [{'id': b, 'visible': b in blocs_visibles} for b in ordre_blocs if b in disponibles],
+    }

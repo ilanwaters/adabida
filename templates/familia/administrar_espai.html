@@ -101,7 +101,61 @@
 </button>
         </div>
     </div>
+    <!-- PÀGINA PÚBLICA -->
+    <div class="card-visualitzacio" id="pagina-publica">
+        <div class="card-header-custom card-header-primary">
+            {{ _('Pàgina pública') }}
+        </div>
 
+        <form method="POST" action="{{ url_for('administrar.desar_pagina_publica', familia_id=familia.id) }}">
+            <div style="display: grid; gap: 1.25rem;">
+
+                <div>
+                    <label for="tema"><strong>{{ _('Tema') }}</strong></label>
+                    <select id="tema" name="tema">
+                        {% for id_tema, nom_tema in temes_pagina.items() %}
+                        <option value="{{ id_tema }}" {% if config_pagina and config_pagina.tema == id_tema %}selected{% endif %}>{{ nom_tema }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="lema"><strong>{{ _('Lema') }}</strong></label>
+                    <input type="text" id="lema" name="lema" maxlength="200"
+                           value="{{ config_pagina.lema if config_pagina and config_pagina.lema else '' }}"
+                           placeholder="{{ _('Una frase curta que apareixerà sota el nom de la família') }}">
+                </div>
+
+                <div>
+                    <strong>{{ _('Blocs de la pàgina') }}</strong>
+                    <small class="text-muted-custom" style="display: block;">{{ _('Marca els que vols mostrar i ordena-los amb les fletxes.') }}</small>
+                    <ul class="llista-elegant" id="llista-blocs-pagina" style="margin-top: 0.5rem;">
+                        {% for bloc in blocs_pagina %}
+                        <li style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                            <input type="hidden" name="ordre_blocs" value="{{ bloc.id }}">
+                            <label class="checkbox-etica" style="margin: 0;">
+                                <input type="checkbox" name="blocs_visibles" value="{{ bloc.id }}" {% if bloc.visible %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                {{ bloc.etiqueta }}
+                            </label>
+                            <span style="display: flex; gap: 0.25rem;">
+                                <button type="button" class="btn-custom btn-outline-custom" style="padding: 0.1rem 0.6rem;" onclick="moureBloc(this, -1)" aria-label="{{ _('Pujar') }}">↑</button>
+                                <button type="button" class="btn-custom btn-outline-custom" style="padding: 0.1rem 0.6rem;" onclick="moureBloc(this, 1)" aria-label="{{ _('Baixar') }}">↓</button>
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <small class="text-muted-custom">{{ _('La imatge de portada és la mateixa que la de la targeta de l\'espai familiar.') }}</small>
+            </div>
+
+            <div class="boto-group">
+                <button type="submit" class="btn-custom btn-primary-custom">{{ _('Desar pàgina pública') }}</button>
+                <a href="{{ url_for('familia.publica', url=familia.url) }}" target="_blank" class="btn-custom btn-secondary-custom">{{ _('Veure-la') }}</a>
+            </div>
+        </form>
+    </div>
     <!-- Grid 2 columnes: Ubicacions -->
     <div class="grid-2-cols">
         
@@ -217,6 +271,12 @@
                         </div>
                         
                         <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-custom btn-outline-custom {{ 'estat-public' if membre.visible_public else 'estat-privat' }}"
+                                    style="padding: 0.25rem 0.75rem; font-size: 0.9rem;"
+                                    data-url="{{ url_for('membres.toggle_visibilitat', membre_id=membre.id) }}"
+                                    onclick="toggleVisibilitatMembre(this)">
+                                {% if membre.visible_public %}{{ _('Visible públicament') }}{% else %}{{ _('Ocult públicament') }}{% endif %}
+                            </button>
                             {% if membre.rol != 'administrador' %}
                             <button class="btn-custom btn-outline-custom" 
                                     style="padding: 0.25rem 0.75rem; font-size: 0.9rem;"
@@ -237,11 +297,14 @@
                                  {{ _('Editar') }}
                             </a>
                             
-                           <button class="btn-custom btn-outline-custom" 
+                                                      <button class="btn-custom btn-outline-custom"
                                     style="padding: 0.25rem 0.75rem; font-size: 0.9rem; color: #dc3545; border-color: #dc3545;"
-                                    onclick="eliminarMembre({{ membre.id }}, '{{ membre.nom or membre.usuari.nom }}')">
-                                {{ _('Eliminar membre') }}
-                            </button>
+                                    data-nom="{{ membre.nom or (membre.usuari.nom if membre.usuari else '') }}"
+                                    onclick="eliminarMembre({{ membre.id }}, this.dataset.nom)">
+                                {{ _('Eliminar') }}
+                            </button> 
+                          
+                          
                         </div>
                     </div>
                 </li>
@@ -497,244 +560,24 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script>
-// Funcions JavaScript per l'administració
-
-function obrirModalInvitar() {
-    document.getElementById('modalInvitar').style.display = 'flex';
-}
-
-function tancarModalInvitar() {
-    document.getElementById('modalInvitar').style.display = 'none';
-}
-
-function canviarRol(membreId, nouRol) {
-    if (confirm('Segur que vols canviar el rol d\'aquest membre?')) {
-        fetch(`/familia/{{ familia.id }}/administrar/membre/${membreId}/canviar-rol`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ rol: nouRol })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error: ' + data.message);
-            }
-        });
-    }
-}
-
-function eliminarMembre(membreId, nomMembre) {
-    if (confirm(`Segur que vols eliminar ${nomMembre} de l'espai familiar?\n\nAquesta acció no es pot desfer.`)) {
-        fetch(`/familia/membre/${membreId}/eliminar`, {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error: ' + data.message);
-            }
-        });
-    }
-}
-
-function eliminarUbicacio(ubicacioId, tipus) {
-    if (confirm('Segur que vols eliminar aquesta ubicació?')) {
-        fetch(`/familia/ubicacio/${ubicacioId}/eliminar`, {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error: ' + data.message);
-            }
-        });
-    }
-}
-
-function afegirUbicacio(tipus) {
-    alert('Funció en desenvolupament: Afegir ubicació ' + tipus);
-}
-
-function recalcularUbicacions() {
-    if (confirm('Això recalcularà les ubicacions actuals basant-se en les adreces dels membres. Continuar?')) {
-        fetch(`/familia/{{ familia.id }}/recalcular-ubicacions`, {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            location.reload();
-        });
-    }
-}
-
-function validarRelacions() {
-    alert('Funció en desenvolupament: Validar consistència de relacions');
-}
-
-function desarConfiguracio() {
-    const config = {
-        visible_globalment: document.getElementById('visibilitat_global').checked,
-        notificacions_actives: document.getElementById('notificacions_actives').checked,
-        permisos_edicio_membres: document.getElementById('permisos_edicio_membres').checked
-    };
-    
-    fetch(`/familia/{{ familia.id }}/configuracio`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(config)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    });
-}
-
-function exportarEspai() {
-    window.location.href = `/familia/{{ familia.id }}/exportar-pdf`;
-}
-
-function ferBackup() {
-    window.location.href = `/familia/{{ familia.id }}/backup`;
-}
-
-function arxivarEspai() {
-    if (confirm('Segur que vols arxivar aquest espai?\n\nRomandrà accessible però no es podrà editar.')) {
-        fetch(`/familia/{{ familia.id }}/arxivar`, {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            if (data.success) {
-                window.location.href = '/familia/les-meves';
-            }
-        });
-    }
-}
-
-function confirmarEliminarEspai() {
-    const confirmText = prompt('Aquesta acció ELIMINARÀ PERMANENTMENT tot l\'espai familiar.\n\nEscriu "ELIMINAR" per confirmar:');
-    
-    if (confirmText === 'ELIMINAR') {
-        fetch(`/familia/{{ familia.id }}/eliminar`, {
-            method: 'POST',
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            if (data.success) {
-                window.location.href = '/familia/les-meves';
-            }
-        });
-    } else if (confirmText !== null) {
-        alert('Text incorrecte. Operació cancel·lada.');
-    }
-}
-
-// Tancar modal en clicar fora
-window.onclick = function(event) {
-    const modal = document.getElementById('modalInvitar');
-    if (event.target === modal) {
-        tancarModalInvitar();
-    }
-}
-
-function canviarFotoMembre(membreId) {
-    document.getElementById('membre-id-foto').value = membreId;
-    document.getElementById('modal-foto-membre').style.display = 'flex';
-}
-
-function tancarModalFotoMembre() {
-    document.getElementById('modal-foto-membre').style.display = 'none';
-    document.getElementById('foto-preview-container').style.display = 'none';
-    document.getElementById('btn-guardar-foto-membre').disabled = true;
-    document.getElementById('btn-guardar-foto-membre').style.opacity = '0.5';
-    document.getElementById('membre-foto-input').value = '';
-}
-
-function previewFotoMembre(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('foto-preview-image').src = e.target.result;
-            document.getElementById('foto-preview-container').style.display = 'block';
-            document.getElementById('btn-guardar-foto-membre').disabled = false;
-            document.getElementById('btn-guardar-foto-membre').style.opacity = '1';
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-// Enviar formulari foto membre
-document.getElementById('form-foto-membre').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    
-    fetch('/familia/membre/pujar-foto', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Foto guardada correctament');
-            location.reload();
-        } else {
-            alert('Error: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error de connexió');
-    });
-});
-function pujarHeraldica(familiaId, input) {
-    const fitxer = input.files[0];
-    if (!fitxer) return;
-
-    const formData = new FormData();
-    formData.append('heraldica', fitxer);
-
-    fetch(`/familia/{{ familia.id }}/administrar/heraldica`, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error: ' + (data.error || 'No s\'ha pogut canviar la heràldica'));
-        }
-    });
-}
+window.ADMIN_ESPAI = { familiaId: {{ familia.id }} };
+window.TRAD_ADMIN_ESPAI = {
+    error: {{ _('Error')|tojson }},
+    error_connexio: {{ _('Error de connexió')|tojson }},
+    error_visibilitat: {{ _('Error canviant la visibilitat')|tojson }},
+    error_heraldica: {{ _("No s'ha pogut canviar l'heràldica")|tojson }},
+    visible: {{ _('Visible públicament')|tojson }},
+    ocult: {{ _('Ocult públicament')|tojson }},
+    confirmar_rol: {{ _("Segur que vols canviar el rol d'aquest membre?")|tojson }},
+    confirmar_eliminar_membre: {{ _("Segur que vols eliminar {nom} de l'espai familiar? Aquesta acció no es pot desfer.")|tojson }},
+    confirmar_eliminar_ubicacio: {{ _('Segur que vols eliminar aquesta ubicació?')|tojson }},
+    confirmar_recalcular: {{ _('Això recalcularà les ubicacions actuals basant-se en les adreces dels membres. Continuar?')|tojson }},
+    confirmar_arxivar: {{ _('Segur que vols arxivar aquest espai? Romandrà accessible però no es podrà editar.')|tojson }},
+    confirmar_eliminar_espai: {{ _("Aquesta acció ELIMINARÀ PERMANENTMENT tot l'espai familiar. Escriu ELIMINAR per confirmar:")|tojson }},
+    text_incorrecte: {{ _('Text incorrecte. Operació cancel·lada.')|tojson }},
+    en_desenvolupament: {{ _('Funció en desenvolupament')|tojson }},
+    foto_guardada: {{ _('Foto guardada correctament')|tojson }},
+};
 </script>
-<script>
-function toggleVisibilitatPublica() {
-    fetch(`/familia/{{ familia.id }}/administrar/toggle-visibilitat-publica`, {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert(data.error || 'Error canviant la visibilitat');
-        }
-    });
-}
-
-</script>
+<script src="{{ url_for('static', filename='js/administrar_espai.js') }}"></script>
 {% endblock %}

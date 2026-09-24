@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, abort
+from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from models import db, EspaiFamiliar, MembreFamilia, Matrimoni, Entrada, EntradaFamilia, DocumentMembreFamilia, DocumentFamilia, GrupDocumentsFamilia
 from sqlalchemy import func
@@ -7,7 +8,6 @@ import os
 from datetime import datetime
 
 administrar_bp = Blueprint('administrar', __name__, url_prefix='/familia/<int:familia_id>/administrar')
-
 
 def es_administrador_familia(familia_id):
     """Comprova si l'usuari actual és administrador de la família"""
@@ -54,12 +54,20 @@ def index(familia_id):
         Entrada.data_creacio.desc()
     ).limit(5).all()
     
+    from models import PaginaPublica
+    from utils.pagina_publica import obtenir_config, blocs_per_formulari, ETIQUETES_TEMES
+
+    tipus_pagina = PaginaPublica.TIPUS_FAMILIA
+    config_pagina = obtenir_config(tipus_pagina, familia_id)
+
     return render_template('familia/administrar_espai.html',
                      familia=familia,
                      estadistiques=estadistiques,
                      problemes_relacions=problemes_relacions,
-                     records_recents=records_recents)
-                       
+                     records_recents=records_recents,
+                     config_pagina=config_pagina,
+                     blocs_pagina=blocs_per_formulari(tipus_pagina, config_pagina),
+                     temes_pagina=ETIQUETES_TEMES)
 
 
 @administrar_bp.route('/membre/<int:membre_id>/canviar-rol', methods=['POST'])
@@ -638,3 +646,29 @@ def eliminar_grup_documents_familia(familia_id, grup_id):
     db.session.delete(grup)
     db.session.commit()
     return jsonify({'success': True})
+
+@administrar_bp.route('/pagina-publica', methods=['POST'])
+@login_required
+def desar_pagina_publica(familia_id):
+    """Desa tema, lema i blocs de la pàgina pública de la família."""
+    from models import PaginaPublica
+    from utils.pagina_publica import obtenir_o_crear_config, desar_config
+
+    if not es_administrador_familia(familia_id):
+        abort(403)
+
+    familia = EspaiFamiliar.query.get_or_404(familia_id)
+    tipus = PaginaPublica.TIPUS_FAMILIA
+
+    config = obtenir_o_crear_config(tipus, familia.id)
+    desar_config(
+        config, tipus,
+        tema=request.form.get('tema'),
+        lema=request.form.get('lema'),
+        ordre_blocs=request.form.getlist('ordre_blocs'),
+        blocs_visibles=set(request.form.getlist('blocs_visibles')),
+    )
+    db.session.commit()
+
+    flash(_('Configuració de la pàgina pública desada'), 'success')
+    return redirect(url_for('administrar.index', familia_id=familia.id) + '#pagina-publica')
