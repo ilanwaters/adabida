@@ -79,7 +79,7 @@ class MembreFamilia(db.Model):
     espai_familiar_id = db.Column(db.Integer, db.ForeignKey('espais_familiars.id'), nullable=False)
     rol = db.Column(db.String(20), nullable=False, default='membre')
     data_adhesio = db.Column(db.DateTime, default=ara_utc)
-    visible_public = db.Column(db.Boolean, default=True, nullable=False)
+    visible_public = db.Column(db.Boolean, default=False, server_default=db.false(), nullable=False)
     
     # Ubicació actual del membre
     pais_actual = db.Column(db.String(100))
