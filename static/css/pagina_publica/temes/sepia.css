@@ -1,0 +1,16 @@
+/* Tema SÈPIA: arxiu antic, paper envellit */
+.tema-sepia {
+    --pp-fons: #f4ecd8;
+    --pp-fons-alt: #ebe0c5;
+    --pp-text: #3b2f23;
+    --pp-text-suau: #7a6a55;
+    --pp-accent: #8a5a2b;
+    --pp-linia: #d8c9a6;
+    --pp-vel-portada: rgba(59, 47, 35, 0.45);
+
+    --pp-font-titols: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --pp-font-text: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+
+    --pp-radi: 0;
+    --pp-amplada: 1000px;
+}

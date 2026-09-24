@@ -10,7 +10,7 @@ from flask_babel import gettext as _
 from models import PaginaPublica, BiografiaFamiliaSeccion, MembreFamilia
 
 
-TEMES_DISPONIBLES = ('classic',)
+TEMES_DISPONIBLES = ('classic', 'sepia', 'modern', 'nocturn')
 TEMA_PER_DEFECTE = 'classic'
 
 BLOCS_PER_TIPUS = {
@@ -141,6 +141,9 @@ ETIQUETES_BLOCS = {
 
 ETIQUETES_TEMES = {
     'classic': _l('Clàssic'),
+    'sepia': _l('Sèpia'),
+    'modern': _l('Modern'),
+    'nocturn': _l('Nocturn'),
 }
 
 

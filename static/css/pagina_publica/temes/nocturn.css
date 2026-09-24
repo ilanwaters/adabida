@@ -1,0 +1,16 @@
+/* Tema NOCTURN: fons fosc, elegant */
+.tema-nocturn {
+    --pp-fons: #1a1a1f;
+    --pp-fons-alt: #23232a;
+    --pp-text: #ece9e3;
+    --pp-text-suau: #a9a49b;
+    --pp-accent: #d4a373;
+    --pp-linia: #34343d;
+    --pp-vel-portada: rgba(0, 0, 0, 0.5);
+
+    --pp-font-titols: Georgia, "Times New Roman", serif;
+    --pp-font-text: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    --pp-radi: 4px;
+    --pp-amplada: 1100px;
+}
